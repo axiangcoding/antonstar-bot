@@ -1,49 +1,15 @@
 <template>
   <v-app id="inspire">
-    <v-app-bar
-        app
-        color="white"
-        flat
-    >
-      <v-container class="py-0 fill-height">
-        <v-avatar
-            class="mr-10"
-            color="grey darken-1"
-            size="32"
-        ></v-avatar>
-
-        <v-btn
-            v-for="link in links"
-            :key="link"
-            text
-        >
-          {{ link }}
-        </v-btn>
-
-        <v-spacer></v-spacer>
-
-        <v-responsive max-width="260">
-          <v-text-field
-              dense
-              flat
-              hide-details
-              rounded
-              solo-inverted
-          ></v-text-field>
-        </v-responsive>
-      </v-container>
-    </v-app-bar>
-
+    <Header></Header>
     <v-main class="grey lighten-3">
       <v-container>
         <v-row>
-
-
           <v-col>
             <v-sheet
                 min-height="70vh"
                 rounded="lg"
             >
+              <router-view/>
               <!--  -->
             </v-sheet>
           </v-col>
@@ -80,21 +46,49 @@
         </v-row>
       </v-container>
     </v-main>
+    <Footer></Footer>
+    <BackToTop></BackToTop>
   </v-app>
 </template>
 
 <script>
+import Header from "@/components/Header"
+import Footer from "@/components/Footer"
+import BackToTop from "@/components/BackToTop";
 
 export default {
   name: 'App',
-
+  components: {
+    Header,
+    Footer,
+    BackToTop
+  },
   data: () => ({
-    links: [
-      'Dashboard',
-      'Messages',
-      'Profile',
-      'Updates',
+    fab: false,
+    links2: [
+      'Home',
+      'About Us',
+      'Team',
+      'Services',
+      'Blog',
+      'Contact Us',
     ],
   }),
+  methods: {
+    onScroll(e) {
+      if (typeof window === 'undefined') return
+      const top = window.scrollY || e.target.scrollTop || 0
+      this.fab = top > 20
+    },
+    toTop() {
+      this.$vuetify.goTo(0)
+    }
+  }
 };
 </script>
+
+<style>
+#inspire {
+  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+}
+</style>
