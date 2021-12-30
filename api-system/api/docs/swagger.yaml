@@ -1,0 +1,187 @@
+consumes:
+- application/json
+definitions:
+  app.ApiJson:
+    properties:
+      code:
+        type: integer
+      data: {}
+      msg:
+        type: string
+    type: object
+  app.ErrJson:
+    properties:
+      err:
+        items:
+          type: string
+        type: array
+    type: object
+  v1.LoginForm:
+    properties:
+      password:
+        type: string
+      userId:
+        type: integer
+    type: object
+  v1.Params:
+    properties:
+      param1:
+        type: string
+      param2:
+        type: string
+    type: object
+  v1.RegisterForm:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      userName:
+        type: string
+    type: object
+info:
+  contact:
+    email: axiangcoding@gmail.com
+    name: axiangcoding
+  description: An example of gin
+  license: {}
+  title: Golang Gin Template API
+  version: 1.0.0
+paths:
+  /v1/demo/get:
+    get:
+      parameters:
+      - description: some params named param1
+        in: query
+        name: param1
+        type: string
+      - description: some params named param2
+        in: query
+        name: param2
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: demo，测试get
+      tags:
+      - Demo/Test
+  /v1/demo/post:
+    post:
+      parameters:
+      - description: some params json
+        in: body
+        name: params
+        schema:
+          $ref: '#/definitions/v1.Params'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: demo，测试post
+      tags:
+      - demo
+  /v1/system/info:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      security:
+      - ApiKeyAuth: []
+      summary: System Info
+      tags:
+      - System
+  /v1/test/test-log:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: demo，测试post
+      tags:
+      - demo
+  /v1/user/login:
+    post:
+      parameters:
+      - description: register form
+        in: body
+        name: form
+        required: true
+        schema:
+          $ref: '#/definitions/v1.LoginForm'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.ErrJson'
+      summary: User login
+      tags:
+      - User
+  /v1/user/logout:
+    post:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.ErrJson'
+      security:
+      - ApiKeyAuth: []
+      summary: User logout
+      tags:
+      - User
+  /v1/user/register:
+    post:
+      parameters:
+      - description: register form
+        in: body
+        name: form
+        required: true
+        schema:
+          $ref: '#/definitions/v1.RegisterForm'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.ErrJson'
+      summary: User register
+      tags:
+      - User
+produces:
+- application/json
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: token
+    type: apiKey
+swagger: "2.0"

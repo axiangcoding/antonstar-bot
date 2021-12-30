@@ -1,0 +1,39 @@
+[app]
+version = "1.0.0"
+name = "axiangcoding/antonstar/api-system"
+
+[app.log]
+level = "INFO"
+file.enable = false
+file.path = "./logs/"
+
+[app.token]
+secret = "r@ndomSecretForSign"
+expire_duration = "12h"
+refresh_duration = "10m"
+
+[app.swagger]
+enable = true
+
+[app.data.database]
+driver = "mysql"
+source = "antonstar:AntonStarP@ssword.@tcp(127.0.0.1:3306)/anton_star?charset=utf8mb4&parseTime=true"
+max_open_conn = 100
+max_idle_conn = 10
+
+[app.data.cache]
+# only support cache for now
+driver = "redis"
+source = "redis://localhost:6379/0"
+
+[app.response]
+# hide error details
+hide_error_details = false
+
+[server]
+run_mode = "debug"
+port = 8888
+base_path = "/api"
+
+
+
