@@ -22,6 +22,7 @@
           v-for="link in links"
           :key="link.id"
           class="text-lg-button font-weight-bold"
+          @click="$router.push({name: link.routeName})"
       >
         {{ link.name }}
       </v-tab>
@@ -53,13 +54,13 @@ export default {
   name: "Header",
   data: () => ({
     links: [
-      {id: 1, name: '首页'},
+      {id: 1, name: '首页', routeName: 'Home'},
       {id: 2, name: '攻略教程'},
       {id: 3, name: '玩家社区'},
       {id: 4, name: '资源下载'},
       {id: 5, name: '游戏数据'},
       {id: 6, name: '封神榜'},
-      {id: 7, name: '关于我们'},
+      {id: 7, name: '关于我们', routeName: 'About'},
 
     ],
     selected: 2,
