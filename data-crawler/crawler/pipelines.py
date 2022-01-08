@@ -7,13 +7,15 @@
 # useful for handling different item types with a single interface
 import pymysql
 from itemadapter import ItemAdapter
+from scrapy.utils.project import get_project_settings
 
 
 class MysqlPipeline:
     def __init__(self):
-        self.conn = pymysql.connect(host='127.0.0.1', port=3306,
-                                    user='antonstar', password='AntonStarP@ssword.', database='anton_star',
-                                    charset='utf8mb4',
+        settings = get_project_settings()
+        self.conn = pymysql.connect(host=settings['MYSQL_HOST'], port=settings['MYSQL_PORT'],
+                                    user=settings['MYSQL_USER'], password=settings['MYSQL_PWD'],
+                                    database=settings['MYSQL_DB'], charset='utf8mb4',
                                     )
         self.cursor = self.conn.cursor()
 
