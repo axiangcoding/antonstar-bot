@@ -17,7 +17,9 @@ class GaijinSpider(scrapy.Spider):
 
     def parse(self, response):
         nick = getattr(self, "nick", None)
+        query_id = getattr(self, "query_id", None)
         item = GaijinPersonalItem()
+        item['query_id'] = query_id
         item['nick'] = nick
         item['source'] = 'gaijin'
         item['created_at'] = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')

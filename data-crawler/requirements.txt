@@ -3,3 +3,4 @@ Scrapy==2.5.1
 scrapy-fake-useragent==1.4.4
 pymysql~=1.0.2
 pika~=1.2.0
+twisted~=21.7.0

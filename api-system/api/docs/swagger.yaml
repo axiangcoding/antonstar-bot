@@ -177,6 +177,34 @@ paths:
       summary: User register
       tags:
       - User
+  /v1/war_thunder/userinfo/detail:
+    get:
+      parameters:
+      - in: query
+        name: query_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      tags:
+      - WarThunder
+  /v1/war_thunder/userinfo/query:
+    get:
+      parameters:
+      - in: query
+        name: nickname
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      tags:
+      - WarThunder
 produces:
 - application/json
 securityDefinitions:

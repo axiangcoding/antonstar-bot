@@ -26,6 +26,10 @@ max_idle_conn = 10
 driver = "redis"
 source = "redis://localhost:6379/0"
 
+[app.mq]
+source = "amqp://localhost:5672"
+
+
 [app.response]
 # hide error details
 hide_error_details = false

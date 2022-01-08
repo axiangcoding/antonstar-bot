@@ -35,6 +35,9 @@ type App struct {
 			Source string
 		}
 	}
+	MQ struct {
+		Source string
+	}
 	Response struct {
 		HideErrorDetails bool `mapstructure:"hide_error_details"`
 	}

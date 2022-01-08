@@ -1,6 +1,7 @@
 package mq
 
 import (
+	"axiangcoding/antonstar/api-system/internal/app/conf"
 	"axiangcoding/antonstar/api-system/pkg/logging"
 	"github.com/streadway/amqp"
 )
@@ -17,22 +18,20 @@ func Setup() {
 		false,     // no-wait
 		nil,       // arguments
 	)
-	failOnError(err, "Failed to declare a queue")
-}
-
-func failOnError(err error, msg string) {
 	if err != nil {
-		logging.Fatalf("%s: %s", msg, err)
+		logging.Fatalf("Failed to declare a queue: %s", err)
 	}
 }
 
 func initMQ() *amqp.Channel {
-	conn, err := amqp.Dial("amqp://localhost:5672")
-	failOnError(err, "Failed to connect to RabbitMQ")
-	//defer conn.Close()
+	conn, err := amqp.Dial(conf.Config.MQ.Source)
+	if err != nil {
+		logging.Fatalf("Failed to connect to RabbitMQ: %s", err)
+	}
 	ch, err := conn.Channel()
-	failOnError(err, "Failed to open a channel")
-	//defer ch.Close()
+	if err != nil {
+		logging.Fatalf("Failed to open a channel: %s", err)
+	}
 	return ch
 }
 

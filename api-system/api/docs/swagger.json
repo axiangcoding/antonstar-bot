@@ -226,6 +226,52 @@
                     }
                 }
             }
+        },
+        "/v1/war_thunder/userinfo/detail": {
+            "get": {
+                "tags": [
+                    "WarThunder"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "query_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/war_thunder/userinfo/query": {
+            "get": {
+                "tags": [
+                    "WarThunder"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "nickname",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {

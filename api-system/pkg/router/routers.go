@@ -44,6 +44,11 @@ func setRouterV1(r *gin.Engine) {
 		{
 			system.GET("/info", v1.SystemInfo)
 		}
+		warThunder := groupV1.Group("/war_thunder")
+		{
+			warThunder.GET("/userinfo/query", v1.UserInfoQuery)
+			warThunder.GET("/userinfo/detail", v1.UserInfoDetail)
+		}
 	}
 }
 
