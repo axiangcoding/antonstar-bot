@@ -7,13 +7,15 @@ import scrapy
 
 
 class TSPersonalStatItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
     http_status = scrapy.Field()
-    http_response = scrapy.Field()
-    createAt = scrapy.Field()
+    source = scrapy.Field()
+    nick = scrapy.Field()
+    content = scrapy.Field()
+    created_at = scrapy.Field()
 
 class GaijinPersonalItem(scrapy.Item):
     http_status = scrapy.Field()
-    http_response = scrapy.Field()
-    createAt = scrapy.Field()
+    source = scrapy.Field()
+    nick = scrapy.Field()
+    content = scrapy.Field()
+    created_at = scrapy.Field()

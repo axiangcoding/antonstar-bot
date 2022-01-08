@@ -1,3 +1,0 @@
-itemadapter==0.4.0
-Scrapy==2.5.1
-scrapy-fake-useragent==1.4.4

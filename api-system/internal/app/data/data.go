@@ -33,22 +33,31 @@ func initDB() *gorm.DB {
 	if err != nil {
 		logging.Fatal(err)
 	}
-	// auto migrate should not be used in production mode
+	autoMigrate(db)
+	setConfig(db)
+	logging.Info("database mysql connected success")
+	return db
+}
+
+func GetDB() *gorm.DB {
+	return db
+}
+
+// 自动更新表结构
+func autoMigrate(db *gorm.DB) {
 	if err := db.AutoMigrate(
 		&schema.User{},
+		&schema.CrawlerData{},
 	); err != nil {
 		logging.Fatal(err)
 	}
-	logging.Info("database mysql connected success")
+}
+
+func setConfig(db *gorm.DB) {
 	s, err := db.DB()
 	if err != nil {
 		logging.Fatal(err)
 	}
 	s.SetMaxOpenConns(conf.Config.App.Data.Database.MaxOpenConn)
 	s.SetMaxIdleConns(conf.Config.App.Data.Database.MaxIdleConn)
-	return db
-}
-
-func GetDB() *gorm.DB {
-	return db
 }

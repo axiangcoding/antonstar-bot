@@ -1,4 +1,4 @@
-import time
+from datetime import datetime
 
 import scrapy
 
@@ -16,10 +16,11 @@ class GaijinSpider(scrapy.Spider):
             yield scrapy.Request(url, method='POST')
 
     def parse(self, response):
-        print(response.request.headers)
+        nick = getattr(self, "nick", None)
         item = GaijinPersonalItem()
-        item['createAt'] = int(time.time())
+        item['nick'] = nick
+        item['source'] = 'gaijin'
+        item['created_at'] = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
         item['http_status'] = response.status
-        item['http_response'] = response.xpath("//div[@class='user-info']").extract()
-        print(item['http_response'])
+        item['content'] = response.xpath("//div[@class='user-info']").extract_first()
         yield item

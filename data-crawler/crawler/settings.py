@@ -14,11 +14,11 @@ SPIDER_MODULES = ['crawler.spiders']
 NEWSPIDER_MODULE = 'crawler.spiders'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-FAKEUSERAGENT_PROVIDERS = [
-                              # "scrapy_fake_useragent.providers.FakerProvider",
-                              "scrapy_fake_useragent.providers.FakeUserAgentProvider",
-                              "scrapy_fake_useragent.providers.FixedUserAgentProvider",
-                          ],
+# FAKEUSERAGENT_PROVIDERS = [
+#                               "scrapy_fake_useragent.providers.FakerProvider",
+#                               "scrapy_fake_useragent.providers.FakeUserAgentProvider",
+#                               "scrapy_fake_useragent.providers.FixedUserAgentProvider",
+#                           ],
 USER_AGENT = 'crawler (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
@@ -70,7 +70,7 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'crawler.pipelines.CrawlerPipeline': 300,
+    'crawler.pipelines.MysqlPipeline': 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

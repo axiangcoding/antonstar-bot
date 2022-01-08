@@ -1,4 +1,4 @@
-import time
+from datetime import datetime
 
 import scrapy
 
@@ -16,8 +16,11 @@ class ThunderSkillSpider(scrapy.Spider):
             yield scrapy.Request(url)
 
     def parse(self, response):
+        nick = getattr(self, "nick", None)
         item = TSPersonalStatItem()
-        item['createAt']= int(time.time())
+        item['nick'] = nick
+        item['source'] = 'thunder skill'
+        item['created_at'] = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
         item['http_status'] = response.status
-        item['http_response'] = response.text
+        item['content'] = response.text
         yield item
