@@ -44,7 +44,7 @@ def callback(ch, method, properties, body):
     print(query_json)
     if query_json['source'] == 'gaijin':
         run_spider(spider=GaijinSpider, nick=query_json['nickname'], query_id=query_json['query_id'])
-    elif query_json['source'] == 'thunderskill':
+    elif query_json['source'] == 'thunder_skill':
         run_spider(spider=ThunderSkillSpider, nick=query_json['nickname'], query_id=query_json['query_id'])
     sec = random_sleep_sec()
     print("Crawl finished, Sleep %d seconds. " % sec)

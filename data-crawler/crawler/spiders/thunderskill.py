@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 
 import scrapy
@@ -21,8 +22,13 @@ class ThunderSkillSpider(scrapy.Spider):
         item = TSPersonalStatItem()
         item['query_id'] = query_id
         item['nick'] = nick
-        item['source'] = 'thunder skill'
+        item['source'] = 'thunder_skill'
         item['created_at'] = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
         item['http_status'] = response.status
-        item['content'] = response.text
+        if response.status == 200:
+            json_body = response.json()
+            content = json.dumps(json_body['stats'])
+            item['content'] = content
+        else:
+            item['content'] = response.text
         yield item

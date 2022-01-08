@@ -2,7 +2,7 @@ package entity
 
 const (
 	SourceGaijin       = "gaijin"
-	SourceThunderskill = "thunderskill"
+	SourceThunderskill = "thunder_skill"
 )
 
 type MQBody struct {
