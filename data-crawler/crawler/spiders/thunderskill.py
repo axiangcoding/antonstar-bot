@@ -27,7 +27,7 @@ class ThunderSkillSpider(scrapy.Spider):
         item['http_status'] = response.status
         if response.status == 200:
             json_body = response.json()
-            content = json.dumps(json_body['stats'])
+            content = json.dumps(json_body['stats'], ensure_ascii=False)
             item['content'] = content
         else:
             item['content'] = response.text
