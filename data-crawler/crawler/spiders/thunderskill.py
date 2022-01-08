@@ -6,7 +6,7 @@ from crawler.items import TSPersonalStatItem
 
 
 class ThunderSkillSpider(scrapy.Spider):
-    name = 'quotes'
+    name = 'thunderskill'
     allowed_domains = ['thunderskill.com']
 
     def start_requests(self):

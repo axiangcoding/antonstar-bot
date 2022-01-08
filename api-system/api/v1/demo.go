@@ -40,7 +40,10 @@ type Params struct {
 // @Security  ApiKeyAuth
 func DemoPost(c *gin.Context) {
 	params := Params{}
-	c.ShouldBindJSON(&params)
+	err := c.ShouldBindJSON(&params)
+	if err != nil {
+		return
+	}
 	c.JSON(200, gin.H{
 		"method":    "post",
 		"post_body": params,
