@@ -1,6 +1,7 @@
 FROM node:16-alpine as build
 WORKDIR /build
 COPY . /build/
+RUN yarn install
 RUN yarn run build
 
 
