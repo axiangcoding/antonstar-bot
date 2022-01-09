@@ -5,6 +5,7 @@ import (
 	v1 "axiangcoding/antonstar/api-system/api/v1"
 	"axiangcoding/antonstar/api-system/internal/app/conf"
 	"axiangcoding/antonstar/api-system/pkg/middleware"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -17,6 +18,9 @@ func InitRouter() *gin.Engine {
 	r.Use(middleware.Logger())
 	// Recovery 中间件会 recover 任何 panic。如果有 panic 的话，会写入 500。
 	r.Use(gin.Recovery())
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
+	r.Use(cors.New(config))
 	setSwagger(r)
 	setRouterV1(r)
 	return r
@@ -48,6 +52,7 @@ func setRouterV1(r *gin.Engine) {
 		{
 			warThunder.GET("/userinfo/query", v1.UserInfoQuery)
 			warThunder.GET("/userinfo/detail", v1.UserInfoDetail)
+			warThunder.StaticFile("/mock.html", "./resources/index.html")
 		}
 	}
 }
