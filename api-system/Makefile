@@ -1,4 +1,4 @@
-.PHONY: all swag clean check build-image run help run-dev-env
+.PHONY: all swag clean upgrade check build-image run help run-dev-env
 
 all: swag run
 
@@ -9,6 +9,9 @@ swag:
 
 clean:
 	go clean
+
+upgrade:
+	go get -u
 
 check:
 	go fmt ./

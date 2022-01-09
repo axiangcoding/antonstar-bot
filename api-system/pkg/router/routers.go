@@ -4,6 +4,7 @@ import (
 	"axiangcoding/antonstar/api-system/api/docs"
 	v1 "axiangcoding/antonstar/api-system/api/v1"
 	"axiangcoding/antonstar/api-system/internal/app/conf"
+	"axiangcoding/antonstar/api-system/pkg/app"
 	"axiangcoding/antonstar/api-system/pkg/middleware"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -18,14 +19,18 @@ func InitRouter() *gin.Engine {
 	r.Use(middleware.Logger())
 	// Recovery 中间件会 recover 任何 panic。如果有 panic 的话，会写入 500。
 	r.Use(gin.Recovery())
-	config := cors.DefaultConfig()
-	config.AllowAllOrigins = true
-	config.AddAllowMethods("OPTIONS")
-	config.AddAllowHeaders("Authorization")
-	r.Use(cors.New(config))
+	setCors(r)
 	setSwagger(r)
 	setRouterV1(r)
 	return r
+}
+
+func setCors(r *gin.Engine) {
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
+	config.AddAllowMethods("OPTIONS")
+	config.AddAllowHeaders(app.AuthHeader)
+	r.Use(cors.New(config))
 }
 
 func setRouterV1(r *gin.Engine) {

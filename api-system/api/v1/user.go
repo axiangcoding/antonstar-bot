@@ -38,7 +38,7 @@ func UserLogin(c *gin.Context) {
 		app.BizFailed(c, e.LoginFailed, err)
 		return
 	}
-	app.Success(c, map[string]string{"token": token})
+	app.Success(c, map[string]string{app.AuthHeader: token})
 }
 
 type RegisterForm struct {
@@ -84,7 +84,7 @@ func UserRegister(c *gin.Context) {
 // @Router    /v1/user/logout [post]
 // @Security  ApiKeyAuth
 func UserLogout(c *gin.Context) {
-	result, err := service.UserLogout(c, c.GetHeader("token"))
+	result, err := service.UserLogout(c, c.GetHeader(app.AuthHeader))
 	if err != nil {
 		app.BizFailed(c, e.Error, err)
 		return

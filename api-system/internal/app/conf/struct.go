@@ -15,7 +15,7 @@ type App struct {
 			Path   string
 		}
 	}
-	Token struct {
+	Auth struct {
 		Secret          string
 		ExpireDuration  string `mapstructure:"expire_duration"`
 		RefreshDuration string `mapstructure:"refresh_duration"`

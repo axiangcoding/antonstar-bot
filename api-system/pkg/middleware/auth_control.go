@@ -13,7 +13,7 @@ import (
 
 func AuthCheck() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		tokenString := c.GetHeader("token")
+		tokenString := c.GetHeader(app.AuthHeader)
 		claims, next := checkToken(c, tokenString)
 		if !next {
 			return

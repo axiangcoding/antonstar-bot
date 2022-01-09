@@ -24,8 +24,8 @@ type CustomClaims struct {
 }
 
 func SetupJwt() {
-	jwtSecret = []byte(conf.Config.App.Token.Secret)
-	expireStr := conf.Config.App.Token.ExpireDuration
+	jwtSecret = []byte(conf.Config.App.Auth.Secret)
+	expireStr := conf.Config.App.Auth.ExpireDuration
 	expire, err := time.ParseDuration(expireStr)
 	if err != nil {
 		logging.Fatal("Config properties: app.token.expire_duration not valid")

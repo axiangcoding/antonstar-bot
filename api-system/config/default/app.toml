@@ -7,7 +7,7 @@ level = "INFO"
 file.enable = false
 file.path = "./logs/"
 
-[app.token]
+[app.auth]
 secret = "r@ndomSecretForSign"
 expire_duration = "12h"
 refresh_duration = "10m"
