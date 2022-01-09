@@ -1,8 +1,8 @@
 import axios from 'axios';
 import {ElMessage, ElLoading} from 'element-plus';
 
-// @ts-ignore
-import settings from '../../public/config.json'
+
+import * as settings from '../../public/config.json'
 // 创建axios实例
 const service = axios.create({
     // 服务接口请求
