@@ -20,6 +20,7 @@ func InitRouter() *gin.Engine {
 	r.Use(gin.Recovery())
 	config := cors.DefaultConfig()
 	config.AllowAllOrigins = true
+	config.AllowMethods = append(config.AllowMethods, "OPTIONS")
 	r.Use(cors.New(config))
 	setSwagger(r)
 	setRouterV1(r)
