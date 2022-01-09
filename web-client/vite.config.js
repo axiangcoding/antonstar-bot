@@ -15,8 +15,12 @@ export default defineConfig({
             resolvers: [ElementPlusResolver()],
         }),],
     server: {
-        open: true,
-        proxy: "http://localhost:8888/api/"
-
+        open: false,
+        proxy: {
+            '/api': {
+                target: 'http://localhost:8888',
+                changeOrigin: true
+            }
+        }
     }
 })
