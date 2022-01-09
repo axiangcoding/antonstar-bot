@@ -1,11 +1,13 @@
 import axios from 'axios';
 import {ElMessage, ElLoading} from 'element-plus';
-import {Config} from '../../public/config.js'
 // 创建axios实例
+
 const service = axios.create({
     // 服务接口请求
+    // @ts-ignore
     baseURL: Config.serverUrl,
     // 超时设置
+    // @ts-ignore
     timeout: Config.requestTimeout,
     headers: {'Content-Type': 'application/json;charset=utf-8'}
 })
