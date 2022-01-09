@@ -1,28 +1,18 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
-    <div>{{ res }}</div>
+    <h1>about page</h1>
+    {{getTest}}
   </div>
 </template>
+<script lang="ts">
+import { defineComponent } from "vue";
+import {mapGetters} from 'vuex';
 
-<script>
-import {HTTP} from "@/plugins/http";
-
-export default {
-  data: () => ({
-    res: ''
-  }),
-  mounted() {
-    this.testGet()
+export default defineComponent({
+  name: "About",
+  computed:{
+    ...mapGetters(['getTest'])
   },
-  methods: {
-    testGet() {
-      HTTP.get('/v1/demo/get').then(res => {
-        this.res = res
-      }).catch(err => {
-        console.log(err)
-      })
-    }
-  }
-}
+  methods:{}
+});
 </script>

@@ -1,15 +1,28 @@
 <template>
-  <hello-world />
+  <div class="home">
+    {{ data }}
+  </div>
 </template>
 
-<script>
-  import HelloWorld from '../components/HelloWorld'
+<script lang="ts" setup>
 
-  export default {
-    name: 'Home',
+import service from "../util/request";
+import {onMounted, ref} from "vue";
 
-    components: {
-      HelloWorld,
-    },
-  }
+const data = ref()
+
+const testGet = () => {
+  service.get('/v1/demo/get', {
+    params: {
+      "param1": "test1",
+      "param2": "test2"
+    }
+  }).then(res => {
+        data.value = res
+      }
+  )
+}
+onMounted(testGet)
+
+
 </script>

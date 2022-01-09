@@ -1,79 +1,79 @@
 <template>
-  <v-app-bar
-      app
-      color="white"
-      flat
-  >
-    <v-img
-        lazy-src=""
-        height="100%"
-        width="250"
-        src="https://picsum.photos/id/11/500/3002"
-        alt="项目的logo"
-    ></v-img>
-
-    <v-spacer class="px-4"></v-spacer>
-    <v-tabs
-        align-with-title
-        class="ml-n9"
-        v-model="selected"
-    >
-      <v-tab
-          v-for="link in links"
-          :key="link.id"
-          class="text-lg-button font-weight-bold"
-          @click="$router.push({name: link.routeName})"
-      >
-        {{ link.name }}
-      </v-tab>
-    </v-tabs>
-    <v-menu offset-y nudge-top="-8" bottom>
-      <template v-slot:activator="{ on, attrs }">
-        <v-avatar
-            class="hidden-sm-and-down"
-            color="grey darken-1 shrink"
-            size="40"
-            v-bind="attrs"
-            v-on="on"
-        ></v-avatar>
-      </template>
-      <v-list>
-        <v-list-item
-            v-for="(item, index) in items"
-            :key="index"
+  <el-header class="header">
+    <el-row>
+      <el-col :span="4">
+        <el-image
+            style="width: 200px; height: 100%"
+            :src="url"
+            fit="scale-down"
+        ></el-image>
+      </el-col>
+      <el-col :span="19">
+        <el-menu
+            :default-active="activeIndex"
+            class="el-menu"
+            mode="horizontal"
+            @select="handleSelect"
         >
-          <v-list-item-title>{{ item.title }}</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
-  </v-app-bar>
+          <el-menu-item v-for="item in titleList" :index="item.id">
+            <span style="font-size: var(--el-font-size-medium);font-weight: bold">{{ item.name }}</span>
+          </el-menu-item>
+        </el-menu>
+      </el-col>
+      <el-col :span="1">
+        <el-dropdown>
+          <el-avatar size="default"
+                     src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+          ></el-avatar>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item>Action 1</el-dropdown-item>
+              <el-dropdown-item>Action 2</el-dropdown-item>
+              <el-dropdown-item>Action 3</el-dropdown-item>
+              <el-dropdown-item>Action 4</el-dropdown-item>
+              <el-dropdown-item>Action 5</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </el-col>
+    </el-row>
+  </el-header>
 </template>
 
-<script>
-export default {
-  name: "Header",
-  data: () => ({
-    links: [
-      {id: 1, name: '首页', routeName: 'Home'},
-      {id: 2, name: '攻略教程'},
-      {id: 3, name: '玩家社区'},
-      {id: 4, name: '资源下载'},
-      {id: 5, name: '游戏数据'},
-      {id: 6, name: '封神榜'},
-      {id: 7, name: '关于我们', routeName: 'About'},
+<script lang="ts" setup>
+import {ref} from 'vue'
+import logo from "../assets/image/logo.png"
+import {useRouter} from "vue-router";
 
-    ],
-    selected: 2,
-    items: [
-      {title: 'Click Me'},
-      {title: 'Click Me'},
-      {title: 'Click Me'},
-      {title: 'Click Me 2'},
-    ],
-  }),
+const titleList = [
+  {id: 'Home', name: '首页'},
+  {id: '2', name: '攻略教程'},
+  {id: '3', name: '玩家社区'},
+  {id: '4', name: '资源下载'},
+  {id: '5', name: '战绩查询'},
+  {id: '6', name: '封神榜'},
+  {id: 'About', name: '关于我们'},
+]
+
+const url = ref(logo)
+const activeIndex = ref('1')
+
+const router = useRouter()
+const handleSelect = (key: string, keyPath: string[]) => {
+  console.log(key, keyPath)
+  router.push({name: key})
 }
+
+
 </script>
+<style lang="scss" scoped>
+.header {
+  text-align: left;
+  //background-color: var(--el-color-primary);
+  //border-bottom: 1px black solid;
+}
 
-<style scoped>
-
+.el-menu {
+  border-bottom: 0;
+}
 </style>
