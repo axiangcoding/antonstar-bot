@@ -5,7 +5,7 @@ deploy:
 	docker-compose up -d --build
 
 stop:
-	@echo "deploy project"
+	@echo "stop project"
 	docker-compose stop
 
 update:
