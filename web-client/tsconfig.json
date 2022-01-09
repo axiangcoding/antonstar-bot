@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "isolatedModules": true,
     "target": "es5",
     "lib": [
       "es6",
@@ -7,6 +8,7 @@
       "esnext",
       "es2020"
     ],
+    "resolveJsonModule": true,
     "alwaysStrict": true
   }
 }
