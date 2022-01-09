@@ -20,7 +20,7 @@ const store = useStore()
 const testGet = () => {
   service.get('/v1/demo/get', {
     headers: {
-      'token': store.state.count + "test"
+      'Authorization': store.state.count + "test"
     },
     params: {
       "param1": "test1",
