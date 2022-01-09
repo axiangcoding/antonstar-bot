@@ -1,12 +1,15 @@
 {
   "compilerOptions": {
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
-    "target": "es5",
+    "moduleResolution": "node",
+    "target": "es2021",
+    "module": "ES2020",
     "lib": [
-      "es6",
-      "dom",
-      "esnext",
-      "es2020"
+      "es2021"
     ],
     "resolveJsonModule": true,
     "alwaysStrict": true
