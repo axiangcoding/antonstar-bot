@@ -17,8 +17,10 @@ export default {
   },
   methods: {
     testGet() {
-      HTTP.post('posts').then(res => {
+      HTTP.get('/v1/demo/get').then(res => {
         this.res = res
+      }).catch(err => {
+        console.log(err)
       })
     }
   }

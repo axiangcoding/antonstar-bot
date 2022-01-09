@@ -1,3 +1,4 @@
+# 部署的样例，仅作为样例，生产环境采用独立的配置
 version: "3"
 services:
   db:
@@ -50,3 +51,4 @@ services:
       - ./volume/data-crawler/settings.py:/app/crawler/settings.py
     depends_on:
       - mq
+      - db
