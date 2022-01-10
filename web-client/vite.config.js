@@ -15,6 +15,7 @@ export default defineConfig({
             resolvers: [ElementPlusResolver()],
         }),],
     server: {
+        host: 3000,
         open: false,
         // proxy: {
         //     '/api': {

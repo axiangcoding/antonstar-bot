@@ -2,10 +2,11 @@
   <div class="home">
     <el-card class="main-card" :body-style="bodyStyle">
       <el-carousel height="200px">
-        <el-carousel-item v-for="item in 4" :key="item">
-          <h3 class="small">{{ item }}</h3>
+        <el-carousel-item v-for="item in carousel_list" :key="item.id">
+          <h2>{{ item.content }}</h2>
         </el-carousel-item>
       </el-carousel>
+      <el-empty description="正在施工中"></el-empty>
     </el-card>
   </div>
 </template>
@@ -16,6 +17,19 @@ import service from "../util/request";
 import {onMounted, computed, ref} from "vue";
 import {useStore} from "vuex";
 
+const carousel_list = ref([
+  {
+    id: 1,
+    content: '安东星内测啦，目前仅战绩查询可用！敬请期待！',
+    to: ''
+  },
+  {
+    id: 2,
+    content: '【广告位招租】',
+    to: ''
+  }
+])
+
 const data = ref()
 const data2 = ref()
 const store = useStore()
@@ -23,6 +37,8 @@ const store = useStore()
 const bodyStyle = {
   padding: '10px'
 }
+
+
 const testGet = () => {
   service.get('/v1/demo/get', {
     headers: {
@@ -51,18 +67,17 @@ onMounted(testGet)
 }
 
 .main-card {
-  min-height: 2000px;
+
   margin: 0;
   padding: 0;
 }
 
-.el-carousel__item h3 {
+::v-deep .el-carousel__item h2 {
   color: #475669;
-  font-size: 14px;
   opacity: 0.75;
-  line-height: 150px;
   margin: 0;
   text-align: center;
+  line-height: 200px;
 }
 
 .el-carousel__item:nth-child(2n) {

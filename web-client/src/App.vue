@@ -4,23 +4,23 @@
     <el-main>
       <el-row>
         <!-- 空白边栏 -->
-        <el-col :span="3"></el-col>
-        <el-col :span="18">
-          <el-row :gutter="6">
-            <el-col :span="20">
+        <el-col :xs="0" :sm="0" :md="0" :lg="0" :xl="2"></el-col>
+        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="20">
+          <el-row :gutter="10">
+            <el-col :xs="24" :sm="24" :md="24" :lg="20" :xl="20">
               <router-view/>
             </el-col>
-            <el-col :span="4">
-              <el-affix :offset="88">
+            <el-col :xs="24" :sm="24" :md="24" :lg="4" :xl="4">
+              <!--<el-affix :offset="88">-->
               <el-card>
                 <el-empty description="正在施工中"></el-empty>
               </el-card>
-              </el-affix>
+              <!--</el-affix>-->
             </el-col>
           </el-row>
         </el-col>
         <!-- 空白边栏 -->
-        <el-col :span="3"></el-col>
+        <el-col :xs="0" :sm="0" :md="0" :lg="0" :xl="2"></el-col>
       </el-row>
     </el-main>
     <Footer></Footer>
