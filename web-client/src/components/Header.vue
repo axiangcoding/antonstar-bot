@@ -1,11 +1,11 @@
 <template>
-  <el-header class="header">
+  <el-header class="header" height="60px">
     <el-row>
       <el-col :span="4">
         <el-image
-            style="width: 200px; height: 100%"
+            style="width: 200px; height: 60px"
             :src="url"
-            fit="scale-down"
+            fit="cover"
         ></el-image>
       </el-col>
       <el-col :span="19">
@@ -66,14 +66,21 @@ const handleSelect = (key: string, keyPath: string[]) => {
 
 
 </script>
-<style lang="scss" scoped>
+<style lang="css" scoped>
+ :deep(.el-header)  {
+  padding: 0;
+}
+
 .header {
   text-align: left;
-  //background-color: var(--el-color-primary);
-  //border-bottom: 1px black solid;
+  border-bottom: 1px #ccc solid;
+  background-color: #ffffff;
 }
 
 .el-menu {
+  margin-top: 0;
+  border-top: 0;
   border-bottom: 0;
+  padding-top: 0;
 }
 </style>

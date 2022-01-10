@@ -1,10 +1,12 @@
 <template>
   <div class="home">
-    {{ data }}
-    <el-divider></el-divider>
-    {{ data2 }}
-    <button @click="addClick()">测试</button>
-    <button @click="testGet()">测试2</button>
+    <el-card class="main-card" :body-style="bodyStyle">
+      <el-carousel height="200px">
+        <el-carousel-item v-for="item in 4" :key="item">
+          <h3 class="small">{{ item }}</h3>
+        </el-carousel-item>
+      </el-carousel>
+    </el-card>
   </div>
 </template>
 
@@ -17,6 +19,10 @@ import {useStore} from "vuex";
 const data = ref()
 const data2 = ref()
 const store = useStore()
+
+const bodyStyle = {
+  padding: '10px'
+}
 const testGet = () => {
   service.get('/v1/demo/get', {
     headers: {
@@ -39,3 +45,31 @@ onMounted(testGet)
 
 
 </script>
+
+<style lang="scss" scoped>
+.home {
+}
+
+.main-card {
+  min-height: 2000px;
+  margin: 0;
+  padding: 0;
+}
+
+.el-carousel__item h3 {
+  color: #475669;
+  font-size: 14px;
+  opacity: 0.75;
+  line-height: 150px;
+  margin: 0;
+  text-align: center;
+}
+
+.el-carousel__item:nth-child(2n) {
+  background-color: #99a9bf;
+}
+
+.el-carousel__item:nth-child(2n + 1) {
+  background-color: #d3dce6;
+}
+</style>
