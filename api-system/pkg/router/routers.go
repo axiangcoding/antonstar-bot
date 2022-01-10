@@ -59,7 +59,6 @@ func setRouterV1(r *gin.Engine) {
 		{
 			warThunder.GET("/userinfo/query", v1.UserInfoQuery)
 			warThunder.GET("/userinfo/detail", v1.UserInfoDetail)
-			warThunder.StaticFile("/mock.html", "./resources/index.html")
 		}
 	}
 }
