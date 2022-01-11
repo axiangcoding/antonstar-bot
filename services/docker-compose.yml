@@ -15,7 +15,7 @@ services:
     volumes:
       - ./volume/mysql:/var/lib/mysql
   phpmyadmin:
-    image: phpmyadmin
+    image: phpmyadmin:fpm-alpine
     # restart: always
     ports:
       - "80:80"

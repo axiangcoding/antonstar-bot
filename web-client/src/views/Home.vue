@@ -25,7 +25,7 @@ const carousel_list = ref([
   },
   {
     id: 2,
-    content: '【广告位招租】',
+    content: '【广告位招租】 ',
     to: ''
   }
 ])
@@ -72,7 +72,7 @@ onMounted(testGet)
   padding: 0;
 }
 
-::v-deep .el-carousel__item h2 {
+:deep(.el-carousel__item)  h2 {
   color: #475669;
   opacity: 0.75;
   margin: 0;
