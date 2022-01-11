@@ -57,6 +57,7 @@ onMounted(generateClientId)
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   background-color: #f6f6f7;
+  font-size: 16px;
   color: #2c3e50;
   height: 98vh;
 }

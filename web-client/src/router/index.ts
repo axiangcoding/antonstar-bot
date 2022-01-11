@@ -21,7 +21,7 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/about",
         name: "About",
-        component: () => import("../views/About.vue"),
+        component: () => import("../views/about/Index.vue"),
         meta: {
             title: '关于我们'
         }
@@ -35,7 +35,9 @@ const router = createRouter({
 
 router.afterEach((to, from, failure) => {
     if (!failure) {
-        document.title = to.meta.title
+        let concat = " - "
+        let prefix = document.title.split(concat)[0]
+        document.title = prefix + concat + to.meta.title
         service.post('/v1/visits/visit', {
             client_id: store.state.clientId,
             page: window.location.href,

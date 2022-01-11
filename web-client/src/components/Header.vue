@@ -1,7 +1,7 @@
 <template>
   <el-header class="header" height="60px">
     <el-row justify="space-between" style="height: 100%">
-      <el-col :xs="4" :sm="4" :md="4" :lg="6" :xl="4" >
+      <el-col :xs="4" :sm="4" :md="4" :lg="6" :xl="4">
         <div>
           <el-image
               @click="pushRouter('Home')"
@@ -50,9 +50,14 @@
 </template>
 
 <script lang="ts" setup>
-import {ref} from 'vue'
+import {computed, ref} from 'vue'
 import logo from "../assets/image/logo.png"
-import {useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
+
+const route = useRoute()
+const activeIndex = computed(() => {
+  return route.name
+})
 
 const titleList = [
   {id: '2', name: '攻略教程'},
@@ -63,10 +68,9 @@ const titleList = [
   {id: 'About', name: '关于我们'},
 ]
 
-const version = ref('v0.0.1-alpha')
+const version = ref('Alpha 测试版')
 
 const url = ref(logo)
-const activeIndex = ref('1')
 
 
 const router = useRouter()
@@ -97,7 +101,7 @@ const pushRouter = (name: string) => {
   height: 60px;
 }
 
-.img-logo:hover{
+.img-logo:hover {
   cursor: pointer;
 }
 </style>
