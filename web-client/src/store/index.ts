@@ -8,11 +8,19 @@ export default createStore({
         })
     ],
     state: {
-        count: 2
+        count: 2,
+        clientId: '',
+        userId: 0
     },
     mutations: {
         increment(state) {
             state.count++
+        },
+        setUserId(state, userId) {
+            state.userId = userId
+        },
+        setClientId(state, clientId) {
+            state.clientId = clientId
         }
     },
     getters: {},

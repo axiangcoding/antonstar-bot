@@ -9,7 +9,7 @@
     "target": "es2021",
     "module": "ES2020",
     "lib": [
-      "es2021"
+      "es2021",
     ],
     "resolveJsonModule": true,
     "alwaysStrict": true

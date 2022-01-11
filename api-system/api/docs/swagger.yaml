@@ -30,6 +30,18 @@ definitions:
       param2:
         type: string
     type: object
+  v1.PostVisitForm:
+    properties:
+      client_id:
+        description: 客户端生成id
+        type: string
+      page:
+        description: 访问页面
+        type: string
+      user_id:
+        description: 用户id
+        type: integer
+    type: object
   v1.RegisterForm:
     properties:
       email:
@@ -177,7 +189,56 @@ paths:
       summary: User register
       tags:
       - User
-  /v1/war_thunder/userinfo/detail:
+  /v1/visits:
+    get:
+      parameters:
+      - description: query userinfo
+        in: query
+        name: form
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Visit
+  /v1/visits/count:
+    get:
+      parameters:
+      - description: query userinfo
+        in: query
+        name: form
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      tags:
+      - Visit
+  /v1/visits/visit:
+    post:
+      parameters:
+      - description: query userinfo
+        in: body
+        name: form
+        required: true
+        schema:
+          $ref: '#/definitions/v1.PostVisitForm'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      summary: 登记访问信息
+      tags:
+      - Visit
+  /v1/war_thunder/userinfo/query:
     get:
       parameters:
       - in: query
@@ -189,12 +250,13 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/app.ApiJson'
+      summary: 获取异步查询结果
       tags:
       - WarThunder
-  /v1/war_thunder/userinfo/query:
-    get:
+    post:
       parameters:
-      - in: query
+      - description: 游戏的昵称
+        in: query
         name: nickname
         required: true
         type: string
@@ -203,6 +265,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/app.ApiJson'
+      summary: 提交一个查询游戏用户的请求
       tags:
       - WarThunder
 produces:

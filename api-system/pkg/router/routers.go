@@ -55,10 +55,17 @@ func setRouterV1(r *gin.Engine) {
 		{
 			system.GET("/info", v1.SystemInfo)
 		}
+		visit := groupV1.Group("/visits")
+		{
+			visit.POST("/visit", v1.PostVisit)
+			visit.GET("/", middleware.AuthCheck(), v1.GetVisits)
+			visit.GET("/count", v1.GetVisitCount)
+		}
 		warThunder := groupV1.Group("/war_thunder")
 		{
-			warThunder.GET("/userinfo/query", v1.UserInfoQuery)
-			warThunder.GET("/userinfo/detail", v1.UserInfoDetail)
+			warThunder.POST("/userinfo/query", v1.PostUserInfoQuery)
+			warThunder.GET("/userinfo/query", v1.GetUserInfoQuery)
+			warThunder.StaticFile("/mock.html", "./resources/index.html")
 		}
 	}
 }

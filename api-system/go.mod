@@ -11,6 +11,7 @@ require (
 	github.com/go-redis/redis/v8 v8.11.4
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.3.0
+	github.com/mssola/user_agent v0.5.3
 	github.com/spf13/viper v1.10.1
 	github.com/streadway/amqp v1.0.0
 	github.com/swaggo/files v0.0.0-20210815190702-a29dd2bc99b2

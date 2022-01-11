@@ -21,6 +21,7 @@ func Setup() {
 func initDB() *gorm.DB {
 	db, err := gorm.Open(mysql.Open(conf.Config.App.Data.Database.Source),
 		&gorm.Config{
+			DisableForeignKeyConstraintWhenMigrating: true,
 			Logger: logger.New(
 				log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer（日志输出的目标，前缀和日志包含的内容——译者注）
 				logger.Config{
@@ -31,11 +32,11 @@ func initDB() *gorm.DB {
 				},
 			)})
 	if err != nil {
-		logging.Fatal(err)
+		logging.Fatalf("Can't connect to MySql: %s", err)
 	}
+	logging.Info("Database mysql connected success")
+	setProperties(db)
 	autoMigrate(db)
-	setConfig(db)
-	logging.Info("database mysql connected success")
 	return db
 }
 
@@ -48,12 +49,15 @@ func autoMigrate(db *gorm.DB) {
 	if err := db.AutoMigrate(
 		&schema.User{},
 		&schema.CrawlerData{},
+		&schema.Visit{},
 	); err != nil {
 		logging.Fatal(err)
+	} else {
+		logging.Info("Auto migrate database table success")
 	}
 }
 
-func setConfig(db *gorm.DB) {
+func setProperties(db *gorm.DB) {
 	s, err := db.DB()
 	if err != nil {
 		logging.Fatal(err)

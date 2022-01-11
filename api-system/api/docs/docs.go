@@ -243,17 +243,74 @@ var doc = `{
                 }
             }
         },
-        "/v1/war_thunder/userinfo/detail": {
+        "/v1/visits": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "tags": [
-                    "WarThunder"
+                    "Visit"
                 ],
                 "parameters": [
                     {
                         "type": "string",
-                        "name": "query_id",
+                        "description": "query userinfo",
+                        "name": "form",
                         "in": "query",
                         "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/visits/count": {
+            "get": {
+                "tags": [
+                    "Visit"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "query userinfo",
+                        "name": "form",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/visits/visit": {
+            "post": {
+                "tags": [
+                    "Visit"
+                ],
+                "summary": "登记访问信息",
+                "parameters": [
+                    {
+                        "description": "query userinfo",
+                        "name": "form",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1.PostVisitForm"
+                        }
                     }
                 ],
                 "responses": {
@@ -271,9 +328,33 @@ var doc = `{
                 "tags": [
                     "WarThunder"
                 ],
+                "summary": "获取异步查询结果",
                 "parameters": [
                     {
                         "type": "string",
+                        "name": "query_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "WarThunder"
+                ],
+                "summary": "提交一个查询游戏用户的请求",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "游戏的昵称",
                         "name": "nickname",
                         "in": "query",
                         "required": true
@@ -333,6 +414,23 @@ var doc = `{
                 },
                 "param2": {
                     "type": "string"
+                }
+            }
+        },
+        "v1.PostVisitForm": {
+            "type": "object",
+            "properties": {
+                "client_id": {
+                    "description": "客户端生成id",
+                    "type": "string"
+                },
+                "page": {
+                    "description": "访问页面",
+                    "type": "string"
+                },
+                "user_id": {
+                    "description": "用户id",
+                    "type": "integer"
                 }
             }
         },

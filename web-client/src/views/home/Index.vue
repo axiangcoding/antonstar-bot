@@ -13,7 +13,7 @@
 
 <script lang="ts" setup>
 
-import service from "../util/request";
+import service from "../../util/request";
 import {onMounted, computed, ref} from "vue";
 import {useStore} from "vuex";
 

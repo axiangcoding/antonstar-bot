@@ -38,6 +38,18 @@ export default defineComponent({
 })
 </script>
 
+<script lang="ts" setup>
+import {v4 as uuid} from "uuid"
+import {useStore} from "vuex";
+import {onMounted} from "vue";
+
+const store = useStore()
+const generateClientId = () => {
+  store.commit('setClientId', uuid())
+}
+onMounted(generateClientId)
+</script>
+
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
