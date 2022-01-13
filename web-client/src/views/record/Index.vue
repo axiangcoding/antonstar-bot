@@ -12,21 +12,27 @@
                   type="error" effect="dark" center
                   :closable="false"></el-alert>
         <el-divider></el-divider>
-        <el-input
-            style="width: 40%"
-            minlength="1"
-            maxlength="20"
-            show-word-limit
-            v-model="nick"
-            placeholder="请输入待查询的游戏昵称"
-            size="large"
-            autofocus
-            @keyup.enter.native="doSearch"
-        >
-          <template #append>
-            <el-button type="primary" @click="doSearch" :disabled="nick.length===0">查询</el-button>
-          </template>
-        </el-input>
+        <el-row justify="space-around">
+          <el-col :xs="24" :sm="16" :md="8" :lg="8" :xl="8">
+            <el-input
+                style="width: 100%"
+                minlength="1"
+                maxlength="20"
+                show-word-limit
+                v-model="nick"
+                placeholder="请输入待查询的游戏昵称"
+                size="large"
+                autofocus
+                @keyup.enter.native="doSearch"
+            >
+              <template #append>
+                <el-button type="primary" @click="doSearch" :disabled="nick.length===0">查询</el-button>
+              </template>
+            </el-input>
+          </el-col>
+        </el-row>
+
+
         <div v-if="showInfo==='done'">
           <el-divider></el-divider>
           <el-space style="width: 100%" direction="vertical" fill>
