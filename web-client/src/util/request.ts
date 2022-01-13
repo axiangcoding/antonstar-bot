@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {ElLoading} from 'element-plus';
+import {ElLoading, ElMessage} from 'element-plus';
 
 // 创建axios实例
 const service = axios.create({
@@ -36,6 +36,7 @@ const hideLoading = () => {
 service.interceptors.request.use(config => {
     return config
 }, error => {
+
     return Promise.reject(error)
 })
 
@@ -44,6 +45,13 @@ service.interceptors.response.use((res: any) => {
         return Promise.resolve(res.data)
     },
     error => {
+        const status = error.response.status;
+        if (status == 400) {
+            ElMessage({
+                message: '请输入正确的参数！',
+                type: 'warning',
+            })
+        }
         return Promise.reject(error)
     }
 )

@@ -63,8 +63,9 @@ func setRouterV1(r *gin.Engine) {
 		}
 		warThunder := groupV1.Group("/war_thunder")
 		{
-			warThunder.POST("/userinfo/query", v1.PostUserInfoQuery)
-			warThunder.GET("/userinfo/query", v1.GetUserInfoQuery)
+			warThunder.GET("/userinfo/queries", v1.GetUserInfoQueries)
+			warThunder.POST("/userinfo/refresh", v1.PostUserInfoRefresh)
+			warThunder.GET("/userinfo", v1.GetUserInfo)
 			// warThunder.StaticFile("/mock.html", "./resources/index.html")
 		}
 	}

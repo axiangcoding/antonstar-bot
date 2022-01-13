@@ -24,7 +24,7 @@
             mode="horizontal"
             @select="handleSelect"
         >
-          <el-menu-item v-for="item in titleList" :index="item.id">
+          <el-menu-item v-for="item in titleList" :index="item.id" :disabled="item.disabled">
             <span style="font-size: var(--el-font-size-medium);font-weight: bold">{{ item.name }}</span>
           </el-menu-item>
         </el-menu>
@@ -60,12 +60,12 @@ const activeIndex = computed(() => {
 })
 
 const titleList = [
-  {id: '2', name: '攻略教程'},
-  {id: '3', name: '玩家社区'},
-  {id: '4', name: '资源下载'},
-  {id: 'Record', name: '战绩查询'},
-  {id: '6', name: '封神榜'},
-  {id: 'About', name: '关于我们'},
+  {id: '2', name: '攻略教程',disabled:true},
+  {id: '3', name: '玩家社区',disabled:true},
+  {id: '4', name: '资源下载',disabled:true},
+  {id: 'Record', name: '战绩查询',disabled:false},
+  {id: '6', name: '封神榜',disabled:true},
+  {id: 'About', name: '关于我们',disabled:false},
 ]
 
 const version = ref('Alpha 测试版')

@@ -238,7 +238,7 @@ paths:
       summary: 登记访问信息
       tags:
       - Visit
-  /v1/war_thunder/userinfo/query:
+  /v1/war_thunder/userinfo:
     get:
       parameters:
       - in: query
@@ -253,6 +253,23 @@ paths:
       summary: 获取异步查询结果
       tags:
       - WarThunder
+  /v1/war_thunder/userinfo/queries:
+    get:
+      parameters:
+      - description: 游戏的昵称
+        in: query
+        name: nickname
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      summary: 查询游戏昵称的所有query_id
+      tags:
+      - WarThunder
+  /v1/war_thunder/userinfo/refresh:
     post:
       parameters:
       - description: 游戏的昵称
@@ -265,7 +282,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/app.ApiJson'
-      summary: 提交一个查询游戏用户的请求
+      summary: 刷新一个游戏用户数据的最新数据
       tags:
       - WarThunder
 produces:
