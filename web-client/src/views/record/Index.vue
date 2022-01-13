@@ -23,8 +23,6 @@
         <el-divider></el-divider>
         <UserInfo></UserInfo>
       </el-space>
-
-
     </el-card>
   </div>
 </template>

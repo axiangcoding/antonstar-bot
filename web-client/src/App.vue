@@ -14,7 +14,7 @@
               </el-col>
               <el-col :xs="24" :sm="24" :md="24" :lg="4" :xl="4">
                 <!--<el-affix :offset="89">-->
-                <el-card>
+                <el-card v-adhereTop:[direction]="{ value:20, parent: '.el-scrollbar .el-scrollbar__wrap' }" >
                   <el-empty description="正在施工中"></el-empty>
                 </el-card>
                 <!--</el-affix>-->
@@ -47,6 +47,7 @@ import {useStore} from "vuex";
 import {onMounted} from "vue";
 
 const store = useStore()
+const direction = 'top'
 const generateClientId = () => {
   store.commit('setClientId', uuid())
 }
