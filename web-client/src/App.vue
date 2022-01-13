@@ -2,7 +2,7 @@
   <el-container direction="vertical" id="app">
     <Header></Header>
     <el-scrollbar>
-      <el-backtop/>
+      <el-backtop target=".el-container .el-scrollbar .el-scrollbar__view"/>
       <el-main>
         <el-row>
           <!-- 空白边栏 -->
@@ -54,6 +54,11 @@ onMounted(generateClientId)
 </script>
 
 <style>
+html,body {
+  margin: 0;
+  overflow: hidden;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -62,7 +67,7 @@ onMounted(generateClientId)
   background-color: #f6f6f7;
   font-size: 16px;
   color: #2c3e50;
-  height: 98vh;
+  height: 100vh;
   overflow-x: hidden;
 }
 
