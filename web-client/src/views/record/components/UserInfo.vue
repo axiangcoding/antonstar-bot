@@ -20,7 +20,7 @@
         </el-space>
       </div>
       <el-row :gutter="10">
-        <el-col :span="8" v-for="(index,key) in gaijinInfo.user_stat" :key="key">
+        <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8" v-for="(index,key) in gaijinInfo.user_stat" :key="key">
           <GaijinStatCard :data="index" :title="key"></GaijinStatCard>
         </el-col>
       </el-row>
@@ -29,7 +29,7 @@
       <el-tabs  type="card" >
         <el-tab-pane label="空军">
           <el-row :gutter="10">
-            <el-col :span="8" v-for="(index,key) in gaijinInfo.user_rate.aviation" :key="key">
+            <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8" v-for="(index,key) in gaijinInfo.user_rate.aviation" :key="key">
               <GaijinRateAviationCard :data="index" :title="key"></GaijinRateAviationCard>
             </el-col>
           </el-row>
@@ -37,14 +37,14 @@
 
         <el-tab-pane label="陆军">
           <el-row :gutter="10">
-            <el-col :span="8" v-for="(index,key) in gaijinInfo.user_rate.ground_vehicles" :key="key">
+            <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8" v-for="(index,key) in gaijinInfo.user_rate.ground_vehicles" :key="key">
               <GaijinGroundCard :data="index" :title="key"></GaijinGroundCard>
             </el-col>
           </el-row>
         </el-tab-pane>
         <el-tab-pane label="海军">
           <el-row :gutter="10">
-            <el-col :span="8" v-for="(index,key) in gaijinInfo.user_rate.fleet" :key="key">
+            <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8" v-for="(index,key) in gaijinInfo.user_rate.fleet" :key="key">
               <GaijinFleetCard :data="index" :title="key"></GaijinFleetCard>
             </el-col>
           </el-row>
