@@ -46,7 +46,7 @@ func GetDB() *gorm.DB {
 
 // 自动更新表结构
 func autoMigrate(db *gorm.DB) {
-	if err := db.AutoMigrate(
+	if err := db.Set("gorm:table_options", "ENGINE=InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_bin").AutoMigrate(
 		&schema.User{},
 		&schema.CrawlerData{},
 		&schema.Visit{},
