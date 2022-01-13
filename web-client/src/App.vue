@@ -2,7 +2,7 @@
   <el-container direction="vertical" id="app">
     <Header></Header>
     <el-scrollbar>
-      <el-backtop target=".el-container .el-scrollbar .el-scrollbar__view"/>
+      <el-backtop target=".el-scrollbar .el-scrollbar__wrap"/>
       <el-main>
         <el-row>
           <!-- 空白边栏 -->
@@ -50,7 +50,9 @@ const store = useStore()
 const generateClientId = () => {
   store.commit('setClientId', uuid())
 }
+
 onMounted(generateClientId)
+
 </script>
 
 <style>
