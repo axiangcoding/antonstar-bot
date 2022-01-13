@@ -19,11 +19,27 @@ const routes: Array<RouteRecordRaw> = [
         }
     },
     {
+        path: "/record",
+        name: "Record",
+        component: () => import("../views/record/Index.vue"),
+        meta: {
+            title: '战绩查询'
+        }
+    },
+    {
         path: "/about",
         name: "About",
         component: () => import("../views/about/Index.vue"),
         meta: {
             title: '关于我们'
+        }
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'NotFound',
+        component: () => import("../views/common/NotFound.vue"),
+        meta: {
+            title: '页面未找到'
         }
     }
 ];

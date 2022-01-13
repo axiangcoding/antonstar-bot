@@ -22,12 +22,12 @@ class MysqlPipeline:
     def process_item(self, item, spider):
         # sql语句
         insert_sql = """
-                insert into crawler_data(query_id,http_status,source,nick,content,created_at) VALUES(%s,%s,%s,%s,%s,%s)
-                """
+        update crawler_data set found=%s,http_status=%s,content=%s,updated_at=%s where query_id=%s and source=%s
+        """
         # 执行插入数据到数据库操作
         self.cursor.execute(insert_sql,
-                            (item['query_id'], item['http_status'], item['source'], item['nick'], item['content'],
-                             item['created_at']))
+                            (item['found'], item['http_status'], item['content'],
+                             item['updated_at'], item['query_id'], item['source'],))
         # 提交，不进行提交无法保存到数据库
         self.conn.commit()
 

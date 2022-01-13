@@ -23,12 +23,14 @@ class ThunderSkillSpider(scrapy.Spider):
         item['query_id'] = query_id
         item['nick'] = nick
         item['source'] = 'thunder_skill'
-        item['created_at'] = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+        item['updated_at'] = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
         item['http_status'] = response.status
         if response.status == 200:
             json_body = response.json()
             content = json.dumps(json_body['stats'], ensure_ascii=False)
             item['content'] = content
+            item['found'] = True
         else:
             item['content'] = response.text
+            item['found'] = False
         yield item

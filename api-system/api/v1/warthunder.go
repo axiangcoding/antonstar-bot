@@ -1,12 +1,10 @@
 package v1
 
 import (
-	"axiangcoding/antonstar/api-system/internal/app/entity"
 	"axiangcoding/antonstar/api-system/internal/app/service"
 	"axiangcoding/antonstar/api-system/pkg/app"
 	"axiangcoding/antonstar/api-system/pkg/app/e"
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
 type UserInfoForm struct {
@@ -27,31 +25,12 @@ func PostUserInfoQuery(c *gin.Context) {
 		app.BadRequest(c, e.RequestParamsNotValid, err)
 		return
 	}
-	queryID := uuid.NewString()
-	body1 := entity.MQBody{
-		QueryID:  queryID,
-		Source:   entity.SourceGaijin,
-		Nickname: form.Nickname,
-	}
-	body2 := entity.MQBody{
-		QueryID:  queryID,
-		Source:   entity.SourceThunderskill,
-		Nickname: form.Nickname,
-	}
-	err = service.SendMessage(body1)
+	info, err := service.RequestUserInfo(c, form.Nickname)
 	if err != nil {
 		app.BizFailed(c, e.Error, err)
 		return
 	}
-	err = service.SendMessage(body2)
-	if err != nil {
-		app.BizFailed(c, e.Error, err)
-		return
-	}
-	app.Success(c, map[string]string{
-		"send":     "success",
-		"query_id": queryID},
-	)
+	app.Success(c, info)
 }
 
 type UserInfoDetailForm struct {

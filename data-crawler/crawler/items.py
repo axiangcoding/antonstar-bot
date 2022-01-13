@@ -8,16 +8,18 @@ import scrapy
 
 class TSPersonalStatItem(scrapy.Item):
     query_id = scrapy.Field()
+    found = scrapy.Field()
     http_status = scrapy.Field()
     source = scrapy.Field()
     nick = scrapy.Field()
     content = scrapy.Field()
-    created_at = scrapy.Field()
+    updated_at = scrapy.Field()
 
 class GaijinPersonalItem(scrapy.Item):
     query_id = scrapy.Field()
+    found = scrapy.Field()
     http_status = scrapy.Field()
     source = scrapy.Field()
     nick = scrapy.Field()
     content = scrapy.Field()
-    created_at = scrapy.Field()
+    updated_at = scrapy.Field()

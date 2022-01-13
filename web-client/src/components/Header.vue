@@ -51,7 +51,7 @@
 
 <script lang="ts" setup>
 import {computed, ref} from 'vue'
-import logo from "../assets/image/logo.png"
+import logo from "../assets/logo/logo.png"
 import {useRoute, useRouter} from "vue-router";
 
 const route = useRoute()
@@ -63,7 +63,7 @@ const titleList = [
   {id: '2', name: '攻略教程'},
   {id: '3', name: '玩家社区'},
   {id: '4', name: '资源下载'},
-  {id: '5', name: '战绩查询'},
+  {id: 'Record', name: '战绩查询'},
   {id: '6', name: '封神榜'},
   {id: 'About', name: '关于我们'},
 ]

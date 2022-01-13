@@ -29,3 +29,13 @@ func SendMessage(body entity.MQBody) error {
 	}
 	return nil
 }
+
+func SendMessages(bodies ...entity.MQBody) error {
+	for _, body := range bodies {
+		err := SendMessage(body)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
