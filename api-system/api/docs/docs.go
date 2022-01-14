@@ -323,7 +323,7 @@ var doc = `{
                 }
             }
         },
-        "/v1/war_thunder/userinfo/query": {
+        "/v1/war_thunder/userinfo": {
             "get": {
                 "tags": [
                     "WarThunder"
@@ -345,14 +345,43 @@ var doc = `{
                         }
                     }
                 }
-            },
+            }
+        },
+        "/v1/war_thunder/userinfo/queries": {
+            "get": {
+                "tags": [
+                    "WarThunder"
+                ],
+                "summary": "查询游戏昵称的所有query_id",
+                "parameters": [
+                    {
+                        "maxLength": 20,
+                        "type": "string",
+                        "description": "游戏的昵称",
+                        "name": "nickname",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/war_thunder/userinfo/refresh": {
             "post": {
                 "tags": [
                     "WarThunder"
                 ],
-                "summary": "提交一个查询游戏用户的请求",
+                "summary": "刷新一个游戏用户数据的最新数据",
                 "parameters": [
                     {
+                        "maxLength": 20,
                         "type": "string",
                         "description": "游戏的昵称",
                         "name": "nickname",

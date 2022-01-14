@@ -4,9 +4,7 @@ import (
 	"axiangcoding/antonstar/api-system/api/docs"
 	v1 "axiangcoding/antonstar/api-system/api/v1"
 	"axiangcoding/antonstar/api-system/internal/app/conf"
-	"axiangcoding/antonstar/api-system/pkg/app"
 	"axiangcoding/antonstar/api-system/pkg/middleware"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -20,21 +18,31 @@ func InitRouter() *gin.Engine {
 	// Recovery 中间件会 recover 任何 panic。如果有 panic 的话，会写入 500。
 	r.Use(gin.Recovery())
 	setCors(r)
-	setSwagger(r)
 	setRouterV1(r)
 	return r
 }
 
 func setCors(r *gin.Engine) {
-	config := cors.DefaultConfig()
-	config.AllowAllOrigins = true
-	config.AddAllowMethods("OPTIONS")
-	config.AddAllowHeaders(app.AuthHeader)
-	r.Use(cors.New(config))
+	// config := cors.DefaultConfig()
+	// config.AllowAllOrigins = true
+	// config.AddAllowMethods("OPTIONS")
+	// config.AddAllowHeaders(app.AuthHeader)
+	// r.Use(cors.New(config))
+}
+
+func setSwagger(r *gin.RouterGroup) {
+	if conf.Config.App.Swagger.Enable {
+		docs.SwaggerInfo.Version = conf.Config.App.Version
+		docs.SwaggerInfo.Title = conf.Config.App.Name
+		docs.SwaggerInfo.BasePath = conf.Config.Server.BasePath
+		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	}
 }
 
 func setRouterV1(r *gin.Engine) {
-	groupV1 := r.Group(conf.Config.Server.BasePath + "/v1")
+	base := r.Group(conf.Config.Server.BasePath)
+	setSwagger(base)
+	groupV1 := base.Group("/v1")
 	{
 		demo := groupV1.Group("/demo")
 		{
@@ -63,18 +71,10 @@ func setRouterV1(r *gin.Engine) {
 		}
 		warThunder := groupV1.Group("/war_thunder")
 		{
-			warThunder.POST("/userinfo/query", v1.PostUserInfoQuery)
-			warThunder.GET("/userinfo/query", v1.GetUserInfoQuery)
+			warThunder.GET("/userinfo/queries", v1.GetUserInfoQueries)
+			warThunder.POST("/userinfo/refresh", v1.PostUserInfoRefresh)
+			warThunder.GET("/userinfo", v1.GetUserInfo)
 			// warThunder.StaticFile("/mock.html", "./resources/index.html")
 		}
-	}
-}
-
-func setSwagger(r *gin.Engine) {
-	if conf.Config.App.Swagger.Enable {
-		docs.SwaggerInfo.Version = conf.Config.App.Version
-		docs.SwaggerInfo.Title = conf.Config.App.Name
-		docs.SwaggerInfo.BasePath = conf.Config.Server.BasePath
-		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 }

@@ -22,7 +22,7 @@ class MysqlPipeline:
     def process_item(self, item, spider):
         # sql语句
         insert_sql = """
-        update crawler_data set found=%s,http_status=%s,content=%s,updated_at=%s where query_id=%s and source=%s
+        update crawler_data set found=%s,http_status=%s,content=%s,updated_at=%s,status='done' where query_id=%s and source=%s
         """
         # 执行插入数据到数据库操作
         self.cursor.execute(insert_sql,
