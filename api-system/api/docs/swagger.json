@@ -339,6 +339,7 @@
                 "summary": "查询游戏昵称的所有query_id",
                 "parameters": [
                     {
+                        "maxLength": 20,
                         "type": "string",
                         "description": "游戏的昵称",
                         "name": "nickname",
@@ -364,6 +365,7 @@
                 "summary": "刷新一个游戏用户数据的最新数据",
                 "parameters": [
                     {
+                        "maxLength": 20,
                         "type": "string",
                         "description": "游戏的昵称",
                         "name": "nickname",

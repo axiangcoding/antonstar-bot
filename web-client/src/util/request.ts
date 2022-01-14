@@ -45,8 +45,10 @@ service.interceptors.response.use((res: any) => {
         return Promise.resolve(res.data)
     },
     error => {
-        const status = error.response.status;
-        if (status == 400) {
+        console.log(error.code);
+        if (error.code === 'ECONNABORTED') {
+            ElMessage.error('连接到服务器超时，请稍后重试！')
+        } else if (error.response.status == 400) {
             ElMessage({
                 message: '请输入正确的参数！',
                 type: 'warning',

@@ -20,7 +20,6 @@ func InitRouter() *gin.Engine {
 	// Recovery 中间件会 recover 任何 panic。如果有 panic 的话，会写入 500。
 	r.Use(gin.Recovery())
 	setCors(r)
-	setSwagger(r)
 	setRouterV1(r)
 	return r
 }
@@ -33,8 +32,19 @@ func setCors(r *gin.Engine) {
 	r.Use(cors.New(config))
 }
 
+func setSwagger(r *gin.RouterGroup) {
+	if conf.Config.App.Swagger.Enable {
+		docs.SwaggerInfo.Version = conf.Config.App.Version
+		docs.SwaggerInfo.Title = conf.Config.App.Name
+		docs.SwaggerInfo.BasePath = conf.Config.Server.BasePath
+		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	}
+}
+
 func setRouterV1(r *gin.Engine) {
-	groupV1 := r.Group(conf.Config.Server.BasePath + "/v1")
+	base := r.Group(conf.Config.Server.BasePath)
+	setSwagger(base)
+	groupV1 := base.Group("/v1")
 	{
 		demo := groupV1.Group("/demo")
 		{
@@ -68,14 +78,5 @@ func setRouterV1(r *gin.Engine) {
 			warThunder.GET("/userinfo", v1.GetUserInfo)
 			// warThunder.StaticFile("/mock.html", "./resources/index.html")
 		}
-	}
-}
-
-func setSwagger(r *gin.Engine) {
-	if conf.Config.App.Swagger.Enable {
-		docs.SwaggerInfo.Version = conf.Config.App.Version
-		docs.SwaggerInfo.Title = conf.Config.App.Name
-		docs.SwaggerInfo.BasePath = conf.Config.Server.BasePath
-		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 }

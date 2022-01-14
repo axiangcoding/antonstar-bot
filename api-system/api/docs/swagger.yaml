@@ -258,6 +258,7 @@ paths:
       parameters:
       - description: 游戏的昵称
         in: query
+        maxLength: 20
         name: nickname
         required: true
         type: string
@@ -274,6 +275,7 @@ paths:
       parameters:
       - description: 游戏的昵称
         in: query
+        maxLength: 20
         name: nickname
         required: true
         type: string
