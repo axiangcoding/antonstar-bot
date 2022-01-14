@@ -16,11 +16,11 @@ export default defineConfig({
         }),],
     server: {
         open: false,
-        // proxy: {
-        //     '/api': {
-        //         target: 'http://localhost:8888',
-        //         changeOrigin: true
-        //     }
-        // }
+        proxy: {
+            '/api': {
+                target: 'http://localhost:8888',
+                changeOrigin: true
+            }
+        }
     }
 })
