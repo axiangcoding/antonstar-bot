@@ -60,12 +60,10 @@ const activeIndex = computed(() => {
 })
 
 const titleList = [
-  {id: '2', name: '攻略教程',disabled:true},
-  {id: '3', name: '玩家社区',disabled:true},
-  {id: '4', name: '资源下载',disabled:true},
-  {id: 'Record', name: '战绩查询',disabled:false},
-  {id: '6', name: '封神榜',disabled:true},
-  {id: 'About', name: '关于我们',disabled:false},
+  {id: 'Record', name: '战绩查询', disabled: false},
+  {id: '4', name: '资源下载', disabled: true},
+  {id: '6', name: '封神榜', disabled: true},
+  {id: 'About', name: '关于我们', disabled: true},
 ]
 
 const version = ref('Alpha 测试版')
