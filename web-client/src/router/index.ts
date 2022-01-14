@@ -27,6 +27,14 @@ const routes: Array<RouteRecordRaw> = [
         }
     },
     {
+        path: "/realtime",
+        name: "RealtimeGame",
+        component: () => import("../views/realtime/Index.vue"),
+        meta: {
+            title: '战绩查询'
+        }
+    },
+    {
         path: "/about",
         name: "About",
         component: () => import("../views/about/Index.vue"),

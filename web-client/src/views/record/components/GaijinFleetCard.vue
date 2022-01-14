@@ -5,7 +5,7 @@
                 <span style="font-size: 20px;font-weight: bolder">{{
                     title === 'ab' ? '街机娱乐' : title === 'rb' ? '历史性能' : '全真模拟'
                   }}</span>
-        <el-button type="info" size="small" disabled>导出为图片</el-button>
+        <!--<el-button type="info" size="small" disabled>导出为图片</el-button>-->
       </div>
     </template>
     <el-descriptions

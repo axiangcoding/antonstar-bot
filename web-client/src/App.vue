@@ -73,7 +73,8 @@ body {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	text-align: center;
-	background-color: #f6f6f7;
+	/*background-color: #f6f6f7;*/
+  background-image: linear-gradient( 135deg, #FFF5C3 10%, #9452A5 100%);
 	font-size: 16px;
 	color: #2c3e50;
 	height: 100vh;
@@ -82,5 +83,7 @@ body {
 
 .el-main {
   overflow: hidden;
+  min-height: 90vh;
+
 }
 </style>

@@ -63,7 +63,8 @@ const titleList = [
   {id: 'Record', name: '战绩查询', disabled: false},
   {id: '4', name: '资源下载', disabled: true},
   {id: '6', name: '封神榜', disabled: true},
-  {id: 'About', name: '关于我们', disabled: true},
+  {id: 'RealtimeGame', name: '本地实时数据', disabled: true},
+  {id: 'About', name: '关于我们', disabled: false},
 ]
 
 const version = ref('Alpha 测试版')

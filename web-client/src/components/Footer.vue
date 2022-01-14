@@ -28,6 +28,7 @@ const routeTo = (name: string) => {
 
 <style lang="scss" scoped>
 .footer {
-  background: rgba(0, 0, 0, .01);
+  //background: rgba(0, 0, 0, .01);
+  background-color: #f6f6f7;
 }
 </style>

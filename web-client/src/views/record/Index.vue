@@ -26,7 +26,10 @@
                 @keyup.enter.native="doSearch"
             >
               <template #append>
-                <el-button type="primary" @click="doSearch" :disabled="nick.length===0">查询</el-button>
+                <el-button icon="Search" type="primary" @click="doSearch" :disabled="nick.length===0"
+                           :loading="searchLoading">
+
+                </el-button>
               </template>
             </el-input>
           </el-col>
@@ -55,6 +58,18 @@
           <h1>该玩家不存在，是否填写了正确的名称？</h1>
           <el-link type="primary" :icon="Refresh" @click="refreshInfo(nick)">点我重新查询</el-link>
         </div>
+        <div v-else>
+          <el-divider></el-divider>
+
+          <el-skeleton style="--el-skeleton-circle-size: 100px">
+            <template #template>
+              <el-skeleton-item variant="circle"/>
+            </template>
+          </el-skeleton>
+          <br/>
+          <el-skeleton :rows="5"/>
+
+        </div>
       </el-space>
     </el-card>
   </div>
@@ -80,24 +95,27 @@ import service from "../../util/request";
 import {useRoute, useRouter} from "vue-router";
 import {ElMessage} from 'element-plus'
 
+const searchLoading = ref(false)
+
 const gaijinInfo = ref({})
 const thunderskillInfo = ref({})
 
 const route = useRoute();
 const router = useRouter()
 
-const nick = ref('')
+const nick = ref('WT_GodFather')
 
 const showInfo = ref('none')
 
 let queryIdList: {}
 const doSearch = async () => {
+  ElMessage.success('正在查询，请稍后')
+  searchLoading.value = true
   await getInfoQueries(nick.value)
   let gaijinList = queryIdList['gaijin'];
   // 如果是唯一的一条记录，那么说明是第一次查询
   if (gaijinList != null && gaijinList.length == 1) {
     const item = gaijinList[0]
-    console.log(item);
     if (item['status'] === 'running') {
       showInfo.value = "running"
     } else if (item['found'] === true) {
@@ -129,6 +147,7 @@ const doSearch = async () => {
     refreshInfo(nick.value)
     showInfo.value = 'running'
   }
+  searchLoading.value = false
 }
 const getInfoQueries = async (nick: string) => {
   await service.get('v1/war_thunder/userinfo/queries',

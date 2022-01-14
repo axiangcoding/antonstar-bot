@@ -1,24 +1,35 @@
 <template>
   <div>
     <el-space style="width: 100%" direction="vertical" fill>
-      <el-badge value="已被封禁！" :hidden="!gaijinInfo.banned">
-        <el-avatar shape="square" :size="size"
-                   src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"></el-avatar>
-      </el-badge>
-      <el-link :href="'https://warthunder.com/'+gaijinInfo.clan_url" target="_blank"
-               :underline="false" class="link-clan">{{ gaijinInfo.clan }}
-      </el-link>
-      <div class="text-title-1">【{{ gaijinInfo.title }}】{{ gaijinInfo.nick }}</div>
-      <el-tag size="large" color="goldenrod" type="info" class="tag-level">
-        等级 {{ gaijinInfo.level }}
-      </el-tag>
-      <div class="text-title-2">注册于 {{ gaijinInfo.register_date }}</div>
-      <div>
-        <el-space>
-          <el-tag size="medium" type="info">本数据获取于 {{ gaijinInfo.updated_at }}</el-tag>
-          <el-link type="primary" :icon="Refresh" @click="refreshInfoQueries(gaijinInfo.nick)">数据过时？点我刷新</el-link>
-        </el-space>
-      </div>
+      <el-row>
+        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
+          <el-space style="width: 100%" direction="vertical" fill>
+            <el-badge value="已被封禁！" :hidden="!gaijinInfo.banned">
+              <el-avatar shape="square" :size="size"
+                         src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"></el-avatar>
+            </el-badge>
+            <el-link :href="'https://warthunder.com/'+gaijinInfo.clan_url" target="_blank"
+                     :underline="false" class="link-clan">{{ gaijinInfo.clan }}
+            </el-link>
+            <div class="text-title-1">【{{ gaijinInfo.title }}】{{ gaijinInfo.nick }}</div>
+            <el-tag size="large" color="goldenrod" type="info" class="tag-level">
+              等级 {{ gaijinInfo.level }}
+            </el-tag>
+            <div class="text-title-2">注册于 {{ gaijinInfo.register_date }}</div>
+            <div>
+              <el-space>
+                <el-tag size="medium" type="info">本数据获取于 {{ gaijinInfo.updated_at }}</el-tag>
+                <el-link type="primary" :icon="Refresh" @click="refreshInfoQueries(gaijinInfo.nick)">数据过时？点我刷新</el-link>
+              </el-space>
+            </div>
+          </el-space>
+
+        </el-col>
+        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12">
+          <TSStatCare :data="thunderskillInfo"></TSStatCare>
+        </el-col>
+      </el-row>
+
       <el-row :gutter="10">
         <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8" v-for="(index,key) in gaijinInfo.user_stat" :key="key">
           <GaijinStatCard :data="index" :title="key"></GaijinStatCard>
@@ -26,10 +37,11 @@
       </el-row>
 
       <!--{{ gaijinInfo.user_rate }}-->
-      <el-tabs  type="card" >
+      <el-tabs type="card">
         <el-tab-pane label="空军">
           <el-row :gutter="10">
-            <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8" v-for="(index,key) in gaijinInfo.user_rate.aviation" :key="key">
+            <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8" v-for="(index,key) in gaijinInfo.user_rate.aviation"
+                    :key="key">
               <GaijinRateAviationCard :data="index" :title="key"></GaijinRateAviationCard>
             </el-col>
           </el-row>
@@ -37,14 +49,16 @@
 
         <el-tab-pane label="陆军">
           <el-row :gutter="10">
-            <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8" v-for="(index,key) in gaijinInfo.user_rate.ground_vehicles" :key="key">
+            <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8"
+                    v-for="(index,key) in gaijinInfo.user_rate.ground_vehicles" :key="key">
               <GaijinGroundCard :data="index" :title="key"></GaijinGroundCard>
             </el-col>
           </el-row>
         </el-tab-pane>
         <el-tab-pane label="海军">
           <el-row :gutter="10">
-            <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8" v-for="(index,key) in gaijinInfo.user_rate.fleet" :key="key">
+            <el-col :xs="24" :sm="24" :md="8" :lg="8" :xl="8" v-for="(index,key) in gaijinInfo.user_rate.fleet"
+                    :key="key">
               <GaijinFleetCard :data="index" :title="key"></GaijinFleetCard>
             </el-col>
           </el-row>
@@ -289,8 +303,10 @@ import GaijinStatCard from "./GaijinStatCard.vue";
 import GaijinRateAviationCard from "./GaijinRateAviationCard.vue";
 import GaijinGroundCard from "./GaijinGroundCard.vue";
 import GaijinFleetCard from "./GaijinFleetCard.vue";
+import TSStatCare from "./TSStatCard.vue"
 import service from "../../../util/request";
 import {ElMessage} from "element-plus";
+
 
 const size = ref('')
 
@@ -348,4 +364,6 @@ const refreshInfoQueries = (nick: string) => {
   font-size: 20px;
   color: goldenrod;
 }
+
+
 </style>

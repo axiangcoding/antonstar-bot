@@ -1,9 +1,13 @@
 <template>
   <div class="home">
-    <el-card class="main-card" :body-style="bodyStyle">
-      <el-carousel height="200px">
+    <el-card class="card-main" :body-style="bodyStyle">
+      <el-carousel height="400px">
         <el-carousel-item v-for="item in carousel_list" :key="item.id">
-          <h2>{{ item.content }}</h2>
+          <!--<h2>{{ item.content }}</h2>-->
+          <el-image style="width: 100%;height: 400px"
+                    :src="item.url" fit="cover">
+
+          </el-image>
         </el-carousel-item>
       </el-carousel>
       <el-empty description="正在施工中"></el-empty>
@@ -21,12 +25,20 @@ const carousel_list = ref([
   {
     id: 1,
     content: '安东星内测啦，目前仅战绩查询可用！敬请期待！',
-    to: ''
+    to: '',
+    url: 'https://s2.loli.net/2022/01/14/2wIoaU193gQYn6A.png'
   },
   {
     id: 2,
     content: '【广告位招租】 ',
-    to: ''
+    to: '',
+    url: 'https://s2.loli.net/2022/01/14/CHkQW3msRbT5ayS.png'
+  },
+  {
+    id: 3,
+    content: '【广告位招租】 ',
+    to: '',
+    url: 'https://s2.loli.net/2022/01/14/O681mVtkdKDRxZz.png'
   }
 ])
 
@@ -66,13 +78,13 @@ onMounted(testGet)
 .home {
 }
 
-.main-card {
+.card-main {
 
   margin: 0;
   padding: 0;
 }
 
-:deep(.el-carousel__item)  h2 {
+:deep(.el-carousel__item) h2 {
   color: #475669;
   opacity: 0.75;
   margin: 0;
