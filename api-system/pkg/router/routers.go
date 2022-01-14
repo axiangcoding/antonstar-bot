@@ -4,9 +4,7 @@ import (
 	"axiangcoding/antonstar/api-system/api/docs"
 	v1 "axiangcoding/antonstar/api-system/api/v1"
 	"axiangcoding/antonstar/api-system/internal/app/conf"
-	"axiangcoding/antonstar/api-system/pkg/app"
 	"axiangcoding/antonstar/api-system/pkg/middleware"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -25,11 +23,11 @@ func InitRouter() *gin.Engine {
 }
 
 func setCors(r *gin.Engine) {
-	config := cors.DefaultConfig()
+	// config := cors.DefaultConfig()
 	// config.AllowAllOrigins = true
-	config.AddAllowMethods("OPTIONS")
-	config.AddAllowHeaders(app.AuthHeader)
-	r.Use(cors.New(config))
+	// config.AddAllowMethods("OPTIONS")
+	// config.AddAllowHeaders(app.AuthHeader)
+	// r.Use(cors.New(config))
 }
 
 func setSwagger(r *gin.RouterGroup) {
