@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { NConfigProvider } from 'naive-ui'
-import themes from '@/themes/index.ts'
+import themes from '@/themes/index'
 </script>
 
 <template>

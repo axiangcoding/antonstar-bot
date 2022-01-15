@@ -1,10 +1,13 @@
-import { useThemeVars } from 'naive-ui'
+import {GlobalThemeOverrides} from 'naive-ui'
 
-const themeOverrides = {
-	common: useThemeVars(),
-	anton_star: {
-		textColor: '#2c3e50',
-	},
+
+const themeOverrides: GlobalThemeOverrides = {
+    common: {
+        primaryColor: '#FF0000'
+    },
+    Button: {
+        textColor: '#FF0000'
+    }
 }
 
 export default themeOverrides
