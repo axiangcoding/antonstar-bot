@@ -1,0 +1,26 @@
+{
+  "name": "browser-client",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.2.25",
+    "vuex": "^4.0.2"
+  },
+  "devDependencies": {
+    "@vicons/fa": "^0.11.0",
+    "@vicons/utils": "^0.1.4",
+    "@vitejs/plugin-vue": "^2.0.1",
+    "axios": "^0.24.0",
+    "naive-ui": "^2.24.1",
+    "typescript": "^4.4.4",
+    "vfonts": "^0.0.3",
+    "vite": "^2.7.12",
+    "vue-router": "^4.0.12",
+    "vue-tsc": "^0.30.2",
+    "vuex-persistedstate": "^4.1.0"
+  }
+}
