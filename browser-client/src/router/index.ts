@@ -10,46 +10,14 @@ declare module 'vue-router' {
 }
 
 const routes: Array<RouteRecordRaw> = [
-    // {
-    //     path: "/",
-    //     name: "Home",
-    //     component: () => import("../views/home/Index.vue"),
-    //     meta: {
-    //         title: '首页'
-    //     }
-    // },
-    // {
-    //     path: "/record",
-    //     name: "Record",
-    //     component: () => import("../views/record/Index.vue"),
-    //     meta: {
-    //         title: '战绩查询'
-    //     }
-    // },
-    // {
-    //     path: "/realtime",
-    //     name: "RealtimeGame",
-    //     component: () => import("../views/realtime/Index.vue"),
-    //     meta: {
-    //         title: '战绩查询'
-    //     }
-    // },
-    // {
-    //     path: "/about",
-    //     name: "About",
-    //     component: () => import("../views/about/Index.vue"),
-    //     meta: {
-    //         title: '关于我们'
-    //     }
-    // },
-    // {
-    //     path: '/:pathMatch(.*)*',
-    //     name: 'NotFound',
-    //     component: () => import("../views/common/NotFound.vue"),
-    //     meta: {
-    //         title: '页面未找到'
-    //     }
-    // }
+    {
+        path: "/",
+        name: "Home",
+        component: () => import("@/layout/index.vue"),
+        meta: {
+            title: '首页'
+        }
+    },
 ];
 
 const router = createRouter({
