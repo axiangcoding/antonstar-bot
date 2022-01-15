@@ -1,19 +1,13 @@
 <template>
 	<n-layout>
 		<n-layout-header>
-			<!-- 命名视图==>头部栏 默认为Header -->
-			<router-view name="header">
-				<Header></Header>
-			</router-view>
+			<Header></Header>
 		</n-layout-header>
 		<n-layout-content>
 			<router-view></router-view>
 		</n-layout-content>
 		<n-layout-footer>
-			<!-- 命名视图==>底边栏 默认为Footer -->
-			<router-view name="footer">
-				<Footer></Footer>
-			</router-view>
+			<Footer></Footer>
 		</n-layout-footer>
 	</n-layout>
 </template>
@@ -33,7 +27,8 @@ export default defineComponent({
 		Header,
 		Footer,
 	},
+	created() {
+		console.log(this.$route)
+	}
 })
 </script>
-
-<style lang="scss" scoped></style>
