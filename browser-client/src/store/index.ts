@@ -5,9 +5,10 @@ import createPersistence from 'vuex-persistedstate'
 import {createStore, useStore as baseUseStore, Store} from 'vuex'
 
 export interface State {
-    count: number,
-    clientId: string,
-    userId: number
+	themes: String,
+	count: number
+	clientId: string
+	userId: number
 }
 
 export const key: InjectionKey<Store<State>> = Symbol()
@@ -19,6 +20,7 @@ export const store = createStore<State>({
         })
     ],
     state: {
+        themes: 'anton_star',
         count: 2,
         clientId: '',
         userId: 0
@@ -32,6 +34,9 @@ export const store = createStore<State>({
         },
         setClientId(state, clientId) {
             state.clientId = clientId
+        },
+        setThemes(state, themes) {
+            state.themes = themes
         }
     },
     getters: {},

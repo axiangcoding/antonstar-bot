@@ -1,9 +1,9 @@
 <template>
 	<n-layout>
-		<n-layout-header>
+		<n-layout-header position="absolute">
 			<Header></Header>
 		</n-layout-header>
-		<n-layout-content>
+		<n-layout-content class="content">
 			<router-view></router-view>
 		</n-layout-content>
 		<n-layout-footer>
@@ -27,8 +27,19 @@ export default defineComponent({
 		Header,
 		Footer,
 	},
-	created() {
-		console.log(this.$route)
-	}
 })
 </script>
+
+<style lang="scss" scoped>
+	::v-deep .n-layout-header {
+		height: $headerHeight;
+		z-index: 10;
+	}
+	.content {
+		padding-top: $headerHeight;
+		min-height: calc(100vh - $footerHeight);
+	}
+	.n-layout-footer {
+		height: $footerHeight;
+	}
+</style>

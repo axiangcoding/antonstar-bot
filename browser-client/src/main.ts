@@ -7,10 +7,13 @@ import {
 	create,
 	// component
   NButton,
+  NImage,
+  NGrid,
+  NGridItem
 } from 'naive-ui'
 
 const naive = create({
-	components: [NButton],
+	components: [NButton, NImage, NGrid, NGridItem],
 })
 
 const app = createApp(App)

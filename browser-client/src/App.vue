@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { NConfigProvider } from 'naive-ui'
 import themes from '@/themes/index'
+import { useStore } from 'vuex';
+import { ref } from 'vue'
+
+const store = useStore()
+const themeOverrides = ref(themes[store.state.themes])
 </script>
 
 <template>
@@ -10,7 +15,7 @@ import themes from '@/themes/index'
 	</n-config-provider>
 </template>
 
-<style>
+<style lang="scss">
 html,
 body {
 	margin: 0;
