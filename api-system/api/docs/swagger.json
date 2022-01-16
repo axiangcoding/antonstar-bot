@@ -17,78 +17,6 @@
         "version": "1.0.0"
     },
     "paths": {
-        "/v1/demo/get": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Demo/Test"
-                ],
-                "summary": "demo，测试get",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "some params named param1",
-                        "name": "param1",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "some params named param2",
-                        "name": "param2",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/demo/post": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "demo"
-                ],
-                "summary": "demo，测试post",
-                "parameters": [
-                    {
-                        "description": "some params json",
-                        "name": "params",
-                        "in": "body",
-                        "schema": {
-                            "$ref": "#/definitions/v1.Params"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/v1/system/info": {
             "get": {
                 "security": [
@@ -105,30 +33,6 @@
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/app.ApiJson"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/test/test-log": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "demo"
-                ],
-                "summary": "demo，测试post",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
                         }
                     }
                 }
@@ -416,17 +320,6 @@
                 },
                 "userId": {
                     "type": "integer"
-                }
-            }
-        },
-        "v1.Params": {
-            "type": "object",
-            "properties": {
-                "param1": {
-                    "type": "string"
-                },
-                "param2": {
-                    "type": "string"
                 }
             }
         },

@@ -23,13 +23,6 @@ definitions:
       userId:
         type: integer
     type: object
-  v1.Params:
-    properties:
-      param1:
-        type: string
-      param2:
-        type: string
-    type: object
   v1.PostVisitForm:
     properties:
       client_id:
@@ -62,49 +55,6 @@ info:
   title: Golang Gin Template API
   version: 1.0.0
 paths:
-  /v1/demo/get:
-    get:
-      parameters:
-      - description: some params named param1
-        in: query
-        name: param1
-        type: string
-      - description: some params named param2
-        in: query
-        name: param2
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: demo，测试get
-      tags:
-      - Demo/Test
-  /v1/demo/post:
-    post:
-      parameters:
-      - description: some params json
-        in: body
-        name: params
-        schema:
-          $ref: '#/definitions/v1.Params'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: demo，测试post
-      tags:
-      - demo
   /v1/system/info:
     get:
       responses:
@@ -117,20 +67,6 @@ paths:
       summary: System Info
       tags:
       - System
-  /v1/test/test-log:
-    get:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: demo，测试post
-      tags:
-      - demo
   /v1/user/login:
     post:
       parameters:
