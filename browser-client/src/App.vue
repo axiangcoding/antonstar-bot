@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NConfigProvider } from 'naive-ui'
+import { NConfigProvider, darkTheme } from 'naive-ui'
 import themes from '@/themes/index'
 import { useStore } from 'vuex'
 import { ref } from 'vue'

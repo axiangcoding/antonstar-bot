@@ -3,7 +3,11 @@
 const anton_star = {
 	common: {
 		headerBackColor: '#40485b',
-		headerColor: '#fff'
+		headerColor: '#fff',
+	},
+	Menu: {
+		itemIconColorActive: '#229cee',
+		itemTextColorActive: '#229cee',
 	},
 }
 

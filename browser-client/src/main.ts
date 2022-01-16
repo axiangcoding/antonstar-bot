@@ -16,11 +16,12 @@ import {
 	NGrid,
 	NGridItem,
   NElement,
-  NSpace
+  NSpace,
+  NAvatar
 } from 'naive-ui'
 
 const naive = create({
-	components: [NButton, NImage, NGrid, NGridItem, NElement, NSpace],
+	components: [NButton, NImage, NGrid, NGridItem, NElement, NSpace, NAvatar],
 })
 
 const app = createApp(App)

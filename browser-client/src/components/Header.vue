@@ -1,22 +1,22 @@
 <template>
 	<n-layout-header position="absolute">
 		<div class="header-content">
-      <n-space>
-        <div class="logo">
-          <n-image height="46" :src="LOGO_URL" preview-disabled />
-        </div>
-        <n-menu
-          v-model:value="activeKey"
-          mode="horizontal"
-          :options="menuOptions"
-        />
-      </n-space>
-      <div class="right">
-        <n-avatar
-          size="large"
-          src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
-        />
-      </div>
+			<n-space>
+				<div class="logo">
+					<n-image height="46" :src="LOGO_URL" preview-disabled />
+				</div>
+				<n-menu
+					v-model:value="activeKey"
+					mode="horizontal"
+					:options="menuOptions"
+				/>
+			</n-space>
+			<div class="right">
+				<n-avatar
+					size="large"
+					src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
+				/>
+			</div>
 		</div>
 	</n-layout-header>
 </template>
@@ -34,7 +34,7 @@ let scrollFunc: any = null
 
 const route = useRoute()
 const activeKey = computed(() => {
-  return route.name as string
+	return route.name as string
 })
 
 function renderIcon(icon: any) {
@@ -111,25 +111,35 @@ export default defineComponent({
 	height: $headerHeight;
 	z-index: 10;
 	background-color: var(--header-back-color);
-  color: var(--header-color);
+	color: var(--header-color);
 	transition: 0.3s all;
 
-  :deep(.n-menu) {
-    &.n-menu--horizontal {
-      transform: translateY(-50%);
-      position: relative;
-      top: 50%;
-    }
-    .n-menu-item-content {
-      margin: auto;
-      .n-menu-item-content-header {
-        color: var(--header-color);
-      }
-      .n-menu-item-content__icon {
-        color: var(--header-color);
-      }
-    }
-  }
+	:deep(.n-menu) {
+		&.n-menu--horizontal {
+			transform: translateY(-50%);
+			position: relative;
+			top: 50%;
+		}
+		.n-menu-item--selected {
+			.n-menu-item-content {
+				.n-menu-item-content-header {
+					color: var(--n-item-text-color-active) !important;
+				}
+				.n-menu-item-content__icon {
+					color: var(--n-item-icon-color-active) !important;
+				}
+			}
+		}
+		.n-menu-item-content {
+			margin: auto;
+			.n-menu-item-content-header {
+				color: var(--header-color);
+			}
+			.n-menu-item-content__icon {
+				color: var(--header-color);
+			}
+		}
+	}
 
 	&.immersive {
 		padding-top: 10px;
@@ -141,14 +151,16 @@ export default defineComponent({
 	}
 
 	.header-content {
-    max-width: 1200px;
-    min-width: 1100px;
-    margin: 0 auto;
+		max-width: 1200px;
+		min-width: 1100px;
+    display: flex;
+    align-items: center;
+		margin: 0 auto;
 	}
 
-  .right {
-    margin-left: auto;
-  }
+	.right {
+		margin-left: auto;
+	}
 
 	:deep(.n-image) {
 		display: block;
