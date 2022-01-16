@@ -34,7 +34,7 @@ let scrollFunc: any = null
 
 const route = useRoute()
 const activeKey = computed(() => {
-	return route.name
+  return route.name as string
 })
 
 function renderIcon(icon: any) {
