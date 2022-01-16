@@ -2,7 +2,7 @@
 	<n-layout-header position="absolute">
 		<div class="header-content">
 			<n-space>
-				<div class="logo">
+				<div class="logo" @click="$router.push({name:'home'})">
 					<n-image height="46" :src="LOGO_URL" preview-disabled />
 				</div>
 				<n-menu
@@ -12,9 +12,10 @@
 				/>
 			</n-space>
 			<div class="right">
-				<n-avatar
-					size="large"
-					src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
+        <n-avatar
+            round
+            size="large"
+            src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
 				/>
 			</div>
 		</div>
@@ -26,7 +27,7 @@ import { useRoute, RouterLink } from 'vue-router'
 import { computed, h, onBeforeUnmount, onMounted, ref } from 'vue'
 import { NIcon, NMenu } from 'naive-ui'
 import logo from '@/assets/logo/logo.png'
-import { Award } from '@vicons/fa'
+import { Award,CommentsRegular } from '@vicons/fa'
 
 let header: any = null
 let scrollBox: any = null
@@ -61,7 +62,7 @@ const menuOptions = [
 	},
 	{
 		key: 'about',
-		icon: renderIcon(Award),
+		icon: renderIcon(CommentsRegular),
 		label: () =>
 			h(
 				RouterLink,
@@ -107,6 +108,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.logo{
+  cursor: pointer;
+}
+
 .n-layout-header {
 	height: $headerHeight;
 	z-index: 10;
