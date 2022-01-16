@@ -17,7 +17,7 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path: '/',
                 name: 'home',
-                component: () => import('@/views/home/index.vue'),
+                component: () => import('@/views/home/Index.vue'),
                 meta: {
                     title: '首页',
                 },
@@ -25,7 +25,7 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path: '/record/:nick',
                 name: 'record',
-                component: () => import('@/views/record/index.vue'),
+                component: () => import('@/views/record/Index.vue'),
                 meta: {
                     title: '战绩查询',
                 },
