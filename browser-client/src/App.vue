@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { NConfigProvider } from 'naive-ui'
 import themes from '@/themes/index'
-import { useStore } from 'vuex';
+import { useStore } from 'vuex'
 import { ref } from 'vue'
 
 const store = useStore()
@@ -9,9 +9,11 @@ const themeOverrides = ref(themes[store.state.themes])
 </script>
 
 <template>
-  <!-- 调整主题变量 -->
-	<n-config-provider :theme-overrides="themes" class="h100">
-		<router-view />
+	<!-- 调整主题变量 -->
+	<n-config-provider :theme-overrides="themeOverrides" class="h100">
+		<n-el tag="div">
+			<router-view />
+		</n-el>
 	</n-config-provider>
 </template>
 

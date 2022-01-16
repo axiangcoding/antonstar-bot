@@ -1,11 +1,9 @@
-import { GlobalThemeOverrides } from 'naive-ui'
+// import { GlobalThemeOverrides } from 'naive-ui'
 
-const anton_star: GlobalThemeOverrides = {
+const anton_star = {
 	common: {
-		primaryColor: '#FF0000',
-	},
-	Button: {
-		textColor: '#FF0000',
+		headerBackColor: '#40485b',
+		headerColor: '#fff'
 	},
 }
 
