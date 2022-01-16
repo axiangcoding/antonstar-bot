@@ -1,5 +1,5 @@
 <template>
-	<n-layout embedded>
+	<n-layout embedded class="layout">
 		<Header></Header>
 		<n-layout-content content-style="padding: 10px;" class="content">
 			<router-view></router-view>
@@ -30,5 +30,9 @@ export default defineComponent({
 	min-height: calc(100vh - $footerHeight);
 	max-width: 1200px;
 	margin: 0 auto;
+}
+
+.layout {
+  background-image: linear-gradient(135deg, #FFF5C3 10%, #9452A5 100%);
 }
 </style>

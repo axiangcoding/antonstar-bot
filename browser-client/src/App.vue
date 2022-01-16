@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NConfigProvider, darkTheme } from 'naive-ui'
+import { NConfigProvider, darkTheme, NBackTop } from 'naive-ui'
 import themes from '@/themes/index'
 import { useStore } from 'vuex'
 import { ref } from 'vue'
@@ -14,6 +14,7 @@ const themeOverrides = ref(themes[store.state.themes])
 		<n-el tag="div">
 			<router-view />
 		</n-el>
+    <n-back-top :right="100" />
 	</n-config-provider>
 </template>
 
@@ -32,5 +33,6 @@ body {
 	font-size: $fontSize;
 	height: 100vh;
 	overflow-x: hidden;
+
 }
 </style>
