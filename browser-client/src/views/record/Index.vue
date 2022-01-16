@@ -19,6 +19,7 @@
         </n-gi>
       </n-grid>
       <n-divider/>
+      <UserInfo></UserInfo>
       <!--<n-empty size="huge">-->
       <!--</n-empty>-->
     </n-space>
@@ -29,6 +30,7 @@
 
 <script lang="ts" setup>
 import {NCard, NEmpty, NAlert, NInputGroup, NInput, NDivider, NGrid, NGi} from "naive-ui";
+import UserInfo from "@/views/record/components/UserInfo.vue";
 
 </script>
 
