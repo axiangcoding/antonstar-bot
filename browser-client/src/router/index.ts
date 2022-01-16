@@ -1,6 +1,6 @@
 import {createRouter, createWebHashHistory, RouteRecordRaw} from 'vue-router'
 import http from '../services/request'
-import {store} from '../store'
+import {store} from '@/store'
 
 declare module 'vue-router' {
     interface RouteMeta {

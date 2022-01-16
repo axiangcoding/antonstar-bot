@@ -39,7 +39,7 @@ let scrollFunc: any = null
 
 const route = useRoute()
 const activeKey = computed(() => {
-  return route.name
+  return route.name as string
 })
 
 function renderIcon(icon: any) {
@@ -105,8 +105,8 @@ const LOGO_URL = ref(logo)
 </script>
 
 <script lang="ts">
-import {NLayoutHeader, NIcon} from 'naive-ui'
-import {defineComponent, ref, onMounted, onBeforeUnmount, computed, h} from 'vue'
+import {NLayoutHeader} from 'naive-ui'
+import {defineComponent} from 'vue'
 
 export default defineComponent({
   components: {
