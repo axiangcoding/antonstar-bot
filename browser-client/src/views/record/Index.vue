@@ -50,4 +50,7 @@ export default {
   text-align: left;
 }
 
+:deep(.n-input-group){
+  justify-content: center;
+}
 </style>

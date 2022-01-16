@@ -29,7 +29,7 @@ body {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	text-align: center;
-	font-size: 16px;
+	font-size: $fontSize;
 	height: 100vh;
 	overflow-x: hidden;
 }
