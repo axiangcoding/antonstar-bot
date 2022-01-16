@@ -1,10 +1,9 @@
 <template>
-
+  <div class="home"></div>
 </template>
 
 <script setup lang="ts">
 </script>
 
-<style>
-
+<style lang="scss" scoped>
 </style>

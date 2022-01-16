@@ -15,9 +15,9 @@ const routes: Array<RouteRecordRaw> = [
 		component: () => import('@/layout/index.vue'),
 		children: [
 			{
-				path: '/',
+				path: '/h',
 				name: 'home',
-				component: import('@/views/home/index.vue'),
+				component: () => import('@/views/home/index.vue'),
 				meta: {
 					title: '首页',
 				},

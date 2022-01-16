@@ -10,7 +10,7 @@ const themeOverrides = ref(themes[store.state.themes])
 
 <template>
   <!-- 调整主题变量 -->
-	<n-config-provider :theme-overrides="themes">
+	<n-config-provider :theme-overrides="themes" class="h100">
 		<router-view />
 	</n-config-provider>
 </template>
