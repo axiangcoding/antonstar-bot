@@ -1,16 +1,14 @@
 <template>
 	<n-layout-header position="absolute">
 		<div class="header-content">
-			<n-space>
-				<div class="logo">
-					<n-image height="46" :src="LOGO_URL" preview-disabled />
-				</div>
-				<n-menu
-					v-model:value="activeKey"
-					mode="horizontal"
-					:options="menuOptions"
-				/>
-			</n-space>
+			<router-link class="logo" to="/">
+				<n-image height="46" :src="LOGO_URL" preview-disabled />
+			</router-link>
+			<n-menu
+				v-model:value="activeKey"
+				mode="horizontal"
+				:options="menuOptions"
+			/>
 			<div class="right">
 				<n-avatar
 					size="large"
@@ -110,33 +108,49 @@ export default defineComponent({
 .n-layout-header {
 	height: $headerHeight;
 	z-index: 10;
-	background-color: var(--header-back-color);
-	color: var(--header-color);
+	background-color: $headerBackColor;
+	color: $headerColor;
 	transition: 0.3s all;
-
+	.logo {
+		display: block;
+	}
 	:deep(.n-menu) {
 		&.n-menu--horizontal {
-			transform: translateY(-50%);
 			position: relative;
 			top: 50%;
 		}
 		.n-menu-item--selected {
 			.n-menu-item-content {
 				.n-menu-item-content-header {
-					color: var(--n-item-text-color-active) !important;
+					color: $itemIconColorActive !important;
+					font-weight: bold;
+					font-size: 17px;
 				}
 				.n-menu-item-content__icon {
-					color: var(--n-item-icon-color-active) !important;
+					color: $itemIconColorActive !important;
+					font-weight: bold;
+					font-size: 22px !important;
 				}
 			}
 		}
 		.n-menu-item-content {
 			margin: auto;
+			&:hover {
+				.n-menu-item-content-header {
+					transition: all 0.3s;
+					color: $itemTextColorHover !important;
+				}
+				.n-menu-item-content__icon {
+					color: $itemTextColorActive !important;
+				}
+			}
 			.n-menu-item-content-header {
-				color: var(--header-color);
+				color: $headerColor;
+				font-size: 16px;
 			}
 			.n-menu-item-content__icon {
-				color: var(--header-color);
+				color: $headerColor;
+				font-size: 21px !important;
 			}
 		}
 	}
@@ -152,14 +166,15 @@ export default defineComponent({
 
 	.header-content {
 		max-width: 1200px;
-		min-width: 1100px;
-    display: flex;
-    align-items: center;
+		display: flex;
+		align-items: center;
 		margin: 0 auto;
 	}
 
 	.right {
 		margin-left: auto;
+    display: flex;
+    align-items: center;
 	}
 
 	:deep(.n-image) {

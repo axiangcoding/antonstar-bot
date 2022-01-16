@@ -38,6 +38,6 @@ export default {
 }
 
 :deep(.n-input-group){
-  margin: 0 auto;
+  justify-content: center;
 }
 </style>

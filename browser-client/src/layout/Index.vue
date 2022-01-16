@@ -28,5 +28,7 @@ export default defineComponent({
 .content {
 	padding-top: $headerHeight;
 	min-height: calc(100vh - $footerHeight);
+	max-width: 1200px;
+	margin: 0 auto;
 }
 </style>
