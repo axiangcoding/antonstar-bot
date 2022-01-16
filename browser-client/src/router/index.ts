@@ -31,6 +31,22 @@ const routes: Array<RouteRecordRaw> = [
                 },
             },
             {
+                path: '/realtime',
+                name: 'realtime',
+                component: () => import('@/views/realtime/Index.vue'),
+                meta: {
+                    title: '实时数据',
+                },
+            },
+            {
+                path: '/about',
+                name: 'about',
+                component: () => import('@/views/about/Index.vue'),
+                meta: {
+                    title: '关于我们',
+                },
+            },
+            {
                 path: '/:pathMatch(.*)*',
                 name: 'not_found',
                 component: () => import("@/views/common/NotFound.vue"),

@@ -21,9 +21,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useRoute, RouterLink } from 'vue-router'
-import { computed, h, onBeforeUnmount, onMounted, ref } from 'vue'
-import { NIcon, NMenu } from 'naive-ui'
+import {useRoute, RouterLink} from 'vue-router'
+import {computed, defineComponent, h, onBeforeUnmount, onMounted, ref, resolveComponent} from 'vue'
+import {NIcon, NMenu} from 'naive-ui'
 import logo from '@/assets/logo/logo.png'
 import { Award,CommentsRegular } from '@vicons/fa'
 
@@ -41,40 +41,52 @@ function renderIcon(icon: any) {
 }
 
 const menuOptions = [
-	{
-		key: 'record',
-		icon: renderIcon(Award),
-		label: () =>
-			h(
-				RouterLink,
-				{
-					to: {
-						name: 'record',
-						params: {
-							nick: 'zh-CN',
-						},
-					},
-				},
-				{ default: () => '战绩查询' }
-			),
-	},
-	{
-		key: 'about',
-		icon: renderIcon(CommentsRegular),
-		label: () =>
-			h(
-				RouterLink,
-				{
-					to: {
-						name: 'record',
-						params: {
-							nick: 'zh-CN',
-						},
-					},
-				},
-				{ default: () => '关于我们' }
-			),
-	},
+  {
+    key: 'record',
+    icon: renderIcon(Award),
+    label: () =>
+        h(
+            RouterLink,
+            {
+              to: {
+                name: 'record',
+                params: {
+                  nick: 'zh-CN',
+                },
+              },
+            },
+            {default: () => '战绩查询'}
+        ),
+  },
+  {
+    key: 'about',
+    icon: renderIcon(CommentsRegular),
+    label: () =>
+        h(
+            RouterLink,
+            {
+              to: {
+                name: 'about',
+              },
+            },
+            {default: () => '关于我们'}
+        ),
+  },
+  {
+    key: 'realtime',
+    // FIXME: 渲染为router-link时，disabled元素错位
+    disabled: true,
+    label: () =>
+        h(
+            RouterLink,
+            {
+              to: {
+                name: 'realtime',
+              },
+            },
+            {default: () => '实时战绩'}
+        ),
+  },
 ]
 onMounted(() => {
 	header = document.querySelector('.n-layout .n-layout-header')
