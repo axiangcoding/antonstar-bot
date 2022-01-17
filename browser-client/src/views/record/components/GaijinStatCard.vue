@@ -8,15 +8,18 @@
           {{ title === 'ab' ? '街机娱乐' : title === 'rb' ? '历史性能' : '全真模拟' }}
         </n-text>
       </n-h3>
-
     </template>
+    <!--<template #header-extra>-->
+    <!--  <n-button size="small" secondary>导出为图片</n-button>-->
+    <!--</template>-->
     <n-descriptions
         v-if="data"
         :column="1"
         label-placement="left"
         bordered
     >
-      <n-descriptions-item label="胜利场次">
+
+      <n-descriptions-item :label-style="{'width':'50%'}" label="胜利场次">
         {{ data['胜利场次'] }}
       </n-descriptions-item>
       <n-descriptions-item label="任务总数">

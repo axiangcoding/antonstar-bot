@@ -18,14 +18,8 @@
         </n-gi>
       </n-grid>
       <n-grid cols="1 768:3 1200:2 1920:3" :x-gap="12" :y-gap="8">
-        <n-gi>
-          <GaijinStatCard></GaijinStatCard>
-        </n-gi>
-        <n-gi>
-          <GaijinStatCard></GaijinStatCard>
-        </n-gi>
-        <n-gi>
-          <GaijinStatCard></GaijinStatCard>
+        <n-gi v-for="(index,key) in gaijinData['user_stat']" :key="key">
+          <GaijinStatCard :data="index" :title="key"></GaijinStatCard>
         </n-gi>
       </n-grid>
       <n-tabs type="line">

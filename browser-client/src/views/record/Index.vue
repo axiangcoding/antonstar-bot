@@ -10,7 +10,8 @@
           <n-input-group>
             <n-input v-model:value="nick" maxlength="20" show-count size="large" round
                      :style="{ width: '100%' }" placeholder="请输入游戏昵称"/>
-            <n-button @click="doSearch" size="large" type="primary" round :disabled="nick.length===0">
+            <n-button @click="doSearch" :loading="btnLoading" size="large" type="primary" round
+                      :disabled="nick.length===0">
               <template #icon>
                 <Search/>
               </template>
@@ -38,9 +39,12 @@ import http from "@/services/request";
 const nick = ref('WT_GodFather')
 const message = useMessage()
 const showInfo = ref('notfound')
+const btnLoading = ref(false)
 let messageReactive = null
+
 const doSearch = async () => {
   messageReactive = message.loading('正在查询，请稍后', {duration: 0})
+  btnLoading.value = true
   try {
     await getInfoQueries(nick.value)
     let gaijinList = queryIdList['gaijin'];
@@ -81,10 +85,9 @@ const doSearch = async () => {
   } catch (e) {
 
   }
-
-  console.log("gg");
   messageReactive.destroy()
   messageReactive = null
+  btnLoading.value = false
 }
 
 let queryIdList: any
