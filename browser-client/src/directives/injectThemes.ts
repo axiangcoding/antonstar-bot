@@ -7,7 +7,6 @@ const injectThemes: Function = (app: any) => {
       const store = getStore()
 			const themeOverrides = themes[store.state.themes]
       const style = themeOverrides[binding.value]
-      console.log(style, el.style)
       for (let i in style) {
         const item = i.replace(/([A-Z])/g, '-$1').toLowerCase()
         const styleAttr = el.getAttribute('style')
