@@ -17,11 +17,21 @@ import {
 	NGridItem,
   NElement,
   NSpace,
-  NAvatar
+  NAvatar,
+  NBackTop
 } from 'naive-ui'
 
 const naive = create({
-	components: [NButton, NImage, NGrid, NGridItem, NElement, NSpace, NAvatar],
+	components: [
+		NButton,
+		NImage,
+		NGrid,
+		NGridItem,
+		NElement,
+		NSpace,
+		NAvatar,
+		NBackTop,
+	],
 })
 
 const app = createApp(App)

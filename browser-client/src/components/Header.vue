@@ -4,11 +4,7 @@
 			<router-link class="logo" to="/">
 				<n-image height="46" :src="LOGO_URL" preview-disabled />
 			</router-link>
-			<n-menu
-				v-model:value="activeKey"
-				mode="horizontal"
-				:options="menuOptions"
-			/>
+      <menu-overides></menu-overides>
 			<div class="right">
         <n-avatar
             round
@@ -21,61 +17,13 @@
 </template>
 
 <script lang="ts" setup>
-import { useRoute, RouterLink } from 'vue-router'
-import { computed, h, onBeforeUnmount, onMounted, ref } from 'vue'
-import { NIcon, NMenu } from 'naive-ui'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import logo from '@/assets/logo/logo.png'
-import { Award,CommentsRegular } from '@vicons/fa'
 
 let header: any = null
 let scrollBox: any = null
 let scrollFunc: any = null
 
-const route = useRoute()
-const activeKey = computed(() => {
-	return route.name as string
-})
-
-function renderIcon(icon: any) {
-	return () => h(NIcon, null, { default: () => h(icon) })
-}
-
-const menuOptions = [
-	{
-		key: 'record',
-		icon: renderIcon(Award),
-		label: () =>
-			h(
-				RouterLink,
-				{
-					to: {
-						name: 'record',
-						params: {
-							nick: 'zh-CN',
-						},
-					},
-				},
-				{ default: () => '战绩查询' }
-			),
-	},
-	{
-		key: 'about',
-		icon: renderIcon(CommentsRegular),
-		label: () =>
-			h(
-				RouterLink,
-				{
-					to: {
-						name: 'record',
-						params: {
-							nick: 'zh-CN',
-						},
-					},
-				},
-				{ default: () => '关于我们' }
-			),
-	},
-]
 onMounted(() => {
 	header = document.querySelector('.n-layout .n-layout-header')
 	scrollBox = document.querySelector('.n-layout .n-layout-scroll-container')
@@ -97,10 +45,12 @@ const LOGO_URL = ref(logo)
 <script lang="ts">
 import { NLayoutHeader } from 'naive-ui'
 import { defineComponent } from 'vue'
+import MenuOverides from './MenuOverides.vue'
 
 export default defineComponent({
 	components: {
 		NLayoutHeader,
+    MenuOverides
 	},
 })
 </script>

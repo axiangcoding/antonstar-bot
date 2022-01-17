@@ -1,9 +1,7 @@
 // import { GlobalThemeOverrides } from 'naive-ui'
 
 const anton_star = {
-	common: {
-
-	},
+	common: {},
 }
 
 const themeOverrides: any = {

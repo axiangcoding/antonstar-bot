@@ -14,6 +14,7 @@ const themeOverrides = ref(themes[store.state.themes])
 		<n-el tag="div">
 			<router-view />
 		</n-el>
+		<n-back-top :right="100" />
 	</n-config-provider>
 </template>
 
