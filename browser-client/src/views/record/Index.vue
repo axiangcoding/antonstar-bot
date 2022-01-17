@@ -142,7 +142,7 @@ const getInfo = async (queryId: string) => {
 
 <style scoped>
 .record {
-  min-height: 2000px;
+  /* min-height: 2000px; */
   text-align: left;
 }
 

@@ -1,14 +1,10 @@
 <template>
-	<n-layout-header position="absolute">
+	<n-layout-header position="absolute" v-injectThemes="'Layout'">
 		<div class="header-content">
 			<router-link class="logo" to="/">
 				<n-image height="46" :src="LOGO_URL" preview-disabled />
 			</router-link>
-			<n-menu
-				v-model:value="activeKey"
-				mode="horizontal"
-				:options="menuOptions"
-			/>
+      <menu-overrides></menu-overrides>
 			<div class="right">
         <n-avatar
             round
@@ -21,73 +17,14 @@
 </template>
 
 <script lang="ts" setup>
-import {useRoute, RouterLink} from 'vue-router'
-import {computed, defineComponent, h, onBeforeUnmount, onMounted, ref, resolveComponent} from 'vue'
-import {NIcon, NMenu} from 'naive-ui'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import logo from '@/assets/logo/logo.png'
-import { Award,CommentsRegular } from '@vicons/fa'
+import MenuOverrides from './MenuOverrides.vue'
 
 let header: any = null
 let scrollBox: any = null
 let scrollFunc: any = null
 
-const route = useRoute()
-const activeKey = computed(() => {
-	return route.name as string
-})
-
-function renderIcon(icon: any) {
-	return () => h(NIcon, null, { default: () => h(icon) })
-}
-
-const menuOptions = [
-  {
-    key: 'record',
-    icon: renderIcon(Award),
-    label: () =>
-        h(
-            RouterLink,
-            {
-              to: {
-                name: 'record',
-                params: {
-                  nick: 'zh-CN',
-                },
-              },
-            },
-            {default: () => '战绩查询'}
-        ),
-  },
-  {
-    key: 'about',
-    icon: renderIcon(CommentsRegular),
-    label: () =>
-        h(
-            RouterLink,
-            {
-              to: {
-                name: 'about',
-              },
-            },
-            {default: () => '关于我们'}
-        ),
-  },
-  {
-    key: 'realtime',
-    // FIXME: 渲染为router-link时，disabled元素错位
-    disabled: true,
-    label: () =>
-        h(
-            RouterLink,
-            {
-              to: {
-                name: 'realtime',
-              },
-            },
-            {default: () => '实时战绩'}
-        ),
-  },
-]
 onMounted(() => {
 	header = document.querySelector('.n-layout .n-layout-header')
 	scrollBox = document.querySelector('.n-layout .n-layout-scroll-container')
@@ -106,59 +43,23 @@ onBeforeUnmount(() => {
 const LOGO_URL = ref(logo)
 </script>
 
+
+
+
+
 <style lang="scss" scoped>
 .logo{
   cursor: pointer;
 }
 
 .n-layout-header {
-	height: $headerHeight;
+	height: var(--header-height);
 	z-index: 10;
-	background-color: $headerBackColor;
-	color: $headerColor;
+	display: flex;
+	align-items: center;
 	transition: 0.3s all;
 	.logo {
 		display: block;
-	}
-	:deep(.n-menu) {
-		&.n-menu--horizontal {
-			position: relative;
-			top: 50%;
-		}
-		.n-menu-item--selected {
-			.n-menu-item-content {
-				.n-menu-item-content-header {
-					color: $itemIconColorActive !important;
-					font-weight: bold;
-					font-size: 17px;
-				}
-				.n-menu-item-content__icon {
-					color: $itemIconColorActive !important;
-					font-weight: bold;
-					font-size: 22px !important;
-				}
-			}
-		}
-		.n-menu-item-content {
-			margin: auto;
-			&:hover {
-				.n-menu-item-content-header {
-					transition: all 0.3s;
-					color: $itemTextColorHover !important;
-				}
-				.n-menu-item-content__icon {
-					color: $itemTextColorActive !important;
-				}
-			}
-			.n-menu-item-content-header {
-				color: $headerColor;
-				font-size: 16px;
-			}
-			.n-menu-item-content__icon {
-				color: $headerColor;
-				font-size: 21px !important;
-			}
-		}
 	}
 
 	&.immersive {
@@ -174,6 +75,7 @@ const LOGO_URL = ref(logo)
 		max-width: 1200px;
 		display: flex;
 		align-items: center;
+		width: 100%;
 		margin: 0 auto;
 	}
 
