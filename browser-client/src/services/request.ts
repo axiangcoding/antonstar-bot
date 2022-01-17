@@ -10,7 +10,6 @@ const http = axios.create({
 })
 
 
-
 // 请求拦截
 http.interceptors.request.use(config => {
     return config
@@ -26,9 +25,9 @@ http.interceptors.response.use((res: any) => {
     error => {
         console.log(error.code);
         if (error.code === 'ECONNABORTED') {
-
+            window.$message.error('服务器暂时无法连接！')
         } else if (error.response.status == 400) {
-
+            window.$message.warn('请输入正确的参数')
         }
         return Promise.reject(error)
     }

@@ -4,7 +4,7 @@
 			<router-link class="logo" to="/">
 				<n-image height="46" :src="LOGO_URL" preview-disabled />
 			</router-link>
-      <menu-overides></menu-overides>
+      <menu-overrides></menu-overrides>
 			<div class="right">
         <n-avatar
             round
@@ -19,6 +19,7 @@
 <script lang="ts" setup>
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import logo from '@/assets/logo/logo.png'
+import MenuOverrides from './MenuOverrides.vue'
 
 let header: any = null
 let scrollBox: any = null
@@ -42,18 +43,9 @@ onBeforeUnmount(() => {
 const LOGO_URL = ref(logo)
 </script>
 
-<script lang="ts">
-import { NLayoutHeader } from 'naive-ui'
-import { defineComponent } from 'vue'
-import MenuOverides from './MenuOverides.vue'
 
-export default defineComponent({
-	components: {
-		NLayoutHeader,
-    MenuOverides
-	},
-})
-</script>
+
+
 
 <style lang="scss" scoped>
 .logo{

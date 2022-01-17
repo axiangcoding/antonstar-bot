@@ -1,13 +1,15 @@
-import { createApp } from 'vue'
+import {createApp} from 'vue'
 import App from './App.vue'
-import { store } from './store'
+import {store} from './store'
 import router from './router'
 import anime from 'animejs'
 import naive from 'naive-ui'
-import injectDirectives from './directives/index.ts'
+import injectDirectives from './directives/index'
 
 // 不放入全局scss配置中，全局scss配置导致页面style标签将其多次引入。
 import '@/scss/global.scss'
+
+
 
 const app = createApp(App)
 
