@@ -4,7 +4,7 @@
       <n-alert title="使用须知" type="warning">
         1. 查询到的数据来自官网和Thunder Skill，本站不对数据的可靠性负责
         <br/>
-        2. 为了防止滥用，同个游戏用户的最新数据每24小时只会刷新一次
+        2. 昵称大小写敏感，注意不要写错
         <br/>
         3. 如果发现数据错位情况，请进行反馈
       </n-alert>
@@ -54,7 +54,6 @@ const doSearch = async () => {
     messageReactive = null
     btnLoading.value = false
   }
-
 }
 
 const router = useRouter();
@@ -75,33 +74,11 @@ const getInfoQueries = async (nick: string) => {
   })
 }
 
-const refreshInfo = (nick: string) => {
-  http.post('v1/war_thunder/userinfo/refresh',
-      {}, {
-        params: {
-          "nickname": nick
-        }
-      }).then(res => {
-    if (res.data['refresh'] === true) {
-      // ElMessage({
-      //   message: '已发送查询请求',
-      //   type: 'success',
-      // })
-    } else {
-      // ElMessage({
-      //   type: 'warning',
-      //   message: "同一个玩家24小时内仅能查询一次！"
-      // })
-    }
-  })
-}
-
 
 </script>
 
 <style scoped>
 .record {
-  /* min-height: 2000px; */
   text-align: left;
 }
 

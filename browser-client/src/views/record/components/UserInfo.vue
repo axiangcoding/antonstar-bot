@@ -24,37 +24,25 @@
             <GaijinStatCard :data="index" :title="key"></GaijinStatCard>
           </n-gi>
         </n-grid>
-        <n-tabs type="line">
+        <n-tabs type="line" v-if="gaijinData.user_rate">
           <n-tab-pane name="aviation" tab="空军">
             <n-grid cols="1 768:3 1200:2 1920:3" :x-gap="12" :y-gap="8">
-              <n-gi>
-                <!--<CommonInfo></CommonInfo>-->
-              </n-gi>
-              <n-gi>
-                <!--<CommonInfo></CommonInfo>-->
-              </n-gi>
-              <n-gi>
-                <!--<CommonInfo></CommonInfo>-->
+              <n-gi v-for="(index,key) in gaijinData.user_rate.aviation" :key="key">
+                <GaijinAviationCard :data="index" :title="key"></GaijinAviationCard>
               </n-gi>
             </n-grid>
           </n-tab-pane>
           <n-tab-pane name="陆军" tab="陆军">
             <n-grid cols="1 768:3 1200:2 1920:3" :x-gap="12" :y-gap="8">
-              <n-gi>
-                <!--<CommonInfo></CommonInfo>-->
-              </n-gi>
-              <n-gi>
-                <!--<CommonInfo></CommonInfo>-->
-              </n-gi>
-              <n-gi>
-                <!--<CommonInfo></CommonInfo>-->
+              <n-gi v-for="(index,key) in gaijinData.user_rate.ground_vehicles" :key="key">
+                <GaijinGroundCard :data="index" :title="key"></GaijinGroundCard>
               </n-gi>
             </n-grid>
           </n-tab-pane>
-          <n-tab-pane name="海军" tab="陆军">
+          <n-tab-pane name="海军" tab="海军">
             <n-grid cols="1 768:3 1200:2 1920:3" :x-gap="12" :y-gap="8">
-              <n-gi>
-                <!--<CommonInfo></CommonInfo>-->
+              <n-gi v-for="(index,key) in gaijinData.user_rate.fleet" :key="key">
+                <GaijinFleetCard :data="index" :title="key"></GaijinFleetCard>
               </n-gi>
               <n-gi>
                 <!--<CommonInfo></CommonInfo>-->
@@ -89,6 +77,9 @@ import CrawlerInfo from "@/views/record/components/CrawlerInfo.vue";
 import {ref, watch} from "vue";
 import http from "@/services/request";
 import {useRoute, useRouter} from "vue-router";
+import GaijinAviationCard from "@/views/record/components/GaijinAviationCard.vue";
+import GaijinGroundCard from "@/views/record/components/GaijinGroundCard.vue";
+import GaijinFleetCard from "@/views/record/components/GaijinFleetCard.vue";
 
 const props = defineProps({
   queryList: Object,

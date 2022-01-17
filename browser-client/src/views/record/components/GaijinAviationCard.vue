@@ -1,9 +1,7 @@
 <template>
-  <n-card
-      size="small"
-      :header-style="{margin:0}"
-      :content-style="{padding:0}"
-  >
+  <n-card size="small"
+          :header-style="{margin:0}"
+          :content-style="{padding:0}">
     <template #header>
       <n-h3 prefix="bar" align-text>
         <n-text type="primary">
@@ -11,33 +9,38 @@
         </n-text>
       </n-h3>
     </template>
-    <!--<template #header-extra>-->
-    <!--  <n-button size="small" secondary>导出为图片</n-button>-->
-    <!--</template>-->
     <n-descriptions
         v-if="data"
         :column="1"
         label-placement="left"
         bordered
     >
-
-      <n-descriptions-item :label-style="{'width':'50%'}" label="胜利场次">
-        {{ data['胜利场次'] }}
+      <n-descriptions-item :label-style="{'width':'50%'}" label="参战次数(空战)">
+        {{ data['参战次数(空战)'] }}
       </n-descriptions-item>
-      <n-descriptions-item label="任务总数">
-        {{ data['任务总数'] }}
+      <n-descriptions-item label="参战次数(战斗机)">
+        {{ data['参战次数(战斗机)'] }}
       </n-descriptions-item>
-      <n-descriptions-item label="作战胜率">
-        {{ data['作战胜率'] }}
+      <n-descriptions-item label="参战次数(轰炸机)">
+        {{ data['参战次数(轰炸机)'] }}
       </n-descriptions-item>
-      <n-descriptions-item label="阵亡数">
-        {{ data['阵亡数'] }}
+      <n-descriptions-item label="参战次数(攻击机)">
+        {{ data['参战次数(攻击机)'] }}
       </n-descriptions-item>
-      <n-descriptions-item label="银狮获得数">
-        {{ data['银狮获得数'] }}
+      <n-descriptions-item label="游戏时长(空战)">
+        {{ data['游戏时长(空战)'] }}
       </n-descriptions-item>
-      <n-descriptions-item label="游戏时间">
-        {{ data['游戏时间'] }}
+      <n-descriptions-item label="游戏时长(战斗机)">
+        {{ data['游戏时长(战斗机)'] }}
+      </n-descriptions-item>
+      <n-descriptions-item label="游戏时长(轰炸机)">
+        {{ data['游戏时长(轰炸机)'] }}
+      </n-descriptions-item>
+      <n-descriptions-item label="游戏时长(攻击机)">
+        {{ data['游戏时长(攻击机)'] }}
+      </n-descriptions-item>
+      <n-descriptions-item label="击毁目标总计">
+        {{ data['击毁目标总计'] }}
       </n-descriptions-item>
       <n-descriptions-item label="空中单位摧毁数">
         {{ data['空中单位摧毁数'] }}
@@ -53,7 +56,6 @@
 </template>
 
 <script lang="ts" setup>
-
 defineProps({
   data: Object,
   title: String,
