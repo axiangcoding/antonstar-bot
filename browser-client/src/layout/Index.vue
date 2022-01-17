@@ -26,5 +26,6 @@ window.$message = useMessage()
 
 .layout {
   background-image: linear-gradient(135deg, #FFF5C3 10%, #9452A5 100%);
+  height: 100%;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-	<n-layout-header position="absolute" v-injectThemes="'Layout'">
+	<n-layout-header class="immersive" position="absolute" v-injectThemes="'Layout'">
 		<div class="header-content">
 			<router-link class="logo" to="/">
 				<n-image height="46" :src="LOGO_URL" preview-disabled />
@@ -58,13 +58,14 @@ const LOGO_URL = ref(logo)
 	display: flex;
 	align-items: center;
 	transition: 0.3s all;
+	box-sizing: content-box;
 	.logo {
 		display: block;
 	}
 
 	&.immersive {
-		padding-top: 10px;
-		background: inherit !important;
+		padding-top: 8px;
+		background-color: var(--header-transparent-color) !important;
 	}
 
 	:deep(.n-grid) {

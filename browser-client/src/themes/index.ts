@@ -7,6 +7,7 @@ const anton_star = {
 	},
 	Layout: {
 		headerTextColor: '#d4d4d4',
+		headerTransparentColor: '#40485bdd',
 		headerNavHoverColor: '#f2f2f2',
 		headerNavActiveColor: '#fff',
 		headerColor: '#40485b',
