@@ -1,9 +1,13 @@
 <template>
   <n-card class="record" :bordered="false">
     <n-space vertical>
-      <n-alert title="查询到的数据来自官网和Thunder Skill，本站不对数据的可靠性负责" type="warning"/>
-      <n-alert title="如果发现数据错位情况，请进行反馈" type="info"/>
-      <n-alert title="为了防止滥用，同个游戏用户的最新数据每24小时只会刷新一次" type="warning"/>
+      <n-alert title="使用须知" type="warning">
+        1. 查询到的数据来自官网和Thunder Skill，本站不对数据的可靠性负责
+        <br/>
+        2. 为了防止滥用，同个游戏用户的最新数据每24小时只会刷新一次
+        <br/>
+        3. 如果发现数据错位情况，请进行反馈
+      </n-alert>
       <n-grid item-responsive>
         <n-gi offset="0 768:6 1200:6 1920:6" span="24 768:12 1200:12 1920:12">
 
@@ -21,7 +25,7 @@
         </n-gi>
       </n-grid>
       <n-divider/>
-      <UserInfo  :query-list="queryIdList"></UserInfo>
+      <UserInfo :query-list="queryIdList"></UserInfo>
     </n-space>
   </n-card>
 </template>
@@ -44,12 +48,12 @@ const doSearch = async () => {
   btnLoading.value = true
   try {
     await getInfoQueries(nick.value)
-  } catch (e) {
-
+  } finally {
+    messageReactive.destroy()
+    messageReactive = null
+    btnLoading.value = false
   }
-  messageReactive.destroy()
-  messageReactive = null
-  btnLoading.value = false
+
 }
 
 const queryIdList = ref()

@@ -3,12 +3,12 @@
     <template #header>
       <n-h3 type="info" prefix="bar" align-text>
         <n-text type="info">
-          获取记录
+          快照记录
         </n-text>
       </n-h3>
     </template>
     <template #header-extra>
-      <n-button type="warning" size="small" secondary>
+      <n-button type="warning" size="small" secondary @click="refresh">
         <template #icon>
           <SunRegular/>
         </template>
@@ -36,12 +36,16 @@ const props = defineProps({
 
 const btnLoading = ref(false)
 const searchQuery = (queryId: string) => {
-  btnLoading.value=true
+  btnLoading.value = true
   emit("searchQuery", queryId)
-  btnLoading.value=false
+  btnLoading.value = false
 }
 
-const emit = defineEmits(["searchQuery"])
+const refresh = () => {
+  emit("refresh")
+}
+
+const emit = defineEmits(["searchQuery", "refresh"])
 
 </script>
 
