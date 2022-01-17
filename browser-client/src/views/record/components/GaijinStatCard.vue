@@ -48,18 +48,11 @@
 </template>
 
 <script lang="ts" setup>
-import {NCard, NH3, NText, NDescriptions, NDescriptionsItem} from "naive-ui";
-</script>
 
-
-<script lang="ts">
-export default {
-  name: "GaijinStatCard",
-  props: {
-    data: {},
-    title: ''
-  }
-}
+defineProps({
+  data: Object,
+  title: String,
+})
 </script>
 
 <style lang="scss" scoped>

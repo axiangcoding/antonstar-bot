@@ -106,17 +106,6 @@ onBeforeUnmount(() => {
 const LOGO_URL = ref(logo)
 </script>
 
-<script lang="ts">
-import { NLayoutHeader } from 'naive-ui'
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-	components: {
-		NLayoutHeader,
-	},
-})
-</script>
-
 <style lang="scss" scoped>
 .logo{
   cursor: pointer;

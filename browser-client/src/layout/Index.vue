@@ -1,35 +1,27 @@
 <template>
-	<n-layout embedded class="layout">
-		<Header></Header>
-		<n-layout-content content-style="padding: 10px;" class="content">
-			<router-view></router-view>
-		</n-layout-content>
-		<Footer></Footer>
-	</n-layout>
+  <n-layout embedded class="layout">
+    <Header></Header>
+    <n-layout-content class="content">
+      <router-view></router-view>
+    </n-layout-content>
+    <Footer></Footer>
+  </n-layout>
 </template>
 
-<script lang="ts">
-import { NLayout, NLayoutContent } from 'naive-ui'
+<script lang="ts" setup>
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-	components: {
-		NLayout,
-		NLayoutContent,
-		Header,
-		Footer,
-	},
-})
+import {useMessage} from "naive-ui";
+// 在组件外的js中调用message，需要挂载到全局变量中，同时需要在n-message-provider的子级组件中挂载
+window.$message = useMessage()
 </script>
 
 <style lang="scss" scoped>
 .content {
-	padding-top: $headerHeight;
-	min-height: calc(100vh - $footerHeight);
-	max-width: 1200px;
-	margin: 0 auto;
+  padding-top: $headerHeight;
+  min-height: calc(100vh - $footerHeight);
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .layout {
