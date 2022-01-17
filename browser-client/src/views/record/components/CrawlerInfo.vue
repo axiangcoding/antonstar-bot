@@ -8,7 +8,7 @@
       </n-h3>
     </template>
     <template #header-extra>
-      <n-button type="warning" size="small" secondary @click="refresh">
+      <n-button type="warning" size="tiny" secondary @click="refresh">
         <template #icon>
           <SunRegular/>
         </template>
@@ -16,9 +16,16 @@
       </n-button>
     </template>
     <n-space vertical>
-      <n-button v-if="data" size="tiny" type="info" :dashed="item.query_id!==active" :loading="btnLoading"
+      <n-button v-if="data"
+                size="tiny" type="info" :dashed="item.query_id!==active" :loading="btnLoading"
+                :disabled="item.status==='running'"
                 v-for="item in data.gaijin" :key="item.query_id" @click="searchQuery(item.query_id)">
-        查看于 {{ parseLocalTime(item.updated_at) }} 获得的快照 【{{ item.found ? '找到' : '未找到' }} {{ item.status }}】
+        <div v-if="item.status!=='running'">
+          查看于 {{ parseLocalTime(item.updated_at) }} 获得的快照
+        </div>
+        <div v-else>
+          创建于 {{ parseLocalTime(item.created_at) }} 的快照正在查询中...
+        </div>
       </n-button>
     </n-space>
   </n-card>

@@ -14,6 +14,7 @@
           :href="'https://warthunder.com/'+data.clan_url"
           target="_blank"
           type="primary"
+          v-if="data.clan"
       >
         <n-gradient-text
             :size="18"
@@ -21,6 +22,12 @@
         >{{ data.clan }}
         </n-gradient-text>
       </n-button>
+      <n-gradient-text
+          :size="18"
+          v-else
+          type="error"
+      >【未加入联队】
+      </n-gradient-text>
       <n-gradient-text size="16" :gradient="{from: '#555555', to: '#aaaaaa'}">【{{ data.title }}】{{ data.nick }}
       </n-gradient-text>
       <n-tag size="large" type="info"> 等级 {{ data.level }}</n-tag>

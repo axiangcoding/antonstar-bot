@@ -36,6 +36,7 @@ import {Search} from "@vicons/fa";
 import UserInfo from "@/views/record/components/UserInfo.vue";
 import {ref} from "vue";
 import http from "@/services/request";
+import {useRouter} from "vue-router";
 
 const nick = ref('WT_GodFather')
 const message = useMessage()
@@ -56,6 +57,7 @@ const doSearch = async () => {
 
 }
 
+const router = useRouter();
 const queryIdList = ref()
 const getInfoQueries = async (nick: string) => {
   await http.get('v1/war_thunder/userinfo/queries',
@@ -65,6 +67,11 @@ const getInfoQueries = async (nick: string) => {
         }
       }).then(res => {
     queryIdList.value = res.data
+    router.push({
+      name: 'record', params: {
+        nick: nick
+      }
+    })
   })
 }
 
