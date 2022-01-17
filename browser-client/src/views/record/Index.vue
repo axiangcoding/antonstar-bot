@@ -5,9 +5,9 @@
       <n-alert title="如果发现数据错位情况，请进行反馈" type="info"/>
       <n-alert title="为了防止滥用，同个游戏用户的最新数据每24小时只会刷新一次" type="warning"/>
       <n-grid item-responsive>
-        <n-gi offset="0 768:8 1200:8 1920:8" span="24 768:8 1200:8 1920:8">
+        <n-gi offset="0 768:6 1200:6 1920:6" span="24 768:12 1200:12 1920:12">
           <n-input-group>
-            <n-input maxlength="20" show-count size="large" round
+            <n-input v-model:value="nick" maxlength="20" show-count size="large" round
                      :style="{ width: '100%' }" placeholder="请输入游戏昵称"/>
             <n-button size="large" type="primary" round>
               <template #icon>
@@ -19,6 +19,8 @@
         </n-gi>
       </n-grid>
       <n-divider/>
+
+      <UserInfo @refresh=""></UserInfo>
       <!--<n-empty size="huge">-->
       <!--</n-empty>-->
     </n-space>
@@ -28,27 +30,28 @@
 </template>
 
 <script lang="ts" setup>
-import {NCard, NEmpty, NAlert, NInputGroup, NInput, NDivider, NGrid, NGi} from "naive-ui";
+import {NCard, NAlert, NInputGroup, NInput, NDivider, NGrid, NGi} from "naive-ui";
+import {Search} from "@vicons/fa";
+import UserInfo from "@/views/record/components/UserInfo.vue";
+import {ref} from "vue";
+
+const nick = ref()
 
 </script>
 
 <script lang="ts">
-import {Search} from "@vicons/fa";
-
 export default {
   name: "Index",
-  components: {
-    Search
-  }
 }
 </script>
 
 <style scoped>
 .record {
+  /* min-height: 2000px; */
   text-align: left;
 }
 
-:deep(.n-input-group){
+:deep(.n-input-group) {
   justify-content: center;
 }
 </style>

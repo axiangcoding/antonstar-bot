@@ -1,5 +1,5 @@
 <template>
-	<n-layout-header position="absolute">
+	<n-layout-header position="absolute" v-injectThemes="'Layout'">
 		<div class="header-content">
 			<router-link class="logo" to="/">
 				<n-image height="46" :src="LOGO_URL" preview-disabled />
@@ -61,53 +61,13 @@ export default defineComponent({
 }
 
 .n-layout-header {
-	height: $headerHeight;
+	height: var(--header-height);
 	z-index: 10;
-	background-color: $headerBackColor;
-	color: $headerColor;
+	display: flex;
+	align-items: center;
 	transition: 0.3s all;
 	.logo {
 		display: block;
-	}
-	:deep(.n-menu) {
-		&.n-menu--horizontal {
-			position: relative;
-			top: 50%;
-		}
-		.n-menu-item--selected {
-			.n-menu-item-content {
-				.n-menu-item-content-header {
-					color: $itemIconColorActive !important;
-					font-weight: bold;
-					font-size: 17px;
-				}
-				.n-menu-item-content__icon {
-					color: $itemIconColorActive !important;
-					font-weight: bold;
-					font-size: 22px !important;
-				}
-			}
-		}
-		.n-menu-item-content {
-			margin: auto;
-			&:hover {
-				.n-menu-item-content-header {
-					transition: all 0.3s;
-					color: $itemTextColorHover !important;
-				}
-				.n-menu-item-content__icon {
-					color: $itemTextColorActive !important;
-				}
-			}
-			.n-menu-item-content-header {
-				color: $headerColor;
-				font-size: 16px;
-			}
-			.n-menu-item-content__icon {
-				color: $headerColor;
-				font-size: 21px !important;
-			}
-		}
 	}
 
 	&.immersive {
@@ -123,6 +83,7 @@ export default defineComponent({
 		max-width: 1200px;
 		display: flex;
 		align-items: center;
+		width: 100%;
 		margin: 0 auto;
 	}
 

@@ -3,38 +3,15 @@ import App from './App.vue'
 import { store } from './store'
 import router from './router'
 import anime from 'animejs'
+import naive from 'naive-ui'
+import injectDirectives from './directives/index.ts'
 
 // 不放入全局scss配置中，全局scss配置导致页面style标签将其多次引入。
 import '@/scss/global.scss'
 
-import {
-	// create naive ui
-	create,
-	// component
-	NButton,
-	NImage,
-	NGrid,
-	NGridItem,
-  NElement,
-  NSpace,
-  NAvatar,
-  NBackTop
-} from 'naive-ui'
-
-const naive = create({
-	components: [
-		NButton,
-		NImage,
-		NGrid,
-		NGridItem,
-		NElement,
-		NSpace,
-		NAvatar,
-		NBackTop,
-	],
-})
-
 const app = createApp(App)
+
+injectDirectives(app)
 
 // 全局变量
 app.config.globalProperties.anime = anime
