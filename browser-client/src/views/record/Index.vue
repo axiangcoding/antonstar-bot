@@ -21,10 +21,7 @@
         </n-gi>
       </n-grid>
       <n-divider/>
-
-      <UserInfo @refresh="" :gaijin-data="gaijinInfo" :thunderskill-data="thunderskillInfo"></UserInfo>
-      <!--<n-empty size="huge">-->
-      <!--</n-empty>-->
+      <UserInfo  :query-list="queryIdList"></UserInfo>
     </n-space>
   </n-card>
 </template>
@@ -38,7 +35,7 @@ import http from "@/services/request";
 
 const nick = ref('WT_GodFather')
 const message = useMessage()
-const showInfo = ref('notfound')
+const showInfo = ref('none')
 const btnLoading = ref(false)
 let messageReactive = null
 
@@ -47,41 +44,6 @@ const doSearch = async () => {
   btnLoading.value = true
   try {
     await getInfoQueries(nick.value)
-    let gaijinList = queryIdList['gaijin'];
-    // 如果是唯一的一条记录，那么说明是第一次查询
-    if (gaijinList != null && gaijinList.length == 1) {
-      const item = gaijinList[0]
-      if (item['status'] === 'running') {
-        showInfo.value = "running"
-      } else if (item['found'] === true) {
-        await getInfo(item['query_id'])
-        showInfo.value = "done"
-      } else {
-        showInfo.value = 'notfound'
-      }
-    }
-    // 如果有多条记录，代表这个用户已经完成了多次查询
-    else if (gaijinList != null && gaijinList.length > 1) {
-      for (let key in gaijinList) {
-        const item = gaijinList[key]
-        if (item['found'] === true) {
-          if (item['status'] === 'running') {
-            showInfo.value = "running"
-          } else if (item['found'] === true) {
-            await getInfo(item['query_id'])
-            showInfo.value = "done"
-          } else {
-            showInfo.value = 'notfound'
-          }
-          break;
-        } else {
-          showInfo.value = 'notfound'
-        }
-      }
-    } else {
-      refreshInfo(nick.value)
-      showInfo.value = 'running'
-    }
   } catch (e) {
 
   }
@@ -90,7 +52,7 @@ const doSearch = async () => {
   btnLoading.value = false
 }
 
-let queryIdList: any
+const queryIdList = ref()
 const getInfoQueries = async (nick: string) => {
   await http.get('v1/war_thunder/userinfo/queries',
       {
@@ -98,9 +60,7 @@ const getInfoQueries = async (nick: string) => {
           "nickname": nick
         }
       }).then(res => {
-
-    queryIdList = res.data
-
+    queryIdList.value = res.data
   })
 }
 
@@ -125,19 +85,7 @@ const refreshInfo = (nick: string) => {
   })
 }
 
-const gaijinInfo = ref({})
-const thunderskillInfo = ref({})
-const getInfo = async (queryId: string) => {
-  await http.get('v1/war_thunder/userinfo',
-      {
-        params: {
-          "query_id": queryId
-        }
-      }).then(res => {
-    gaijinInfo.value = res.data['gaijin']
-    thunderskillInfo.value = res.data['thunder_skill']
-  })
-}
+
 </script>
 
 <style scoped>

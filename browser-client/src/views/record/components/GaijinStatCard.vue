@@ -1,6 +1,9 @@
 <template>
   <n-card
+      size="small"
+      :header-style="{margin:0}"
       :content-style="{padding:0}"
+      v-if="data"
   >
     <template #header>
       <n-h3 prefix="bar" align-text>
