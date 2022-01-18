@@ -18,7 +18,7 @@ window.$message = useMessage()
 
 <style lang="scss" scoped>
 .content {
-	padding-top: var(--header-height);
+	padding-top: calc(var(--header-height) + 8px);
 	min-height: calc(100vh - var(--footer-height));
 	max-width: 1200px;
 	margin: 0 auto;
