@@ -23,7 +23,7 @@ const routes: Array<RouteRecordRaw> = [
                 },
             },
             {
-                path: '/record/:nick',
+                path: '/record/:nick?',
                 name: 'record',
                 component: () => import('@/views/record/Index.vue'),
                 meta: {

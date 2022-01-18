@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "build-tsc": "vue-tsc --noEmit && vite build",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -16,6 +17,7 @@
     "@vicons/utils": "^0.1.4",
     "@vitejs/plugin-vue": "^2.0.1",
     "axios": "^0.24.0",
+    "moment-timezone": "^0.5.34",
     "naive-ui": "^2.24.1",
     "sass": "^1.48.0",
     "sass-loader": "^12.4.0",
