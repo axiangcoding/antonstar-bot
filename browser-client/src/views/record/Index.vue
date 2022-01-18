@@ -12,7 +12,7 @@
         <n-gi offset="0 768:6 1200:6 1920:6" span="24 768:12 1200:12 1920:12">
 
           <n-input-group>
-            <n-input v-model:value="nick" maxlength="20" show-count size="large" round
+            <n-input v-model:value="nick" maxlength="16" show-count size="large" round
                      :style="{ width: '100%' }" placeholder="请输入游戏昵称"/>
             <n-button @click="doSearch" :loading="btnLoading" size="large" type="primary" round
                       :disabled="nick.length===0">
@@ -34,27 +34,37 @@
 import {useMessage} from "naive-ui";
 import {Search} from "@vicons/fa";
 import UserInfo from "@/views/record/components/UserInfo.vue";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import http from "@/services/request";
-import {useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 
-const nick = ref('WT_GodFather')
+const route = useRoute();
+const nick = ref(
+    route.params.nick
+)
 const message = useMessage()
 const showInfo = ref('none')
 const btnLoading = ref(false)
 let messageReactive = null
 
+onMounted(() => {
+  if (nick.value) {
+    doSearch()
+  }
+})
+
 const doSearch = async () => {
-  messageReactive = message.loading('正在查询，请稍后', {duration: 0})
+  // messageReactive = message.loading('正在查询，请稍后', {duration: 0})
   btnLoading.value = true
   try {
-    await getInfoQueries(nick.value)
+    await getInfoQueries(nick.value as string)
   } finally {
-    messageReactive.destroy()
-    messageReactive = null
+    // messageReactive.destroy()
+    // messageReactive = null
     btnLoading.value = false
   }
 }
+
 
 const router = useRouter();
 const queryIdList = ref()

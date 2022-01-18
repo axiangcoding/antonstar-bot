@@ -71,7 +71,7 @@ const menuOptions = [
 		label: '战绩查询',
 		routerName: 'record',
 		params: {
-			nick: 'zh-CN',
+			nick: '',
 		},
 		active: null, // 选中
 		children: [], // 子项

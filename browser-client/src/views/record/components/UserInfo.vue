@@ -55,14 +55,27 @@
         </n-tabs>
       </n-space>
       <n-space align="center" vertical v-else-if="displayStatus==='nothing'">
-        <n-empty>未在本站中找到该用户记录</n-empty>
-        <n-button type="primary" @click="refreshInfoQueries(route.params.nick)">点我向官网发起查询</n-button>
+        <n-result size="small" status="404" title="未在本站中找到该用户" description="未在本站中找到记录并不代表该用户真的不存在，点击下面的按钮查询试试？">
+          <template #footer>
+            <n-button type="info" secondary @click="refreshInfoQueries(route.params.nick)">点我向官网发起查询</n-button>
+          </template>
+        </n-result>
       </n-space>
       <n-space align="center" vertical v-else-if="displayStatus==='running'">
-        <n-empty>正在向官网查询中，请稍等</n-empty>
+        <n-gradient-text :size="20" type="warning">
+          正在向官网查询中...
+        </n-gradient-text>
+        <n-gradient-text :size="14" gradient="linear-gradient(90deg, red 0%, green 50%, purple 100%)">程序本没有慢，查的人多了，就变成了慢</n-gradient-text>
+      </n-space>
+      <n-space vertical v-else-if="displayStatus==='notfound'">
+        <n-result size="small" status="404" title="未在官网中找到该用户" description="这下是真找不到了，是不是名字输错了？">
+          <template #footer>
+            <n-button type="error" secondary @click="refreshInfoQueries(route.params.nick)">我不信，我要再查</n-button>
+          </template>
+        </n-result>
+
       </n-space>
       <n-space vertical v-else>
-        {{ displayStatus }}
         <n-skeleton text :repeat="5" :animated="false"></n-skeleton>
       </n-space>
     </n-spin>
@@ -96,19 +109,25 @@ watch(props, (newVal, oldVal) => {
   if (props.queryList !== undefined && props.queryList.gaijin !== undefined) {
     // 找到最新的一条记录
     let found = false
+    let done = props.queryList.gaijin[0].status === 'done'
     let queryId = props.queryList.gaijin[0].query_id
     for (let item of props.queryList.gaijin) {
       if (item.found) {
         found = true
+        done = item.status === 'done'
+        console.log(item.done);
         queryId = item.query_id
         break
       }
     }
-    if (found) {
+    console.log(done);
+    if (found && done) {
       displayStatus.value = 'find'
       getInfo(queryId)
-    } else {
+    } else if (!found && !done) {
       displayStatus.value = 'running'
+    } else {
+      displayStatus.value = 'notfound'
     }
   } else {
     displayStatus.value = 'nothing'
