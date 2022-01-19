@@ -91,7 +91,7 @@ export default defineComponent({
 					label: '战绩查询',
 					routerName: 'record',
 					params: {
-						nick: 'zh-CN',
+						nick: '',
 					},
 					active: null, // 选中
 					options: [], // 子项
