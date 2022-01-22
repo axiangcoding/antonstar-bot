@@ -1,5 +1,5 @@
 <template>
-  <n-card bordered >
+  <n-card bordered>
     <n-space align="center" vertical>
       <n-badge v-if="data" value="已被封禁！" :show="data.banned">
         <n-avatar
@@ -28,8 +28,9 @@
           type="error"
       >【未加入联队】
       </n-gradient-text>
-      <n-gradient-text size="16" :gradient="{from: '#555555', to: '#aaaaaa'}">【{{ data.title }}】{{ data.nick }}
+      <n-gradient-text size="16" :gradient="{from: '#555555', to: '#aaaaaa'}">【{{ data.title }}】
       </n-gradient-text>
+      <n-gradient-text size="16" :gradient="{from: '#555555', to: '#000000'}"> {{ data.nick }}</n-gradient-text>
       <n-tag size="large" type="info"> 等级 {{ data.level }}</n-tag>
       <n-gradient-text size="14" :gradient="{from: '#555555', to: '#aaaaaa'}">注册于 {{ data.register_date }}
       </n-gradient-text>

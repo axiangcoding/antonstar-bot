@@ -1,5 +1,5 @@
 <template>
-  <n-card>
+  <n-card size="small">
     <template #header>
       <n-h3 type="info" prefix="bar" align-text>
         <n-text type="info">
