@@ -32,7 +32,7 @@ body {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	text-align: center;
-	font-size: $fontSize;
+	font-size: 16px;
 	height: 100vh;
 	overflow-x: hidden;
 }
