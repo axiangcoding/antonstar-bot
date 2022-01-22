@@ -24,7 +24,7 @@
           查看于 {{ parseLocalTime(item.updated_at) }} 获得的快照
         </div>
         <div v-else>
-          创建于 {{ parseLocalTime(item.created_at) }} 的快照正在查询中...
+          创建于 {{ parseLocalTime(item.created_at) }} 的快照查询中...
         </div>
       </n-button>
     </n-space>
