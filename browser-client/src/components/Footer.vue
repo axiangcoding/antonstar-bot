@@ -23,5 +23,6 @@ const router = useRouter()
 <style lang="scss" scoped>
 .n-layout-footer {
   height: var(--footer-height);
+  overflow: hidden;
 }
 </style>
