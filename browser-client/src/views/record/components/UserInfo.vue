@@ -3,9 +3,16 @@
     <n-spin :show="reloading">
       <n-space v-if="displayStatus==='find'" vertical>
         <div>
-          <n-button quaternary type="error" size="small" disabled>站内举报</n-button>
+          <n-button quaternary type="error" size="small" disabled><template #icon>
+            <Angry/>
+          </template>站内举报</n-button>
           <n-divider vertical/>
-          <n-button quaternary type="info" size="small" @click="copyLink">分享链接</n-button>
+          <n-button quaternary type="info" size="small" @click="copyLink">
+            <template #icon>
+                <ShareAlt/>
+            </template>
+            分享链接
+          </n-button>
         </div>
         <n-grid cols="1 768:2 1200:2 1920:2" :x-gap="12" :y-gap="8">
           <n-gi>
@@ -92,6 +99,7 @@ import {useRoute, useRouter} from "vue-router";
 import GaijinAviationCard from "@/views/record/components/GaijinAviationCard.vue";
 import GaijinGroundCard from "@/views/record/components/GaijinGroundCard.vue";
 import GaijinFleetCard from "@/views/record/components/GaijinFleetCard.vue";
+import {ShareAlt, Angry} from "@vicons/fa";
 
 const props = defineProps({
   queryList: Object,

@@ -104,7 +104,7 @@ export default defineComponent({
 				},
 				{
 					key: 'realtime',
-					// icon: renderIcon(CommentsRegular),
+					icon: this.renderIcon(CommentsRegular),
 					label: '实时数据',
 					disabled: true,
 					routerName: 'realtime',
