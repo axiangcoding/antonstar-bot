@@ -78,6 +78,7 @@ const LOGO_URL = ref(logo)
 		align-items: center;
 		width: 100%;
 		margin: 0 auto;
+		padding: 0 5px 0 2px;
 	}
 
 	.right {
