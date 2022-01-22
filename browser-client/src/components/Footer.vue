@@ -22,6 +22,6 @@ const router = useRouter()
 
 <style lang="scss" scoped>
 .n-layout-footer {
-  height: $footerHeight;
+  height: var(--footer-height);
 }
 </style>
