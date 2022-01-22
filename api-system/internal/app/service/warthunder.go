@@ -15,6 +15,7 @@ import (
 
 func GetAllUserInfo(c *gin.Context, nick string) (map[string][]interface{}, error) {
 	lst := make(map[string][]interface{})
+	// TODO: 限制只获取最新5条source为gaijin的记录，thunderskill可以不传
 	crawlerData, err := data.QueryShortCrawlerData(c, schema.CrawlerData{Nick: nick})
 	if err != nil {
 		return lst, err

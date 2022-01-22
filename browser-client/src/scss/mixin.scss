@@ -1,0 +1,31 @@
+// 响应式布局混入
+
+@mixin xs {
+  @media screen and (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin sm {
+  @media screen and (max-width: 992px) {
+    @content;
+  }
+}
+
+@mixin md {
+  @media screen and (max-width: 1200px) {
+    @content;
+  }
+}
+
+@mixin lg {
+  @media screen and (max-width: 1920px) {
+    @content;
+  }
+}
+
+@mixin xl {
+  @media screen and (min-width: 1920px) {
+    @content;
+  }
+}
