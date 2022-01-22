@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ master, develop ]
 
+env:
+  TENCENT_BASE_REPO: ccr.ccs.tencentyun.com
+
 jobs:
   push_api_system:
     name: Push api-system
@@ -25,7 +28,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: axiangcoding/antonstar-api-system
+          images: ${{TENCENT_BASE_REPO}}/axiangcoding/antonstar-api-system
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
