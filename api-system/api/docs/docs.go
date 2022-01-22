@@ -33,78 +33,6 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/v1/demo/get": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Demo/Test"
-                ],
-                "summary": "demo，测试get",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "some params named param1",
-                        "name": "param1",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "some params named param2",
-                        "name": "param2",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/demo/post": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "demo"
-                ],
-                "summary": "demo，测试post",
-                "parameters": [
-                    {
-                        "description": "some params json",
-                        "name": "params",
-                        "in": "body",
-                        "schema": {
-                            "$ref": "#/definitions/v1.Params"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/v1/system/info": {
             "get": {
                 "security": [
@@ -121,30 +49,6 @@ var doc = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/app.ApiJson"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/test/test-log": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "demo"
-                ],
-                "summary": "demo，测试post",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
                         }
                     }
                 }
@@ -242,6 +146,162 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/v1/visits": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "tags": [
+                    "Visit"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "query userinfo",
+                        "name": "form",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/visits/count": {
+            "get": {
+                "tags": [
+                    "Visit"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "query userinfo",
+                        "name": "form",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/visits/visit": {
+            "post": {
+                "tags": [
+                    "Visit"
+                ],
+                "summary": "登记访问信息",
+                "parameters": [
+                    {
+                        "description": "query userinfo",
+                        "name": "form",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1.PostVisitForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/war_thunder/userinfo": {
+            "get": {
+                "tags": [
+                    "WarThunder"
+                ],
+                "summary": "获取异步查询结果",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "query_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/war_thunder/userinfo/queries": {
+            "get": {
+                "tags": [
+                    "WarThunder"
+                ],
+                "summary": "查询游戏昵称的所有query_id",
+                "parameters": [
+                    {
+                        "maxLength": 20,
+                        "type": "string",
+                        "description": "游戏的昵称",
+                        "name": "nickname",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/war_thunder/userinfo/refresh": {
+            "post": {
+                "tags": [
+                    "WarThunder"
+                ],
+                "summary": "刷新一个游戏用户数据的最新数据",
+                "parameters": [
+                    {
+                        "maxLength": 20,
+                        "type": "string",
+                        "description": "游戏的昵称",
+                        "name": "nickname",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -279,14 +339,20 @@ var doc = `{
                 }
             }
         },
-        "v1.Params": {
+        "v1.PostVisitForm": {
             "type": "object",
             "properties": {
-                "param1": {
+                "client_id": {
+                    "description": "客户端生成id",
                     "type": "string"
                 },
-                "param2": {
+                "page": {
+                    "description": "访问页面",
                     "type": "string"
+                },
+                "user_id": {
+                    "description": "用户id",
+                    "type": "integer"
                 }
             }
         },
@@ -311,7 +377,7 @@ var doc = `{
     "securityDefinitions": {
         "ApiKeyAuth": {
             "type": "apiKey",
-            "name": "token",
+            "name": "Authorization",
             "in": "header"
         }
     }

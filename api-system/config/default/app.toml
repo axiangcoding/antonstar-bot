@@ -7,7 +7,7 @@ level = "INFO"
 file.enable = false
 file.path = "./logs/"
 
-[app.token]
+[app.auth]
 secret = "r@ndomSecretForSign"
 expire_duration = "12h"
 refresh_duration = "10m"
@@ -25,6 +25,10 @@ max_idle_conn = 10
 # only support cache for now
 driver = "redis"
 source = "redis://localhost:6379/0"
+
+[app.mq]
+source = "amqp://localhost:5672"
+
 
 [app.response]
 # hide error details

@@ -19,9 +19,9 @@ var errCodeText = map[int]string{
 	Error:                 "System error",
 	RequestParamsNotValid: "Request params not valid",
 
-	TokenNotExist: "Token not exist",
-	TokenNotValid: "Token not valid",
-	TokenExpired:  "Token expired",
+	TokenNotExist: "Authorization not exist",
+	TokenNotValid: "Authorization not valid",
+	TokenExpired:  "Authorization expired",
 	NoPermission:  "No permission",
 
 	LoginFailed:    "Login failed",

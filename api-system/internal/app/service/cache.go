@@ -9,10 +9,10 @@ import (
 	"time"
 )
 
-const tokenKeyPrefix = "Token#"
+const tokenKeyPrefix = "Authorization#"
 
 func getRefreshDuration() time.Duration {
-	duration := conf.Config.App.Token.RefreshDuration
+	duration := conf.Config.App.Auth.RefreshDuration
 	parseDuration, err := time.ParseDuration(duration)
 	if err != nil {
 		logging.Errorf("refresh_duration config valid, please check it again. ", err)

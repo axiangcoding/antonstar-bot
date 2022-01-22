@@ -1,100 +1,89 @@
 <template>
-  <v-app id="inspire">
-    <v-app-bar
-        app
-        color="white"
-        flat
-    >
-      <v-container class="py-0 fill-height">
-        <v-avatar
-            class="mr-10"
-            color="grey darken-1"
-            size="32"
-        ></v-avatar>
-
-        <v-btn
-            v-for="link in links"
-            :key="link"
-            text
-        >
-          {{ link }}
-        </v-btn>
-
-        <v-spacer></v-spacer>
-
-        <v-responsive max-width="260">
-          <v-text-field
-              dense
-              flat
-              hide-details
-              rounded
-              solo-inverted
-          ></v-text-field>
-        </v-responsive>
-      </v-container>
-    </v-app-bar>
-
-    <v-main class="grey lighten-3">
-      <v-container>
-        <v-row>
-
-
-          <v-col>
-            <v-sheet
-                min-height="70vh"
-                rounded="lg"
-            >
-              <!--  -->
-            </v-sheet>
-          </v-col>
-          <v-col cols="2">
-            <v-sheet rounded="lg">
-              <v-list color="transparent">
-                <v-list-item
-                    v-for="n in 5"
-                    :key="n"
-                    link
-                >
-                  <v-list-item-content>
-                    <v-list-item-title>
-                      List Item {{ n }}
-                    </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-
-                <v-divider class="my-2"></v-divider>
-
-                <v-list-item
-                    link
-                    color="grey lighten-4"
-                >
-                  <v-list-item-content>
-                    <v-list-item-title>
-                      Refresh
-                    </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
-            </v-sheet>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-main>
-  </v-app>
+	<el-container direction="vertical" id="app">
+		<Header></Header>
+		<el-scrollbar>
+			<el-backtop target=".el-scrollbar .el-scrollbar__wrap" />
+			<el-main>
+				<el-row>
+					<!-- 空白边栏 -->
+					<el-col :xs="0" :sm="0" :md="0" :lg="0" :xl="2"></el-col>
+					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="20">
+						<el-row :gutter="10">
+							<el-col :xs="24" :sm="24" :md="24" :lg="20" :xl="20">
+								<router-view />
+							</el-col>
+							<el-col :xs="24" :sm="24" :md="24" :lg="4" :xl="4">
+								<!--<el-affix :offset="89">-->
+								<el-card
+									v-adhereTop:[direction]="{
+										el: 'rightAside',
+										parent: '.el-scrollbar .el-scrollbar__wrap',
+										enabledOn: '1200',
+									}"
+								>
+									<el-empty description="正在施工中"></el-empty>
+								</el-card>
+								<!--</el-affix>-->
+							</el-col>
+						</el-row>
+					</el-col>
+					<!-- 空白边栏 -->
+					<el-col :xs="0" :sm="0" :md="0" :lg="0" :xl="2"></el-col>
+				</el-row>
+			</el-main>
+			<Footer></Footer>
+		</el-scrollbar>
+	</el-container>
 </template>
 
-<script>
+<script lang="ts">
+import Header from './components/Header.vue'
+import Footer from './components/Footer.vue'
+import { defineComponent } from 'vue'
 
-export default {
-  name: 'App',
-
-  data: () => ({
-    links: [
-      'Dashboard',
-      'Messages',
-      'Profile',
-      'Updates',
-    ],
-  }),
-};
+export default defineComponent({
+	name: 'App',
+	components: { Header, Footer },
+})
 </script>
+
+<script lang="ts" setup>
+import { v4 as uuid } from 'uuid'
+import { useStore } from 'vuex'
+import { onMounted } from 'vue'
+
+const store = useStore()
+const direction = 'top'
+const generateClientId = () => {
+	store.commit('setClientId', uuid())
+}
+
+onMounted(generateClientId)
+</script>
+
+<style>
+html,
+body {
+	margin: 0;
+	overflow: hidden;
+}
+
+#app {
+	font-family: Avenir, Helvetica, Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-align: center;
+	/*background-color: #f6f6f7;*/
+  background-image: linear-gradient( 135deg, #FFF5C3 10%, #9452A5 100%);
+	font-size: 16px;
+	color: #2c3e50;
+	height: 100vh;
+	overflow-x: hidden;
+}
+
+.el-main {
+  overflow: hidden;
+  min-height: 90vh;
+
+}
+</style>

@@ -6,6 +6,7 @@ import (
 	"axiangcoding/antonstar/api-system/pkg/auth"
 	"axiangcoding/antonstar/api-system/pkg/cache"
 	"axiangcoding/antonstar/api-system/pkg/logging"
+	"axiangcoding/antonstar/api-system/pkg/mq"
 	"axiangcoding/antonstar/api-system/pkg/router"
 	"context"
 	"fmt"
@@ -23,6 +24,7 @@ func init() {
 	logging.Setup()
 	data.Setup()
 	cache.Setup()
+	mq.Setup()
 	auth.Setup()
 }
 
@@ -40,7 +42,7 @@ func init() {
 
 // @securityDefinitions.apikey  ApiKeyAuth
 // @in                          header
-// @name                        token
+// @name                        Authorization
 
 // @accept   json
 // @produce  json

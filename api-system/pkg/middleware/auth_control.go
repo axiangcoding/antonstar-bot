@@ -13,7 +13,7 @@ import (
 
 func AuthCheck() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		tokenString := c.GetHeader("token")
+		tokenString := c.GetHeader(app.AuthHeader)
 		claims, next := checkToken(c, tokenString)
 		if !next {
 			return
@@ -77,7 +77,7 @@ func checkTokenInCache(c *gin.Context, tokenString string, userID int64) bool {
 }
 
 // checkPermission
-// check user permission to access resource
+// check user permission to access resources
 // 检查用户访问资源的权限
 func checkPermission(c *gin.Context, roles string) bool {
 	roleItems := strings.Split(roles, ",")

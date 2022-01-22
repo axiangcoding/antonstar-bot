@@ -23,12 +23,17 @@ definitions:
       userId:
         type: integer
     type: object
-  v1.Params:
+  v1.PostVisitForm:
     properties:
-      param1:
+      client_id:
+        description: 客户端生成id
         type: string
-      param2:
+      page:
+        description: 访问页面
         type: string
+      user_id:
+        description: 用户id
+        type: integer
     type: object
   v1.RegisterForm:
     properties:
@@ -50,49 +55,6 @@ info:
   title: Golang Gin Template API
   version: 1.0.0
 paths:
-  /v1/demo/get:
-    get:
-      parameters:
-      - description: some params named param1
-        in: query
-        name: param1
-        type: string
-      - description: some params named param2
-        in: query
-        name: param2
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: demo，测试get
-      tags:
-      - Demo/Test
-  /v1/demo/post:
-    post:
-      parameters:
-      - description: some params json
-        in: body
-        name: params
-        schema:
-          $ref: '#/definitions/v1.Params'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: demo，测试post
-      tags:
-      - demo
   /v1/system/info:
     get:
       responses:
@@ -105,20 +67,6 @@ paths:
       summary: System Info
       tags:
       - System
-  /v1/test/test-log:
-    get:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: demo，测试post
-      tags:
-      - demo
   /v1/user/login:
     post:
       parameters:
@@ -177,11 +125,109 @@ paths:
       summary: User register
       tags:
       - User
+  /v1/visits:
+    get:
+      parameters:
+      - description: query userinfo
+        in: query
+        name: form
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Visit
+  /v1/visits/count:
+    get:
+      parameters:
+      - description: query userinfo
+        in: query
+        name: form
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      tags:
+      - Visit
+  /v1/visits/visit:
+    post:
+      parameters:
+      - description: query userinfo
+        in: body
+        name: form
+        required: true
+        schema:
+          $ref: '#/definitions/v1.PostVisitForm'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      summary: 登记访问信息
+      tags:
+      - Visit
+  /v1/war_thunder/userinfo:
+    get:
+      parameters:
+      - in: query
+        name: query_id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      summary: 获取异步查询结果
+      tags:
+      - WarThunder
+  /v1/war_thunder/userinfo/queries:
+    get:
+      parameters:
+      - description: 游戏的昵称
+        in: query
+        maxLength: 20
+        name: nickname
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      summary: 查询游戏昵称的所有query_id
+      tags:
+      - WarThunder
+  /v1/war_thunder/userinfo/refresh:
+    post:
+      parameters:
+      - description: 游戏的昵称
+        in: query
+        maxLength: 20
+        name: nickname
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      summary: 刷新一个游戏用户数据的最新数据
+      tags:
+      - WarThunder
 produces:
 - application/json
 securityDefinitions:
   ApiKeyAuth:
     in: header
-    name: token
+    name: Authorization
     type: apiKey
 swagger: "2.0"

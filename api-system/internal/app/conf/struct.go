@@ -15,7 +15,7 @@ type App struct {
 			Path   string
 		}
 	}
-	Token struct {
+	Auth struct {
 		Secret          string
 		ExpireDuration  string `mapstructure:"expire_duration"`
 		RefreshDuration string `mapstructure:"refresh_duration"`
@@ -34,6 +34,9 @@ type App struct {
 			Driver string
 			Source string
 		}
+	}
+	MQ struct {
+		Source string
 	}
 	Response struct {
 		HideErrorDetails bool `mapstructure:"hide_error_details"`

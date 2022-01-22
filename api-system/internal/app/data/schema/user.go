@@ -19,8 +19,8 @@ type User struct {
 	UserName string  `gorm:"uniqueIndex;size:255"`
 	Email    *string `gorm:"uniqueIndex;size:255"`
 	Phone    *string `gorm:"uniqueIndex;size:255"`
-	Password string
-	Roles    string
+	Password string  `gorm:"uniqueIndex;size:255"`
+	Roles    string  `gorm:"uniqueIndex;size:255"`
 }
 
 func (u *User) GenerateId() {

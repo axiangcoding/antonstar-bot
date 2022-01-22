@@ -1,0 +1,21 @@
+// 不可被用户更改的全局样式存放在此处
+
+$screen: xs,sm,md,lg;
+$maxWidth: 768px, 992px, 1200px, 1920px;
+
+@for $i from 1 to length($screen) + 1 {
+  hidden_#{nth($screen, $i)} {
+    @media screen and (max-width: #{nth($maxWidth, $i)}) {
+      display: none;
+    }
+  }
+}
+
+@for $i from 1 to 101 {
+  .h#{$i} {
+    height: percentage(calc($i / 100));
+  }
+  .w#{$i} {
+    width: percentage(calc($i / 100));
+  }
+}
