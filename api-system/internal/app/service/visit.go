@@ -6,6 +6,7 @@ import (
 	"axiangcoding/antonstar/api-system/internal/app/entity"
 	"github.com/gin-gonic/gin"
 	"github.com/mssola/user_agent"
+	"time"
 )
 
 func AddVisit(c *gin.Context, visit entity.AddVisit) error {
@@ -29,4 +30,11 @@ func AddVisit(c *gin.Context, visit entity.AddVisit) error {
 		return err
 	}
 	return nil
+}
+
+func CountVisit(c *gin.Context, timestamp time.Time) map[string]interface{} {
+	visit := data.CountVisit(c, timestamp)
+	return map[string]interface{}{
+		"count": visit,
+	}
 }

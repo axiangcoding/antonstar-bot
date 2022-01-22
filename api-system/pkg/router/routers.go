@@ -66,6 +66,7 @@ func setRouterV1(r *gin.Engine) {
 			warThunder.GET("/userinfo/queries", v1.GetUserInfoQueries)
 			warThunder.POST("/userinfo/refresh", v1.PostUserInfoRefresh)
 			warThunder.GET("/userinfo", v1.GetUserInfo)
+			warThunder.GET("/userinfo/query/count", v1.GetQueryCount)
 			// warThunder.StaticFile("/mock.html", "./resources/index.html")
 		}
 	}

@@ -131,3 +131,10 @@ func FindCrawlerData(c *gin.Context, queryId string) (map[string]interface{}, er
 	}
 	return m, nil
 }
+
+func CountCrawlerQuery(c *gin.Context, timestamp time.Time) map[string]interface{} {
+	visit := data.CountCrawlerQuery(c, timestamp)
+	return map[string]interface{}{
+		"count": visit,
+	}
+}

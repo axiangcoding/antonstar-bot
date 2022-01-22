@@ -3,12 +3,9 @@
     <n-spin :show="reloading">
       <n-space v-if="displayStatus==='find'" vertical>
         <div>
-          <n-button quaternary type="info" size="small" disabled>这是我</n-button>
-          <n-divider vertical/>
-          <n-button quaternary type="primary" size="small" disabled>给大佬点赞</n-button>
-          <n-divider vertical/>
           <n-button quaternary type="error" size="small" disabled>站内举报</n-button>
           <n-divider vertical/>
+          <n-button quaternary type="info" size="small" @click="copyLink">分享链接</n-button>
         </div>
         <n-grid cols="1 768:2 1200:2 1920:2" :x-gap="12" :y-gap="8">
           <n-gi>
@@ -65,7 +62,9 @@
         <n-gradient-text :size="20" type="warning">
           正在向官网查询中...
         </n-gradient-text>
-        <n-gradient-text :size="14" gradient="linear-gradient(90deg, red 0%, green 50%, purple 100%)">程序本没有慢，查的人多了，就变成了慢</n-gradient-text>
+        <n-gradient-text :size="14" gradient="linear-gradient(90deg, red 0%, green 50%, purple 100%)">
+          程序本没有慢，查的人多了，就变成了慢
+        </n-gradient-text>
       </n-space>
       <n-space vertical v-else-if="displayStatus==='notfound'">
         <n-result size="small" status="404" title="未在官网中找到该用户" description="这下是真找不到了，是不是名字输错了？">
@@ -115,12 +114,10 @@ watch(props, (newVal, oldVal) => {
       if (item.found) {
         found = true
         done = item.status === 'done'
-        console.log(item.done);
         queryId = item.query_id
         break
       }
     }
-    console.log(done);
     if (found && done) {
       displayStatus.value = 'find'
       getInfo(queryId)
@@ -167,6 +164,20 @@ const refreshInfoQueries = (nick: any) => {
       message.warning('同一个玩家24小时内仅能查询一次！')
     }
   })
+}
+
+
+const copyLink = async () => {
+  if (!navigator.clipboard) {
+    message.error('复制到剪切板失败，请直接复制网页地址')
+    return
+  }
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    message.success('链接已复制到剪切板，欢迎分享！')
+  }).catch(() => {
+    message.error('复制到剪切板失败，请直接复制网页地址')
+  })
+
 }
 </script>
 
