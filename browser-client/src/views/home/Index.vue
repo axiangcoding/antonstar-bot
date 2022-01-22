@@ -3,10 +3,13 @@
     <n-carousel autoplay draggable>
       <n-image height="240" width="1200" object-fit="cover" v-for="item in imgList" :key="item.index" :src="item.src"/>
     </n-carousel>
-    <n-space vertical>
-      <Notice/>
-      <Statistics/>
-    </n-space>
+    <n-card :content-style="{padding:'4px'}" :bordered="false">
+      <n-space vertical>
+        <Notice/>
+        <Statistics/>
+      </n-space>
+    </n-card>
+
   </n-card>
 
 
