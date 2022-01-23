@@ -5,6 +5,7 @@ import (
 	"axiangcoding/antonstar/api-system/pkg/app"
 	"axiangcoding/antonstar/api-system/pkg/app/e"
 	"github.com/gin-gonic/gin"
+	"time"
 )
 
 type UserInfoForm struct {
@@ -16,7 +17,7 @@ type UserInfoForm struct {
 // @Summary  查询游戏昵称的所有query_id
 // @Tags     WarThunder
 // @Param    form  query     UserInfoForm  true  "param"
-// @Success  200   {object}  app.ApiJson   ""
+// @Success  200   {object}  app.ApiJson        ""
 // @Router   /v1/war_thunder/userinfo/queries [get]
 func GetUserInfoQueries(c *gin.Context) {
 	var form UserInfoForm
@@ -77,4 +78,25 @@ func GetUserInfo(c *gin.Context) {
 		return
 	}
 	app.Success(c, data)
+}
+
+type GetQueryCountForm struct {
+	Timestamp time.Time `form:"timestamp" json:"timestamp"`
+}
+
+// GetQueryCount
+// @Summary  查询query的数量
+// @Tags     WarThunder
+// @Param    form  query     GetQueryCountForm  true  "param"
+// @Success  200   {object}  app.ApiJson   ""
+// @Router   /v1/war_thunder/userinfo/query/count [get]
+func GetQueryCount(c *gin.Context) {
+	var form GetQueryCountForm
+	err := c.ShouldBindQuery(&form)
+	if err != nil {
+		app.BadRequest(c, e.RequestParamsNotValid, err)
+		return
+	}
+	info := service.CountCrawlerQuery(c, form.Timestamp)
+	app.Success(c, info)
 }

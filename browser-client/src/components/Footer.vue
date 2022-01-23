@@ -7,7 +7,7 @@
         <n-divider vertical/>
         <n-button quaternary>问题反馈</n-button>
       </div>
-      <n-text italic>安东星开发小组 All Rights Reserved.</n-text>
+      <n-text italic>安东星 All Rights Reserved.</n-text>
     </n-space>
 
   </n-layout-footer>

@@ -18,7 +18,7 @@ const themeOverrides = ref(themes[store.state.themes])
 				<router-view />
 			</n-el>
 		</n-message-provider>
-		<n-back-top :right="100" />
+		<n-back-top :right="30" />
 		<Loading :loading="loading"/>
 	</n-config-provider>
 </template>

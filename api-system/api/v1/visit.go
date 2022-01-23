@@ -60,12 +60,23 @@ func GetVisits(c *gin.Context) {
 
 }
 
+type GetVisitsCountForm struct {
+	Timestamp time.Time `form:"timestamp" json:"timestamp"`
+}
+
 // GetVisitCount
 // @Summary
 // @Tags     Visit
-// @Param    form  query     string       true  "query userinfo"
-// @Success  200   {object}  app.ApiJson  ""
+// @Param    form  query     GetVisitsCountForm  true  "query userinfo"
+// @Success  200   {object}  app.ApiJson         ""
 // @Router   /v1/visits/count [get]
 func GetVisitCount(c *gin.Context) {
-
+	var form GetVisitsCountForm
+	err := c.ShouldBindQuery(&form)
+	if err != nil {
+		app.BadRequest(c, e.RequestParamsNotValid, err)
+		return
+	}
+	info := service.CountVisit(c, form.Timestamp)
+	app.Success(c, info)
 }

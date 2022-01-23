@@ -8,11 +8,11 @@
       </n-h3>
     </template>
     <template #header-extra>
-      <n-button type="warning" size="tiny" secondary @click="refresh">
+      <n-button type="warning" size="tiny" @click="refresh">
         <template #icon>
           <SunRegular/>
         </template>
-        数据过时了？点我刷新
+        点我刷新
       </n-button>
     </template>
     <n-space vertical>
