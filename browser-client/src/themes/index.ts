@@ -1,3 +1,5 @@
+// import { GlobalThemeOverrides } from 'naive-ui'
+
 const anton_star = {
 	common: {
 		headerHeight: '46px',
@@ -16,11 +18,8 @@ const anton_star = {
 	},
 }
 
-export default {
-	namespaced: true,
-	state: {
-		themesOverides: {
-			anton_star,
-		},
-  },
+const themeOverrides: any = {
+	anton_star,
 }
+
+export default themeOverrides
