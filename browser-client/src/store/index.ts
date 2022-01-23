@@ -1,16 +1,15 @@
 // store.ts
-import { InjectionKey } from 'vue'
+import {InjectionKey} from 'vue'
 import createPersistence from 'vuex-persistedstate'
 
-import { createStore, useStore as baseUseStore, Store } from 'vuex'
-import themes from './themes'
+import {createStore, useStore as baseUseStore, Store} from 'vuex'
 
 export interface State {
-	theme: String
+	themes: String,
 	count: number
 	clientId: string
-	userId: number
-	loading: Boolean
+    userId: number
+    loading: Boolean
 }
 
 export const key: InjectionKey<Store<State>> = Symbol()
@@ -22,7 +21,7 @@ export const store = createStore<State>({
 		}),
 	],
 	state: {
-		theme: 'anton_star',
+		themes: 'anton_star',
 		count: 2,
 		clientId: '',
 		userId: 0,
@@ -38,25 +37,23 @@ export const store = createStore<State>({
 		setClientId(state, clientId) {
 			state.clientId = clientId
 		},
-		setThemes(state, theme) {
-			state.theme = theme
-		},
-		setLoading(state, val) {
-			state.loading = val
-		},
+		setThemes(state, themes) {
+			state.themes = themes
+        },
+        setLoading(state, val) {
+            state.loading = val
+        }
 	},
-	getters: {
-		getThemesOverides(state) {
-			return state.themes.themesOverides[state.theme]
-		}
-	},
+	getters: {},
 	actions: {},
-	modules: {
-		themes,
-	},
+	modules: {},
 })
 
 // 定义自己的 `useStore` 组合式函数
 export function useStore() {
-	return baseUseStore(key)
+    return baseUseStore(key)
+}
+
+export function getStore() {
+    return store
 }
