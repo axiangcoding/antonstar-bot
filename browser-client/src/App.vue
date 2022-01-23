@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { darkTheme } from 'naive-ui'
-import themes from '@/themes/index'
 import { useStore } from 'vuex'
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import Loading from './components/Loading.vue';
 
 const store = useStore()
+
 const loading = computed(() => store.state.loading)
-const themeOverrides = ref(themes[store.state.themes])
+const themeOverrides = computed(() => store.getters.getThemesOverides)
 </script>
 
 <template>
