@@ -43,7 +43,7 @@
 import { useRoute } from 'vue-router'
 import { h, ref, onMounted, nextTick, watch, computed } from 'vue'
 import { NIcon } from 'naive-ui'
-import { Award, CommentsRegular } from '@vicons/fa'
+import { Award, CommentsRegular,Gamepad } from '@vicons/fa'
 
 const route = useRoute()
 const navActive = ref(null)
@@ -104,7 +104,7 @@ export default defineComponent({
 				},
 				{
 					key: 'realtime',
-					icon: this.renderIcon(CommentsRegular),
+					icon: this.renderIcon(Gamepad),
 					label: '实时数据',
 					disabled: true,
 					routerName: 'realtime',
