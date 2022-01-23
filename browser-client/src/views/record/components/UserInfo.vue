@@ -3,13 +3,16 @@
     <n-spin :show="reloading">
       <n-space v-if="displayStatus==='find'" vertical>
         <div>
-          <n-button quaternary type="error" size="small" disabled><template #icon>
-            <Angry/>
-          </template>站内举报</n-button>
+          <n-button quaternary type="error" size="small" disabled>
+            <template #icon>
+              <Angry/>
+            </template>
+            站内举报
+          </n-button>
           <n-divider vertical/>
           <n-button quaternary type="info" size="small" @click="copyLink">
             <template #icon>
-                <ShareAlt/>
+              <ShareAlt/>
             </template>
             分享链接
           </n-button>
@@ -59,19 +62,22 @@
         </n-tabs>
       </n-space>
       <n-space align="center" vertical v-else-if="displayStatus==='nothing'">
-        <n-result size="small" status="404" title="未在本站中找到该用户" description="未在本站中找到记录并不代表该用户真的不存在，点击下面的按钮查询试试？">
-          <template #footer>
-            <n-button type="info" secondary @click="refreshInfoQueries(route.params.nick)">点我向官网发起查询</n-button>
+        <n-result size="small" status="success" title="已发起查询">
+          <template #default>
+            <n-gradient-text :size="14" gradient="linear-gradient(90deg, red 0%, green 50%, purple 100%)">
+              第一次总是值得期待的
+            </n-gradient-text>
           </template>
         </n-result>
       </n-space>
       <n-space align="center" vertical v-else-if="displayStatus==='running'">
-        <n-gradient-text :size="20" type="warning">
-          正在向官网查询中...
-        </n-gradient-text>
-        <n-gradient-text :size="14" gradient="linear-gradient(90deg, red 0%, green 50%, purple 100%)">
-          程序本没有慢，查的人多了，就变成了慢
-        </n-gradient-text>
+        <n-result size="small" status="info" title="正在查询中...">
+          <template #default>
+            <n-gradient-text :size="14" gradient="linear-gradient(90deg, red 0%, green 50%, purple 100%)">
+              程序本没有慢，查的人多了，就变成了慢
+            </n-gradient-text>
+          </template>
+        </n-result>
       </n-space>
       <n-space vertical v-else-if="displayStatus==='notfound'">
         <n-result size="small" status="404" title="未在官网中找到该用户" description="这下是真找不到了，是不是名字输错了？">
@@ -102,7 +108,7 @@ import GaijinFleetCard from "@/views/record/components/GaijinFleetCard.vue";
 import {ShareAlt, Angry} from "@vicons/fa";
 
 const props = defineProps({
-  queryList: Object,
+  queryList: Object
 });
 
 const route = useRoute();
@@ -112,7 +118,6 @@ const thunderskillData = ref({})
 
 const displayStatus = ref('none')
 watch(props, (newVal, oldVal) => {
-
   if (props.queryList !== undefined && props.queryList.gaijin !== undefined) {
     // 找到最新的一条记录
     let found = false
@@ -136,8 +141,10 @@ watch(props, (newVal, oldVal) => {
     }
   } else {
     displayStatus.value = 'nothing'
+    refreshInfoQueries(route.params.nick)
   }
 })
+
 
 const reloading = ref(false)
 const getInfo = async (queryId: string) => {
@@ -167,9 +174,9 @@ const refreshInfoQueries = (nick: any) => {
         }
       }).then(res => {
     if (res.data['refresh'] === true) {
-      message.success("正在刷新，请稍后")
+      message.success("正在获取最新快照，请稍后")
     } else {
-      message.warning('同一个玩家24小时内仅能查询一次！')
+      message.warning('同一个玩家24小时内只能刷新一次！')
     }
   })
 }

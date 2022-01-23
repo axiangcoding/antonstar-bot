@@ -39,15 +39,14 @@ import http from "@/services/request";
 import {useRoute, useRouter} from "vue-router";
 
 const route = useRoute();
-const nick = ref(
-    route.params.nick
-)
+const nick = ref('')
 const message = useMessage()
 const showInfo = ref('none')
 const btnLoading = ref(false)
 let messageReactive = null
 
 onMounted(() => {
+  nick.value = route.params.nick as string
   if (nick.value) {
     doSearch()
   }
@@ -69,18 +68,19 @@ const doSearch = async () => {
 const router = useRouter();
 const queryIdList = ref()
 const getInfoQueries = async (nick: string) => {
+  // 点击查询后，应先进行跳转，这样组件才能获得正确的nickname
+  await router.push({
+    name: 'record', params: {
+      nick: nick
+    }
+  })
   await http.get('v1/war_thunder/userinfo/queries',
       {
         params: {
           "nickname": nick
         }
-      }).then(res => {
+      }).then(async res => {
     queryIdList.value = res.data
-    router.push({
-      name: 'record', params: {
-        nick: nick
-      }
-    })
   })
 }
 
