@@ -2,7 +2,9 @@ package data
 
 import (
 	"axiangcoding/antonstar/api-system/internal/app/data/schema"
+	"axiangcoding/antonstar/api-system/pkg/logging"
 	"context"
+	"time"
 )
 
 func QueryShortCrawlerData(c context.Context, crawlerData schema.CrawlerData) ([]schema.ShortCrawlerData, error) {
@@ -26,4 +28,17 @@ func FindLastCrawlerData(c context.Context, crawlerData schema.CrawlerData) (sch
 func SaveCrawlerData(c context.Context, crawlerData schema.CrawlerData) (schema.CrawlerData, error) {
 	err := GetDB().Save(&crawlerData).Error
 	return crawlerData, err
+}
+
+func CountCrawlerQuery(c context.Context, timestamp time.Time) int64 {
+	var count int64
+	model := GetDB().Model(&schema.CrawlerData{})
+	if !timestamp.IsZero() {
+		model.Where("to_days(created_at) = to_days(?)", timestamp)
+	}
+	err := model.Count(&count).Error
+	if err != nil {
+		logging.Error(err)
+	}
+	return count
 }

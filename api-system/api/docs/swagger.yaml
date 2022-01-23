@@ -145,10 +145,8 @@ paths:
   /v1/visits/count:
     get:
       parameters:
-      - description: query userinfo
-        in: query
-        name: form
-        required: true
+      - in: query
+        name: timestamp
         type: string
       responses:
         "200":
@@ -204,6 +202,20 @@ paths:
           schema:
             $ref: '#/definitions/app.ApiJson'
       summary: 查询游戏昵称的所有query_id
+      tags:
+      - WarThunder
+  /v1/war_thunder/userinfo/query/count:
+    get:
+      parameters:
+      - in: query
+        name: timestamp
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      summary: 查询query的数量
       tags:
       - WarThunder
   /v1/war_thunder/userinfo/refresh:

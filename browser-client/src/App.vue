@@ -2,21 +2,24 @@
 import { darkTheme } from 'naive-ui'
 import themes from '@/themes/index'
 import { useStore } from 'vuex'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import Loading from './components/Loading.vue';
 
 const store = useStore()
+const loading = computed(() => store.state.loading)
 const themeOverrides = ref(themes[store.state.themes])
 </script>
 
 <template>
 	<!-- 调整主题变量 -->
-	<n-config-provider :theme-overrides="themeOverrides" class="h100">
+	<n-config-provider :theme-overrides="themeOverrides">
 		<n-message-provider>
-			<n-el tag="div" class="h100">
+			<n-el tag="div">
 				<router-view />
 			</n-el>
 		</n-message-provider>
-		<n-back-top :right="100" />
+		<n-back-top :right="30" />
+		<Loading :loading="loading"/>
 	</n-config-provider>
 </template>
 
@@ -32,7 +35,7 @@ body {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	text-align: center;
-	font-size: $fontSize;
+	font-size: 16px;
 	height: 100vh;
 	overflow-x: hidden;
 }
