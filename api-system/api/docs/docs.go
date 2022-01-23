@@ -184,10 +184,8 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "query userinfo",
-                        "name": "form",
-                        "in": "query",
-                        "required": true
+                        "name": "timestamp",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -265,6 +263,29 @@ var doc = `{
                         "name": "nickname",
                         "in": "query",
                         "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/war_thunder/userinfo/query/count": {
+            "get": {
+                "tags": [
+                    "WarThunder"
+                ],
+                "summary": "查询query的数量",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "timestamp",
+                        "in": "query"
                     }
                 ],
                 "responses": {

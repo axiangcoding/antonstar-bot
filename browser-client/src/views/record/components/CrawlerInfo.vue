@@ -1,5 +1,5 @@
 <template>
-  <n-card>
+  <n-card size="small">
     <template #header>
       <n-h3 type="info" prefix="bar" align-text>
         <n-text type="info">
@@ -8,11 +8,11 @@
       </n-h3>
     </template>
     <template #header-extra>
-      <n-button type="warning" size="tiny" secondary @click="refresh">
+      <n-button type="warning" size="tiny" @click="refresh">
         <template #icon>
           <SunRegular/>
         </template>
-        数据过时了？点我刷新
+        点我刷新
       </n-button>
     </template>
     <n-space vertical>

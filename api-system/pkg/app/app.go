@@ -3,10 +3,7 @@ package app
 import (
 	"axiangcoding/antonstar/api-system/internal/app/conf"
 	"axiangcoding/antonstar/api-system/pkg/app/e"
-	"axiangcoding/antonstar/api-system/pkg/logging"
-	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
 	"net/http"
 )
 
@@ -29,18 +26,6 @@ func generateErrJson(errs []error) *ErrJson {
 	if !hideDetail {
 		for _, err := range errs {
 			errMessages = append(errMessages, err.Error())
-		}
-	}
-	return &ErrJson{Err: errMessages}
-}
-
-func generateBadRequestErrJson(err validator.ValidationErrors) *ErrJson {
-	var errMessages []string
-	for _, v := range err {
-		if field, ok := v.(validator.FieldError); ok {
-			logging.Info()
-			errMessages = append(errMessages,
-				fmt.Sprintf("Field validation for '%s' failed on the '%s' tag", field.Field(), field.Tag()))
 		}
 	}
 	return &ErrJson{Err: errMessages}
@@ -74,9 +59,8 @@ func BizFailed(c *gin.Context, errCode int, err ...error) {
 // BadRequest
 // bad request response
 // 返回错误参数请求
-func BadRequest(c *gin.Context, errCode int, err error) {
-	logging.Warn(err)
-	HttpResponse(c, http.StatusBadRequest, errCode, generateBadRequestErrJson(err.(validator.ValidationErrors)))
+func BadRequest(c *gin.Context, errCode int, err ...error) {
+	HttpResponse(c, http.StatusBadRequest, errCode, generateErrJson(err))
 	c.Abort()
 }
 

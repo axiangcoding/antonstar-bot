@@ -3,7 +3,7 @@
 const anton_star = {
 	common: {
 		headerHeight: '46px',
-		footerHeight: '70px',
+		footerHeight: '100px',
 	},
 	Layout: {
 		headerTextColor: '#d4d4d4',
