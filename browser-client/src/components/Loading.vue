@@ -36,7 +36,7 @@ watch(
 		if (newv) {
       console.log('正在加载中...')
 			if (timer.value) clearTimeout(timer.value)
-			showLoading.value = !showLoading.value
+			showLoading.value = true
 			anime({
 				targets: '#loading',
 				left: '0%',
@@ -48,7 +48,7 @@ watch(
 				left: '100%',
 			})
 			timer.value = setTimeout(() => {
-				showLoading.value = !showLoading.value
+				showLoading.value = false
 			}, 1000)
 		}
 	}
