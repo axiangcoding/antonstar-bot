@@ -19,16 +19,18 @@ onMounted(() => {
 </script>
 
 <template>
-	<!-- 调整主题变量 -->
-	<n-config-provider :theme-overrides="themeOverrides">
-		<n-message-provider>
-			<n-el tag="div">
-				<router-view />
-			</n-el>
-		</n-message-provider>
-		<n-back-top :right="30" />
-		<Loading :loading="loading"/>
-	</n-config-provider>
+  <!-- 调整主题变量 -->
+  <n-config-provider :theme-overrides="themeOverrides">
+    <n-message-provider>
+      <n-dialog-provider>
+        <n-el tag="div">
+          <router-view/>
+        </n-el>
+      </n-dialog-provider>
+    </n-message-provider>
+    <n-back-top :right="30"/>
+    <Loading :loading="loading"/>
+  </n-config-provider>
 </template>
 
 <style lang="scss">

@@ -51,15 +51,11 @@
               <n-gi v-for="(index,key) in gaijinData.user_rate.fleet" :key="key">
                 <GaijinFleetCard :data="index" :title="key"></GaijinFleetCard>
               </n-gi>
-              <n-gi>
-                <!--<CommonInfo></CommonInfo>-->
-              </n-gi>
-              <n-gi>
-                <!--<CommonInfo></CommonInfo>-->
-              </n-gi>
             </n-grid>
           </n-tab-pane>
         </n-tabs>
+        <n-divider/>
+        <TSCommonInfo :data="thunderskillData"/>
       </n-space>
       <n-space align="center" vertical v-else-if="displayStatus==='nothing'">
         <n-result size="small" status="success" title="已发起查询">
@@ -73,9 +69,12 @@
       <n-space align="center" vertical v-else-if="displayStatus==='running'">
         <n-result size="small" status="info" title="正在查询中...">
           <template #default>
-            <n-gradient-text :size="14" gradient="linear-gradient(90deg, red 0%, green 50%, purple 100%)">
-              程序本没有慢，查的人多了，就变成了慢
-            </n-gradient-text>
+            <n-space vertical align="center">
+              <n-gradient-text :size="14" gradient="linear-gradient(90deg, red 0%, green 50%, purple 100%)">
+                程序本没有慢，查的人多了，就变成了慢
+              </n-gradient-text>
+              <n-button type="warning" secondary @click="refreshInfoQueries(route.params.nick)">很久没刷出来？点我重新查询</n-button>
+            </n-space>
           </template>
         </n-result>
       </n-space>
@@ -106,6 +105,7 @@ import GaijinAviationCard from "@/views/record/components/GaijinAviationCard.vue
 import GaijinGroundCard from "@/views/record/components/GaijinGroundCard.vue";
 import GaijinFleetCard from "@/views/record/components/GaijinFleetCard.vue";
 import {ShareAlt, Angry} from "@vicons/fa";
+import TSCommonInfo from "@/views/record/components/TSCommonInfo.vue";
 
 const props = defineProps({
   queryList: Object
