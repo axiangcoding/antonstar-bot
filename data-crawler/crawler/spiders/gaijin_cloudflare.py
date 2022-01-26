@@ -18,7 +18,7 @@ class GaijinCloudflareSpider(scrapy.Spider):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         options = uc.ChromeOptions()
-        options.add_argument('--no-first-run --no-service-autorun --password-store=basic')
+        options.add_argument('--no-sandbox --headless --disable-gpu')
         self.driver = uc.Chrome(options=options, suppress_welcome=True)
 
     def parse(self, response):
