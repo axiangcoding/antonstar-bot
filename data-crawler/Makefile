@@ -1,4 +1,4 @@
-.PHONY:run-ts-person,run-gaijin-person,gen-new-spidre
+.PHONY:run-ts-person,run-gaijin-person,run-gaijin-cloudflare-person,gen-new-spidre
 
 run-ts-person:
 	scrapy runspider .\crawler\spiders\thunderskill.py -a nick=${nick}

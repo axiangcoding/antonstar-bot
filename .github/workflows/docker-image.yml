@@ -3,6 +3,7 @@ name: Docker CI
 on:
   push:
     branches: [ master, develop ]
+    pull_request: [develop]
     tags:
     - 'v*'
 
