@@ -2,6 +2,8 @@ import re
 
 
 def cleanup(string: str):
+    if string is None:
+        return 'N/A'
     return string.replace(" ", "").replace("\\t", "").replace("\r", "").replace("\n", "")
 
 CLEAN = re.compile('<.*?>')
