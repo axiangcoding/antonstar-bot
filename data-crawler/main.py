@@ -46,9 +46,13 @@ def callback(ch, method, properties, body):
     print(query_json)
     begin = datetime.datetime.now()
     if query_json['source'] == 'gaijin':
-        run_spider(spider=GaijinCloudflareSpider, nick=query_json['nickname'], query_id=query_json['query_id'])
+        if query_json['slow_mode']:
+            run_spider(spider=GaijinCloudflareSpider, nick=query_json['nickname'], query_id=query_json['query_id'])
+        else:
+            run_spider(spider=GaijinSpider, nick=query_json['nickname'], query_id=query_json['query_id'])
     elif query_json['source'] == 'thunder_skill':
         run_spider(spider=ThunderSkillSpider, nick=query_json['nickname'], query_id=query_json['query_id'])
+
     end = datetime.datetime.now()
     sec = random_sleep_sec()
     print("Crawl finished, Spend %d seconds, sleep %d seconds. " % ((end - begin).seconds, sec))
