@@ -19,7 +19,7 @@ class GaijinCloudflareSpider(scrapy.Spider):
         super().__init__(**kwargs)
         options = uc.ChromeOptions()
         options.add_argument('--no-first-run --no-service-autorun --password-store=basic')
-        self.driver = uc.Chrome(options=options, suppress_welcome=True, version_main=97)
+        self.driver = uc.Chrome(options=options, suppress_welcome=True)
 
     def parse(self, response):
         nick = getattr(self, "nick", None)
