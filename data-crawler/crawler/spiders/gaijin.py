@@ -39,20 +39,3 @@ class GaijinSpider(scrapy.Spider):
             item['content'] = json.dumps(content, ensure_ascii=False)
         yield item
 
-
-def extract_register_date(date_str: str):
-    return time.strftime("%Y-%m-%d", time.strptime(date_str.split(" ")[-1], "%d.%m.%Y"))
-
-
-def extract_level(level_str: str):
-    return level_str.replace("Level", "").replace("等级", "")
-
-
-def zip_user_stat(lst: list, split: int):
-    title = lst[:split]
-    ret_lst = []
-    for i in range(split, len(lst), split):
-        line = lst[i:i + split]
-        ret_lst.append(dict(
-            (string.cleanup(string.cleanhtml(x)), string.cleanup(string.cleanhtml(y))) for x, y in zip(title, line)))
-    return ret_lst
