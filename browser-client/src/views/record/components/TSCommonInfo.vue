@@ -20,8 +20,8 @@
       <n-button dashed type="info" size="small" @click="showWhy">为什么我没有？</n-button>
     </template>
     <n-space vertical v-if="data && data.found">
-      <n-tag type="success"> 该记录由Thunder skill在 {{ parseLocalTime(data.created_at) }} 生成</n-tag>
-      <n-tag type="info"> 数据统计的时间为 {{ parseLocalTime(data.last_stat) }}</n-tag>
+      <n-tag type="success"> 该记录由TS在 {{ parseLocalTime(data.created_at) }} 生成</n-tag>
+      <n-tag type="info"> 统计的时间节点是 {{ parseLocalTime(data.last_stat) }}</n-tag>
       <n-grid :x-gap="12" :y-gap="8" cols="1 768:3 1200:2 1920:3">
         <n-gi>
           <n-space vertical align="center">
@@ -56,7 +56,7 @@
       <n-result
           status="info"
           title="友情提示"
-          description="对不起，好像没有你的数据哦"
+          description="好像没有这个玩家的数据，再等等看看？"
       >
       </n-result>
     </n-space>
@@ -107,7 +107,7 @@ const generateText = (percentage: number) => {
 const dialog = useDialog();
 const showWhy = () => {
   dialog.info({
-    title: '为什么没有Thunder Skill（TS）的数据',
+    title: '为什么没有TS的数据',
     content: 'TS不会主动计算一个玩家的数据，如果需要请到TS上手动生成'
   })
 }
