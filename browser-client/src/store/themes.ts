@@ -2,6 +2,9 @@ const anton_star = {
 	common: {
 		headerHeight: '46px',
 		footerHeight: '100px',
+		primaryColor: '#FCA706',
+		primaryColorHover: '#F26E1D',
+		primaryColorPressed: '#FC5C04',
 	},
 	Layout: {
 		headerTextColor: '#d4d4d4',

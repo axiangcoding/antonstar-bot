@@ -50,9 +50,6 @@ const LOGO_TEXT_URL = ref(logoText)
 
 
 <style lang="scss" scoped>
-.logo {
-  cursor: pointer;
-}
 
 .n-layout-header {
   height: var(--header-height);
@@ -61,9 +58,12 @@ const LOGO_TEXT_URL = ref(logoText)
   align-items: center;
   transition: 0.3s all;
   box-sizing: content-box;
-
+  :deep(.n-space) {
+		flex-wrap: nowrap !important;
+	}
   .logo {
     display: block;
+    cursor: pointer;
   }
 
   &.immersive {

@@ -1,49 +1,15 @@
 <template>
 	<div id="menuOverides">
-		<!-- <n-space> -->
-		<template v-for="item in menuOptions">
-			<n-dropdown
-				v-if="item.options?.length"
-				@select="handleSelect"
-				:options="item.options"
-				trigger="click"
-			>
-				<n-button
-					:class="{ 'menu-active': activeKey == item.routerName }"
-					quaternary
-					:key="item.key"
-					:disabled="item.disabled"
-					@click="routerClick(item.key)"
-					>{{ item.label }}
-					<template #icon v-if="item.icon">
-						<an-icon :vdom="item.icon"></an-icon>
-					</template>
-				</n-button>
-			</n-dropdown>
-			<n-button
-				v-else
-				:class="{ 'menu-active': activeKey == item.routerName }"
-				quaternary
-				:key="item.key"
-				:disabled="item.disabled"
-				@click="routerClick(item.key)"
-			>
-				{{ item.label }}
-				<template #icon v-if="item.icon">
-					<an-icon :vdom="item.icon"></an-icon>
-				</template>
-			</n-button>
-		</template>
-		<!-- </n-space> -->
+		<n-menu :value="activeKey" mode="horizontal" :options="menuOptions" />
 		<div class="nav-active" ref="navActive"></div>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { useRoute } from 'vue-router'
+import { useRoute, RouterLink } from 'vue-router'
 import { h, ref, onMounted, nextTick, watch, computed } from 'vue'
 import { NIcon } from 'naive-ui'
-import { Award, CommentsRegular,Gamepad } from '@vicons/fa'
+import { Award, CommentsRegular, Gamepad, EllipsisH } from '@vicons/fa'
 
 const route = useRoute()
 const navActive = ref(null)
@@ -51,15 +17,71 @@ let activeKey: any = computed(() => {
 	return route.name as string
 })
 
+const renderIcon = (icon: any) => {
+	return () => h(NIcon, null, { default: () => h(icon) })
+}
+
+const options = ref([
+	{
+		key: 'record',
+		icon: renderIcon(Award),
+		label: () =>
+			h(RouterLink, { to: { name: 'record' } }, { default: () => '战绩查询' }),
+	},
+	{
+		key: 'about',
+		icon: renderIcon(CommentsRegular),
+		label: () =>
+			h(RouterLink, { to: { name: 'about' } }, { default: () => '关于我们' }),
+	},
+	{
+		key: 'realtime',
+		icon: renderIcon(Gamepad),
+		disabled: true,
+		label: '实时数据',
+		// label: () =>	h(RouterLink, { to: { name: 'realtime' } }, { default: () => '实时数据' })
+	},
+])
+
+const others = ref({
+	key: 'others',
+	label: '更多',
+	icon: renderIcon(EllipsisH),
+	children: [],
+})
+
+const menuOptions = computed(() => {
+	const result = [...options.value]
+	if (others.value.children.length != 0) result.push(others.value)
+	return result
+})
+
 function navAnimation() {
-	const menuActive = document.querySelector('#menuOverides .menu-active')
-	const width = menuActive?.clientWidth
-	const left = menuActive?.offsetLeft
+	const menuActive = document.querySelector(
+		'#menuOverides .n-menu-item--selected'
+	)
+	const width = menuActive?.clientWidth - 20
+	const left = menuActive?.offsetLeft + 10
 	navActive.value?.setAttribute('style', `width: ${width}px; left: ${left}px`)
 }
 
 onMounted(() => {
 	navAnimation()
+	const menu = document.querySelector('#menuOverides')
+	let width = menu?.clientWidth || 0
+	const resizeObserver = new ResizeObserver((resizeObj) => {
+		const resizeWidth = resizeObj[0].target.clientWidth
+		if (resizeWidth < width) {
+			width = menu?.clientWidth || 0
+			nextTick(() => {
+				let last = null
+				if(options.value.length) last = options.value.pop()
+				if(last) others.value.children.unshift(last)
+			})
+		} else {
+		}
+	})
+	resizeObserver.observe(menu)
 })
 
 watch(
@@ -72,133 +94,30 @@ watch(
 )
 </script>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-	data() {
-		return {
-			options: [],
-			optionsTemp: []
-		}
-	},
-	computed: {
-		menuOptions() {
-			const options = [
-				{
-					key: 'record',
-					icon: this.renderIcon(Award),
-					label: '战绩查询',
-					routerName: 'record',
-					params: {
-						nick: '',
-					},
-					active: null, // 选中
-					options: [], // 子项
-				},
-				{
-					key: 'about',
-					icon: this.renderIcon(CommentsRegular),
-					label: '关于我们',
-					routerName: 'about',
-				},
-				{
-					key: 'realtime',
-					icon: this.renderIcon(Gamepad),
-					label: '实时数据',
-					disabled: true,
-					routerName: 'realtime',
-				},
-			]
-			const optionsList = JSON.parse(JSON.stringify(this.options))
-			const result = options.filter(
-				(o) => !optionsList.find((p) => p.key == o.key)
-			)
-			if (optionsList.length) {
-				result.push({
-					key: 'others',
-					label: '更多',
-					options: optionsList,
-				})
-			}
-			return result
-		},
-	},
-	mounted() {
-		const menu = document.querySelector('#menuOverides')
-		const menuItems = document.querySelectorAll('#menuOverides .n-button')
-		const widthLists: any[] = []
-		const optionsTemp: any[] = []
-		menuItems.forEach((o, index) => {
-			widthLists.push(o.clientWidth)
-			optionsTemp.push(this.menuOptions[index])
-		})
-		this.optionsTemp = optionsTemp
-		const resizeObserver = new ResizeObserver((resizeObj) => {
-			let menuWidth = -12
-			const optionsMap: any[] = []
-			let flag = true
-			widthLists.forEach((o, index) => {
-				if (
-					menuWidth + 12 + o <= resizeObj[0].target.clientWidth - 56 &&
-					flag
-				) {
-					menuWidth += 12 + o
-				} else {
-					flag = false
-					optionsMap.push({
-						label: optionsTemp[index].label,
-						key: optionsTemp[index].key,
-						disabled: optionsTemp[index].disabled,
-					})
-				}
-			})
-			this.options = optionsMap
-			this.navAnimation()
-		})
-		resizeObserver.observe(menu)
-	},
-	methods: {
-		renderIcon(icon: any) {
-			return () => h(NIcon, null, { default: () => h(icon) })
-		},
-		routerClick(key: String) {
-			if (key == 'others') {
-				return
-			}
-			const { routerName: name, params } = this.optionsTemp.find(
-				(o) => o.key == key
-			)
-			this.$router.push({
-				name,
-				params,
-			})
-		},
-		handleSelect(key: any) {
-			this.routerClick(key)
-		},
-	},
-})
-</script>
-
 <style lang="scss" scoped>
 #menuOverides {
 	position: relative;
 	margin-left: 10px;
 	overflow: hidden;
-	display: flex;
-	flex: 1;
-	:deep(.n-button) {
-		color: var(--header-text-color) !important;
-		&:not(:first-child) {
-			margin-left: 12px;
+	:deep(.n-menu) {
+		.n-menu-item.n-menu-item--selected {
+			.n-menu-item-content {
+				color: var(--header-nav-active-color);
+				font-weight: bold;
+			}
 		}
-		&:hover {
-			color: var(--header-nav-hover-color) !important;
-		}
-		&.menu-active {
-			color: var(--header-nav-active-color) !important;
-			font-weight: bold !important;
+		.n-menu-item-content {
+			color: var(--header-text-color);
+			display: flex;
+			&:hover {
+				color: var(--header-nav-hover-color);
+			}
+			.n-menu-item-content__icon {
+				color: inherit;
+			}
+			.n-menu-item-content-header {
+				color: inherit;
+			}
 		}
 	}
 	.nav-active {
