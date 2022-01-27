@@ -101,7 +101,6 @@ export default defineComponent({
           icon: this.renderIcon(Biohazard),
           label: '硬核狠人',
           routerName: 'rank',
-          disabled: true,
           active: null, // 选中
           options: [], // 子项
         },
