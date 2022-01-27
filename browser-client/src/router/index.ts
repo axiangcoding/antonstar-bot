@@ -31,6 +31,14 @@ const routes: Array<RouteRecordRaw> = [
                 },
             },
             {
+                path: '/rank/',
+                name: 'rank',
+                component: () => import('@/views/rank/Index.vue'),
+                meta: {
+                    title: '硬核狠人',
+                },
+            },
+            {
                 path: '/realtime',
                 name: 'realtime',
                 component: () => import('@/views/realtime/Index.vue'),

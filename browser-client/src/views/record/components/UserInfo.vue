@@ -26,6 +26,9 @@
                          @refresh="refreshInfoQueries(route.params.nick)"></CrawlerInfo>
           </n-gi>
         </n-grid>
+        <TSCommonInfo :data="thunderskillData"/>
+        <n-divider/>
+
         <n-grid cols="1 768:3 1200:2 1920:3" :x-gap="12" :y-gap="8">
           <n-gi v-for="(index,key) in gaijinData.user_stat" :key="key">
             <GaijinStatCard :data="index" :title="key"></GaijinStatCard>
@@ -51,31 +54,39 @@
               <n-gi v-for="(index,key) in gaijinData.user_rate.fleet" :key="key">
                 <GaijinFleetCard :data="index" :title="key"></GaijinFleetCard>
               </n-gi>
-              <n-gi>
-                <!--<CommonInfo></CommonInfo>-->
-              </n-gi>
-              <n-gi>
-                <!--<CommonInfo></CommonInfo>-->
-              </n-gi>
             </n-grid>
           </n-tab-pane>
         </n-tabs>
+
       </n-space>
       <n-space align="center" vertical v-else-if="displayStatus==='nothing'">
         <n-result size="small" status="success" title="已发起查询">
           <template #default>
-            <n-gradient-text :size="14" gradient="linear-gradient(90deg, red 0%, green 50%, purple 100%)">
-              第一次总是值得期待的
-            </n-gradient-text>
+            <n-space vertical align="center">
+              <n-gradient-text :size="14" gradient="linear-gradient(90deg, red 0%, green 50%, purple 100%)">
+                第一次总是值得期待的
+              </n-gradient-text>
+              <n-button type="warning" ghost tag="a"
+                        :href="'https://warthunder.com/zh/community/userinfo/?nick='+route.params.nick" target="_blank">
+                在线等，很急，点我直接去官网
+              </n-button>
+            </n-space>
           </template>
         </n-result>
       </n-space>
       <n-space align="center" vertical v-else-if="displayStatus==='running'">
         <n-result size="small" status="info" title="正在查询中...">
           <template #default>
-            <n-gradient-text :size="14" gradient="linear-gradient(90deg, red 0%, green 50%, purple 100%)">
-              程序本没有慢，查的人多了，就变成了慢
-            </n-gradient-text>
+            <n-space vertical align="center">
+              <n-gradient-text :size="14" gradient="linear-gradient(90deg, red 0%, green 50%, purple 100%)">
+                程序本没有慢，查的人多了，就变成了慢
+              </n-gradient-text>
+              <n-button type="info" ghost @click="refreshInfoQueries(route.params.nick)">很久没刷出来？点我重新查询</n-button>
+              <n-button type="warning" ghost tag="a"
+                        :href="'https://warthunder.com/zh/community/userinfo/?nick='+route.params.nick" target="_blank">
+                在线等，很急，点我直接去官网
+              </n-button>
+            </n-space>
           </template>
         </n-result>
       </n-space>
@@ -106,6 +117,7 @@ import GaijinAviationCard from "@/views/record/components/GaijinAviationCard.vue
 import GaijinGroundCard from "@/views/record/components/GaijinGroundCard.vue";
 import GaijinFleetCard from "@/views/record/components/GaijinFleetCard.vue";
 import {ShareAlt, Angry} from "@vicons/fa";
+import TSCommonInfo from "@/views/record/components/TSCommonInfo.vue";
 
 const props = defineProps({
   queryList: Object
@@ -173,6 +185,10 @@ const refreshInfoQueries = (nick: any) => {
           "nickname": nick
         }
       }).then(res => {
+    if (res.code === 13000) {
+      message.warning('无法刷新，已达到今天的全站限额！')
+      return
+    }
     if (res.data['refresh'] === true) {
       message.success("正在获取最新快照，请稍后")
     } else {
@@ -192,6 +208,11 @@ const copyLink = async () => {
   }).catch(() => {
     message.error('复制到剪切板失败，请直接复制网页地址')
   })
+
+}
+
+
+const toGaijin = () => {
 
 }
 </script>
