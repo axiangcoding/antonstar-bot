@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [develop ]
   tags:
-    - 'v*'
+  - 'v*'
 
 env:
   REGISTRY: sgccr.ccs.tencentyun.com
