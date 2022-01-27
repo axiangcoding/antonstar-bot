@@ -12,6 +12,8 @@ const (
 
 	LoginFailed    = 12000
 	RegisterFailed = 12001
+
+	ReachRefreshLimit = 13000
 )
 
 var errCodeText = map[int]string{
@@ -24,8 +26,9 @@ var errCodeText = map[int]string{
 	TokenExpired:  "Authorization expired",
 	NoPermission:  "No permission",
 
-	LoginFailed:    "Login failed",
-	RegisterFailed: "Register failed",
+	LoginFailed:       "Login failed",
+	RegisterFailed:    "Register failed",
+	ReachRefreshLimit: "Reach Refresh Limit",
 }
 
 func CodeText(code int) string {

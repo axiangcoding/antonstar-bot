@@ -34,6 +34,15 @@ func GetAllUserInfo(c *gin.Context, nick string) (map[string][]interface{}, erro
 	return lst, nil
 }
 
+func CheckReachRefreshLimit(c *gin.Context) error {
+	limit := GetRefreshLimit(c)
+	size := data.CountCrawlerQuery(c, time.Now())
+	if (size / 2) >= int64(limit) {
+		return errors.New("reach daily refresh limit")
+	}
+	return nil
+}
+
 // RefreshUserInfo
 // 1. 查看该用户的请求是否在1天以内
 // 2. 如果在一天以内，不做请求，返回最近的一个queryId

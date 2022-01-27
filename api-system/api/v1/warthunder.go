@@ -47,6 +47,11 @@ func PostUserInfoRefresh(c *gin.Context) {
 		app.BadRequest(c, e.RequestParamsNotValid, err)
 		return
 	}
+	err = service.CheckReachRefreshLimit(c)
+	if err != nil {
+		app.BizFailed(c, e.ReachRefreshLimit)
+		return
+	}
 	info, err := service.RefreshUserInfo(c, form.Nickname)
 	if err != nil {
 		app.BizFailed(c, e.Error, err)

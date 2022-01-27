@@ -1,11 +1,9 @@
 import json
-import time
 from datetime import datetime
 
 import scrapy
 
 from crawler.items import GaijinPersonalItem
-from util import string
 from util.extract_gaijin import extract_user_info
 
 
