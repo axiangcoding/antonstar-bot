@@ -31,6 +31,14 @@ const routes: Array<RouteRecordRaw> = [
                 },
             },
             {
+                path: '/resource',
+                name: 'resource',
+                component: () => import('@/views/resource/Index.vue'),
+                meta: {
+                    title: '游戏资源',
+                },
+            },
+            {
                 path: '/rank/',
                 name: 'rank',
                 component: () => import('@/views/rank/Index.vue'),
@@ -52,6 +60,22 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import('@/views/about/Index.vue'),
                 meta: {
                     title: '关于我们',
+                },
+            },
+            {
+                path: '/user/login',
+                name: 'login',
+                component: () => import('@/views/user/Login.vue'),
+                meta: {
+                    title: '用户登录',
+                },
+            },
+            {
+                path: '/user/register',
+                name: 'register',
+                component: () => import('@/views/user/Register.vue'),
+                meta: {
+                    title: '用户注册',
                 },
             },
             {

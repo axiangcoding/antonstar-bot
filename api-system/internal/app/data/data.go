@@ -49,6 +49,7 @@ func autoMigrate(db *gorm.DB) {
 	if err := db.Set("gorm:table_options",
 		"ENGINE=InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_bin").AutoMigrate(
 		&schema.User{},
+		&schema.UserCert{},
 		&schema.CrawlerData{},
 		&schema.Visit{},
 		&schema.BugReport{},

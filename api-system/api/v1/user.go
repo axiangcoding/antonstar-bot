@@ -17,8 +17,8 @@ type LoginForm struct {
 // @Summary  User login
 // @Tags      User
 // @Param    form  body      LoginForm    true  "register form"
-// @Success   200  {object}  app.ApiJson  ""
-// @Failure   400  {object}  app.ErrJson  ""
+// @Success  200  {object}  app.ApiJson  ""
+// @Failure  400  {object}  app.ErrJson  ""
 // @Router   /v1/user/login [post]
 func UserLogin(c *gin.Context) {
 	form := LoginForm{}
@@ -42,14 +42,15 @@ func UserLogin(c *gin.Context) {
 }
 
 type RegisterForm struct {
-	UserName string  `binding:"alphanum"`
-	Email    *string `binding:"email"`
-	Phone    *string `binding:"e164"`
-	Password string
+	UserName  string `binding:"alphanum,required"`
+	Email     string `binding:"email,required"`
+	Phone     string `binding:"omitempty,e164"`
+	AvatarUrl string `binding:"omitempty,url"`
+	Password  string `binding:"required"`
 }
 
 // UserRegister
-// @Summary  User register
+// @Summary  用户注册
 // @Tags     User
 // @Param    form  body      RegisterForm  true  "register form"
 // @Success  200   {object}  app.ApiJson  ""
@@ -79,8 +80,8 @@ func UserRegister(c *gin.Context) {
 // UserLogout
 // @Summary   User logout
 // @Tags     User
-// @Success  200   {object}  app.ApiJson   ""
-// @Failure  400   {object}  app.ErrJson  ""
+// @Success   200  {object}  app.ApiJson  ""
+// @Failure   400  {object}  app.ErrJson  ""
 // @Router    /v1/user/logout [post]
 // @Security  ApiKeyAuth
 func UserLogout(c *gin.Context) {
@@ -93,5 +94,19 @@ func UserLogout(c *gin.Context) {
 		app.BizFailed(c, e.TokenNotValid)
 		return
 	}
+	app.Success(c, nil)
+}
+
+type KeyFieldExistForm struct {
+}
+
+// IsKeyFieldValueExist
+// @Summary  判断主要的用户信息的值是否存在
+// @Tags     User
+// @Success  200   {object}  app.ApiJson   ""
+// @Failure  400   {object}  app.ErrJson  ""
+// @Router   /v1/user/key-field/exist [post]
+func IsKeyFieldValueExist(c *gin.Context) {
+	// TODO
 	app.Success(c, nil)
 }

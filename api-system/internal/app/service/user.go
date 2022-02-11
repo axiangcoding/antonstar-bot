@@ -20,7 +20,7 @@ func UserRegister(ctx *gin.Context, ur entity.UserRegister) (string, error) {
 		Email:    ur.Email,
 		Phone:    ur.Phone,
 		Password: string(hashedPassword),
-		Roles:    schema.UserRoleNormal,
+		Roles:    schema.UserRoleOrdinary,
 	}
 	user.GenerateId()
 	return data.UserRegister(ctx, user)

@@ -37,6 +37,8 @@ definitions:
     type: object
   v1.RegisterForm:
     properties:
+      avatarUrl:
+        type: string
       email:
         type: string
       password:
@@ -45,6 +47,10 @@ definitions:
         type: string
       userName:
         type: string
+    required:
+    - email
+    - password
+    - userName
     type: object
 info:
   contact:
@@ -55,6 +61,39 @@ info:
   title: Golang Gin Template API
   version: 1.0.0
 paths:
+  /v1/captcha:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      summary: 请求生成验证码
+      tags:
+      - Captcha
+  /v1/captcha/{file}:
+    get:
+      consumes:
+      - image/png
+      parameters:
+      - description: image id
+        in: path
+        name: file
+        required: true
+        type: string
+      - in: query
+        name: lang
+        type: string
+      - in: query
+        name: reload
+        required: true
+        type: boolean
+      responses:
+        "200":
+          description: ""
+      summary: 获取验证码图片
+      tags:
+      - Captcha
   /v1/system/info:
     get:
       responses:
@@ -67,6 +106,20 @@ paths:
       summary: System Info
       tags:
       - System
+  /v1/user/key-field/exist:
+    post:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.ErrJson'
+      summary: 判断主要的用户信息的值是否存在
+      tags:
+      - User
   /v1/user/login:
     post:
       parameters:
@@ -122,7 +175,7 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/app.ErrJson'
-      summary: User register
+      summary: 用户注册
       tags:
       - User
   /v1/visits:

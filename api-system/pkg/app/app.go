@@ -3,7 +3,10 @@ package app
 import (
 	"axiangcoding/antonstar/api-system/internal/app/conf"
 	"axiangcoding/antonstar/api-system/pkg/app/e"
+	"errors"
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"net/http"
 )
 
@@ -17,6 +20,10 @@ type ErrJson struct {
 	Err []string `json:"err"`
 }
 
+const (
+	validFailedErrMsg = "Valid Error: [%s] should be match tag [%s]"
+)
+
 func generateErrJson(errs []error) *ErrJson {
 	if len(errs) == 0 {
 		return nil
@@ -25,7 +32,25 @@ func generateErrJson(errs []error) *ErrJson {
 	var errMessages []string
 	if !hideDetail {
 		for _, err := range errs {
-			errMessages = append(errMessages, err.Error())
+			var validErrors validator.ValidationErrors
+			if errors.As(err, &validErrors) {
+				for _, err := range err.(validator.ValidationErrors) {
+					errMessages = append(errMessages, fmt.Sprintf(validFailedErrMsg, err.Field(), err.Tag()))
+					// fmt.Println(err.Namespace())
+					// fmt.Println(err.Field())
+					// fmt.Println(err.StructNamespace())
+					// fmt.Println(err.StructField())
+					// fmt.Println(err.Tag())
+					// fmt.Println(err.ActualTag())
+					// fmt.Println(err.Kind())
+					// fmt.Println(err.Type())
+					// fmt.Println(err.Value())
+					// fmt.Println(err.Param())
+					// fmt.Println()
+				}
+			} else {
+				errMessages = append(errMessages, err.Error())
+			}
 		}
 	}
 	return &ErrJson{Err: errMessages}
@@ -60,6 +85,7 @@ func BizFailed(c *gin.Context, errCode int, err ...error) {
 // bad request response
 // 返回错误参数请求
 func BadRequest(c *gin.Context, errCode int, err ...error) {
+
 	HttpResponse(c, http.StatusBadRequest, errCode, generateErrJson(err))
 	c.Abort()
 }

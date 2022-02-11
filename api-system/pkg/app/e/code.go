@@ -14,6 +14,8 @@ const (
 	RegisterFailed = 12001
 
 	ReachRefreshLimit = 13000
+
+	DuplicateEntry = 14000
 )
 
 var errCodeText = map[int]string{
@@ -29,6 +31,8 @@ var errCodeText = map[int]string{
 	LoginFailed:       "Login failed",
 	RegisterFailed:    "Register failed",
 	ReachRefreshLimit: "Reach Refresh Limit",
+
+	DuplicateEntry: "Entry duplicated",
 }
 
 func CodeText(code int) string {
