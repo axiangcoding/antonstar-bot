@@ -12,16 +12,18 @@
 	</div>
 </template>
 
+
+
 <script lang="ts" setup>
-import { useRoute, RouterLink } from 'vue-router'
-import { h, ref, onMounted, nextTick, watch, computed } from 'vue'
-import { NIcon } from 'naive-ui'
-import { Award, CommentsRegular, Gamepad, EllipsisH } from '@vicons/fa'
+import {useRoute,RouterLink} from 'vue-router'
+import {h, ref, onMounted, nextTick, watch, computed} from 'vue'
+import {NIcon} from 'naive-ui'
+import {Award, CommentsRegular, Gamepad, Biohazard,EllipsisH} from '@vicons/fa'
 
 const route = useRoute()
 const navActive = ref(null)
 let activeKey: any = computed(() => {
-	return route.name as string
+  return route.name as string
 })
 
 const renderIcon = (icon: any) => {
@@ -46,6 +48,12 @@ const options = ref([
 		label: () =>
 			h(RouterLink, { to: { name: 'record' } }, { default: () => '战绩查询' }),
 	},
+  {
+    key: 'rank',
+    icon: renderIcon(Biohazard),
+    label: () =>
+        h(RouterLink, { to: { name: 'rank' } }, { default: () => '硬核狠人' }),
+  },
 	{
 		key: 'about',
 		icon: renderIcon(CommentsRegular),
@@ -103,15 +111,16 @@ onMounted(() => {
 			navAnimation()
 		}
 	}
+
 })
 
 watch(
-	() => route.name,
-	() => {
-		nextTick(() => {
-			navAnimation()
-		})
-	}
+    () => route.name,
+    () => {
+      nextTick(() => {
+        navAnimation()
+      })
+    }
 )
 </script>
 

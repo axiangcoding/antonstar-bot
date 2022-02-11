@@ -1,25 +1,36 @@
 <script setup lang="ts">
-import { useStore } from 'vuex'
-import { computed } from 'vue'
+import {darkTheme} from 'naive-ui'
+import themes from '@/themes/index'
+import {useStore} from 'vuex'
+import {ref, computed, onMounted} from 'vue'
 import Loading from './components/Loading.vue';
 
 const store = useStore()
-
 const loading = computed(() => store.state.loading)
-const themeOverrides = computed(() => store.getters.getThemesOverides)
+const themeOverrides = ref(themes[store.state.themes])
+
+import {v4 as uuid} from "uuid"
+
+onMounted(() => {
+  if (store.state.clientId == '') {
+    store.commit('setClientId', uuid())
+  }
+})
 </script>
 
 <template>
-	<!-- 调整主题变量 -->
-	<n-config-provider :theme-overrides="themeOverrides" class="h100">
-		<n-message-provider>
-			<n-el tag="div" class="h100">
-				<router-view />
-			</n-el>
-		</n-message-provider>
-		<n-back-top :right="30" />
-		<Loading :loading="loading"/>
-	</n-config-provider>
+  <!-- 调整主题变量 -->
+  <n-config-provider :theme-overrides="themeOverrides" class="h100">
+    <n-message-provider>
+      <n-dialog-provider>
+        <n-el tag="div" class="h100">
+          <router-view/>
+        </n-el>
+      </n-dialog-provider>
+    </n-message-provider>
+    <n-back-top :right="30"/>
+    <Loading :loading="loading"/>
+  </n-config-provider>
 </template>
 
 <style lang="scss">
