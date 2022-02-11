@@ -1,5 +1,5 @@
 <template>
-  <n-card :bordered="false" size="small" style="text-align: left">
+  <n-card :bordered="false" size="small">
     <template #header>
       <n-h2 prefix="bar" align-text type="primary">数据统计</n-h2>
     </template>
