@@ -29,6 +29,20 @@ body {
 	overflow: hidden;
 }
 
+::-webkit-scrollbar {
+	width: 8px;
+	background: transparent;
+	padding: 0;
+}
+
+::-webkit-scrollbar-thumb {
+	&:hover {
+		background: #bbbbbbdd;
+	}
+	background: #bbbbbbaa;
+	border-radius: 4px;
+}
+
 #app {
 	font-family: Avenir, Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
