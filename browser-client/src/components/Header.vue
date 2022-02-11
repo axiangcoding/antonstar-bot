@@ -11,7 +11,6 @@
 						<n-image height="44" :src="LOGO_URL" preview-disabled />
 						<n-image
 							height="44"
-							class="hiddenAnimate"
 							:src="LOGO_TEXT_URL"
 							preview-disabled
 						/>
