@@ -20,10 +20,10 @@ onMounted(() => {
 
 <template>
   <!-- 调整主题变量 -->
-  <n-config-provider :theme-overrides="themeOverrides">
+  <n-config-provider :theme-overrides="themeOverrides" class="h100">
     <n-message-provider>
       <n-dialog-provider>
-        <n-el tag="div">
+        <n-el tag="div" class="h100">
           <router-view/>
         </n-el>
       </n-dialog-provider>
@@ -38,6 +38,20 @@ html,
 body {
 	margin: 0;
 	overflow: hidden;
+}
+
+::-webkit-scrollbar {
+	width: 8px;
+	background: transparent;
+	padding: 0;
+}
+
+::-webkit-scrollbar-thumb {
+	&:hover {
+		background: #bbbbbbdd;
+	}
+	background: #bbbbbbaa;
+	border-radius: 4px;
 }
 
 #app {

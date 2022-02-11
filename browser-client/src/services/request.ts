@@ -29,7 +29,7 @@ http.interceptors.response.use((res: any) => {
         } else if (error.response.status == 400) {
             window.$message.warning('请输入正确的参数')
         }
-        return Promise.reject(error)
+        // return Promise.reject(error)  这个会默认报错显示
     }
 )
 

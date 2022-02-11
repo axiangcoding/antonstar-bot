@@ -48,7 +48,7 @@ const btnLoading = ref(false)
 let messageReactive = null
 
 onMounted(() => {
-  nick.value = route.params.nick as string
+  nick.value = route.params.nick as string || ""
   if (nick.value) {
     doSearch()
   }
