@@ -74,8 +74,7 @@ var doc = `{
                     {
                         "type": "boolean",
                         "name": "reload",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     }
                 ],
                 "responses": {

@@ -5,7 +5,6 @@ import (
 	"axiangcoding/antonstar/api-system/pkg/app"
 	"axiangcoding/antonstar/api-system/pkg/app/e"
 	"bytes"
-	"fmt"
 	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -24,7 +23,7 @@ func GenerateCaptcha(c *gin.Context) {
 }
 
 type GetCaptchaForm struct {
-	Reload bool   `binding:"omitempty,required" json:"reload" form:"reload"`
+	Reload bool   `binding:"omitempty" json:"reload" form:"reload"`
 	Lang   string `binding:"" json:"lang" form:"lang"`
 }
 
@@ -40,8 +39,6 @@ func GetCaptcha(c *gin.Context) {
 	file := c.Param("file")
 	var form GetCaptchaForm
 	err := c.ShouldBindQuery(&form)
-	fmt.Println(form.Lang)
-	fmt.Println(form.Reload)
 	if err != nil {
 		app.BadRequest(c, e.RequestParamsNotValid, err)
 		return

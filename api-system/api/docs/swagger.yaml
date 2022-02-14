@@ -86,7 +86,6 @@ paths:
         type: string
       - in: query
         name: reload
-        required: true
         type: boolean
       responses:
         "200":
