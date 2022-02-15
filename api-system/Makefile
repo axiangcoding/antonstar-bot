@@ -4,8 +4,8 @@ all: swag run
 
 swag:
 	@echo "latest swag tool required"
-	swag init --output ./api/docs
-	swag fmt
+	swag init -o ./api/docs -g ./cmd/app/main.go
+	swag fmt -g ./cmd/app/main.go
 
 clean:
 	go clean
@@ -22,7 +22,7 @@ build-image:
 	docker build . -t axiangcoding/antonstar/api-system:latest
 
 run:
-	go run ./
+	go run ./cmd/app/main.go
 
 
 
