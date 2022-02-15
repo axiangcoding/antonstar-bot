@@ -76,7 +76,7 @@ paths:
       consumes:
       - image/png
       parameters:
-      - description: image id
+      - description: image file name
         in: path
         name: file
         required: true
@@ -128,6 +128,14 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/v1.LoginForm'
+      - in: query
+        name: captcha_id
+        required: true
+        type: string
+      - in: query
+        name: captcha_val
+        required: true
+        type: string
       responses:
         "200":
           description: OK

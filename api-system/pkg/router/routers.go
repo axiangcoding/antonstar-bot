@@ -4,7 +4,7 @@ import (
 	"axiangcoding/antonstar/api-system/api/docs"
 	"axiangcoding/antonstar/api-system/internal/app/conf"
 	"axiangcoding/antonstar/api-system/pkg/middleware"
-	v12 "axiangcoding/antonstar/api-system/pkg/router/v1"
+	v1 "axiangcoding/antonstar/api-system/pkg/router/v1"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -47,33 +47,33 @@ func setRouterV1(r *gin.Engine) {
 	{
 		user := groupV1.Group("/user")
 		{
-			user.POST("/login", v12.UserLogin)
-			user.POST("/register", v12.UserRegister)
-			user.POST("/logout", middleware.AuthCheck(), v12.UserLogout)
-			user.POST("/key-field/exist", v12.IsKeyFieldValueExist)
+			user.POST("/login", middleware.CaptchaCheck(), v1.UserLogin)
+			user.POST("/register", v1.UserRegister)
+			user.POST("/logout", middleware.AuthCheck(), v1.UserLogout)
+			user.POST("/key-field/exist", v1.IsKeyFieldValueExist)
 		}
 		system := groupV1.Group("/system", middleware.AuthCheck())
 		{
-			system.GET("/info", v12.SystemInfo)
+			system.GET("/info", v1.SystemInfo)
 		}
 		visit := groupV1.Group("/visits")
 		{
-			visit.POST("/visit", v12.PostVisit)
-			visit.GET("/", middleware.AuthCheck(), v12.GetVisits)
-			visit.GET("/count", v12.GetVisitCount)
+			visit.POST("/visit", v1.PostVisit)
+			visit.GET("/", middleware.AuthCheck(), v1.GetVisits)
+			visit.GET("/count", v1.GetVisitCount)
 		}
 		captcha := groupV1.Group("/captcha")
 		{
-			captcha.GET("/", v12.GenerateCaptcha)
-			captcha.GET("/:file", v12.GetCaptcha)
+			captcha.GET("/", v1.GenerateCaptcha)
+			captcha.GET("/:file", v1.GetCaptcha)
 			captcha.POST("/verify")
 		}
 		warThunder := groupV1.Group("/war_thunder")
 		{
-			warThunder.GET("/userinfo/queries", v12.GetUserInfoQueries)
-			warThunder.POST("/userinfo/refresh", v12.PostUserInfoRefresh)
-			warThunder.GET("/userinfo", v12.GetUserInfo)
-			warThunder.GET("/userinfo/query/count", v12.GetQueryCount)
+			warThunder.GET("/userinfo/queries", v1.GetUserInfoQueries)
+			warThunder.POST("/userinfo/refresh", v1.PostUserInfoRefresh)
+			warThunder.GET("/userinfo", v1.GetUserInfo)
+			warThunder.GET("/userinfo/query/count", v1.GetQueryCount)
 			// warThunder.StaticFile("/mock.html", "./resources/index.html")
 		}
 	}

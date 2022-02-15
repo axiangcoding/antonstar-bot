@@ -30,7 +30,7 @@ type GetCaptchaForm struct {
 // GetCaptcha
 // @Summary  获取验证码图片
 // @Tags     Captcha
-// @Param    file  path   string          true   "image id"
+// @Param    file  path   string          true   "image file name"
 // @Param    form  query  GetCaptchaForm  false  "more options"
 // @Accept   png
 // @Success  200

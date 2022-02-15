@@ -8,7 +8,7 @@
       <n-grid cols="1 768:3 1200:3 1920:3">
         <n-gi/>
         <n-gi>
-          <n-card size="small" bordered embedded style="min-width: 300px">
+          <n-card size="small" bordered embedded >
             <template #header><h3>登录</h3></template>
             <n-form
                 :model="formValue"
@@ -23,20 +23,23 @@
                 <n-input placeholder="输入密码" type="password"
                          show-password-on="click" v-model:value="formValue.password"/>
               </n-form-item>
-              <n-form-item label="验证码" path="captcha">
+              <n-form-item label="验证码" required path="captcha">
                 <n-space vertical>
                   <n-input v-model:value="formValue.captcha" placeholder="输入验证码"/>
-                  <n-image width="240" height="80" preview-disabled src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"></n-image>
+                  <n-image width="240" height="80" preview-disabled
+                           @click="refreshCaptcha"
+                           class="img-captcha"
+                           :src="prefix+captchaFile+'?'+randomStr"></n-image>
                 </n-space>
-
               </n-form-item>
               <n-form-item style="display: flex; justify-content: flex-end;">
                 <n-space>
-                  <n-button type="success">没有账号？注册一个</n-button>
-                  <n-button @click="handleValidateClick"  type="primary">登录</n-button>
+                  <n-button type="success" @click="router.push({'name':'register'})">没有账号？注册一个</n-button>
+                  <n-button @click="handleValidateClick" type="primary">登录</n-button>
                 </n-space>
               </n-form-item>
             </n-form>
+            <!--{{ formValue }}-->
           </n-card>
 
         </n-gi>
@@ -48,17 +51,50 @@
 </template>
 
 <script lang="ts" setup>
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
+import http from "@/services/request";
+import {useRouter} from "vue-router";
+
+onMounted(() => {
+  generateCaptcha()
+})
 
 const formValue = ref({
   username: '',
   password: '',
-  captcha:''
+  captcha_id: '',
+  captcha_val: '',
 })
+
+const router = useRouter()
 const rules = ref()
 const size = ref()
+const captchaFile = ref()
+const randomStr = ref(0)
+
+const prefix = import.meta.env.VITE_APP_REQUEST_BASE_URL + 'v1/captcha/'
+const generateCaptcha = () => {
+  http.get('/v1/captcha').then(res => {
+    captchaFile.value = res.data.id + "." + res.data.ext
+    formValue.value.captcha_id = res.data.id
+  })
+}
+
+const refreshCaptcha = () => {
+  http.get('/v1/captcha/' + captchaFile.value, {
+    params: {
+      reload: true
+    }
+  }).then(res => {
+    randomStr.value = new Date().getTime()
+  })
+}
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.img-captcha {
+  &:hover {
+    cursor: pointer;
+  }
+}
 </style>

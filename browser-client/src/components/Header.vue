@@ -28,7 +28,7 @@
             <template #icon>
               <User/>
             </template>
-            登录
+            登录 / 注册
           </n-button>
         </div>
       </div>

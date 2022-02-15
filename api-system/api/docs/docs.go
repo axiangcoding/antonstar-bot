@@ -61,7 +61,7 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "image id",
+                        "description": "image file name",
                         "name": "file",
                         "in": "path",
                         "required": true
@@ -142,6 +142,18 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/v1.LoginForm"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "name": "captcha_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "captcha_val",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
