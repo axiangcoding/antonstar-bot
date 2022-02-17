@@ -8,6 +8,6 @@ type UserRegister struct {
 }
 
 type UserLogin struct {
-	UserId   int64
+	UserName string
 	Password string
 }

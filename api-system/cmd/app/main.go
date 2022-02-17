@@ -8,6 +8,7 @@ import (
 	"axiangcoding/antonstar/api-system/pkg/logging"
 	"axiangcoding/antonstar/api-system/pkg/mq"
 	"axiangcoding/antonstar/api-system/pkg/router"
+	"axiangcoding/antonstar/api-system/pkg/validation"
 	"context"
 	"fmt"
 	"net/http"
@@ -26,6 +27,7 @@ func init() {
 	cache.Setup()
 	mq.Setup()
 	auth.Setup()
+	validation.Setup()
 }
 
 // @title        Golang Gin Template API

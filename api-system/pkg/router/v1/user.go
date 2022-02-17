@@ -8,18 +8,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// LoginForm 目前支持用户名登录
 type LoginForm struct {
-	UserId   int64
-	Password string
+	UserName string `binding:"username,required" json:"username" form:"username"`
+	Password string `binding:"password,required" json:"password" form:"password"`
 }
 
 // UserLogin
 // @Summary  User login
 // @Tags      User
-// @Param    form     body      LoginForm               true  "register form"
-// @Param    captcha  query     middleware.CaptchaForm  true  "captcha form"
-// @Success  200      {object}  app.ApiJson             ""
-// @Failure  400      {object}  app.ErrJson             ""
+// @Param    form  body      LoginForm    true  "register form"
+// @Success  200   {object}  app.ApiJson  ""
+// @Failure  400   {object}  app.ErrJson  ""
 // @Router   /v1/user/login [post]
 func UserLogin(c *gin.Context) {
 	form := LoginForm{}
@@ -30,7 +30,7 @@ func UserLogin(c *gin.Context) {
 	}
 
 	login := entity.UserLogin{
-		UserId:   form.UserId,
+		UserName: form.UserName,
 		Password: form.Password,
 	}
 
@@ -43,11 +43,11 @@ func UserLogin(c *gin.Context) {
 }
 
 type RegisterForm struct {
-	UserName  string `binding:"alphanum,required"`
-	Email     string `binding:"email,required"`
-	Phone     string `binding:"omitempty,e164"`
-	AvatarUrl string `binding:"omitempty,url"`
-	Password  string `binding:"required"`
+	UserName  string `binding:"username,required" json:"username" form:"username"`
+	Email     string `binding:"email,required" json:"email" form:"email"`
+	Phone     string `binding:"omitempty,e164" json:"phone"`
+	AvatarUrl string `binding:"omitempty,url" json:"avatar_url"`
+	Password  string `binding:"password,required" json:"password" form:"password"`
 }
 
 // UserRegister

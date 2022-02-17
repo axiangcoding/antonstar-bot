@@ -20,8 +20,11 @@ definitions:
     properties:
       password:
         type: string
-      userId:
-        type: integer
+      username:
+        type: string
+    required:
+    - password
+    - username
     type: object
   v1.PostVisitForm:
     properties:
@@ -37,7 +40,7 @@ definitions:
     type: object
   v1.RegisterForm:
     properties:
-      avatarUrl:
+      avatar_url:
         type: string
       email:
         type: string
@@ -45,12 +48,12 @@ definitions:
         type: string
       phone:
         type: string
-      userName:
+      username:
         type: string
     required:
     - email
     - password
-    - userName
+    - username
     type: object
 info:
   contact:
@@ -128,14 +131,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/v1.LoginForm'
-      - in: query
-        name: captcha_id
-        required: true
-        type: string
-      - in: query
-        name: captcha_val
-        required: true
-        type: string
       responses:
         "200":
           description: OK

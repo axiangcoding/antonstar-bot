@@ -28,7 +28,7 @@ func UserRegister(ctx *gin.Context, ur entity.UserRegister) (string, error) {
 
 func UserLogin(ctx *gin.Context, login entity.UserLogin) (string, error) {
 	user := schema.User{
-		UserId: login.UserId,
+		UserName: login.UserName,
 	}
 	findUser, err := data.UserLogin(ctx, user)
 	if err != nil {

@@ -142,18 +142,6 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/v1.LoginForm"
                         }
-                    },
-                    {
-                        "type": "string",
-                        "name": "captcha_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "name": "captcha_val",
-                        "in": "query",
-                        "required": true
                     }
                 ],
                 "responses": {
@@ -436,12 +424,16 @@ var doc = `{
         },
         "v1.LoginForm": {
             "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
             "properties": {
                 "password": {
                     "type": "string"
                 },
-                "userId": {
-                    "type": "integer"
+                "username": {
+                    "type": "string"
                 }
             }
         },
@@ -467,10 +459,10 @@ var doc = `{
             "required": [
                 "email",
                 "password",
-                "userName"
+                "username"
             ],
             "properties": {
-                "avatarUrl": {
+                "avatar_url": {
                     "type": "string"
                 },
                 "email": {
@@ -482,7 +474,7 @@ var doc = `{
                 "phone": {
                     "type": "string"
                 },
-                "userName": {
+                "username": {
                     "type": "string"
                 }
             }

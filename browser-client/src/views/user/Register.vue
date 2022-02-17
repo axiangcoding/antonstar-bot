@@ -43,9 +43,13 @@
                            :src="prefix+captchaFile+'?'+randomStr"></n-image>
                 </n-space>
               </n-form-item>
+              <n-form-item label="用户协议" required path="captcha">
+                <n-checkbox v-model:checked="formValue.agreeLicense">同意用户协议</n-checkbox>
+                <n-button text type="info">用户协议</n-button>
+              </n-form-item>
               <n-form-item style="display: flex; justify-content: flex-end;">
                 <n-space>
-                  <n-button type="success" @click="router.push({'name':'login'})">已有账号？点我登录</n-button>
+                  <n-button type="success" text @click="router.push({'name':'login'})">已有账号？点我登录</n-button>
                   <n-button @click="handleValidateClick" type="primary">注册</n-button>
                 </n-space>
               </n-form-item>
@@ -78,6 +82,7 @@ const formValue = ref({
   inviteCode: '',
   captcha_id: '',
   captcha_val: '',
+  agreeLicense: false
 })
 
 const router = useRouter()
