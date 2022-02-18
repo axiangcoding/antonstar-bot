@@ -24,7 +24,7 @@
                          show-password-on="click" v-model:value="formValue.password"/>
               </n-form-item>
               <n-form-item label="验证码" required path="captcha_val">
-                <n-input v-model:value="formValue.captcha_val" placeholder="输入验证码"/>
+                <n-input v-model:value="formValue.captchaVal" placeholder="输入验证码"/>
               </n-form-item>
               <n-image width="240" height="80" preview-disabled
                        @click="refreshCaptcha"
@@ -33,7 +33,7 @@
               <n-form-item style="display: flex; justify-content: flex-end;">
                 <n-space>
                   <n-button type="success" text @click="router.push({'name':'register'})">没有账号？注册一个</n-button>
-                  <n-button @click="handleValidateClick" type="primary">登录</n-button>
+                  <n-button @click="" type="primary">登录</n-button>
                 </n-space>
               </n-form-item>
             </n-form>
@@ -53,6 +53,7 @@ import {onMounted, ref} from "vue";
 import http from "@/services/request";
 import {useRouter} from "vue-router";
 import {getRegex} from "@/util/validation";
+import {captcha} from "@/services/user";
 
 onMounted(() => {
   generateCaptcha()
@@ -61,7 +62,7 @@ onMounted(() => {
 const formValue = ref({
   username: '',
   password: '',
-  captcha_val: '',
+  captchaVal: '',
 })
 
 const captchaId = ref('')
@@ -92,7 +93,7 @@ const rules = {
       trigger: 'blur'
     }
   ],
-  captcha_val: {
+  captchaVal: {
     required: true,
     message: '请输入验证码',
     trigger: 'blur'
@@ -104,18 +105,14 @@ const randomStr = ref(0)
 
 const prefix = import.meta.env.VITE_APP_REQUEST_BASE_URL + 'v1/captcha/'
 const generateCaptcha = () => {
-  http.get('/v1/captcha').then(res => {
+  captcha('', false).then(res => {
     captchaFile.value = res.data.id + "." + res.data.ext
     captchaId.value = res.data.id
   })
 }
 
 const refreshCaptcha = () => {
-  http.get('/v1/captcha/' + captchaFile.value, {
-    params: {
-      reload: true
-    }
-  }).then(res => {
+  captcha(captchaFile.value, true).then(res => {
     randomStr.value = new Date().getTime()
   })
 }

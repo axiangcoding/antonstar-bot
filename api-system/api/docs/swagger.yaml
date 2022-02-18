@@ -16,6 +16,19 @@ definitions:
           type: string
         type: array
     type: object
+  v1.KeyFieldExistForm:
+    properties:
+      key:
+        enum:
+        - username
+        - email
+        type: string
+      value:
+        type: string
+    required:
+    - key
+    - value
+    type: object
   v1.LoginForm:
     properties:
       password:
@@ -108,20 +121,6 @@ paths:
       summary: System Info
       tags:
       - System
-  /v1/user/key-field/exist:
-    post:
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.ApiJson'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/app.ErrJson'
-      summary: 判断主要的用户信息的值是否存在
-      tags:
-      - User
   /v1/user/login:
     post:
       parameters:
@@ -178,6 +177,27 @@ paths:
           schema:
             $ref: '#/definitions/app.ErrJson'
       summary: 用户注册
+      tags:
+      - User
+  /v1/user/value/exist:
+    post:
+      parameters:
+      - description: form
+        in: body
+        name: form
+        required: true
+        schema:
+          $ref: '#/definitions/v1.KeyFieldExistForm'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.ErrJson'
+      summary: 判断主要的用户信息的值是否存在
       tags:
       - User
   /v1/visits:

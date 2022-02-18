@@ -85,7 +85,6 @@ func BizFailed(c *gin.Context, errCode int, err ...error) {
 // bad request response
 // 返回错误参数请求
 func BadRequest(c *gin.Context, errCode int, err ...error) {
-
 	HttpResponse(c, http.StatusBadRequest, errCode, generateErrJson(err))
 	c.Abort()
 }

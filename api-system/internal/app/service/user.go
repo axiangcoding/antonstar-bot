@@ -50,11 +50,20 @@ func UserLogin(ctx *gin.Context, login entity.UserLogin) (string, error) {
 }
 
 func UserLogout(c *gin.Context, token string) (int64, error) {
-
 	claims, _ := auth.ParseToken(token)
 	result, err := DeleteCachedToken(c, claims.Id)
-	if err != nil {
-		return 0, err
+	return result, err
+}
+
+func FindValueExist(c *gin.Context, key string, val string) bool {
+	user := schema.User{}
+	switch key {
+	case "username":
+		user.UserName = val
+		break
+	case "email":
+		user.Email = val
 	}
-	return result, nil
+	findUser := data.FindUser(c, user)
+	return findUser
 }

@@ -54,7 +54,7 @@ type RegisterForm struct {
 // @Summary  用户注册
 // @Tags     User
 // @Param    form  body      RegisterForm  true  "register form"
-// @Success  200  {object}  app.ApiJson  ""
+// @Success  200   {object}  app.ApiJson        ""
 // @Failure  400   {object}  app.ErrJson   ""
 // @Router   /v1/user/register [post]
 func UserRegister(c *gin.Context) {
@@ -99,15 +99,26 @@ func UserLogout(c *gin.Context) {
 }
 
 type KeyFieldExistForm struct {
+	Key   string `json:"key" form:"key" binding:"required,oneof=username email"`
+	Value string `json:"value" form:"value" binding:"required"`
 }
 
 // IsKeyFieldValueExist
 // @Summary  判断主要的用户信息的值是否存在
 // @Tags     User
+// @Param    form  body      KeyFieldExistForm  true  "form"
 // @Success  200   {object}  app.ApiJson   ""
-// @Failure  400  {object}  app.ErrJson  ""
-// @Router   /v1/user/key-field/exist [post]
+// @Failure  400   {object}  app.ErrJson        ""
+// @Router   /v1/user/value/exist [post]
 func IsKeyFieldValueExist(c *gin.Context) {
-	// TODO
-	app.Success(c, nil)
+	form := KeyFieldExistForm{}
+	err := c.ShouldBindJSON(&form)
+	if err != nil {
+		app.BadRequest(c, e.RequestParamsNotValid, err)
+		return
+	}
+	existed := service.FindValueExist(c, form.Key, form.Value)
+	app.Success(c, map[string]interface{}{
+		"exists": existed,
+	})
 }

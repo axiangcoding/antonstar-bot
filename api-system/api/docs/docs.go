@@ -105,28 +105,6 @@ var doc = `{
                 }
             }
         },
-        "/v1/user/key-field/exist": {
-            "post": {
-                "tags": [
-                    "User"
-                ],
-                "summary": "判断主要的用户信息的值是否存在",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.ApiJson"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/app.ErrJson"
-                        }
-                    }
-                }
-            }
-        },
         "/v1/user/login": {
             "post": {
                 "tags": [
@@ -201,6 +179,39 @@ var doc = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/v1.RegisterForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/app.ErrJson"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/user/value/exist": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "判断主要的用户信息的值是否存在",
+                "parameters": [
+                    {
+                        "description": "form",
+                        "name": "form",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1.KeyFieldExistForm"
                         }
                     }
                 ],
@@ -419,6 +430,25 @@ var doc = `{
                     "items": {
                         "type": "string"
                     }
+                }
+            }
+        },
+        "v1.KeyFieldExistForm": {
+            "type": "object",
+            "required": [
+                "key",
+                "value"
+            ],
+            "properties": {
+                "key": {
+                    "type": "string",
+                    "enum": [
+                        "username",
+                        "email"
+                    ]
+                },
+                "value": {
+                    "type": "string"
                 }
             }
         },

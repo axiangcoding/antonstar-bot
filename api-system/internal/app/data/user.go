@@ -18,10 +18,17 @@ func UserRegister(ctx context.Context, user schema.User) (string, error) {
 }
 
 func UserLogin(ctx context.Context, user schema.User) (schema.User, error) {
-	var findUser schema.User
-	find := GetDB().Where(user).Take(&findUser)
-	if errors.Is(find.Error, gorm.ErrRecordNotFound) {
-		return findUser, find.Error
+	var found schema.User
+	take := GetDB().Where(user).Take(&found)
+	if errors.Is(take.Error, gorm.ErrRecordNotFound) {
+		return found, take.Error
 	}
-	return findUser, nil
+	return found, nil
+}
+
+// FindUser
+// 检查是否存在
+func FindUser(c context.Context, user schema.User) bool {
+	take := GetDB().Where(user).Take(&schema.User{})
+	return take.RowsAffected == 1
 }

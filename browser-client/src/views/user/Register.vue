@@ -24,7 +24,7 @@
                 <n-input placeholder="输入密码" type="password"
                          show-password-on="click" v-model:value="formValue.password"/>
               </n-form-item>
-              <n-form-item label="重复密码" required path="password">
+              <n-form-item label="重复密码" required path="secPassword">
                 <n-input placeholder="请再次输入密码" type="password"
                          show-password-on="click" v-model:value="formValue.secPassword"/>
               </n-form-item>
@@ -34,23 +34,21 @@
               <n-form-item label="邀请码" path="inviteCode">
                 <n-input v-model:value="formValue.inviteCode" placeholder="输入邀请码"/>
               </n-form-item>
-              <n-form-item label="验证码" required path="captcha">
-                <n-space vertical>
-                  <n-input v-model:value="formValue.captcha" placeholder="输入验证码"/>
-                  <n-image width="240" height="80" preview-disabled
-                           @click="refreshCaptcha"
-                           class="img-captcha"
-                           :src="prefix+captchaFile+'?'+randomStr"></n-image>
-                </n-space>
+              <n-form-item label="验证码" required path="captchaVal">
+                <n-input v-model:value="formValue.captchaVal" placeholder="输入验证码"/>
               </n-form-item>
-              <n-form-item label="用户协议" required path="captcha">
-                <n-checkbox v-model:checked="formValue.agreeLicense">同意用户协议</n-checkbox>
-                <n-button text type="info">用户协议</n-button>
+              <n-image width="240" height="80" preview-disabled
+                       @click="refreshCaptcha"
+                       class="img-captcha"
+                       :src="prefix+captchaFile+'?'+randomStr"></n-image>
+              <n-form-item label="用户协议" required path="agreeLicense">
+                <n-checkbox v-model:checked="formValue.agreeLicense">同意行为准则</n-checkbox>
+                <n-button text type="info">《安东星行为准则》</n-button>
               </n-form-item>
               <n-form-item style="display: flex; justify-content: flex-end;">
                 <n-space>
                   <n-button type="success" text @click="router.push({'name':'login'})">已有账号？点我登录</n-button>
-                  <n-button @click="handleValidateClick" type="primary">注册</n-button>
+                  <n-button @click="" type="primary">注册</n-button>
                 </n-space>
               </n-form-item>
             </n-form>
@@ -67,8 +65,9 @@
 
 <script lang="ts" setup>
 import {onMounted, ref} from "vue";
-import http from "@/services/request";
 import {useRouter} from "vue-router";
+import {getRegex} from "@/util/validation";
+import {captcha, userValueExist} from "@/services/user";
 
 onMounted(() => {
   generateCaptcha()
@@ -80,34 +79,136 @@ const formValue = ref({
   password: '',
   secPassword: '',
   inviteCode: '',
-  captcha_id: '',
-  captcha_val: '',
+  captchaVal: '',
   agreeLicense: false
 })
 
+const captchaId = ref()
+
+// 校验二次密码是否相同
+const validatePasswordSame = (rule: any, value: string) => {
+  return value === formValue.value.password
+}
+
+const validatePasswordStartWith = (rule: any, value: string) => {
+  return (
+      formValue.value.password &&
+      formValue.value.password.startsWith(value) &&
+      formValue.value.password.length >= value.length
+  )
+}
+
+const validateEmailExist = async (rule: any, value: string, callback: any) => {
+  if (value === '') {
+    return
+  }
+  await userValueExist('email', value).then(res => {
+    if (res.data.exists) {
+      callback(new Error('邮箱已存在！'))
+    }
+  }).catch(err => {
+    callback(new Error('重复邮箱检测失败，请稍后重试'))
+  })
+  callback()
+}
+
+const validateUsernameExist = async (rule: any, value: string, callback: any) => {
+  if (value === '') {
+    return
+  }
+  await userValueExist('username', value).then(res => {
+    if (res.data.exists) {
+      callback(new Error('用户名已存在！'))
+    }
+  })
+  callback()
+}
+
+
 const router = useRouter()
-const rules = ref()
+const rules = {
+  username: [
+    {
+      required: true,
+      message: '请输入登录用户名',
+      trigger: 'blur'
+    },
+    {
+      pattern: getRegex('username'),
+      message: '字母，数字，下划线组成，长度在5-16位之间',
+      trigger: 'blur'
+    },
+    {
+      message: '用户名已经存在，请更换！',
+      validator: validateUsernameExist,
+      trigger: 'blur'
+    }
+  ],
+  password: [
+    {
+      required: true,
+      message: '请输入密码',
+      trigger: 'blur'
+    },
+    {
+      pattern: getRegex('password'),
+      message: '密码长度应该在8-16位之间',
+      trigger: 'blur'
+    }
+  ],
+  secPassword: [
+    {
+      required: true,
+      message: '请再次输入密码',
+      trigger: ['input', 'blur']
+    },
+    {
+      validator: validatePasswordStartWith,
+      message: '两次密码输入不一致',
+      trigger: 'input'
+    },
+    {
+      validator: validatePasswordSame,
+      message: '两次密码输入不一致',
+      trigger: ['blur', 'password-input']
+    }
+  ],
+  email: [
+    {
+      validator: validateEmailExist,
+      trigger: 'blur'
+    }
+  ],
+  captchaVal: {
+    required: true,
+    message: '请输入验证码',
+    trigger: 'blur'
+  },
+  agreeLicense: {
+    required: true,
+    message: '请阅读并同意安东星行为准则',
+    trigger: 'blur'
+  }
+}
 const size = ref()
-const captchaFile = ref()
 const randomStr = ref(0)
 
+const captchaFile = ref()
 const prefix = import.meta.env.VITE_APP_REQUEST_BASE_URL + 'v1/captcha/'
 const generateCaptcha = () => {
-  http.get('/v1/captcha').then(res => {
+  captcha('', false).then(res => {
     captchaFile.value = res.data.id + "." + res.data.ext
-    formValue.value.captcha_id = res.data.id
+    captchaId.value = res.data.id
   })
 }
 
 const refreshCaptcha = () => {
-  http.get('/v1/captcha/' + captchaFile.value, {
-    params: {
-      reload: true
-    }
-  }).then(res => {
+  captcha(captchaFile.value, true).then(res => {
     randomStr.value = new Date().getTime()
   })
 }
+
+
 </script>
 
 <style lang="scss" scoped>

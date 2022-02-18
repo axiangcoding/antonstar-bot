@@ -11,11 +11,11 @@ clean:
 	go clean
 
 upgrade:
-	go get -u
+	go get -u ./cmd/app/
 
 check:
-	go fmt ./
-	go vet ./
+	go fmt ./cmd/app/
+	go vet ./cmd/app/
 
 build-image:
 	@echo "docker required"
