@@ -2,6 +2,7 @@ package schema
 
 import (
 	"axiangcoding/antonstar/api-system/pkg/logging"
+	"database/sql"
 	"github.com/bwmarrin/snowflake"
 	"gorm.io/gorm"
 )
@@ -32,13 +33,15 @@ type User struct {
 	// 登录用户名
 	UserName string `gorm:"uniqueIndex;size:255"`
 	// 用户昵称
-	NickName string `gorm:"uniqueIndex;size:255"`
+	NickName sql.NullString `gorm:"uniqueIndex;size:255"`
 	// 头像链接
 	AvatarUrl string `gorm:"size:255"`
 	// 邮箱
-	Email string `gorm:"uniqueIndex;size:255"`
+	Email sql.NullString `gorm:"uniqueIndex;size:255"`
 	// 电话
-	Phone string `gorm:"uniqueIndex;size:255"`
+	Phone sql.NullString `gorm:"uniqueIndex;size:255"`
+	// 邀请码
+	InvitedCode string `gorm:"size:255"`
 	// 加密后的密码
 	Password string `gorm:"size:255"`
 	// 用户分配的角色，逗号分割的若干个值

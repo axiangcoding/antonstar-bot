@@ -6,7 +6,9 @@ const http = axios.create({
     baseURL: import.meta.env.VITE_APP_REQUEST_BASE_URL,
     // 超时设置
     timeout: import.meta.env.VITE_APP_REQUEST_TIMEOUT,
-    headers: {}
+    headers: {
+        'Authorization': ''
+    }
 })
 
 
@@ -14,7 +16,6 @@ const http = axios.create({
 http.interceptors.request.use(config => {
     return config
 }, error => {
-
     return Promise.reject(error)
 })
 
@@ -23,7 +24,6 @@ http.interceptors.response.use((res: any) => {
         return Promise.resolve(res.data)
     },
     error => {
-        console.log(error.code);
         if (error.code === 'ECONNABORTED') {
             window.$message.error('服务器暂时无法连接！')
         } else if (error.response.status == 400) {
@@ -34,3 +34,5 @@ http.interceptors.response.use((res: any) => {
 )
 
 export default http;
+
+

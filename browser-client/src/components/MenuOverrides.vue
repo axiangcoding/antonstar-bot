@@ -17,7 +17,7 @@
 import {useRoute, RouterLink} from 'vue-router'
 import {h, ref, onMounted, nextTick, watch, computed} from 'vue'
 import {NIcon} from 'naive-ui'
-import {Award, CommentsRegular, Gamepad, Biohazard, EllipsisH, Toolbox} from '@vicons/fa'
+import {Award, CommentsRegular, Gamepad, Biohazard, EllipsisH, Toolbox, FortAwesome} from '@vicons/fa'
 
 const route = useRoute()
 const navActive = ref(null)
@@ -72,6 +72,12 @@ const options = ref([
     label: '实时数据',
     // label: () =>	h(RouterLink, { to: { name: 'realtime' } }, { default: () => '实时数据' })
   },
+  {
+    key:'admin',
+    icon: renderIcon(FortAwesome),
+    disabled: true,
+    label: '管理后台',
+  }
 ])
 
 const others = ref({

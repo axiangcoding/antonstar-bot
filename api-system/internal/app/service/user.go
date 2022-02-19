@@ -5,6 +5,7 @@ import (
 	"axiangcoding/antonstar/api-system/internal/app/data/schema"
 	"axiangcoding/antonstar/api-system/internal/app/entity"
 	"axiangcoding/antonstar/api-system/pkg/auth"
+	"database/sql"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 	"strconv"
@@ -15,14 +16,17 @@ func UserRegister(ctx *gin.Context, ur entity.UserRegister) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	user := schema.User{
-		UserName: ur.UserName,
-		Email:    ur.Email,
-		Phone:    ur.Phone,
-		Password: string(hashedPassword),
-		Roles:    schema.UserRoleOrdinary,
+	var user = schema.User{
+		UserName:    ur.UserName,
+		Email:       sql.NullString{String: ur.Email, Valid: ur.Email != ""},
+		Phone:       sql.NullString{String: ur.Phone, Valid: ur.Phone != ""},
+		Password:    string(hashedPassword),
+		InvitedCode: ur.InvitedCode,
+		Roles:       schema.UserRoleOrdinary,
+		Status:      schema.UserStatusNoVerify,
 	}
 	user.GenerateId()
+	user.NickName = sql.NullString{String: "用户" + strconv.FormatInt(user.UserId, 10)}
 	return data.UserRegister(ctx, user)
 }
 
@@ -62,7 +66,7 @@ func FindValueExist(c *gin.Context, key string, val string) bool {
 		user.UserName = val
 		break
 	case "email":
-		user.Email = val
+		user.Email = sql.NullString{String: val, Valid: val != ""}
 	}
 	findUser := data.FindUser(c, user)
 	return findUser

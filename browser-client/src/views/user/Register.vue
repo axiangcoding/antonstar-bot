@@ -1,65 +1,59 @@
 <template>
-  <n-card :bordered="false">
+  <n-card :bordered="false" id="body-register">
     <template #header>
       <h1>欢迎来到安东星！</h1>
     </template>
     <n-space vertical style="text-align: left">
-      <n-alert title="注册须知" type="warning">请阅读以下说明</n-alert>
-      <n-grid cols="1 768:3 1200:3 1920:3">
-        <n-gi/>
-        <n-gi>
-          <n-card size="small" bordered embedded>
-            <template #header><h3>注册</h3></template>
-            <n-form
-                :model="formValue"
-                :rules="rules"
-                :size="size"
-                ref="formRef"
-            >
-              <n-form-item label="登录账号" required path="username">
-                <n-input v-model:value="formValue.username" placeholder="输入登录名"/>
-              </n-form-item>
+      <!--<n-alert title="注册须知" type="warning">请阅读以下说明</n-alert>-->
+      <n-card size="small" bordered embedded class="card-register">
+        <template #header><h3>注册</h3></template>
+        <n-form
+            :model="formValue"
+            :rules="rules"
+            :size="size"
+            ref="formRef"
+        >
+          <n-form-item label="登录账号" required path="username">
+            <n-input v-model:value="formValue.username" placeholder="输入登录名"/>
+          </n-form-item>
 
-              <n-form-item label="密码" required path="password">
-                <n-input placeholder="输入密码" type="password"
-                         show-password-on="click" v-model:value="formValue.password"/>
-              </n-form-item>
-              <n-form-item label="重复密码" required path="secPassword">
-                <n-input placeholder="请再次输入密码" type="password"
-                         show-password-on="click" v-model:value="formValue.secPassword"/>
-              </n-form-item>
-              <n-form-item label="邮箱" path="email">
-                <n-input v-model:value="formValue.email" placeholder="输入邮箱"/>
-              </n-form-item>
-              <n-form-item label="邀请码" path="inviteCode">
-                <n-input v-model:value="formValue.inviteCode" placeholder="输入邀请码"/>
-              </n-form-item>
-              <n-form-item label="验证码" required path="captchaVal">
-                <n-input v-model:value="formValue.captchaVal" placeholder="输入验证码"/>
-              </n-form-item>
-              <n-image width="240" height="80" preview-disabled
-                       @click="refreshCaptcha"
-                       class="img-captcha"
-                       :src="prefix+captchaFile+'?'+randomStr"></n-image>
-              <n-form-item label="用户协议" required path="agreeLicense">
-                <n-checkbox v-model:checked="formValue.agreeLicense">同意行为准则</n-checkbox>
-                <n-button text type="info">《安东星行为准则》</n-button>
-              </n-form-item>
-              <n-form-item style="display: flex; justify-content: flex-end;">
-                <n-space>
-                  <n-button type="success" text @click="router.push({'name':'login'})">已有账号？点我登录</n-button>
-                  <n-button @click="" type="primary">注册</n-button>
-                </n-space>
-              </n-form-item>
-            </n-form>
-            <!--{{ formValue }}-->
-          </n-card>
-
-        </n-gi>
-        <n-gi/>
-      </n-grid>
-
+          <n-form-item label="密码" required path="password">
+            <n-input placeholder="输入密码" type="password"
+                     show-password-on="click" v-model:value="formValue.password"/>
+          </n-form-item>
+          <n-form-item label="重复密码" required path="secPassword">
+            <n-input placeholder="请再次输入密码" type="password"
+                     show-password-on="click" v-model:value="formValue.secPassword"/>
+          </n-form-item>
+          <n-form-item label="邮箱" path="email">
+            <n-input v-model:value="formValue.email" placeholder="输入邮箱"/>
+          </n-form-item>
+          <n-form-item label="邀请码" path="inviteCode">
+            <n-input v-model:value="formValue.inviteCode" placeholder="输入邀请码"/>
+          </n-form-item>
+          <n-form-item label="验证码" required path="captchaVal">
+            <n-input v-model:value="formValue.captchaVal" placeholder="输入验证码"/>
+          </n-form-item>
+          <n-image v-if="captchaFile!==undefined" width="240" height="80" preview-disabled
+                   @click="refreshCaptcha"
+                   class="img-captcha"
+                   :src="prefix+captchaFile+'?'+randomStr"
+          ></n-image>
+          <n-form-item label="用户协议" required path="agreeLicense">
+            <n-checkbox v-model:checked="formValue.agreeLicense">同意行为准则</n-checkbox>
+            <n-button text type="info" @click="showUA=true">《安东星行为准则》</n-button>
+          </n-form-item>
+          <n-form-item style="display: flex; justify-content: flex-end;">
+            <n-space>
+              <n-button type="success" text @click="router.push({'name':'login'})">已有账号？点我登录</n-button>
+              <n-button @click="handlerClick" type="primary">注册</n-button>
+            </n-space>
+          </n-form-item>
+        </n-form>
+      </n-card>
     </n-space>
+    <UserAgreementCard :show="showUA" @update-show="updateShowUA"/>
+    <RegSuccessCard :show="showRegSuccess"/>
   </n-card>
 </template>
 
@@ -67,12 +61,17 @@
 import {onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
 import {getRegex} from "@/util/validation";
-import {captcha, userValueExist} from "@/services/user";
+import {captcha, CaptchaForm} from "@/services/captcha";
+import {userRegister, RegForm, userValueExist} from "@/services/user";
+import {useMessage} from "naive-ui";
+import RegSuccessCard from "@/views/user/components/RegSuccessCard.vue";
+import UserAgreementCard from "@/views/user/components/UserAgreementCard.vue";
 
 onMounted(() => {
   generateCaptcha()
 })
 
+const formRef = ref()
 const formValue = ref({
   username: '',
   email: '',
@@ -122,6 +121,56 @@ const validateUsernameExist = async (rule: any, value: string, callback: any) =>
     }
   })
   callback()
+}
+
+const showUA = ref(false)
+const updateShowUA = (show: boolean) => {
+  showUA.value = show
+}
+
+const message = useMessage()
+const showRegSuccess = ref(false)
+const handlerClick = (e: Event) => {
+  e.preventDefault()
+  formRef.value.validate((errors: any) => {
+    if (!errors) {
+      let user: RegForm = {
+        email: formValue.value.email,
+        invitedCode: formValue.value.inviteCode,
+        password: formValue.value.password,
+        username: formValue.value.username
+      }
+      let cap: CaptchaForm = {
+        captchaId: captchaId.value,
+        captchaVal: formValue.value.captchaVal
+
+      }
+      userRegister(user, cap)
+          .then((res: any) => {
+            if (res.code === 0) {
+              showRegSuccess.value = true
+              countdown()
+            } else if (res.code === 11004) {
+              message.warning('验证码不正确，请重新输入！')
+            } else {
+              message.warning('注册失败！')
+            }
+            generateCaptcha()
+          })
+          .catch(err => {
+            generateCaptcha()
+          })
+    } else {
+
+    }
+  })
+}
+
+const countdown = () => {
+  setTimeout(() => {
+    showRegSuccess.value = false
+    router.push({name: 'login'})
+  }, 3000)
 }
 
 
@@ -175,6 +224,11 @@ const rules = {
   ],
   email: [
     {
+      pattern: getRegex('email'),
+      message: '请输入正确的邮箱',
+      trigger: 'blur'
+    },
+    {
       validator: validateEmailExist,
       trigger: 'blur'
     }
@@ -185,8 +239,9 @@ const rules = {
     trigger: 'blur'
   },
   agreeLicense: {
-    required: true,
-    message: '请阅读并同意安东星行为准则',
+    type: 'enum',
+    enum: [true],
+    message: '请阅读并同意行为准则',
     trigger: 'blur'
   }
 }
@@ -216,5 +271,10 @@ const refreshCaptcha = () => {
   &:hover {
     cursor: pointer;
   }
+}
+
+.card-register {
+  max-width: 550px;
+  margin: 0 auto;
 }
 </style>

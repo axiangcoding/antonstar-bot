@@ -120,6 +120,18 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/v1.LoginForm"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "name": "captcha_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "captcha_val",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -173,13 +185,25 @@ var doc = `{
                 "summary": "用户注册",
                 "parameters": [
                     {
-                        "description": "register form",
+                        "description": "form",
                         "name": "form",
                         "in": "body",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/v1.RegisterForm"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "name": "captcha_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "captcha_val",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -487,7 +511,6 @@ var doc = `{
         "v1.RegisterForm": {
             "type": "object",
             "required": [
-                "email",
                 "password",
                 "username"
             ],
@@ -496,6 +519,9 @@ var doc = `{
                     "type": "string"
                 },
                 "email": {
+                    "type": "string"
+                },
+                "invited_code": {
                     "type": "string"
                 },
                 "password": {

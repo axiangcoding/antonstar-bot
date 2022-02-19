@@ -17,9 +17,10 @@ type LoginForm struct {
 // UserLogin
 // @Summary  User login
 // @Tags      User
-// @Param    form  body      LoginForm    true  "register form"
-// @Success  200   {object}  app.ApiJson  ""
-// @Failure  400   {object}  app.ErrJson  ""
+// @Param    form  body      LoginForm               true  "register form"
+// @Param    form  query     middleware.CaptchaForm  true  "captcha"
+// @Success  200   {object}  app.ApiJson             ""
+// @Failure  400   {object}  app.ErrJson             ""
 // @Router   /v1/user/login [post]
 func UserLogin(c *gin.Context) {
 	form := LoginForm{}
@@ -43,19 +44,21 @@ func UserLogin(c *gin.Context) {
 }
 
 type RegisterForm struct {
-	UserName  string `binding:"username,required" json:"username" form:"username"`
-	Email     string `binding:"email,required" json:"email" form:"email"`
-	Phone     string `binding:"omitempty,e164" json:"phone"`
-	AvatarUrl string `binding:"omitempty,url" json:"avatar_url"`
-	Password  string `binding:"password,required" json:"password" form:"password"`
+	UserName    string `binding:"username,required" json:"username" form:"username"`
+	Password    string `binding:"password,required" json:"password" form:"password"`
+	Email       string `binding:"omitempty,email" json:"email" form:"email"`
+	Phone       string `binding:"omitempty,e164" json:"phone"`
+	InvitedCode string `binding:"omitempty" json:"invited_code" form:"invited_code"`
+	AvatarUrl   string `binding:"omitempty,url" json:"avatar_url"`
 }
 
 // UserRegister
 // @Summary  用户注册
 // @Tags     User
-// @Param    form  body      RegisterForm  true  "register form"
-// @Success  200   {object}  app.ApiJson        ""
-// @Failure  400   {object}  app.ErrJson   ""
+// @Param    form  body      RegisterForm            true  "form"
+// @Param    form  query     middleware.CaptchaForm  true  "captcha"
+// @Success  200   {object}  app.ApiJson             ""
+// @Failure  400   {object}  app.ErrJson             ""
 // @Router   /v1/user/register [post]
 func UserRegister(c *gin.Context) {
 	regForm := RegisterForm{}
@@ -65,10 +68,11 @@ func UserRegister(c *gin.Context) {
 		return
 	}
 	register := entity.UserRegister{
-		UserName: regForm.UserName,
-		Email:    regForm.Email,
-		Phone:    regForm.Phone,
-		Password: regForm.Password,
+		UserName:    regForm.UserName,
+		Email:       regForm.Email,
+		Phone:       regForm.Phone,
+		Password:    regForm.Password,
+		InvitedCode: regForm.InvitedCode,
 	}
 	id, err := service.UserRegister(c, register)
 	if err != nil {
@@ -107,7 +111,7 @@ type KeyFieldExistForm struct {
 // @Summary  判断主要的用户信息的值是否存在
 // @Tags     User
 // @Param    form  body      KeyFieldExistForm  true  "form"
-// @Success  200   {object}  app.ApiJson   ""
+// @Success  200   {object}  app.ApiJson        ""
 // @Failure  400   {object}  app.ErrJson        ""
 // @Router   /v1/user/value/exist [post]
 func IsKeyFieldValueExist(c *gin.Context) {

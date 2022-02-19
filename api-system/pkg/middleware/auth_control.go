@@ -43,13 +43,15 @@ func CaptchaCheck() gin.HandlerFunc {
 		var form CaptchaForm
 		err := c.ShouldBindQuery(&form)
 		if err != nil {
-			app.BadRequest(c, e.CaptchaNotValid, err)
+			app.BizFailed(c, e.CaptchaNotValid, err)
+			c.Abort()
 			return
 		}
 		if captcha.VerifyString(form.CaptchaId, form.CaptchaVal) {
 			c.Next()
 		} else {
-			app.BadRequest(c, e.CaptchaNotValid)
+			app.BizFailed(c, e.CaptchaNotValid)
+			c.Abort()
 		}
 	}
 }

@@ -50,10 +50,9 @@
 
 <script lang="ts" setup>
 import {onMounted, ref} from "vue";
-import http from "@/services/request";
 import {useRouter} from "vue-router";
 import {getRegex} from "@/util/validation";
-import {captcha} from "@/services/user";
+import {captcha} from "@/services/captcha";
 
 onMounted(() => {
   generateCaptcha()
