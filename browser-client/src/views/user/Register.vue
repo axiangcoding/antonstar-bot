@@ -59,7 +59,7 @@
 
 <script lang="ts" setup>
 import {onMounted, ref} from "vue";
-import {useRouter} from "vue-router";
+import {onBeforeRouteLeave, useRouter} from "vue-router";
 import {getRegex} from "@/util/validation";
 import {captcha, CaptchaForm} from "@/services/captcha";
 import {userRegister, RegForm, userValueExist} from "@/services/user";
@@ -263,7 +263,13 @@ const refreshCaptcha = () => {
   })
 }
 
-
+onBeforeRouteLeave((to, from) => {
+  const answer = window.confirm(
+      '你确定要离开这个页面吗？未保存的更改将会被丢弃'
+  )
+  // 取消导航并停留在同一页面上
+  if (!answer) return false
+})
 </script>
 
 <style lang="scss" scoped>
@@ -272,6 +278,12 @@ const refreshCaptcha = () => {
     cursor: pointer;
   }
 }
+
+//#body-register {
+//  background: url("@/assets/image/bg-reg.jpg") no-repeat;
+//  background-size: 100% 100%;
+//  min-height: calc(100vh - var(--footer-height) - var(--header-height));
+//}
 
 .card-register {
   max-width: 550px;

@@ -156,7 +156,14 @@ const refreshCaptcha = () => {
   }
 }
 
+//#body-login {
+//  background: url("@/assets/image/bg-login.jpg") no-repeat;
+//  background-size: 100% 100%;
+//  min-height: calc(100vh - var(--footer-height) - var(--header-height));
+//}
+
 .card-login {
+
   max-width: 550px;
   margin: 0 auto;
 }

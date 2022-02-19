@@ -10,24 +10,25 @@ import injectDirectives from './directives/index'
 import '@/scss/global.scss'
 
 
-
 const app = createApp(App)
 
 injectDirectives(app)
 
 app.component('an-icon', {
-  render() {
-    return this.vdom()
-  },
-  props: {
-    vdom: {
-      type: Function,
-      default: () => {},
+    render() {
+        return this.vdom()
+    },
+    props: {
+        vdom: {
+            type: Function,
+            default: () => {
+            },
+        }
     }
-  }
 })
 
 // 全局变量
 app.config.globalProperties.anime = anime
+
 
 app.use(store).use(router).use(naive).mount('#app')
