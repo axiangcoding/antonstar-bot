@@ -47,7 +47,7 @@ func CreateToken(user schema.User) (string, error) {
 		},
 		UserInfo{
 			UserID: user.UserId,
-			Roles:  user.Roles,
+			// Roles:  user.Roles,
 		},
 	}
 	return t.SignedString(jwtSecret)

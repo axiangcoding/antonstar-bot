@@ -19,6 +19,7 @@ export const store = createStore<State>({
     plugins: [
         createPersistence({
             key: 'vuex',
+            storage: localStorage
         }),
     ],
     state: {

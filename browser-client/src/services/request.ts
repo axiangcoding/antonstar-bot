@@ -6,9 +6,6 @@ const http = axios.create({
     baseURL: import.meta.env.VITE_APP_REQUEST_BASE_URL,
     // 超时设置
     timeout: import.meta.env.VITE_APP_REQUEST_TIMEOUT,
-    headers: {
-        'Authorization': ''
-    }
 })
 
 

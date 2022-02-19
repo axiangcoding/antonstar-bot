@@ -15,6 +15,9 @@ onMounted(() => {
   if (store.state.clientId == '') {
     store.commit('setClientId', uuid())
   }
+  if (store.state.login) {
+    // TODO: 校验token是否过期，如果过期就退出登录状态
+  }
 })
 </script>
 

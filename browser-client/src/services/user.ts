@@ -33,5 +33,22 @@ export function userRegister(form: RegForm, captcha: CaptchaForm) {
     })
 }
 
+export interface LoginForm {
+    password: string,
+    username: string
+}
 
-
+export function userLogin(auth: string, form: LoginForm, captcha: CaptchaForm) {
+    return http.post('/v1/user/login', {
+        "password": form.password,
+        "username": form.username
+    }, {
+        params: {
+            'captcha_id': captcha.captchaId,
+            'captcha_val': captcha.captchaVal
+        },
+        headers: {
+            'Authorization': auth
+        }
+    })
+}

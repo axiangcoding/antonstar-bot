@@ -24,7 +24,7 @@
               size="large"
               src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
           />
-          <n-button ghost type="primary" @click="router.push({name:'login'})">
+          <n-button v-else ghost type="primary" @click="router.push({name:'login'})">
             <template #icon>
               <User/>
             </template>

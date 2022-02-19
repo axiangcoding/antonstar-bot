@@ -46,7 +46,7 @@
           <n-form-item style="display: flex; justify-content: flex-end;">
             <n-space>
               <n-button type="success" text @click="router.push({'name':'login'})">已有账号？点我登录</n-button>
-              <n-button @click="handlerClick" type="primary">注册</n-button>
+              <n-button @click="handlerClick" type="primary">注 册</n-button>
             </n-space>
           </n-form-item>
         </n-form>
