@@ -122,6 +122,25 @@ paths:
       summary: System Info
       tags:
       - System
+  /v1/user/info:
+    post:
+      parameters:
+      - in: query
+        name: user_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.ErrJson'
+      summary: 获取用户信息。如果不传入user_id参数，则查token所代表的个人信息，如果传入，则查其他用户的
+      tags:
+      - User
   /v1/user/login:
     post:
       parameters:

@@ -18,12 +18,8 @@
         </router-link>
         <menu-overrides ref="menu"></menu-overrides>
         <div class="right">
-          <n-avatar
-              v-if="$store.state.login"
-              round
-              size="large"
-              src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg"
-          />
+          <UserBar v-if="$store.state.login" />
+
           <n-button v-else ghost type="primary" @click="router.push({name:'login'})">
             <template #icon>
               <User/>
@@ -49,8 +45,10 @@ import {onBeforeUnmount, onMounted, ref} from 'vue'
 import logo from '@/assets/logo/logo_no_text.png'
 import logoText from '@/assets/logo/logo_text_white.png'
 import MenuOverrides from './MenuOverrides.vue'
-import {LaughWinkRegular, User} from '@vicons/fa'
+import {Edit, LaughWinkRegular, SignOutAlt, User} from '@vicons/fa'
 import {useRouter} from "vue-router";
+import {renderIcon} from "@/util/naive";
+import UserBar from "@/components/UserBar.vue";
 
 let header: any = null
 let scrollBox: any = null
@@ -85,6 +83,9 @@ onBeforeUnmount(() => {
 })
 const LOGO_URL = ref(logo)
 const LOGO_TEXT_URL = ref(logoText)
+
+
+
 </script>
 
 <style lang="scss" scoped>

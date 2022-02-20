@@ -34,7 +34,7 @@ func UserLogin(ctx *gin.Context, login entity.UserLogin) (string, error) {
 	user := schema.User{
 		UserName: login.UserName,
 	}
-	findUser, err := data.UserLogin(ctx, user)
+	findUser, err := data.FindUser(ctx, user)
 	if err != nil {
 		return "", err
 	}
@@ -55,7 +55,7 @@ func UserLogin(ctx *gin.Context, login entity.UserLogin) (string, error) {
 
 func UserLogout(c *gin.Context, token string) (int64, error) {
 	claims, _ := auth.ParseToken(token)
-	result, err := DeleteCachedToken(c, claims.Id)
+	result, err := DeleteCachedToken(c, strconv.FormatInt(claims.UserID, 10))
 	return result, err
 }
 
@@ -68,6 +68,15 @@ func FindValueExist(c *gin.Context, key string, val string) bool {
 	case "email":
 		user.Email = sql.NullString{String: val, Valid: val != ""}
 	}
-	findUser := data.FindUser(c, user)
+	findUser := data.ExistUser(c, user)
 	return findUser
+}
+
+func UserInfo(c *gin.Context, token string, id int64) (schema.User, error) {
+	if id == 0 {
+		claims, _ := auth.ParseToken(token)
+		id = claims.UserID
+	}
+	user, err := data.FindUser(c, schema.User{UserId: id})
+	return user, err
 }

@@ -106,7 +106,7 @@ const handlerClick = (e: Event) => {
       userLogin(store.state.auth, user, cap)
           .then((res: any) => {
             if (res.code === 0) {
-              message.success('登录成功!')
+              message.success(`欢迎回来， ${formValue.value.username}！`)
               store.commit('setAuth', res.data.Authorization)
               store.commit('setLogin', true)
               router.back()

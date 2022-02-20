@@ -111,8 +111,8 @@ type KeyFieldExistForm struct {
 // @Summary  判断主要的用户信息的值是否存在
 // @Tags     User
 // @Param    form  body      KeyFieldExistForm  true  "form"
-// @Success  200   {object}  app.ApiJson        ""
-// @Failure  400   {object}  app.ErrJson        ""
+// @Success  200   {object}  app.ApiJson  ""
+// @Failure  400   {object}  app.ErrJson  ""
 // @Router   /v1/user/value/exist [post]
 func IsKeyFieldValueExist(c *gin.Context) {
 	form := KeyFieldExistForm{}
@@ -125,4 +125,30 @@ func IsKeyFieldValueExist(c *gin.Context) {
 	app.Success(c, map[string]interface{}{
 		"exists": existed,
 	})
+}
+
+type IdForm struct {
+	UserId int64 `json:"user_id" form:"user_id" binding:"required,omitempty"`
+}
+
+// UserInfo
+// @Summary  获取用户信息。如果不传入user_id参数，则查token所代表的个人信息，如果传入，则查其他用户的
+// @Tags     User
+// @Param    form  query     IdForm       true  "form"
+// @Success  200   {object}  app.ApiJson        ""
+// @Failure  400   {object}  app.ErrJson        ""
+// @Router   /v1/user/info [post]
+func UserInfo(c *gin.Context) {
+	form := IdForm{}
+	err := c.ShouldBindQuery(&form)
+	if err != nil {
+		app.BadRequest(c, e.RequestParamsNotValid, err)
+		return
+	}
+	info, err := service.UserInfo(c, c.GetHeader(app.AuthHeader), form.UserId)
+	if err != nil {
+		app.BizFailed(c, e.Error, err)
+		return
+	}
+	app.Success(c, info)
 }

@@ -1,5 +1,5 @@
 <template>
-  <n-drawer v-model:show="show" placement="top" :on-update:show="updateStatus" height="500">
+  <n-drawer v-model:show="show" placement="top" @update:show="updateStatus" height="500">
     <n-drawer-content title="安东星行为准则 v1.0" closable>
       <ol>
         <li>遵守中华人民共和国的各项有关法律法规.</li>

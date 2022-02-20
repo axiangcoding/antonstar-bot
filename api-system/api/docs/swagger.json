@@ -89,6 +89,36 @@
                 }
             }
         },
+        "/v1/user/info": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "获取用户信息。如果不传入user_id参数，则查token所代表的个人信息，如果传入，则查其他用户的",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/app.ErrJson"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/user/login": {
             "post": {
                 "tags": [

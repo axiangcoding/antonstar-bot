@@ -18,16 +18,13 @@ import {useRoute, RouterLink} from 'vue-router'
 import {h, ref, onMounted, nextTick, watch, computed} from 'vue'
 import {NIcon} from 'naive-ui'
 import {Award, CommentsRegular, Gamepad, Biohazard, EllipsisH, Toolbox, FortAwesome} from '@vicons/fa'
+import {renderIcon} from "@/util/naive";
 
 const route = useRoute()
 const navActive = ref(null)
 let activeKey: any = computed(() => {
   return route.name as string
 })
-
-const renderIcon = (icon: any) => {
-  return () => h(NIcon, null, {default: () => h(icon)})
-}
 
 let flag = ref(false)
 let expand = ref(false)

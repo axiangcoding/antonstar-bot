@@ -1,6 +1,4 @@
-p, normal, /api/v1/demo/get, GET
-p, normal, /api/v1/demo/post, POST
-p, normal, /api/v1/user/logout, POST
+p, ordinary, /api/v1/user/logout, POST
 
 p, manager, /api/v1/manager/.*, GET
 p, manager, /api/v1/user/logout, POST
