@@ -16,17 +16,20 @@ import {Edit, SignOutAlt, User} from "@vicons/fa";
 import {userLogout} from "@/services/user";
 import {useStore} from "vuex";
 import {useMessage} from "naive-ui";
+import {useRouter} from "vue-router";
 
 const options = ref([
   {
     label: '个人信息',
     key: 'profile',
-    icon: renderIcon(User)
+    icon: renderIcon(User),
+    disabled: true
   },
   {
     label: '编辑用户资料',
     key: 'editProfile',
-    icon: renderIcon(Edit)
+    icon: renderIcon(Edit),
+    disabled: true
   },
   {
     label: '退出登录',
@@ -37,6 +40,7 @@ const options = ref([
 
 const message = useMessage();
 const store = useStore();
+const router = useRouter();
 const handleSelect = (key: string) => {
   switch (key) {
     case "profile":
@@ -45,8 +49,8 @@ const handleSelect = (key: string) => {
       break
     case "logout":
       userLogout(store.state.auth).then(res => {
-        store.commit('setAuth', '')
-        store.commit('setLogin', false)
+        store.commit('logout')
+        router.push({name: 'home'})
         message.success('你已成功退出登录，再见！')
       })
       break

@@ -44,7 +44,7 @@
 import {onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
 import {captcha, CaptchaForm} from "@/services/captcha";
-import {LoginForm, RegForm, userLogin} from "@/services/user";
+import {LoginForm, RegForm, userInfo, userLogin} from "@/services/user";
 import {useMessage} from "naive-ui";
 import {getRegex} from "@/util/validation";
 import {useStore} from "vuex";
@@ -109,15 +109,20 @@ const handlerClick = (e: Event) => {
               message.success(`欢迎回来， ${formValue.value.username}！`)
               store.commit('setAuth', res.data.Authorization)
               store.commit('setLogin', true)
+              userInfo(store.state.auth).then((res: any) => {
+                store.commit('setUserInfo', res.data)
+              })
               router.back()
             } else if (res.code === 11004) {
               message.warning('验证码不正确，请重新输入！')
+              generateCaptcha()
             } else {
               message.error('登录失败！用户名或密码错误！')
+              generateCaptcha()
             }
-            generateCaptcha()
           })
           .catch(err => {
+            message.error('登录失败！用户名或密码错误！')
             generateCaptcha()
           })
     } else {

@@ -51,6 +51,7 @@ func setRouterV1(r *gin.Engine) {
 			user.POST("/register", middleware.CaptchaCheck(), v1.UserRegister)
 			user.POST("/logout", middleware.AuthCheck(), v1.UserLogout)
 			user.POST("/value/exist", v1.IsKeyFieldValueExist)
+			user.POST("/info", middleware.AuthCheck(), v1.UserInfo)
 		}
 		system := groupV1.Group("/system", middleware.AuthCheck())
 		{

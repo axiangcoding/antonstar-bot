@@ -24,7 +24,9 @@ http.interceptors.response.use((res: any) => {
         if (error.code === 'ECONNABORTED') {
             window.$message.error('服务器暂时无法连接！')
         } else if (error.response.status == 400) {
-            window.$message.warning('请输入正确的参数')
+            // window.$message.warning('请输入正确的参数')
+        } else if (error.response.states ==401){
+            window.$message.warning('请登录后再访问！')
         }
         // return Promise.reject(error)  这个会默认报错显示
     }

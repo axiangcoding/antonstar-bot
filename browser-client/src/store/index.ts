@@ -3,14 +3,16 @@ import {InjectionKey} from 'vue'
 import createPersistence from 'vuex-persistedstate'
 
 import {createStore, useStore as baseUseStore, Store} from 'vuex'
+import {userInfo} from "@/services/user";
 
 export interface State {
-    themes: String
+    themes: string
     clientId: string
     login: boolean
     auth: string
-    userId: number
-    loading: Boolean
+    userId: number,
+    userInfo: object,
+    loading: boolean
 }
 
 export const key: InjectionKey<Store<State>> = Symbol()
@@ -28,6 +30,7 @@ export const store = createStore<State>({
         login: false,
         auth: '',
         userId: 0,
+        userInfo: {},
         loading: false,
     },
     mutations: {
@@ -48,6 +51,15 @@ export const store = createStore<State>({
         },
         setLoading(state, val) {
             state.loading = val
+        },
+        setUserInfo(state, val) {
+            state.userInfo = val
+        },
+        logout(state) {
+            state.login = false
+            state.auth = ''
+            state.userInfo = {}
+            state.userId = 0
         }
     },
     getters: {},

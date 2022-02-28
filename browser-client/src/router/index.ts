@@ -9,86 +9,84 @@ declare module 'vue-router' {
     }
 }
 
-const routes: Array<RouteRecordRaw> = [
-    {
-        path: '/',
-        component: () => import('@/layout/Index.vue'),
-        children: [
-            {
-                path: '/',
-                name: 'home',
-                component: () => import('@/views/home/Index.vue'),
-                meta: {
-                    title: '首页',
-                },
+const routes: Array<RouteRecordRaw> = [{
+    path: '/',
+    component: () => import('@/layout/Index.vue'),
+    children: [
+        {
+            path: '/',
+            name: 'home',
+            component: () => import('@/views/home/Index.vue'),
+            meta: {
+                title: '首页',
             },
-            {
-                path: '/record/:nick?',
-                name: 'record',
-                component: () => import('@/views/record/Index.vue'),
-                meta: {
-                    title: '战绩查询',
-                },
+        },
+        {
+            path: '/record/:nick?',
+            name: 'record',
+            component: () => import('@/views/record/Index.vue'),
+            meta: {
+                title: '战绩查询',
             },
-            {
-                path: '/resource',
-                name: 'resource',
-                component: () => import('@/views/resource/Index.vue'),
-                meta: {
-                    title: '游戏资源',
-                },
+        },
+        {
+            path: '/resource',
+            name: 'resource',
+            component: () => import('@/views/resource/Index.vue'),
+            meta: {
+                title: '游戏资源',
             },
-            {
-                path: '/rank/',
-                name: 'rank',
-                component: () => import('@/views/rank/Index.vue'),
-                meta: {
-                    title: '硬核狠人',
-                },
+        },
+        {
+            path: '/rank/',
+            name: 'rank',
+            component: () => import('@/views/rank/Index.vue'),
+            meta: {
+                title: '硬核狠人',
             },
-            {
-                path: '/realtime',
-                name: 'realtime',
-                component: () => import('@/views/realtime/Index.vue'),
-                meta: {
-                    title: '实时数据',
-                },
+        },
+        {
+            path: '/about',
+            name: 'about',
+            component: () => import('@/views/about/Index.vue'),
+            meta: {
+                title: '关于我们',
             },
-            {
-                path: '/about',
-                name: 'about',
-                component: () => import('@/views/about/Index.vue'),
-                meta: {
-                    title: '关于我们',
-                },
+        },
+        {
+            path: '/user/login',
+            name: 'login',
+            component: () => import('@/views/user/Login.vue'),
+            meta: {
+                title: '用户登录',
             },
-            {
-                path: '/user/login',
-                name: 'login',
-                component: () => import('@/views/user/Login.vue'),
-                meta: {
-                    title: '用户登录',
-                },
+        },
+        {
+            path: '/user/register',
+            name: 'register',
+            component: () => import('@/views/user/Register.vue'),
+            meta: {
+                title: '用户注册',
             },
-            {
-                path: '/user/register',
-                name: 'register',
-                component: () => import('@/views/user/Register.vue'),
-                meta: {
-                    title: '用户注册',
-                },
+        },
+        {
+            path: '/admin',
+            name: 'admin',
+            component: () => import('@/views/admin/Index.vue'),
+            meta: {
+                title: '管理员界面',
             },
-            {
-                path: '/:pathMatch(.*)*',
-                name: 'not_found',
-                component: () => import("@/views/common/NotFound.vue"),
-                meta: {
-                    title: '页面未找到'
-                }
+        },
+        {
+            path: '/:pathMatch(.*)*',
+            name: 'not_found',
+            component: () => import("@/views/common/NotFound.vue"),
+            meta: {
+                title: '页面未找到'
             }
-        ],
-    },
-]
+        }
+    ],
+},]
 
 const router = createRouter({
     history: createWebHashHistory(),

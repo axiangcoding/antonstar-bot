@@ -54,7 +54,7 @@ type RegisterForm struct {
 
 // UserRegister
 // @Summary  用户注册
-// @Tags     User
+// @Tags      User
 // @Param    form  body      RegisterForm            true  "form"
 // @Param    form  query     middleware.CaptchaForm  true  "captcha"
 // @Success  200   {object}  app.ApiJson             ""
@@ -111,8 +111,8 @@ type KeyFieldExistForm struct {
 // @Summary  判断主要的用户信息的值是否存在
 // @Tags     User
 // @Param    form  body      KeyFieldExistForm  true  "form"
-// @Success  200   {object}  app.ApiJson  ""
-// @Failure  400   {object}  app.ErrJson  ""
+// @Success   200   {object}  app.ApiJson  ""
+// @Failure   400   {object}  app.ErrJson  ""
 // @Router   /v1/user/value/exist [post]
 func IsKeyFieldValueExist(c *gin.Context) {
 	form := KeyFieldExistForm{}
@@ -128,16 +128,18 @@ func IsKeyFieldValueExist(c *gin.Context) {
 }
 
 type IdForm struct {
-	UserId int64 `json:"user_id" form:"user_id" binding:"required,omitempty"`
+	// 如果不传入user_id参数，则查token所代表的个人信息，如果传入，则查其他用户的
+	UserId int64 `json:"user_id" form:"user_id" binding:"omitempty"`
 }
 
 // UserInfo
-// @Summary  获取用户信息。如果不传入user_id参数，则查token所代表的个人信息，如果传入，则查其他用户的
+// @Summary   获取用户信息
 // @Tags     User
-// @Param    form  query     IdForm       true  "form"
+// @Param     form  query     IdForm       true  "form"
 // @Success  200   {object}  app.ApiJson        ""
 // @Failure  400   {object}  app.ErrJson        ""
-// @Router   /v1/user/info [post]
+// @Router    /v1/user/info [post]
+// @Security  ApiKeyAuth
 func UserInfo(c *gin.Context) {
 	form := IdForm{}
 	err := c.ShouldBindQuery(&form)

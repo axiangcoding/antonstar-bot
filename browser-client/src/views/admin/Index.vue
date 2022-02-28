@@ -1,5 +1,5 @@
 <template>
-实时战绩
+  <div>管理员界面</div>
 </template>
 
 <script>

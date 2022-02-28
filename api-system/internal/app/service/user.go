@@ -72,11 +72,18 @@ func FindValueExist(c *gin.Context, key string, val string) bool {
 	return findUser
 }
 
-func UserInfo(c *gin.Context, token string, id int64) (schema.User, error) {
+func UserInfo(c *gin.Context, token string, id int64) (map[string]interface{}, error) {
 	if id == 0 {
 		claims, _ := auth.ParseToken(token)
 		id = claims.UserID
 	}
 	user, err := data.FindUser(c, schema.User{UserId: id})
-	return user, err
+	return map[string]interface{}{
+		"user_id":    user.UserId,
+		"username":   user.UserName,
+		"nickname":   user.NickName.String,
+		"avatar_url": user.AvatarUrl,
+		"roles":      user.Roles,
+		"status":     user.Status,
+	}, err
 }

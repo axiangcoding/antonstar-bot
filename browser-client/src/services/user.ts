@@ -53,8 +53,16 @@ export function userLogin(auth: string, form: LoginForm, captcha: CaptchaForm) {
     })
 }
 
-export function userLogout(auth: string,){
+export function userLogout(auth: string,) {
     return http.post('/v1/user/logout', {}, {
+        headers: {
+            'Authorization': auth
+        }
+    })
+}
+
+export function userInfo(auth: string,) {
+    return http.post('/v1/user/info', {}, {
         headers: {
             'Authorization': auth
         }

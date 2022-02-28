@@ -206,6 +206,7 @@ const LOGO_TEXT_URL = ref(logoText)
 
   .right {
     margin-left: auto;
+    margin-right: 10px;
     display: flex;
     align-items: center;
   }

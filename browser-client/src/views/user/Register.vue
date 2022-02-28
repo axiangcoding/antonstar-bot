@@ -166,9 +166,12 @@ const handlerClick = (e: Event) => {
   })
 }
 
+// 自动跳转不弹框显示离开限制
+let autoJump = false;
 const countdown = () => {
   setTimeout(() => {
     showRegSuccess.value = false
+    autoJump = true
     router.push({name: 'login'})
   }, 3000)
 }
@@ -264,11 +267,13 @@ const refreshCaptcha = () => {
 }
 
 onBeforeRouteLeave((to, from) => {
-  const answer = window.confirm(
-      '你确定要离开这个页面吗？未保存的更改将会被丢弃'
-  )
-  // 取消导航并停留在同一页面上
-  if (!answer) return false
+  if (!autoJump) {
+    const answer = window.confirm(
+        '你确定要离开这个页面吗？未保存的更改将会被丢弃'
+    )
+    // 取消导航并停留在同一页面上
+    if (!answer) return false
+  }
 })
 </script>
 

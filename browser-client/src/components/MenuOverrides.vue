@@ -19,6 +19,7 @@ import {h, ref, onMounted, nextTick, watch, computed} from 'vue'
 import {NIcon} from 'naive-ui'
 import {Award, CommentsRegular, Gamepad, Biohazard, EllipsisH, Toolbox, FortAwesome} from '@vicons/fa'
 import {renderIcon} from "@/util/naive";
+import {useStore} from "vuex";
 
 const route = useRoute()
 const navActive = ref(null)
@@ -37,7 +38,8 @@ defineExpose({
   changeExpand,
 })
 
-const options = ref([
+
+const basicRoute = [
   {
     key: 'record',
     icon: renderIcon(Award),
@@ -62,20 +64,16 @@ const options = ref([
     label: () =>
         h(RouterLink, {to: {name: 'about'}}, {default: () => '关于我们'}),
   },
-  {
-    key: 'realtime',
-    icon: renderIcon(Gamepad),
-    disabled: true,
-    label: '实时数据',
-    // label: () =>	h(RouterLink, { to: { name: 'realtime' } }, { default: () => '实时数据' })
-  },
-  {
-    key:'admin',
-    icon: renderIcon(FortAwesome),
-    disabled: true,
-    label: '管理后台',
-  }
-])
+]
+
+const adminRoute = [{
+  key: 'admin',
+  icon: renderIcon(FortAwesome),
+  label: () =>
+      h(RouterLink, {to: {name: 'admin'}}, {default: () => '管理界面'})
+}]
+
+const options = ref(basicRoute)
 
 const others = ref({
   key: 'others',
@@ -101,6 +99,17 @@ function navAnimation() {
   })
 }
 
+const store = useStore();
+// 重设头部可选栏目
+const resetHeader = () => {
+  const roles = store.state.userInfo.roles;
+  if (roles != undefined && roles.indexOf('admin') >= 0) {
+    options.value = basicRoute.concat(adminRoute)
+  } else {
+    options.value = basicRoute
+  }
+}
+
 onMounted(() => {
   navAnimation()
   if (window.innerWidth < 992) {
@@ -119,8 +128,15 @@ onMounted(() => {
       navAnimation()
     }
   }
-
+  resetHeader()
 })
+
+watch(
+    () => store.state.userInfo,
+    () => {
+      resetHeader()
+    }
+)
 
 watch(
     () => route.name,

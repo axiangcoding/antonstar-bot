@@ -91,16 +91,21 @@
         },
         "/v1/user/info": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "tags": [
                     "User"
                 ],
-                "summary": "获取用户信息。如果不传入user_id参数，则查token所代表的个人信息，如果传入，则查其他用户的",
+                "summary": "获取用户信息",
                 "parameters": [
                     {
                         "type": "integer",
+                        "description": "如果不传入user_id参数，则查token所代表的个人信息，如果传入，则查其他用户的",
                         "name": "user_id",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     }
                 ],
                 "responses": {
