@@ -39,6 +39,15 @@ definitions:
     - password
     - username
     type: object
+  v1.NoticeForm:
+    properties:
+      content:
+        type: string
+      title:
+        type: string
+    required:
+    - content
+    type: object
   v1.PostVisitForm:
     properties:
       client_id:
@@ -110,6 +119,35 @@ paths:
       summary: 获取验证码图片
       tags:
       - Captcha
+  /v1/site/notice/:
+    post:
+      parameters:
+      - description: form
+        in: body
+        name: form
+        required: true
+        schema:
+          $ref: '#/definitions/v1.NoticeForm'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      security:
+      - ApiKeyAuth: []
+      summary: 新增一条全站公告消息
+      tags:
+      - Site
+  /v1/site/notice/last:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      summary: 获取最新的一条全站公告消息
+      tags:
+      - Site
   /v1/system/info:
     get:
       responses:

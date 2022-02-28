@@ -8,7 +8,8 @@ import injectDirectives from './directives/index'
 
 // 不放入全局scss配置中，全局scss配置导致页面style标签将其多次引入。
 import '@/scss/global.scss'
-
+// 引入vditor的样式文件
+import "vditor/src/assets/scss/index.scss"
 
 const app = createApp(App)
 

@@ -71,11 +71,25 @@ const routes: Array<RouteRecordRaw> = [{
         },
         {
             path: '/admin',
-            name: 'admin',
             component: () => import('@/views/admin/Index.vue'),
-            meta: {
-                title: '管理员界面',
-            },
+            children: [
+                {
+                    path: '/',
+                    name: 'admin',
+                    component: () => import('@/views/admin/dashboard/Index.vue'),
+                    meta: {
+                        title: '管理员 - 总览',
+                    },
+                },
+                {
+                    path: '/notice',
+                    name: 'adminNotice',
+                    component: () => import('@/views/admin/notice/Index.vue'),
+                    meta: {
+                        title: '管理员 - 通知管理',
+                    },
+                }
+            ]
         },
         {
             path: '/:pathMatch(.*)*',
@@ -84,8 +98,7 @@ const routes: Array<RouteRecordRaw> = [{
             meta: {
                 title: '页面未找到'
             }
-        }
-    ],
+        }],
 },]
 
 const router = createRouter({

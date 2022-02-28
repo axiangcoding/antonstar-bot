@@ -73,17 +73,24 @@ func FindValueExist(c *gin.Context, key string, val string) bool {
 }
 
 func UserInfo(c *gin.Context, token string, id int64) (map[string]interface{}, error) {
+	isPrivate := false
 	if id == 0 {
-		claims, _ := auth.ParseToken(token)
-		id = claims.UserID
+		id = auth.GetUserIdFromToken(token)
+		isPrivate = true
 	}
 	user, err := data.FindUser(c, schema.User{UserId: id})
-	return map[string]interface{}{
-		"user_id":    user.UserId,
+
+	m := map[string]interface{}{
+		"user_id":    strconv.FormatInt(user.UserId, 10),
 		"username":   user.UserName,
 		"nickname":   user.NickName.String,
 		"avatar_url": user.AvatarUrl,
 		"roles":      user.Roles,
 		"status":     user.Status,
-	}, err
+	}
+	// 如果是查自己的数据，可以适当添加一些记录
+	if isPrivate {
+		m["create_at"] = user.CreatedAt
+	}
+	return m, err
 }

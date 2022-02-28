@@ -61,10 +61,13 @@ export function userLogout(auth: string,) {
     })
 }
 
-export function userInfo(auth: string,) {
+export function userInfo(auth: string, user_id?: string) {
     return http.post('/v1/user/info', {}, {
         headers: {
             'Authorization': auth
+        },
+        params: {
+            'user_id': user_id
         }
     })
 }

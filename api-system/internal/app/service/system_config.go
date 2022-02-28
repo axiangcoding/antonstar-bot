@@ -9,7 +9,7 @@ import (
 
 func GetRefreshLimit(c *gin.Context) int {
 	defaultVal := 100
-	config, err := data.FindSystemConfig(c, schema.ConfigDailyRefreshLimit)
+	config, err := data.TakeSystemConfig(c, schema.ConfigDailyRefreshLimit)
 	if err != nil {
 		return defaultVal
 	}
