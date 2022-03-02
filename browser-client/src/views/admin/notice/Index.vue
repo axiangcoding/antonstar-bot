@@ -5,7 +5,7 @@
       <div id="vditor" style="text-align: left"></div>
       <n-space justify="end">
         <n-button type="error">重置</n-button>
-        <n-button type="success" @click="getHTML">发布</n-button>
+        <n-button type="success" @click="handleSubmit">发布</n-button>
       </n-space>
     </n-space>
 
@@ -17,12 +17,27 @@
 import {onMounted, ref} from "vue";
 import Vditor from "vditor";
 import {toolbarMini} from "@/util/vditor-utils";
+import {getLastSiteNotice, NoticeForm, postSiteNotice} from "@/services/site-notice";
+import {useStore} from "vuex";
+import {today} from "@/util/time";
+import {useMessage} from "naive-ui";
 
 const contentEditor = ref()
 
+const message = useMessage();
+const store = useStore();
+const handleSubmit = () => {
+  let form: NoticeForm = {
+    content: contentEditor.value.getValue(),
+    title: 'title'
+  }
 
-const getHTML = () => {
-  console.log(contentEditor.value.getValue());
+  postSiteNotice(store.state.auth, form).then((res: any) => {
+    if (res.code === 0) {
+      message.success('公告发布成功！')
+    }
+
+  })
 }
 
 onMounted(() => {
@@ -39,10 +54,13 @@ onMounted(() => {
     counter: {
       enable: true,
       max: 500
-    }
-    // after: () => {
-    //   contentEditor.value.setValue('')
-    // },
+    },
+    after: () => {
+      getLastSiteNotice().then(res => {
+        contentEditor.value.setValue(res.data.content)
+      })
+
+    },
   })
 })
 
