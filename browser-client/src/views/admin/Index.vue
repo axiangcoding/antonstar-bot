@@ -21,7 +21,7 @@ import {renderIcon} from "@/util/naive";
 import {h} from "vue";
 import {RouterLink} from "vue-router";
 import {MenuOption} from "naive-ui";
-import {Book, ChartArea, Home, MicrophoneAlt, PersonBooth, WineBottle} from "@vicons/fa";
+import {Book, ChartArea, Globe, Home, MicrophoneAlt, PersonBooth, WineBottle} from "@vicons/fa";
 
 const menuOptions: MenuOption[] = [
   {
@@ -46,66 +46,72 @@ const menuOptions: MenuOption[] = [
     icon: renderIcon(MicrophoneAlt)
   },
   {
-    label: '1973年的弹珠玩具',
-    key: 'pinball-1973',
-    icon: renderIcon(Book),
-    disabled: true,
-    children: [
-      {
-        label: '鼠',
-        key: 'rat'
-      }
-    ]
+    label: () =>
+        h(RouterLink, {to: {name: 'adminGlobalConfig',}}, {default: () => '全局配置'}),
+    key: 'adminGlobalConfig',
+    icon: renderIcon(Globe)
   },
-  {
-    label: '舞，舞，舞',
-    key: 'dance-dance-dance',
-    icon: renderIcon(Book),
-    children: [
-      {
-        type: 'group',
-        label: '人物',
-        key: 'people',
-        children: [
-          {
-            label: '叙事者',
-            key: 'narrator',
-            icon: renderIcon(PersonBooth)
-          },
-          {
-            label: '羊男',
-            key: 'sheep-man',
-            icon: renderIcon(PersonBooth)
-          }
-        ]
-      },
-      {
-        label: '饮品',
-        key: 'beverage',
-        icon: renderIcon(WineBottle),
-        children: [
-          {
-            label: '威士忌',
-            key: 'whisky'
-          }
-        ]
-      },
-      {
-        label: '食物',
-        key: 'food',
-        children: [
-          {
-            label: '三明治',
-            key: 'sandwich'
-          }
-        ]
-      },
-      {
-        label: '过去增多，未来减少',
-        key: 'the-past-increases-the-future-recedes'
-      }
-    ]
-  }
+  // {
+  //   label: '1973年的弹珠玩具',
+  //   key: 'pinball-1973',
+  //   icon: renderIcon(Book),
+  //   disabled: true,
+  //   children: [
+  //     {
+  //       label: '鼠',
+  //       key: 'rat'
+  //     }
+  //   ]
+  // },
+  // {
+  //   label: '舞，舞，舞',
+  //   key: 'dance-dance-dance',
+  //   icon: renderIcon(Book),
+  //   children: [
+  //     {
+  //       type: 'group',
+  //       label: '人物',
+  //       key: 'people',
+  //       children: [
+  //         {
+  //           label: '叙事者',
+  //           key: 'narrator',
+  //           icon: renderIcon(PersonBooth)
+  //         },
+  //         {
+  //           label: '羊男',
+  //           key: 'sheep-man',
+  //           icon: renderIcon(PersonBooth)
+  //         }
+  //       ]
+  //     },
+  //     {
+  //       label: '饮品',
+  //       key: 'beverage',
+  //       icon: renderIcon(WineBottle),
+  //       children: [
+  //         {
+  //           label: '威士忌',
+  //           key: 'whisky'
+  //         }
+  //       ]
+  //     },
+  //     {
+  //       label: '食物',
+  //       key: 'food',
+  //       children: [
+  //         {
+  //           label: '三明治',
+  //           key: 'sandwich'
+  //         }
+  //       ]
+  //     },
+  //     {
+  //       label: '过去增多，未来减少',
+  //       key: 'the-past-increases-the-future-recedes'
+  //     }
+  //   ]
+  // }
 ]
 
 const handleUpdateValue = () => {

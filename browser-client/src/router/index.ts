@@ -88,6 +88,14 @@ const routes: Array<RouteRecordRaw> = [{
                     meta: {
                         title: '管理员 - 通知管理',
                     },
+                },
+                {
+                    path: 'global-config',
+                    name: 'adminGlobalConfig',
+                    component: () => import('@/views/admin/global_config/Index.vue'),
+                    meta: {
+                        title: '管理员 - 全局配置',
+                    },
                 }
             ]
         },
