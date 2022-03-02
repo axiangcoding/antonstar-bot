@@ -42,8 +42,10 @@ definitions:
   v1.NoticeForm:
     properties:
       content:
+        maxLength: 1000
         type: string
       title:
+        maxLength: 30
         type: string
     required:
     - content

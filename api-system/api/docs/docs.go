@@ -581,10 +581,12 @@ var doc = `{
             ],
             "properties": {
                 "content": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 1000
                 },
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 30
                 }
             }
         },

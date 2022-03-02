@@ -25,8 +25,8 @@ func GetLastSiteNotice(c *gin.Context) {
 }
 
 type NoticeForm struct {
-	Content string `json:"content" binding:"required" form:"content"`
-	Title   string `json:"title" binding:"omitempty" form:"title"`
+	Content string `json:"content" binding:"required,max=2000" form:"content"`
+	Title   string `json:"title" binding:"omitempty,max=30" form:"title"`
 }
 
 // PostSiteNotice

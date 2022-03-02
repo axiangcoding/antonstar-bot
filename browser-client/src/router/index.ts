@@ -70,11 +70,11 @@ const routes: Array<RouteRecordRaw> = [{
             },
         },
         {
-            path: '/admin',
+            path: 'admin',
             component: () => import('@/views/admin/Index.vue'),
             children: [
                 {
-                    path: '/',
+                    path: '',
                     name: 'admin',
                     component: () => import('@/views/admin/dashboard/Index.vue'),
                     meta: {
@@ -82,7 +82,7 @@ const routes: Array<RouteRecordRaw> = [{
                     },
                 },
                 {
-                    path: '/notice',
+                    path: 'notice',
                     name: 'adminNotice',
                     component: () => import('@/views/admin/notice/Index.vue'),
                     meta: {
@@ -90,6 +90,14 @@ const routes: Array<RouteRecordRaw> = [{
                     },
                 }
             ]
+        },
+        {
+            path: '/403',
+            name: 'no_permission',
+            component: () => import("@/views/common/NoPermission.vue"),
+            meta: {
+                title: '无权访问'
+            }
         },
         {
             path: '/:pathMatch(.*)*',
