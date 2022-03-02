@@ -30,9 +30,9 @@ func init() {
 	validation.Setup()
 }
 
-// @title        Golang Gin Template API
+// @title        安东星
 // @version      1.0.0
-// @description  An example of gin
+// @description  安东星接口文档
 // @termsOfService
 
 // @contact.name  axiangcoding

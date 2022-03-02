@@ -193,7 +193,7 @@ var doc = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "User login",
+                "summary": "用户登录",
                 "parameters": [
                     {
                         "description": "register form",
@@ -243,7 +243,7 @@ var doc = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "User logout",
+                "summary": "用户注销",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -548,6 +548,7 @@ var doc = `{
             ],
             "properties": {
                 "key": {
+                    "description": "字段名称，比如username和email",
                     "type": "string",
                     "enum": [
                         "username",
@@ -555,6 +556,7 @@ var doc = `{
                     ]
                 },
                 "value": {
+                    "description": "字段值",
                     "type": "string"
                 }
             }
@@ -567,9 +569,11 @@ var doc = `{
             ],
             "properties": {
                 "password": {
+                    "description": "密码",
                     "type": "string"
                 },
                 "username": {
+                    "description": "用户名",
                     "type": "string"
                 }
             }
@@ -582,7 +586,7 @@ var doc = `{
             "properties": {
                 "content": {
                     "type": "string",
-                    "maxLength": 1000
+                    "maxLength": 2000
                 },
                 "title": {
                     "type": "string",
@@ -615,21 +619,27 @@ var doc = `{
             ],
             "properties": {
                 "avatar_url": {
+                    "description": "头像url地址",
                     "type": "string"
                 },
                 "email": {
+                    "description": "邮箱",
                     "type": "string"
                 },
                 "invited_code": {
+                    "description": "邀请码",
                     "type": "string"
                 },
                 "password": {
+                    "description": "密码",
                     "type": "string"
                 },
                 "phone": {
+                    "description": "电话",
                     "type": "string"
                 },
                 "username": {
+                    "description": "用户名",
                     "type": "string"
                 }
             }
@@ -659,8 +669,8 @@ var SwaggerInfo = swaggerInfo{
 	Host:        "",
 	BasePath:    "",
 	Schemes:     []string{},
-	Title:       "Golang Gin Template API",
-	Description: "An example of gin",
+	Title:       "安东星",
+	Description: "安东星接口文档",
 }
 
 type s struct{}

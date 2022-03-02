@@ -7,8 +7,8 @@
     ],
     "swagger": "2.0",
     "info": {
-        "description": "An example of gin",
-        "title": "Golang Gin Template API",
+        "description": "安东星接口文档",
+        "title": "安东星",
         "contact": {
             "name": "axiangcoding",
             "email": "axiangcoding@gmail.com"
@@ -177,7 +177,7 @@
                 "tags": [
                     "User"
                 ],
-                "summary": "User login",
+                "summary": "用户登录",
                 "parameters": [
                     {
                         "description": "register form",
@@ -227,7 +227,7 @@
                 "tags": [
                     "User"
                 ],
-                "summary": "User logout",
+                "summary": "用户注销",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -532,6 +532,7 @@
             ],
             "properties": {
                 "key": {
+                    "description": "字段名称，比如username和email",
                     "type": "string",
                     "enum": [
                         "username",
@@ -539,6 +540,7 @@
                     ]
                 },
                 "value": {
+                    "description": "字段值",
                     "type": "string"
                 }
             }
@@ -551,9 +553,11 @@
             ],
             "properties": {
                 "password": {
+                    "description": "密码",
                     "type": "string"
                 },
                 "username": {
+                    "description": "用户名",
                     "type": "string"
                 }
             }
@@ -566,7 +570,7 @@
             "properties": {
                 "content": {
                     "type": "string",
-                    "maxLength": 1000
+                    "maxLength": 2000
                 },
                 "title": {
                     "type": "string",
@@ -599,21 +603,27 @@
             ],
             "properties": {
                 "avatar_url": {
+                    "description": "头像url地址",
                     "type": "string"
                 },
                 "email": {
+                    "description": "邮箱",
                     "type": "string"
                 },
                 "invited_code": {
+                    "description": "邀请码",
                     "type": "string"
                 },
                 "password": {
+                    "description": "密码",
                     "type": "string"
                 },
                 "phone": {
+                    "description": "电话",
                     "type": "string"
                 },
                 "username": {
+                    "description": "用户名",
                     "type": "string"
                 }
             }

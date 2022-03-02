@@ -10,12 +10,14 @@ import (
 
 // LoginForm 目前支持用户名登录
 type LoginForm struct {
+	// 用户名
 	UserName string `binding:"username,required" json:"username" form:"username"`
+	// 密码
 	Password string `binding:"password,required" json:"password" form:"password"`
 }
 
 // UserLogin
-// @Summary  User login
+// @Summary  用户登录
 // @Tags      User
 // @Param    form  body      LoginForm               true  "register form"
 // @Param    form  query     middleware.CaptchaForm  true  "captcha"
@@ -44,12 +46,18 @@ func UserLogin(c *gin.Context) {
 }
 
 type RegisterForm struct {
-	UserName    string `binding:"username,required" json:"username" form:"username"`
-	Password    string `binding:"password,required" json:"password" form:"password"`
-	Email       string `binding:"omitempty,email" json:"email" form:"email"`
-	Phone       string `binding:"omitempty,e164" json:"phone"`
+	// 用户名
+	UserName string `binding:"username,required" json:"username" form:"username"`
+	// 密码
+	Password string `binding:"password,required" json:"password" form:"password"`
+	// 邮箱
+	Email string `binding:"omitempty,email" json:"email" form:"email"`
+	// 电话
+	Phone string `binding:"omitempty,e164" json:"phone"`
+	// 邀请码
 	InvitedCode string `binding:"omitempty" json:"invited_code" form:"invited_code"`
-	AvatarUrl   string `binding:"omitempty,url" json:"avatar_url"`
+	// 头像url地址
+	AvatarUrl string `binding:"omitempty,url" json:"avatar_url"`
 }
 
 // UserRegister
@@ -83,7 +91,7 @@ func UserRegister(c *gin.Context) {
 }
 
 // UserLogout
-// @Summary   User logout
+// @Summary   用户注销
 // @Tags     User
 // @Success   200  {object}  app.ApiJson  ""
 // @Failure   400  {object}  app.ErrJson  ""
@@ -103,7 +111,9 @@ func UserLogout(c *gin.Context) {
 }
 
 type KeyFieldExistForm struct {
-	Key   string `json:"key" form:"key" binding:"required,oneof=username email"`
+	// 字段名称，比如username和email
+	Key string `json:"key" form:"key" binding:"required,oneof=username email"`
+	// 字段值
 	Value string `json:"value" form:"value" binding:"required"`
 }
 
