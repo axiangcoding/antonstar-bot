@@ -66,3 +66,13 @@ func ParseToken(tokenString string) (*CustomClaims, error) {
 	}
 	return nil, err
 }
+
+// GetUserIdFromToken
+// 从Token中获取用户ID
+func GetUserIdFromToken(token string) int64 {
+	claims, err := ParseToken(token)
+	if err != nil {
+		return 0
+	}
+	return claims.UserID
+}

@@ -1,5 +1,5 @@
 <template>
-实时战绩
+dashboard
 </template>
 
 <script>
