@@ -9,7 +9,7 @@
         <li>本站管理员拥有一切管理权力，有权保留或删除论坛中的任意内容.</li>
         <li>由用户发布的所有信息均代表作者的个人观点, 不能代表"安东星运营方".</li>
         <li>内测期间，用户产生的所有数据，"安东星运营方"均具有在不告知用户的情况下进行清理的权力</li>
-        <li>该行为准则将会适时更新</li>s
+        <li>该行为准则将会适时更新</li>
       </ol>
     </n-drawer-content>
   </n-drawer>
@@ -21,10 +21,10 @@ const props = defineProps({
   show: Boolean,
 })
 
-const emit = defineEmits(['update-show'])
+const emit = defineEmits(['update-status'])
 
 const updateStatus = (display: boolean) => {
-  emit('update-show', display)
+  emit('update-status', display)
 }
 </script>
 
