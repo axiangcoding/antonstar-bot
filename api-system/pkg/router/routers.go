@@ -53,7 +53,7 @@ func setRouterV1(r *gin.Engine) {
 			user.POST("/value/exist", v1.IsKeyFieldValueExist)
 			user.POST("/info", v1.UserInfo)
 		}
-		system := groupV1.Group("/system", middleware.AuthCheck())
+		system := groupV1.Group("/system")
 		{
 			system.GET("/info", v1.SystemInfo)
 		}

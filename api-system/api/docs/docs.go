@@ -134,11 +134,6 @@ var doc = `{
         },
         "/v1/system/info": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "tags": [
                     "System"
                 ],

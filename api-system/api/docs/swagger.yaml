@@ -167,8 +167,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/app.ApiJson'
-      security:
-      - ApiKeyAuth: []
       summary: System Info
       tags:
       - System
