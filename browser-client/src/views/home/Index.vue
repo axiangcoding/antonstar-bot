@@ -4,9 +4,10 @@
       <n-image height="240" width="1200" object-fit="cover" v-for="item in imgList" :key="item.index" :src="item.src"/>
     </n-carousel>
     <n-card :content-style="{padding:'4px'}" :bordered="false">
-      <n-space vertical>
+      <n-space vertical style="text-align: left">
         <Notice/>
         <Statistics/>
+        <Links></Links>
       </n-space>
     </n-card>
 
@@ -19,6 +20,7 @@
 import {ref} from "vue";
 import Statistics from "@/views/home/components/Statistics.vue";
 import Notice from "@/views/home/components/Notice.vue";
+import Links from "@/views/home/components/Links.vue";
 
 const imgList = ref([
   {

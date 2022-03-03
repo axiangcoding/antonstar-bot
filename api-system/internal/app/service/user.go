@@ -5,6 +5,7 @@ import (
 	"axiangcoding/antonstar/api-system/internal/app/data/schema"
 	"axiangcoding/antonstar/api-system/internal/app/entity"
 	"axiangcoding/antonstar/api-system/pkg/auth"
+	"database/sql"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 	"strconv"
@@ -15,22 +16,25 @@ func UserRegister(ctx *gin.Context, ur entity.UserRegister) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	user := schema.User{
-		UserName: ur.UserName,
-		Email:    ur.Email,
-		Phone:    ur.Phone,
-		Password: string(hashedPassword),
-		Roles:    schema.UserRoleNormal,
+	var user = schema.User{
+		UserName:    ur.UserName,
+		Email:       sql.NullString{String: ur.Email, Valid: ur.Email != ""},
+		Phone:       sql.NullString{String: ur.Phone, Valid: ur.Phone != ""},
+		Password:    string(hashedPassword),
+		InvitedCode: ur.InvitedCode,
+		Roles:       schema.UserRoleOrdinary,
+		Status:      schema.UserStatusNoVerify,
 	}
 	user.GenerateId()
+	user.NickName = sql.NullString{String: "用户" + strconv.FormatInt(user.UserId, 10)}
 	return data.UserRegister(ctx, user)
 }
 
 func UserLogin(ctx *gin.Context, login entity.UserLogin) (string, error) {
 	user := schema.User{
-		UserId: login.UserId,
+		UserName: login.UserName,
 	}
-	findUser, err := data.UserLogin(ctx, user)
+	findUser, err := data.FindUser(ctx, user)
 	if err != nil {
 		return "", err
 	}
@@ -50,11 +54,43 @@ func UserLogin(ctx *gin.Context, login entity.UserLogin) (string, error) {
 }
 
 func UserLogout(c *gin.Context, token string) (int64, error) {
-
 	claims, _ := auth.ParseToken(token)
-	result, err := DeleteCachedToken(c, claims.Id)
-	if err != nil {
-		return 0, err
+	result, err := DeleteCachedToken(c, strconv.FormatInt(claims.UserID, 10))
+	return result, err
+}
+
+func FindValueExist(c *gin.Context, key string, val string) bool {
+	user := schema.User{}
+	switch key {
+	case "username":
+		user.UserName = val
+		break
+	case "email":
+		user.Email = sql.NullString{String: val, Valid: val != ""}
 	}
-	return result, nil
+	findUser := data.ExistUser(c, user)
+	return findUser
+}
+
+func UserInfo(c *gin.Context, token string, id int64) (map[string]interface{}, error) {
+	isPrivate := false
+	if id == 0 {
+		id = auth.GetUserIdFromToken(token)
+		isPrivate = true
+	}
+	user, err := data.FindUser(c, schema.User{UserId: id})
+
+	m := map[string]interface{}{
+		"user_id":    strconv.FormatInt(user.UserId, 10),
+		"username":   user.UserName,
+		"nickname":   user.NickName.String,
+		"avatar_url": user.AvatarUrl,
+		"roles":      user.Roles,
+		"status":     user.Status,
+	}
+	// 如果是查自己的数据，可以适当添加一些记录
+	if isPrivate {
+		m["create_at"] = user.CreatedAt
+	}
+	return m, err
 }

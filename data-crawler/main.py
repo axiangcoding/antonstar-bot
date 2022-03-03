@@ -45,14 +45,13 @@ def callback(ch, method, properties, body):
     query_json = json.loads(body)
     print(query_json)
     begin = datetime.datetime.now()
-    if query_json['source'] == 'gaijin':
-        if 'slow_mode' in query_json and query_json['slow_mode']:
+    for i in query_json['target']:
+        if i == 'thunder_skill':
+            run_spider(spider=ThunderSkillSpider, nick=query_json['nickname'], query_id=query_json['query_id'])
+        elif i == 'gaijin' and 'slow_mode' in query_json and query_json['slow_mode']:
             run_spider(spider=GaijinCloudflareSpider, nick=query_json['nickname'], query_id=query_json['query_id'])
         else:
             run_spider(spider=GaijinSpider, nick=query_json['nickname'], query_id=query_json['query_id'])
-    elif query_json['source'] == 'thunder_skill':
-        run_spider(spider=ThunderSkillSpider, nick=query_json['nickname'], query_id=query_json['query_id'])
-
     end = datetime.datetime.now()
     sec = random_sleep_sec()
     print("Crawl finished, Spend %d seconds, sleep %d seconds. " % ((end - begin).seconds, sec))
@@ -63,9 +62,9 @@ if __name__ == '__main__':
     connection = pika.BlockingConnection(pika.ConnectionParameters(get_project_settings().get("MQ_SOURCE")))
     channel = connection.channel()
 
-    channel.queue_declare(queue='crawler')
+    channel.queue_declare( queue='crawler')
     channel.basic_consume(queue='crawler',
                           auto_ack=True,
                           on_message_callback=callback)
-    print("Start consuming...")
+    print("Start the query task...")
     channel.start_consuming()

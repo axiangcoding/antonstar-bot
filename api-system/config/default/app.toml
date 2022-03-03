@@ -11,6 +11,9 @@ file.path = "./logs/"
 secret = "r@ndomSecretForSign"
 expire_duration = "12h"
 refresh_duration = "10m"
+casbin_model_path = "./config/default/"
+casbin_policy_adapter = "local"
+casbin_policy_path = "./config/default/"
 
 [app.swagger]
 enable = true

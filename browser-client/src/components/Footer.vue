@@ -1,11 +1,13 @@
 <template>
   <n-layout-footer>
     <n-space vertical>
-      <n-text strong>安东星 v0.3.0</n-text>
+      <n-text strong>安东星 v0.4.0</n-text>
       <div>
         <n-button quaternary @click="router.push({name:'about'})">关于我们</n-button>
         <n-divider vertical/>
         <n-button quaternary>问题反馈</n-button>
+        <n-divider vertical/>
+        <n-button quaternary>赞助名单</n-button>
         <n-divider vertical/>
         <n-button quaternary @click="showModal=true">商业合作</n-button>
       </div>
@@ -39,7 +41,7 @@ const showModal = ref(false)
 
 <style lang="scss" scoped>
 .n-layout-footer {
-  height: var(--footer-height);
+  min-height: var(--footer-height);
   overflow: hidden;
 }
 </style>

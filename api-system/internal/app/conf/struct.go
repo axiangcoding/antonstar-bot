@@ -16,9 +16,12 @@ type App struct {
 		}
 	}
 	Auth struct {
-		Secret          string
-		ExpireDuration  string `mapstructure:"expire_duration"`
-		RefreshDuration string `mapstructure:"refresh_duration"`
+		Secret              string
+		ExpireDuration      string `mapstructure:"expire_duration"`
+		RefreshDuration     string `mapstructure:"refresh_duration"`
+		CasbinModelPath     string `mapstructure:"casbin_model_path"`
+		CasbinPolicyAdapter string `mapstructure:"casbin_policy_adapter"`
+		CasbinPolicyPath    string `mapstructure:"casbin_policy_path"`
 	}
 	Swagger struct {
 		Enable bool

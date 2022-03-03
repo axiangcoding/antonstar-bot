@@ -33,13 +33,107 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/v1/system/info": {
+        "/v1/captcha": {
             "get": {
+                "tags": [
+                    "Captcha"
+                ],
+                "summary": "请求生成验证码",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/captcha/{file}": {
+            "get": {
+                "consumes": [
+                    "image/png"
+                ],
+                "tags": [
+                    "Captcha"
+                ],
+                "summary": "获取验证码图片",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "image file name",
+                        "name": "file",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "lang",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "name": "reload",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/v1/site/notice/": {
+            "post": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
+                "tags": [
+                    "Site"
+                ],
+                "summary": "新增一条全站公告消息",
+                "parameters": [
+                    {
+                        "description": "form",
+                        "name": "form",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1.NoticeForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/site/notice/last": {
+            "get": {
+                "tags": [
+                    "Site"
+                ],
+                "summary": "获取最新的一条全站公告消息",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/system/info": {
+            "get": {
                 "tags": [
                     "System"
                 ],
@@ -54,12 +148,47 @@ var doc = `{
                 }
             }
         },
+        "/v1/user/info": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "获取用户信息",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "如果不传入user_id参数，则查token所代表的个人信息，如果传入，则查其他用户的",
+                        "name": "user_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/app.ErrJson"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/user/login": {
             "post": {
                 "tags": [
                     "User"
                 ],
-                "summary": "User login",
+                "summary": "用户登录",
                 "parameters": [
                     {
                         "description": "register form",
@@ -69,6 +198,18 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/v1.LoginForm"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "name": "captcha_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "captcha_val",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -97,7 +238,7 @@ var doc = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "User logout",
+                "summary": "用户注销",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -119,15 +260,60 @@ var doc = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "User register",
+                "summary": "用户注册",
                 "parameters": [
                     {
-                        "description": "register form",
+                        "description": "form",
                         "name": "form",
                         "in": "body",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/v1.RegisterForm"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "name": "captcha_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "captcha_val",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/app.ErrJson"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/user/value/exist": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "判断主要的用户信息的值是否存在",
+                "parameters": [
+                    {
+                        "description": "form",
+                        "name": "form",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1.KeyFieldExistForm"
                         }
                     }
                 ],
@@ -349,14 +535,57 @@ var doc = `{
                 }
             }
         },
+        "v1.KeyFieldExistForm": {
+            "type": "object",
+            "required": [
+                "key",
+                "value"
+            ],
+            "properties": {
+                "key": {
+                    "description": "字段名称，比如username和email",
+                    "type": "string",
+                    "enum": [
+                        "username",
+                        "email"
+                    ]
+                },
+                "value": {
+                    "description": "字段值",
+                    "type": "string"
+                }
+            }
+        },
         "v1.LoginForm": {
             "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
             "properties": {
                 "password": {
+                    "description": "密码",
                     "type": "string"
                 },
-                "userId": {
-                    "type": "integer"
+                "username": {
+                    "description": "用户名",
+                    "type": "string"
+                }
+            }
+        },
+        "v1.NoticeForm": {
+            "type": "object",
+            "required": [
+                "content"
+            ],
+            "properties": {
+                "content": {
+                    "type": "string",
+                    "maxLength": 2000
+                },
+                "title": {
+                    "type": "string",
+                    "maxLength": 30
                 }
             }
         },
@@ -379,17 +608,33 @@ var doc = `{
         },
         "v1.RegisterForm": {
             "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
             "properties": {
+                "avatar_url": {
+                    "description": "头像url地址",
+                    "type": "string"
+                },
                 "email": {
+                    "description": "邮箱",
+                    "type": "string"
+                },
+                "invited_code": {
+                    "description": "邀请码",
                     "type": "string"
                 },
                 "password": {
+                    "description": "密码",
                     "type": "string"
                 },
                 "phone": {
+                    "description": "电话",
                     "type": "string"
                 },
-                "userName": {
+                "username": {
+                    "description": "用户名",
                     "type": "string"
                 }
             }
@@ -419,8 +664,8 @@ var SwaggerInfo = swaggerInfo{
 	Host:        "",
 	BasePath:    "",
 	Schemes:     []string{},
-	Title:       "Golang Gin Template API",
-	Description: "An example of gin",
+	Title:       "安东星",
+	Description: "安东星接口文档",
 }
 
 type s struct{}

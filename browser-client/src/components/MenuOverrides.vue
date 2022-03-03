@@ -1,49 +1,25 @@
 <template>
   <div id="menuOverides">
-    <!-- <n-space> -->
-    <template v-for="item in menuOptions">
-      <n-dropdown
-          v-if="item.options?.length"
-          @select="handleSelect"
-          :options="item.options"
-          trigger="click"
-      >
-        <n-button
-            :class="{ 'menu-active': activeKey == item.routerName }"
-            quaternary
-            :key="item.key"
-            :disabled="item.disabled"
-            @click="routerClick(item.key)"
-        >{{ item.label }}
-          <template #icon v-if="item.icon">
-            <an-icon :vdom="item.icon"></an-icon>
-          </template>
-        </n-button>
-      </n-dropdown>
-      <n-button
-          v-else
-          :class="{ 'menu-active': activeKey == item.routerName }"
-          quaternary
-          :key="item.key"
-          :disabled="item.disabled"
-          @click="routerClick(item.key)"
-      >
-        {{ item.label }}
-        <template #icon v-if="item.icon">
-          <an-icon :vdom="item.icon"></an-icon>
-        </template>
-      </n-button>
-    </template>
-    <!-- </n-space> -->
+    <n-menu
+        :value="activeKey"
+        mode="horizontal"
+        :options="menuOptions"
+        :dropdown-props="{
+				show: expand
+			}"
+    />
     <div class="nav-active" ref="navActive"></div>
   </div>
 </template>
 
+
 <script lang="ts" setup>
-import {useRoute} from 'vue-router'
+import {useRoute, RouterLink} from 'vue-router'
 import {h, ref, onMounted, nextTick, watch, computed} from 'vue'
 import {NIcon} from 'naive-ui'
-import {Award, CommentsRegular, Gamepad, Biohazard} from '@vicons/fa'
+import {Award, CommentsRegular, Gamepad, Biohazard, EllipsisH, Toolbox, FortAwesome} from '@vicons/fa'
+import {renderIcon} from "@/util/naive";
+import {useStore} from "vuex";
 
 const route = useRoute()
 const navActive = ref(null)
@@ -51,16 +27,116 @@ let activeKey: any = computed(() => {
   return route.name as string
 })
 
+let flag = ref(false)
+let expand = ref(false)
+
+const changeExpand = () => {
+  expand.value = !expand.value
+}
+
+defineExpose({
+  changeExpand,
+})
+
+
+const basicRoute = [
+  {
+    key: 'record',
+    icon: renderIcon(Award),
+    label: () =>
+        h(RouterLink, {to: {name: 'record'}}, {default: () => '战绩查询'}),
+  },
+  {
+    key: 'resource',
+    icon: renderIcon(Toolbox),
+    label: () =>
+        h(RouterLink, {to: {name: 'resource'}}, {default: () => '游戏资源'}),
+  },
+  {
+    key: 'rank',
+    icon: renderIcon(Biohazard),
+    label: () =>
+        h(RouterLink, {to: {name: 'rank'}}, {default: () => '硬核狠人'}),
+  },
+  {
+    key: 'about',
+    icon: renderIcon(CommentsRegular),
+    label: () =>
+        h(RouterLink, {to: {name: 'about'}}, {default: () => '关于我们'}),
+  },
+]
+
+const adminRoute = [{
+  key: 'admin',
+  icon: renderIcon(FortAwesome),
+  label: () =>
+      h(RouterLink, {to: {name: 'admin'}}, {default: () => '管理界面'})
+}]
+
+const options = ref(basicRoute)
+
+const others = ref({
+  key: 'others',
+  label: '更多',
+  icon: renderIcon(EllipsisH),
+  children: [...options.value],
+})
+
+const menuOptions = computed(() => {
+  const result = [...options.value]
+  if (flag.value) return [others.value]
+  return result
+})
+
 function navAnimation() {
-  const menuActive = document.querySelector('#menuOverides .menu-active')
-  const width = menuActive?.clientWidth
-  const left = menuActive?.offsetLeft
-  navActive.value?.setAttribute('style', `width: ${width}px; left: ${left}px`)
+  nextTick(() => {
+    const menuActive = document.querySelector(
+        '#menuOverides .n-menu-item--selected'
+    )
+    const width = menuActive?.clientWidth - 20
+    const left = menuActive?.offsetLeft + 10
+    navActive.value?.setAttribute('style', `width: ${width}px; left: ${left}px`)
+  })
+}
+
+const store = useStore();
+// 重设头部可选栏目
+const resetHeader = () => {
+  const roles = store.state.userInfo.roles;
+  if (roles != undefined && roles.indexOf('admin') >= 0) {
+    options.value = basicRoute.concat(adminRoute)
+  } else {
+    options.value = basicRoute
+  }
 }
 
 onMounted(() => {
   navAnimation()
+  if (window.innerWidth < 992) {
+    flag.value = true
+    navAnimation()
+  } else {
+    flag.value = false
+    navAnimation()
+  }
+  window.onresize = (event) => {
+    if (window.innerWidth < 768) {
+      flag.value = true
+      navAnimation()
+    } else {
+      flag.value = false
+      navAnimation()
+    }
+  }
+  resetHeader()
 })
+
+watch(
+    () => store.state.userInfo,
+    () => {
+      resetHeader()
+    }
+)
 
 watch(
     () => route.name,
@@ -72,151 +148,42 @@ watch(
 )
 </script>
 
-<script lang="ts">
-import {defineComponent} from 'vue'
-
-export default defineComponent({
-  data() {
-    return {
-      options: [],
-      optionsTemp: []
-    }
-  },
-  computed: {
-    menuOptions() {
-      const options = [
-        {
-          key: 'record',
-          icon: this.renderIcon(Award),
-          label: '战绩查询',
-          routerName: 'record',
-          params: {
-            nick: '',
-          },
-          active: null, // 选中
-          options: [], // 子项
-        },
-        {
-          key: 'rank',
-          icon: this.renderIcon(Biohazard),
-          label: '硬核狠人',
-          routerName: 'rank',
-          active: null, // 选中
-          options: [], // 子项
-        },
-        {
-          key: 'about',
-          icon: this.renderIcon(CommentsRegular),
-          label: '关于我们',
-          routerName: 'about',
-        },
-        {
-          key: 'realtime',
-          icon: this.renderIcon(Gamepad),
-          label: '实时数据',
-          disabled: true,
-          routerName: 'realtime',
-        },
-      ]
-      const optionsList = JSON.parse(JSON.stringify(this.options))
-      const result = options.filter(
-          (o) => !optionsList.find((p) => p.key == o.key)
-      )
-      if (optionsList.length) {
-        result.push({
-          key: 'others',
-          label: '更多',
-          options: optionsList,
-        })
-      }
-      return result
-    },
-  },
-  mounted() {
-    const menu = document.querySelector('#menuOverides')
-    const menuItems = document.querySelectorAll('#menuOverides .n-button')
-    const widthLists: any[] = []
-    const optionsTemp: any[] = []
-    menuItems.forEach((o, index) => {
-      widthLists.push(o.clientWidth)
-      optionsTemp.push(this.menuOptions[index])
-    })
-    this.optionsTemp = optionsTemp
-    const resizeObserver = new ResizeObserver((resizeObj) => {
-      let menuWidth = -12
-      const optionsMap: any[] = []
-      let flag = true
-      widthLists.forEach((o, index) => {
-        if (
-            menuWidth + 12 + o <= resizeObj[0].target.clientWidth - 56 &&
-            flag
-        ) {
-          menuWidth += 12 + o
-        } else {
-          flag = false
-          optionsMap.push({
-            label: optionsTemp[index].label,
-            key: optionsTemp[index].key,
-            disabled: optionsTemp[index].disabled,
-          })
-        }
-      })
-      this.options = optionsMap
-      this.navAnimation()
-    })
-    resizeObserver.observe(menu)
-  },
-  methods: {
-    renderIcon(icon: any) {
-      return () => h(NIcon, null, {default: () => h(icon)})
-    },
-    routerClick(key: String) {
-      if (key == 'others') {
-        return
-      }
-      const {routerName: name, params} = this.optionsTemp.find(
-          (o) => o.key == key
-      )
-      this.$router.push({
-        name,
-        params,
-      })
-    },
-    handleSelect(key: any) {
-      this.routerClick(key)
-    },
-  },
-})
-</script>
-
 <style lang="scss" scoped>
 #menuOverides {
   position: relative;
   margin-left: 10px;
-  overflow: hidden;
-  display: flex;
-  flex: 1;
-
-  :deep(.n-button) {
-    color: var(--header-text-color) !important;
-
-    &:not(:first-child) {
-      margin-left: 12px;
+  // overflow: hidden;
+  // flex: 1;
+  // text-align: left;
+  :deep(.n-menu) {
+    .n-menu-item.n-menu-item--selected {
+      .n-menu-item-content {
+        color: var(--header-nav-active-color);
+        font-weight: bold;
+      }
     }
 
-    &:hover {
-      color: var(--header-nav-hover-color) !important;
-    }
+    .n-menu-item-content {
+      color: var(--header-text-color);
+      display: flex;
 
-    &.menu-active {
-      color: var(--header-nav-active-color) !important;
-      font-weight: bold !important;
+      &:hover {
+        color: var(--header-nav-hover-color);
+      }
+
+      .n-menu-item-content__icon {
+        color: inherit;
+      }
+
+      .n-menu-item-content-header {
+        color: inherit;
+      }
     }
   }
 
   .nav-active {
     position: absolute;
-    bottom: 0px;
+    bottom: 2px;
     height: 2px;
     border-radius: 2px;
     background-color: var(--header-nav-active-color);

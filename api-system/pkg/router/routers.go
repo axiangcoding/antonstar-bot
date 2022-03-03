@@ -2,9 +2,9 @@ package router
 
 import (
 	"axiangcoding/antonstar/api-system/api/docs"
-	v1 "axiangcoding/antonstar/api-system/api/v1"
 	"axiangcoding/antonstar/api-system/internal/app/conf"
 	"axiangcoding/antonstar/api-system/pkg/middleware"
+	v1 "axiangcoding/antonstar/api-system/pkg/router/v1"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -47,19 +47,32 @@ func setRouterV1(r *gin.Engine) {
 	{
 		user := groupV1.Group("/user")
 		{
-			user.POST("/login", v1.UserLogin)
-			user.POST("/register", v1.UserRegister)
+			user.POST("/login", middleware.CaptchaCheck(), v1.UserLogin)
+			user.POST("/register", middleware.CaptchaCheck(), v1.UserRegister)
 			user.POST("/logout", middleware.AuthCheck(), v1.UserLogout)
+			user.POST("/value/exist", v1.IsKeyFieldValueExist)
+			user.POST("/info", v1.UserInfo)
 		}
-		system := groupV1.Group("/system", middleware.AuthCheck())
+		system := groupV1.Group("/system")
 		{
 			system.GET("/info", v1.SystemInfo)
+		}
+		site := groupV1.Group("/site")
+		{
+			site.GET("/notice/last", v1.GetLastSiteNotice)
+			site.POST("/notice/", middleware.AuthCheck(), v1.PostSiteNotice)
 		}
 		visit := groupV1.Group("/visits")
 		{
 			visit.POST("/visit", v1.PostVisit)
 			visit.GET("/", middleware.AuthCheck(), v1.GetVisits)
 			visit.GET("/count", v1.GetVisitCount)
+		}
+		captcha := groupV1.Group("/captcha")
+		{
+			captcha.GET("/", v1.GenerateCaptcha)
+			captcha.GET("/:file", v1.GetCaptcha)
+			captcha.POST("/verify")
 		}
 		warThunder := groupV1.Group("/war_thunder")
 		{

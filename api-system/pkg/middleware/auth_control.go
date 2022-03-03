@@ -5,12 +5,14 @@ import (
 	"axiangcoding/antonstar/api-system/pkg/app"
 	"axiangcoding/antonstar/api-system/pkg/app/e"
 	"axiangcoding/antonstar/api-system/pkg/auth"
+	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 	"strconv"
 	"strings"
 )
 
+// AuthCheck 用户权限校验
 func AuthCheck() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		tokenString := c.GetHeader(app.AuthHeader)
@@ -27,6 +29,30 @@ func AuthCheck() gin.HandlerFunc {
 			return
 		}
 		c.Next()
+	}
+}
+
+type CaptchaForm struct {
+	CaptchaId  string `binding:"required" json:"captcha_id" form:"captcha_id"`
+	CaptchaVal string `binding:"required" json:"captcha_val" form:"captcha_val"`
+}
+
+// CaptchaCheck 验证码校验
+func CaptchaCheck() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var form CaptchaForm
+		err := c.ShouldBindQuery(&form)
+		if err != nil {
+			app.BizFailed(c, e.CaptchaNotValid, err)
+			c.Abort()
+			return
+		}
+		if captcha.VerifyString(form.CaptchaId, form.CaptchaVal) {
+			c.Next()
+		} else {
+			app.BizFailed(c, e.CaptchaNotValid)
+			c.Abort()
+		}
 	}
 }
 

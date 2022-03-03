@@ -2,6 +2,7 @@ package conf
 
 import (
 	"log"
+	"strings"
 
 	"github.com/spf13/viper"
 )
@@ -14,6 +15,10 @@ func Setup() {
 	viper.SetConfigType("toml")
 	viper.AddConfigPath("config/")
 	viper.AddConfigPath("config/default/")
+	viper.AutomaticEnv()
+	viper.SetEnvPrefix("as_api")
+	replacer := strings.NewReplacer(".", "_")
+	viper.SetEnvKeyReplacer(replacer)
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			log.Println("Config file not found. The program will use default conf and may not work properly")

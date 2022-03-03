@@ -8,6 +8,7 @@ import (
 	"axiangcoding/antonstar/api-system/pkg/logging"
 	"axiangcoding/antonstar/api-system/pkg/mq"
 	"axiangcoding/antonstar/api-system/pkg/router"
+	"axiangcoding/antonstar/api-system/pkg/validation"
 	"context"
 	"fmt"
 	"net/http"
@@ -26,11 +27,12 @@ func init() {
 	cache.Setup()
 	mq.Setup()
 	auth.Setup()
+	validation.Setup()
 }
 
-// @title        Golang Gin Template API
+// @title        安东星
 // @version      1.0.0
-// @description  An example of gin
+// @description  安东星接口文档
 // @termsOfService
 
 // @contact.name  axiangcoding

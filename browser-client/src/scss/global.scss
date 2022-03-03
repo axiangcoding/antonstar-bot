@@ -4,9 +4,9 @@ $screen: xs,sm,md,lg;
 $maxWidth: 768px, 992px, 1200px, 1920px;
 
 @for $i from 1 to length($screen) + 1 {
-  hidden_#{nth($screen, $i)} {
+  .hidden_#{nth($screen, $i)} {
     @media screen and (max-width: #{nth($maxWidth, $i)}) {
-      display: none;
+      display: none !important;
     }
   }
 }

@@ -100,17 +100,12 @@ func sendNewRequestToCrawler(c *gin.Context, nick string) (*schema.CrawlerData, 
 	if err != nil {
 		return nil, err
 	}
-	body1 := entity.MQBody{
+	body := entity.MQBody{
 		QueryID:  queryID,
-		Source:   entity.SourceGaijin,
+		Target:   []string{entity.SourceGaijin, entity.SourceThunderskill},
 		Nickname: nick,
 	}
-	body2 := entity.MQBody{
-		QueryID:  queryID,
-		Source:   entity.SourceThunderskill,
-		Nickname: nick,
-	}
-	err = SendMessages(body1, body2)
+	err = SendMessage(body)
 	if err != nil {
 		return nil, err
 	}
