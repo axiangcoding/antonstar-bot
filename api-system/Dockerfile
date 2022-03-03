@@ -4,7 +4,7 @@ WORKDIR /build
 COPY . /build/
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o application ./cmd/app
 
-FROM scratch as prod
+FROM busybox:stable as prod
 COPY --from=build /build/application /app/application
 # copy config file
 COPY --from=build /build/config /app/config

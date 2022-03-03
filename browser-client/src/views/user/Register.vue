@@ -52,7 +52,7 @@
         </n-form>
       </n-card>
     </n-space>
-    <UserAgreementCard :show="showUA" @update-show="updateShowUA"/>
+    <UserAgreementCard :show="showUA" @update-status="updateShowUA"/>
     <RegSuccessCard :show="showRegSuccess"/>
   </n-card>
 </template>
