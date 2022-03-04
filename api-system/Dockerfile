@@ -2,7 +2,7 @@ FROM golang:1.17-alpine as build
 ENV GOPROXY https://goproxy.cn,direct
 WORKDIR /build
 COPY . /build/
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o application ./cmd/app
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o application .
 
 FROM busybox:stable as prod
 ARG AS_VERSION
