@@ -6,11 +6,6 @@ import (
 	"github.com/streadway/amqp"
 )
 
-const (
-	SourceGaijin       = "gaijin"
-	SourceThunderskill = "thunder_skill"
-)
-
 type CrawBody struct {
 	// 查询的ID
 	QueryID string `json:"query_id"`

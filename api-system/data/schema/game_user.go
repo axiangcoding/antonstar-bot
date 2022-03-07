@@ -5,10 +5,10 @@ import (
 	"time"
 )
 
-type WTUser struct {
+type GameUser struct {
 	gorm.Model
 	// 游戏昵称
-	Nick string `gorm:"uniqueIndex"`
+	Nick string `gorm:"uniqueIndex;size:255"`
 	// 联队
 	Clan string `gorm:"size:255"`
 	// 联队地址

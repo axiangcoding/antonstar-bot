@@ -333,6 +333,33 @@ var doc = `{
                 }
             }
         },
+        "/v1/user/wt_query/history": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "tags": [
+                    "User API"
+                ],
+                "summary": "获取用户的查询历史记录",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/app.ErrJson"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/visits": {
             "get": {
                 "security": [
@@ -487,6 +514,11 @@ var doc = `{
         },
         "/v1/war_thunder/userinfo/refresh": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "tags": [
                     "WarThunder API"
                 ],

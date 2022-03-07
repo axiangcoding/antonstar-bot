@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"axiangcoding/antonstar/api-system/auth"
 	"axiangcoding/antonstar/api-system/entity"
 	"axiangcoding/antonstar/api-system/entity/app"
 	"axiangcoding/antonstar/api-system/entity/e"
@@ -62,7 +63,7 @@ type RegisterForm struct {
 
 // UserRegister
 // @Summary  用户注册
-// @Tags     User API
+// @Tags      User API
 // @Param    form  body      RegisterForm            true  "form"
 // @Param    form  query     middleware.CaptchaForm  true  "captcha"
 // @Success  200   {object}  app.ApiJson             ""
@@ -93,8 +94,8 @@ func UserRegister(c *gin.Context) {
 // UserLogout
 // @Summary   用户注销
 // @Tags     User API
-// @Success   200  {object}  app.ApiJson  ""
-// @Failure   400  {object}  app.ErrJson  ""
+// @Success   200   {object}  app.ApiJson  ""
+// @Failure   400   {object}  app.ErrJson  ""
 // @Router    /v1/user/logout [post]
 // @Security  ApiKeyAuth
 func UserLogout(c *gin.Context) {
@@ -121,8 +122,8 @@ type KeyFieldExistForm struct {
 // @Summary  判断主要的用户信息的值是否存在
 // @Tags      User API
 // @Param    form  body      KeyFieldExistForm  true  "form"
-// @Success   200   {object}  app.ApiJson  ""
-// @Failure   400   {object}  app.ErrJson  ""
+// @Success   200  {object}  app.ApiJson  ""
+// @Failure   400  {object}  app.ErrJson  ""
 // @Router   /v1/user/value/exist [post]
 func IsKeyFieldValueExist(c *gin.Context) {
 	form := KeyFieldExistForm{}
@@ -146,8 +147,8 @@ type IdForm struct {
 // @Summary   获取用户信息
 // @Tags     User API
 // @Param     form  query     IdForm       true  "form"
-// @Success  200   {object}  app.ApiJson        ""
-// @Failure  400   {object}  app.ErrJson        ""
+// @Success   200  {object}  app.ApiJson  ""
+// @Failure   400  {object}  app.ErrJson  ""
 // @Router    /v1/user/info [post]
 // @Security  ApiKeyAuth
 func UserInfo(c *gin.Context) {
@@ -163,4 +164,21 @@ func UserInfo(c *gin.Context) {
 		return
 	}
 	app.Success(c, info)
+}
+
+// GetUserWTQueryHistory
+// @Summary   获取用户的查询历史记录
+// @Tags     User API
+// @Success  200   {object}  app.ApiJson        ""
+// @Failure  400   {object}  app.ErrJson        ""
+// @Router    /v1/user/wt_query/history [get]
+// @Security  ApiKeyAuth
+func GetUserWTQueryHistory(c *gin.Context) {
+	userID := auth.GetUserIdFromToken(c.GetHeader(app.AuthHeader))
+	history, err := service.GetWTQueryHistory(c, userID)
+	if err != nil {
+		app.BizFailed(c, e.Error, err)
+		return
+	}
+	app.Success(c, history)
 }

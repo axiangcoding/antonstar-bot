@@ -104,7 +104,7 @@ func ServerFailed(c *gin.Context, errCode int, err ...error) {
 // authorized failed response
 // 返回权限不足
 func Unauthorized(c *gin.Context, errCode int, err ...error) {
-	logging.Infof("Unauthorized with code [%d].", errCode)
+	logging.Warnf("Unauthorized with code [%d].", errCode)
 	HttpResponse(c, http.StatusUnauthorized, errCode, generateErrJson(err))
 	c.Abort()
 }

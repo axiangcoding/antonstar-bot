@@ -13,10 +13,9 @@ import (
 	"time"
 )
 
-func GetAllUserInfo(c *gin.Context, nick string) (map[string][]interface{}, error) {
+func GetAllUserInfo(c *gin.Context, nick string, userID int64) (map[string][]interface{}, error) {
 	lst := make(map[string][]interface{})
-	// TODO: 限制只获取最新5条source为gaijin的记录，thunderskill可以不传
-	crawlerData, err := data.QueryShortCrawlerData(c, schema.CrawlerData{Nick: nick})
+	crawlerData, err := data.QueryShortCrawlerData(c, schema.CrawlerData{Nick: nick, Source: schema.SourceGaijin})
 	if err != nil {
 		return lst, err
 	}
@@ -29,6 +28,15 @@ func GetAllUserInfo(c *gin.Context, nick string) (map[string][]interface{}, erro
 			"found":      datum.Found,
 			"status":     datum.Status,
 			"source":     source,
+		})
+	}
+	// 如果是登录用户搜索，则记录搜索记录
+	if userID != 0 {
+		data.GetDB().Save(&schema.SearchHistory{
+			Type:    schema.SearchHistoryTypeCrawlerQuery,
+			UserId:  userID,
+			Context: nick,
+			Found:   len(lst) != 0,
 		})
 	}
 	return lst, nil
@@ -47,12 +55,12 @@ func CheckReachRefreshLimit(c *gin.Context) error {
 // 1. 查看该用户的请求是否在1天以内
 // 2. 如果在一天以内，不做请求，返回最近的一个queryId
 // 3. 如果在一天以外，做新的请求，返回新的queryId
-func RefreshUserInfo(c *gin.Context, nick string) (map[string]interface{}, error) {
+func RefreshUserInfo(c *gin.Context, nick string, triggerUser int64) (map[string]interface{}, error) {
 	find, err := data.FindLastCrawlerData(c, schema.CrawlerData{Nick: nick})
 	if err != nil {
 		// 如果未找到记录，做一次查询
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			crawler, err := sendNewRequestToCrawler(c, nick)
+			crawler, err := sendNewRequestToCrawler(c, nick, triggerUser)
 			return map[string]interface{}{
 				"refresh":    true,
 				"query_id":   crawler.QueryID,
@@ -72,7 +80,7 @@ func RefreshUserInfo(c *gin.Context, nick string) (map[string]interface{}, error
 				"created_at": createdAt,
 			}, nil
 		} else {
-			crawler, err := sendNewRequestToCrawler(c, nick)
+			crawler, err := sendNewRequestToCrawler(c, nick, triggerUser)
 			return map[string]interface{}{
 				"refresh":    true,
 				"query_id":   crawler.QueryID,
@@ -82,27 +90,29 @@ func RefreshUserInfo(c *gin.Context, nick string) (map[string]interface{}, error
 	}
 }
 
-func sendNewRequestToCrawler(c *gin.Context, nick string) (*schema.CrawlerData, error) {
+func sendNewRequestToCrawler(c *gin.Context, nick string, triggerUser int64) (*schema.CrawlerData, error) {
 	queryID := uuid.NewString()
 	// 先保存请求信息
 	saved, err := data.SaveCrawlerData(c, schema.CrawlerData{
-		Nick:    nick,
-		QueryID: queryID,
-		Source:  mq.SourceGaijin,
-		Status:  schema.CrawlerStatusRunning,
+		Nick:          nick,
+		QueryID:       queryID,
+		Source:        schema.SourceGaijin,
+		Status:        schema.CrawlerStatusRunning,
+		TriggerUserId: triggerUser,
 	})
 	saved, err = data.SaveCrawlerData(c, schema.CrawlerData{
-		Nick:    nick,
-		QueryID: queryID,
-		Source:  mq.SourceThunderskill,
-		Status:  schema.CrawlerStatusRunning,
+		Nick:          nick,
+		QueryID:       queryID,
+		Source:        schema.SourceThunderskill,
+		Status:        schema.CrawlerStatusRunning,
+		TriggerUserId: triggerUser,
 	})
 	if err != nil {
 		return nil, err
 	}
 	body := mq.CrawBody{
 		QueryID:  queryID,
-		Target:   []string{mq.SourceGaijin, mq.SourceThunderskill},
+		Target:   []string{schema.SourceGaijin, schema.SourceThunderskill},
 		Nickname: nick,
 	}
 	err = SendMessage(body)

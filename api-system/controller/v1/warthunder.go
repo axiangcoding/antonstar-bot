@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"axiangcoding/antonstar/api-system/auth"
 	"axiangcoding/antonstar/api-system/entity/app"
 	"axiangcoding/antonstar/api-system/entity/e"
 	"axiangcoding/antonstar/api-system/service"
@@ -15,8 +16,8 @@ type UserInfoForm struct {
 
 // GetUserInfoQueries
 // @Summary  查询游戏昵称的所有query_id
-// @Tags     WarThunder API
-// @Param    form  query     UserInfoForm  true  "param"
+// @Tags      WarThunder API
+// @Param     form  query     UserInfoForm  true  "param"
 // @Success  200   {object}  app.ApiJson        ""
 // @Router   /v1/war_thunder/userinfo/queries [get]
 func GetUserInfoQueries(c *gin.Context) {
@@ -26,7 +27,8 @@ func GetUserInfoQueries(c *gin.Context) {
 		app.BadRequest(c, e.RequestParamsNotValid, err)
 		return
 	}
-	info, err := service.GetAllUserInfo(c, form.Nickname)
+	userId := auth.GetUserIdFromToken(c.GetHeader(app.AuthHeader))
+	info, err := service.GetAllUserInfo(c, form.Nickname, userId)
 	if err != nil {
 		app.BizFailed(c, e.Error, err)
 		return
@@ -35,11 +37,12 @@ func GetUserInfoQueries(c *gin.Context) {
 }
 
 // PostUserInfoRefresh
-// @Summary  刷新一个游戏用户数据的最新数据
+// @Summary   刷新一个游戏用户数据的最新数据
 // @Tags     WarThunder API
 // @Param    form  query     UserInfoForm  true  "param"
-// @Success  200   {object}  app.ApiJson   ""
-// @Router   /v1/war_thunder/userinfo/refresh [post]
+// @Success   200   {object}  app.ApiJson   ""
+// @Router    /v1/war_thunder/userinfo/refresh [post]
+// @Security  ApiKeyAuth
 func PostUserInfoRefresh(c *gin.Context) {
 	var form UserInfoForm
 	err := c.ShouldBindQuery(&form)
@@ -52,7 +55,8 @@ func PostUserInfoRefresh(c *gin.Context) {
 		app.BizFailed(c, e.ReachRefreshLimit)
 		return
 	}
-	info, err := service.RefreshUserInfo(c, form.Nickname)
+	userID := auth.GetUserIdFromToken(c.GetHeader(app.AuthHeader))
+	info, err := service.RefreshUserInfo(c, form.Nickname, userID)
 	if err != nil {
 		app.BizFailed(c, e.Error, err)
 		return

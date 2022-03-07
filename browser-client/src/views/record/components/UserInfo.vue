@@ -118,6 +118,8 @@ import GaijinGroundCard from "@/views/record/components/GaijinGroundCard.vue";
 import GaijinFleetCard from "@/views/record/components/GaijinFleetCard.vue";
 import {ShareAlt, Angry} from "@vicons/fa";
 import TSCommonInfo from "@/views/record/components/TSCommonInfo.vue";
+import {getWTUserInfo, postWTUserInfoRefresh} from "@/services/war_thunder";
+import {useStore} from "vuex";
 
 const props = defineProps({
   queryList: Object
@@ -163,12 +165,7 @@ const getInfo = async (queryId: string) => {
   reloading.value = true
   activeQuery.value = queryId
   try {
-    await http.get('v1/war_thunder/userinfo',
-        {
-          params: {
-            "query_id": queryId
-          }
-        }).then(res => {
+    await getWTUserInfo(queryId).then(res => {
       gaijinData.value = res.data['gaijin']
       thunderskillData.value = res.data['thunder_skill']
     })
@@ -178,13 +175,9 @@ const getInfo = async (queryId: string) => {
 }
 
 const message = useMessage();
+const store = useStore();
 const refreshInfoQueries = (nick: any) => {
-  http.post('v1/war_thunder/userinfo/refresh',
-      {}, {
-        params: {
-          "nickname": nick
-        }
-      }).then(res => {
+  postWTUserInfoRefresh(store.state.auth, nick).then((res: any) => {
     if (res.code === 13000) {
       message.warning('无法刷新，已达到今天的全站限额！')
       return

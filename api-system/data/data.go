@@ -55,7 +55,8 @@ func autoMigrate(db *gorm.DB) {
 		&schema.BugReport{},
 		&schema.SystemConfig{},
 		&schema.SiteNotice{},
-		&schema.WTUser{},
+		&schema.GameUser{},
+		&schema.SearchHistory{},
 	); err != nil {
 		logging.Fatal(err)
 	} else {

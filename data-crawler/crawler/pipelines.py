@@ -35,7 +35,7 @@ class MysqlPipeline:
         if item['source'] == 'gaijin' and item['found']:
             content = json.loads(item['content'])
             find_wt_user_sql = """
-            select id from wt_users where nick=%s
+            select id from game_users where nick=%s
             """
             self.cursor.execute(find_wt_user_sql, content['nick'])
             res = self.cursor.fetchall()
@@ -43,7 +43,7 @@ class MysqlPipeline:
             # 如果找到记录，说明不是第一次获取到该玩家记录
             if len(res) != 0:
                 update_wt_user_sql = """
-                update wt_users set clan=%s, clan_url=%s, register_date=%s, level=%s, title=%s, banned=%s, updated_at=%s where nick=%s 
+                update game_users set clan=%s, clan_url=%s, register_date=%s, level=%s, title=%s, banned=%s, updated_at=%s where nick=%s 
                 """
                 self.cursor.execute(update_wt_user_sql,
                                     (content['clan'], content['clan_url'],
@@ -51,7 +51,7 @@ class MysqlPipeline:
                                      content['banned'], item['updated_at'], content['nick']))
             else:
                 insert_wt_user_sql = """
-                insert into wt_users(nick,clan,clan_url,register_date,level,title,banned,created_at) values (%s,%s,%s,%s,%s,%s,%s,%s)
+                insert into game_users(nick,clan,clan_url,register_date,level,title,banned,created_at) values (%s,%s,%s,%s,%s,%s,%s,%s)
                 """
                 self.cursor.execute(insert_wt_user_sql,
                                     (content['nick'], content['clan'], content['clan_url'],

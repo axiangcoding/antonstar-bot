@@ -12,18 +12,38 @@
       </n-alert>
       <n-grid item-responsive>
         <n-gi offset="0 768:6 1200:6 1920:6" span="24 768:12 1200:12 1920:12">
+          <n-space vertical>
+            <n-input-group>
+              <n-input v-model:value="nick" maxlength="16" show-count size="large" round
+                       :style="{ width: '100%' }" placeholder="请输入游戏昵称"/>
+              <n-button @click="doSearch" :loading="btnLoading" size="large" type="primary" round
+                        :disabled="nick.length===0">
+                <template #icon>
+                  <Search/>
+                </template>
+                查询
+              </n-button>
+            </n-input-group>
 
-          <n-input-group>
-            <n-input v-model:value="nick" maxlength="16" show-count size="large" round
-                     :style="{ width: '100%' }" placeholder="请输入游戏昵称"/>
-            <n-button @click="doSearch" :loading="btnLoading" size="large" type="primary" round
-                      :disabled="nick.length===0">
-              <template #icon>
-                <Search/>
-              </template>
-              查询
-            </n-button>
-          </n-input-group>
+            <n-space v-if="store.state.login && searchHistory!=null" justify="space-between">
+              <n-space>
+                搜索历史：
+                <n-button v-for="i in searchHistory.slice(0, 5)" size="tiny" @click="handleSearch(i)" secondary
+                          type="info" :key="i">{{ i }}
+                </n-button>
+              </n-space>
+              <n-button text type="primary" @click="showMore=!showMore" v-if="searchHistory.length>5">
+                查看更多
+              </n-button>
+            </n-space>
+            <n-collapse-transition :show="showMore && searchHistory!=null">
+              <n-space>
+                <n-button v-for="i in searchHistory.slice(5)" size="tiny" @click="handleSearch(i)" secondary
+                          type="info" :key="i">{{ i }}
+                </n-button>
+              </n-space>
+            </n-collapse-transition>
+          </n-space>
         </n-gi>
       </n-grid>
       <n-divider/>
@@ -33,35 +53,40 @@
 </template>
 
 <script lang="ts" setup>
-import {useMessage} from "naive-ui";
 import {Search} from "@vicons/fa";
 import UserInfo from "@/views/record/components/UserInfo.vue";
 import {onMounted, ref} from "vue";
-import http from "@/services/request";
 import {useRoute, useRouter} from "vue-router";
+import {getWTUserInfoQueries} from "@/services/war_thunder";
+import {useStore} from "vuex";
+import {getWTQueryHistory} from "@/services/user";
 
+const store = useStore();
 const route = useRoute();
 const nick = ref('')
-const message = useMessage()
-const showInfo = ref('none')
-const btnLoading = ref(false)
-let messageReactive = null
 
+
+const btnLoading = ref(false)
+
+const searchHistory = ref([])
 onMounted(() => {
   nick.value = route.params.nick as string || ""
   if (nick.value) {
     doSearch()
   }
+
+  if (store.state.login) {
+    getWTQueryHistory(store.state.auth).then(res => {
+      searchHistory.value = res.data.list
+    })
+  }
 })
 
 const doSearch = async () => {
-  // messageReactive = message.loading('正在查询，请稍后', {duration: 0})
   btnLoading.value = true
   try {
     await getInfoQueries(nick.value as string)
   } finally {
-    // messageReactive.destroy()
-    // messageReactive = null
     btnLoading.value = false
   }
 }
@@ -76,20 +101,19 @@ const getInfoQueries = async (nick: string) => {
       nick: nick
     }
   })
-  await http.get('v1/war_thunder/userinfo/queries',
-      {
-        params: {
-          "nickname": nick
-        }
-      }).then(async res => {
+  await getWTUserInfoQueries(store.state.auth, nick).then(async res => {
     queryIdList.value = res.data
   })
 }
 
+const handleSearch = (i: string) => {
+  nick.value = i
+}
+const showMore = ref(false)
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .record {
   text-align: left;
 }
@@ -97,4 +121,6 @@ const getInfoQueries = async (nick: string) => {
 :deep(.n-input-group) {
   justify-content: center;
 }
+
+
 </style>

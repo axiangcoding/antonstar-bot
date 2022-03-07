@@ -286,6 +286,22 @@ paths:
       summary: 判断主要的用户信息的值是否存在
       tags:
       - User API
+  /v1/user/wt_query/history:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.ErrJson'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户的查询历史记录
+      tags:
+      - User API
   /v1/visits:
     get:
       parameters:
@@ -394,6 +410,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/app.ApiJson'
+      security:
+      - ApiKeyAuth: []
       summary: 刷新一个游戏用户数据的最新数据
       tags:
       - WarThunder API

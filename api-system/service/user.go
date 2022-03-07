@@ -94,3 +94,22 @@ func UserInfo(c *gin.Context, token string, id int64) (map[string]interface{}, e
 	}
 	return m, err
 }
+
+func GetWTQueryHistory(c *gin.Context, userID int64) (map[string]interface{}, error) {
+	where := schema.SearchHistory{
+		Type:   schema.SearchHistoryTypeCrawlerQuery,
+		UserId: userID,
+	}
+	var find []schema.SearchHistory
+	err := data.GetDB().Select("context").Distinct("context").Where(where).Find(&find).Error
+	if err != nil {
+		return nil, err
+	}
+	m := map[string]interface{}{}
+	var nicks []string
+	for _, item := range find {
+		nicks = append(nicks, item.Context)
+	}
+	m["list"] = nicks
+	return m, nil
+}
