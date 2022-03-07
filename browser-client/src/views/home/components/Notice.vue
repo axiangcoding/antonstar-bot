@@ -20,7 +20,7 @@
           </n-tag>
         </n-space>
       </template>
-      <div id="site-notice"></div>
+      <div id="site-notice"/>
     </n-card>
 
   </n-card>
@@ -50,8 +50,13 @@ onMounted(() => {
     })
   })
 })
+
+
 </script>
 
 <style scoped>
-
+#site-notice {
+  min-height: 200px;
+  width: 100%;
+}
 </style>
