@@ -4,7 +4,7 @@ name = "axiangcoding/antonstar/api-system"
 
 [app.log]
 level = "INFO"
-file.enable = true
+file.enable = false
 file.encoder = "console"
 file.path = "./logs/"
 

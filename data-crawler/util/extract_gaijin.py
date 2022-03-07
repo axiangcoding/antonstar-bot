@@ -78,7 +78,7 @@ def extract_user_info(page_html: str):
         'level': extract_level(string.cleanup(user_profile_list[1])),
         'user_stat': user_stat,
         'user_rate': user_rate
-
+        # TODO: 计算当前用户的KD值等信息
     }
     return res
 
