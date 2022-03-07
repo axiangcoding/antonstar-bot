@@ -21,7 +21,7 @@ func Logger() gin.HandlerFunc {
 		reqMethod := c.Request.Method
 		statusCode := c.Writer.Status()
 		clientIP := c.ClientIP()
-		logging.Infof("%s %s %s--> status=%d, latency_time=%s, ip=%s",
+		logging.Infof("%s %s %s --> status=%d, latency_time=%s, ip=%s",
 			reqMethod, path, raw, statusCode, latencyTime, clientIP)
 	}
 }

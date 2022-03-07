@@ -11,8 +11,9 @@ type App struct {
 	Log     struct {
 		Level string
 		File  struct {
-			Enable bool
-			Path   string
+			Enable  bool
+			Path    string
+			Encoder string
 		}
 	}
 	Auth struct {

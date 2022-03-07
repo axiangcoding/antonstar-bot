@@ -2,6 +2,7 @@ package logging
 
 import (
 	"axiangcoding/antonstar/api-system/settings"
+	"log"
 	"path"
 
 	"go.uber.org/zap"
@@ -16,7 +17,7 @@ var enableFileLog = false
 
 func Setup() {
 	enableFileLog = settings.Config.App.Log.File.Enable
-	logger, _ := zap.NewDevelopment()
+	logger, _ := zap.NewDevelopment(zap.AddCallerSkip(1))
 	logConsole = logger.Sugar()
 	// 是否打印日志到文件中
 	if enableFileLog {
@@ -37,19 +38,36 @@ func Setup() {
 		// lock it.
 		w := zapcore.AddSync(&lumberjack.Logger{
 			Filename: path.Join(settings.Config.App.Log.File.Path,
-				"application.logging"),
-			MaxSize:    500, // megabytes
-			MaxBackups: 3,
-			MaxAge:     28, // days
+				"application.log"),
+			MaxSize:    1, // megabytes
+			MaxBackups: 100,
+			MaxAge:     30, // days
 		})
+		var encoder zapcore.Encoder
+		encoderConfig := zap.NewProductionEncoderConfig()
+		// 可读性时间戳
+		encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+		// 将日志等级大写
+		encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
+		// 调用者命名
+		encoderConfig.EncodeCaller = zapcore.FullCallerEncoder
+
+		if settings.Config.Log.File.Encoder == "json" {
+			encoder = zapcore.NewJSONEncoder(encoderConfig)
+		} else if settings.Config.Log.File.Encoder == "console" {
+			encoder = zapcore.NewConsoleEncoder(encoderConfig)
+		} else {
+			log.Println("File log encoder invalid. Reset to default console encoder.")
+			encoder = zapcore.NewConsoleEncoder(encoderConfig)
+		}
 		core := zapcore.NewCore(
-			zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig()),
+			encoder,
 			w,
 			zapLevel,
 		)
-		logger := zap.New(core)
+		// 打印调用者时跳过一级封装显示真实调用，同时只在Error和以上级别的日志里显示堆栈信息
+		logger := zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1), zap.AddStacktrace(zapcore.ErrorLevel))
 		logFile = logger.Sugar()
-
 	}
 
 }
