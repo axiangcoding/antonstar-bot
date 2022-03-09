@@ -36,7 +36,7 @@ onMounted(() => {
         </n-el>
       </n-dialog-provider>
     </n-message-provider>
-    <n-back-top :right="30"/>
+
     <Loading :loading="loading"/>
   </n-config-provider>
 </template>
