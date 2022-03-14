@@ -10,7 +10,6 @@ type SearchHistory struct {
 	UserId int64
 	// 搜索的内容
 	Context string `gorm:"size:255"`
-	Found   bool
 }
 
 const (

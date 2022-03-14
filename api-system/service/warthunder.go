@@ -36,7 +36,6 @@ func GetAllUserInfo(c *gin.Context, nick string, userID int64) (map[string][]int
 			Type:    schema.SearchHistoryTypeCrawlerQuery,
 			UserId:  userID,
 			Context: nick,
-			Found:   len(lst) != 0,
 		})
 	}
 	return lst, nil

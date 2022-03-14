@@ -4,6 +4,7 @@ import (
 	"axiangcoding/antonstar/api-system/auth"
 	"axiangcoding/antonstar/api-system/cache"
 	"axiangcoding/antonstar/api-system/controller/validation"
+	"axiangcoding/antonstar/api-system/cron"
 	"axiangcoding/antonstar/api-system/data"
 	"axiangcoding/antonstar/api-system/logging"
 	"axiangcoding/antonstar/api-system/mq"
@@ -26,6 +27,7 @@ func init() {
 	data.Setup()
 	cache.Setup()
 	mq.Setup()
+	cron.Setup()
 	auth.Setup()
 	validation.Setup()
 }
