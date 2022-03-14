@@ -5,8 +5,6 @@ COPY . /build/
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o application .
 
 FROM busybox:stable as prod
-ARG AS_VERSION
-ENV AS_API_APP_VERSION=$AS_VERSION
 COPY --from=build /build/application /app/application
 # copy config file
 COPY --from=build /build/config /app/config
