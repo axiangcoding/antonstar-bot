@@ -11,7 +11,7 @@
               <QuestionCircleRegular/>
             </n-icon>
           </template>
-          效率值仅供参考，由 Thunder Skill计算得到
+          效率值仅供参考。请注意，本站不会主动刷新效率值哦，请手动到TS网页刷新
         </n-tooltip>
 
       </n-h3>
@@ -20,8 +20,8 @@
       <n-button dashed type="info" size="small" @click="showWhy">为什么我没有？</n-button>
     </template>
     <n-space vertical v-if="data && data.found">
-      <n-tag type="success"> 该记录由TS在 {{ parseLocalTime(data.created_at) }} 生成</n-tag>
-      <n-tag type="info"> 统计的时间节点是 {{ parseLocalTime(data.last_stat) }}</n-tag>
+      <n-tag type="success"> TS效率在 {{ parseLocalTime(data.created_at) }} 生成</n-tag>
+      <n-tag type="info"> 统计的节点是 {{ parseLocalTime(data.last_stat) }}</n-tag>
       <n-grid :x-gap="12" :y-gap="8" cols="1 768:3 1200:2 1920:3">
         <n-gi>
           <n-space vertical align="center">

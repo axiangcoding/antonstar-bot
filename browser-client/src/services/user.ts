@@ -71,3 +71,12 @@ export function userInfo(auth: string, user_id?: string) {
         }
     })
 }
+
+export function getWTQueryHistory(auth: string) {
+    return http.get('/v1/user/wt_query/history', {
+        headers: {
+            'Authorization': auth
+        }
+    })
+}
+

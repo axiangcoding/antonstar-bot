@@ -5,7 +5,7 @@
         <n-avatar
             round
             :size="80"
-            src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"
+            src="https://pic.imgdb.cn/item/622ea5435baa1a80ab949b2d.png"
         />
       </n-badge>
       <n-button
