@@ -18,7 +18,7 @@
         </router-link>
         <menu-overrides ref="menu"></menu-overrides>
         <div class="right">
-          <UserBar v-if="$store.state.login" />
+          <UserBar v-if="$store.state.login"/>
 
           <n-button v-else ghost type="primary" @click="router.push({name:'login'})">
             <template #icon>
@@ -32,9 +32,11 @@
     <div class="rope" :class="{'pushDown': hasPush, 'pushUp': !hasPush}" @click="handlePushMenu">
       <div class="ropeLine"></div>
       <div class="laugh">
-        <n-icon size="30">
-          <LaughWinkRegular/>
-        </n-icon>
+        <n-icon-wrapper size="30">
+          <n-icon>
+            <BookOpen/>
+          </n-icon>
+        </n-icon-wrapper>
       </div>
     </div>
   </div>
@@ -45,9 +47,8 @@ import {onBeforeUnmount, onMounted, ref} from 'vue'
 import logo from '@/assets/logo/logo_no_text.png'
 import logoText from '@/assets/logo/logo_text_white.png'
 import MenuOverrides from './MenuOverrides.vue'
-import {Edit, LaughWinkRegular, SignOutAlt, User} from '@vicons/fa'
+import {BookOpen, User} from '@vicons/fa'
 import {useRouter} from "vue-router";
-import {renderIcon} from "@/util/naive";
 import UserBar from "@/components/UserBar.vue";
 
 let header: any = null
@@ -83,7 +84,6 @@ onBeforeUnmount(() => {
 })
 const LOGO_URL = ref(logo)
 const LOGO_TEXT_URL = ref(logoText)
-
 
 
 </script>
