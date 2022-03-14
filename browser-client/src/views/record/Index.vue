@@ -28,7 +28,7 @@
             <n-space v-if="store.state.login && searchHistory!=null" justify="space-between">
               <n-space>
                 搜索历史：
-                <n-button v-for="i in searchHistory.slice(0, 5)" size="tiny" @click="handleSearch(i)" secondary
+                <n-button v-for="i in searchHistory.slice(0, 3)" size="tiny" @click="handleSearch(i)" secondary
                           type="info" :key="i">{{ i }}
                 </n-button>
               </n-space>
@@ -38,7 +38,7 @@
             </n-space>
             <n-collapse-transition :show="showMore && searchHistory!=null">
               <n-space>
-                <n-button v-for="i in searchHistory.slice(5)" size="tiny" @click="handleSearch(i)" secondary
+                <n-button v-for="i in searchHistory.slice(3)" size="tiny" @click="handleSearch(i)" secondary
                           type="info" :key="i">{{ i }}
                 </n-button>
               </n-space>
