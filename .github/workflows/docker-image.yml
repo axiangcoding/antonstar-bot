@@ -37,6 +37,7 @@ jobs:
         with:
           context: api-system/.
           push: true
+          build-args: AS_VERSION=${{ env.GITHUB_REF_NAME}}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
   push_data_crawler:

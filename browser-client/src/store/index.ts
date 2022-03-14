@@ -12,6 +12,7 @@ export interface State {
     auth: string
     userId: number,
     userInfo: object,
+    systemInfo: object,
     loading: boolean
 }
 
@@ -31,6 +32,7 @@ export const store = createStore<State>({
         auth: '',
         userId: 0,
         userInfo: {},
+        systemInfo: {},
         loading: false,
     },
     mutations: {
@@ -54,6 +56,9 @@ export const store = createStore<State>({
         },
         setUserInfo(state, val) {
             state.userInfo = val
+        },
+        setSystemInfo(state, val) {
+            state.systemInfo = val
         },
         logout(state) {
             state.login = false

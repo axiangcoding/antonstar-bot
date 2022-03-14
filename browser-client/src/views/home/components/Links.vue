@@ -27,7 +27,7 @@ const displayList = ref([
   {name: '分房热力图', url: 'https://wt.controlnet.space/'},
   {name: 'Thunder Skill', url: 'https://thunderskill.com/en'},
   {name: 'BiliGame WiKi', url: 'https://wiki.biligame.com/warthunder/'},
-  {name: '小老板33的b站直播间', url: 'https://live.bilibili.com/5295790'}
+  {name: '小老板 摸鱼的33 的b站直播间', url: 'https://live.bilibili.com/5295790'}
 ])
 </script>
 
