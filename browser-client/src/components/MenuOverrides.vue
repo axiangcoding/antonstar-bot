@@ -177,6 +177,10 @@ watch(
 
       .n-menu-item-content-header {
         color: inherit;
+        a {
+          transition: none;
+          color: inherit;
+        }
       }
     }
   }
