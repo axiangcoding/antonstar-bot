@@ -27,7 +27,7 @@
           </n-gi>
         </n-grid>
         <TSCommonInfo :data="thunderskillData"/>
-        <n-divider/>
+        <!--<n-divider/>-->
 
         <n-grid cols="1 768:3 1200:2 1920:3" :x-gap="12" :y-gap="8">
           <n-gi v-for="(index,key) in gaijinData.user_stat" :key="key">
@@ -106,11 +106,11 @@
 </template>
 
 <script lang="ts" setup>
-import {NCard, NGrid, NGi, NSpace, NTabs, NTabPane, NDivider, useMessage} from "naive-ui";
+import {NCard, NGrid, NGi, NSpace, NTabs, NTabPane, NDivider, useMessage, useDialog} from "naive-ui";
 import CommonInfo from "@/views/record/components/CommonInfo.vue";
 import GaijinStatCard from "@/views/record/components/GaijinStatCard.vue";
 import CrawlerInfo from "@/views/record/components/CrawlerInfo.vue";
-import {ref, watch} from "vue";
+import {getCurrentInstance, ref, watch} from "vue";
 import http from "@/services/request";
 import {useRoute, useRouter} from "vue-router";
 import GaijinAviationCard from "@/views/record/components/GaijinAviationCard.vue";
@@ -154,7 +154,6 @@ watch(props, (newVal, oldVal) => {
       displayStatus.value = 'notfound'
     }
   } else {
-    displayStatus.value = 'nothing'
     refreshInfoQueries(route.params.nick)
   }
 })
@@ -175,7 +174,10 @@ const getInfo = async (queryId: string) => {
 }
 
 const message = useMessage();
+const dialog = useDialog();
 const store = useStore();
+const router = useRouter();
+
 const refreshInfoQueries = (nick: any) => {
   postWTUserInfoRefresh(store.state.auth, nick).then((res: any) => {
     if (res.code === 13000) {
@@ -184,9 +186,25 @@ const refreshInfoQueries = (nick: any) => {
     }
     if (res.data['refresh'] === true) {
       message.success("正在获取最新快照，请稍后")
+      displayStatus.value = 'nothing'
     } else {
       message.warning('同一个玩家24小时内只能刷新一次！')
     }
+  }).catch(err => {
+    if (err.response.status == 401) {
+      dialog.warning({
+        title: '查询受限',
+        content: '对不起，该玩家的战绩无法刷新。请登录后再访问',
+        closable: false,
+        positiveText:'登 录',
+        onPositiveClick:()=>{
+          router.push({name:'login'})
+        }
+      })
+    }
+    // if(reloadPage){
+    //   router.go(0)
+    // }
   })
 }
 

@@ -16,6 +16,26 @@ definitions:
           type: string
         type: array
     type: object
+  v1.BugReportForm:
+    properties:
+      anonymous:
+        description: 是否匿名
+        type: boolean
+      content:
+        description: 报告的详情
+        maxLength: 2000
+        type: string
+      title:
+        description: 报告的标题
+        maxLength: 30
+        type: string
+      type:
+        description: 报告的类型
+        type: string
+    required:
+    - title
+    - type
+    type: object
   v1.KeyFieldExistForm:
     properties:
       key:
@@ -99,6 +119,23 @@ info:
   title: 安东星
   version: 1.0.0
 paths:
+  /v1/bug_report/:
+    post:
+      parameters:
+      - description: form
+        in: body
+        name: form
+        required: true
+        schema:
+          $ref: '#/definitions/v1.BugReportForm'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      summary: 提交一条问题反馈
+      tags:
+      - BugReport API
   /v1/captcha:
     get:
       responses:
