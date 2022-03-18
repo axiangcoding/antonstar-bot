@@ -94,8 +94,8 @@ func UserRegister(c *gin.Context) {
 // UserLogout
 // @Summary   用户注销
 // @Tags     User API
-// @Success   200   {object}  app.ApiJson  ""
-// @Failure   400   {object}  app.ErrJson  ""
+// @Success   200  {object}  app.ApiJson  ""
+// @Failure   400  {object}  app.ErrJson  ""
 // @Router    /v1/user/logout [post]
 // @Security  ApiKeyAuth
 func UserLogout(c *gin.Context) {
@@ -122,8 +122,8 @@ type KeyFieldExistForm struct {
 // @Summary  判断主要的用户信息的值是否存在
 // @Tags      User API
 // @Param    form  body      KeyFieldExistForm  true  "form"
-// @Success   200  {object}  app.ApiJson  ""
-// @Failure   400  {object}  app.ErrJson  ""
+// @Success   200   {object}  app.ApiJson  ""
+// @Failure   400   {object}  app.ErrJson  ""
 // @Router   /v1/user/value/exist [post]
 func IsKeyFieldValueExist(c *gin.Context) {
 	form := KeyFieldExistForm{}
