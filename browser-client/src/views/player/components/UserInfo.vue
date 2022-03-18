@@ -27,7 +27,6 @@
           </n-gi>
         </n-grid>
         <TSCommonInfo :data="thunderskillData"/>
-        <!--<n-divider/>-->
 
         <n-grid cols="1 768:3 1200:2 1920:3" :x-gap="12" :y-gap="8">
           <n-gi v-for="(index,key) in gaijinData.user_stat" :key="key">
@@ -107,57 +106,72 @@
 
 <script lang="ts" setup>
 import {NCard, NGrid, NGi, NSpace, NTabs, NTabPane, NDivider, useMessage, useDialog} from "naive-ui";
-import CommonInfo from "@/views/record/components/CommonInfo.vue";
-import GaijinStatCard from "@/views/record/components/GaijinStatCard.vue";
-import CrawlerInfo from "@/views/record/components/CrawlerInfo.vue";
-import {getCurrentInstance, ref, watch} from "vue";
-import http from "@/services/request";
+import CommonInfo from "@/views/player/components/CommonInfo.vue";
+import GaijinStatCard from "@/views/player/components/GaijinStatCard.vue";
+import CrawlerInfo from "@/views/player/components/CrawlerInfo.vue";
+import {onMounted, ref, watch} from "vue";
 import {useRoute, useRouter} from "vue-router";
-import GaijinAviationCard from "@/views/record/components/GaijinAviationCard.vue";
-import GaijinGroundCard from "@/views/record/components/GaijinGroundCard.vue";
-import GaijinFleetCard from "@/views/record/components/GaijinFleetCard.vue";
+import GaijinAviationCard from "@/views/player/components/GaijinAviationCard.vue";
+import GaijinGroundCard from "@/views/player/components/GaijinGroundCard.vue";
+import GaijinFleetCard from "@/views/player/components/GaijinFleetCard.vue";
 import {ShareAlt, Angry} from "@vicons/fa";
-import TSCommonInfo from "@/views/record/components/TSCommonInfo.vue";
-import {getWTUserInfo, postWTUserInfoRefresh} from "@/services/war_thunder";
+import TSCommonInfo from "@/views/player/components/TSCommonInfo.vue";
+import {getWTUserInfo, getWTUserInfoQueries, postWTUserInfoRefresh} from "@/services/war_thunder";
 import {useStore} from "vuex";
 
 const props = defineProps({
-  queryList: Object
+  nick: String
 });
 
+const message = useMessage();
+const dialog = useDialog();
+const store = useStore();
+const router = useRouter();
 const route = useRoute();
+
 const activeQuery = ref()
+
 const gaijinData = ref({})
 const thunderskillData = ref({})
 
 const displayStatus = ref('none')
-watch(props, (newVal, oldVal) => {
-  if (props.queryList !== undefined && props.queryList.gaijin !== undefined) {
-    // 找到最新的一条记录
-    let found = false
-    let done = props.queryList.gaijin[0].status === 'done'
-    let queryId = props.queryList.gaijin[0].query_id
-    for (let item of props.queryList.gaijin) {
-      if (item.found) {
-        found = true
-        done = item.status === 'done'
-        queryId = item.query_id
-        break
-      }
-    }
-    if (found && done) {
-      displayStatus.value = 'find'
-      getInfo(queryId)
-    } else if (!found && !done) {
-      displayStatus.value = 'running'
+const queryList = ref()
+
+onMounted(() => {
+  // FIXME: 检查查询玩家的交互完整性
+  getWTUserInfoQueries(store.state.auth, props.nick as string).then(res => {
+    queryList.value = res.data
+    if (queryList.value !== undefined && queryList.value.gaijin !== undefined) {
+        // 找到最新的一条记录
+        let found = false
+        let done = queryList.value.gaijin[0].status === 'done'
+        let queryId = queryList.value.gaijin[0].query_id
+        for (let item of queryList.value.gaijin) {
+          if (item.found) {
+            found = true
+            done = item.status === 'done'
+            queryId = item.query_id
+            break
+          }
+        }
+        if (found && done) {
+          displayStatus.value = 'find'
+          getInfo(queryId)
+        } else if (!found && !done) {
+          displayStatus.value = 'running'
+        } else {
+          displayStatus.value = 'notfound'
+        }
     } else {
-      displayStatus.value = 'notfound'
+      refreshInfoQueries(props.nick)
     }
-  } else {
-    refreshInfoQueries(route.params.nick)
-  }
+  })
 })
 
+const getInfoQueries = async (nick: string) => {
+  // 点击查询后，应先进行跳转，这样组件才能获得正确的nickname
+
+}
 
 const reloading = ref(false)
 const getInfo = async (queryId: string) => {
@@ -173,10 +187,6 @@ const getInfo = async (queryId: string) => {
   }
 }
 
-const message = useMessage();
-const dialog = useDialog();
-const store = useStore();
-const router = useRouter();
 
 const refreshInfoQueries = (nick: any) => {
   postWTUserInfoRefresh(store.state.auth, nick).then((res: any) => {
@@ -196,15 +206,12 @@ const refreshInfoQueries = (nick: any) => {
         title: '查询受限',
         content: '对不起，该玩家的战绩无法刷新。请登录后再访问',
         closable: false,
-        positiveText:'登 录',
-        onPositiveClick:()=>{
-          router.push({name:'login'})
+        positiveText: '登 录',
+        onPositiveClick: () => {
+          router.push({name: 'login'})
         }
       })
     }
-    // if(reloadPage){
-    //   router.go(0)
-    // }
   })
 }
 
@@ -222,10 +229,6 @@ const copyLink = async () => {
 
 }
 
-
-const toGaijin = () => {
-
-}
 </script>
 
 <style scoped>

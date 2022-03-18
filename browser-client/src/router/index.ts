@@ -22,11 +22,19 @@ const routes: Array<RouteRecordRaw> = [{
             },
         },
         {
-            path: '/record/:nick?',
+            path: '/record',
             name: 'record',
             component: () => import('@/views/record/Index.vue'),
             meta: {
                 title: '战绩查询',
+            },
+        },
+        {
+            path: '/player/:nick',
+            name: 'recordPlayer',
+            component: () => import('@/views/player/Index.vue'),
+            meta: {
+                title: '玩家战绩',
             },
         },
         {

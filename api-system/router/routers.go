@@ -87,5 +87,9 @@ func setRouterV1(r *gin.Engine) {
 			warThunder.GET("/userinfo/query/count", v1.GetQueryCount)
 			// warThunder.StaticFile("/mock.html", "./resources/index.html")
 		}
+		gameUser := groupV1.Group("/game_users")
+		{
+			gameUser.GET("", v1.GetGameUsers)
+		}
 	}
 }

@@ -1,5 +1,7 @@
 package entity
 
+// UserRegister
+// Deprecated
 type UserRegister struct {
 	UserName    string
 	Email       string
@@ -8,6 +10,8 @@ type UserRegister struct {
 	InvitedCode string
 }
 
+// UserLogin
+// Deprecated
 type UserLogin struct {
 	UserName string
 	Password string

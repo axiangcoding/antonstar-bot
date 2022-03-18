@@ -7,6 +7,7 @@ const http = axios.create({
     baseURL: import.meta.env.VITE_APP_REQUEST_BASE_URL,
     // 超时设置
     timeout: import.meta.env.VITE_APP_REQUEST_TIMEOUT,
+    withCredentials: false
 })
 
 
@@ -30,9 +31,9 @@ http.interceptors.response.use((res: any) => {
             // window.$message.warning('功能仅限登录用户使用，请登录后再访问！')
             store.commit('logout')
             // router.push({name: 'login'})
-        } else if (error.response.status == 403){
+        } else if (error.response.status == 403) {
             window.$message.warning('对不起，你无权访问这个资源')
-            router.push({name:'no_permission'})
+            router.push({name: 'no_permission'})
         }
         // 这个会默认报错显示
         return Promise.reject(error)
@@ -42,3 +43,8 @@ http.interceptors.response.use((res: any) => {
 export default http;
 
 
+export interface Pagination {
+    pageNum: number,
+    pageSize: number,
+    filter: string
+}
