@@ -27,14 +27,15 @@ http.interceptors.response.use((res: any) => {
         } else if (error.response.status == 400) {
             // window.$message.warning('请输入正确的参数')
         } else if (error.response.status == 401) {
-            window.$message.warning('你的登录认证已过期，请登录后再访问！')
+            // window.$message.warning('功能仅限登录用户使用，请登录后再访问！')
             store.commit('logout')
-            router.push({name: 'login'})
+            // router.push({name: 'login'})
         } else if (error.response.status == 403){
             window.$message.warning('对不起，你无权访问这个资源')
             router.push({name:'no_permission'})
         }
-        // return Promise.reject(error)  这个会默认报错显示
+        // 这个会默认报错显示
+        return Promise.reject(error)
     }
 )
 

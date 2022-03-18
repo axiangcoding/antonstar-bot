@@ -33,6 +33,33 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/v1/bug_report/": {
+            "post": {
+                "tags": [
+                    "BugReport API"
+                ],
+                "summary": "提交一条问题反馈",
+                "parameters": [
+                    {
+                        "description": "form",
+                        "name": "form",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1.BugReportForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/captcha": {
             "get": {
                 "tags": [
@@ -565,6 +592,33 @@ var doc = `{
                     "items": {
                         "type": "string"
                     }
+                }
+            }
+        },
+        "v1.BugReportForm": {
+            "type": "object",
+            "required": [
+                "title",
+                "type"
+            ],
+            "properties": {
+                "anonymous": {
+                    "description": "是否匿名",
+                    "type": "boolean"
+                },
+                "content": {
+                    "description": "报告的详情",
+                    "type": "string",
+                    "maxLength": 2000
+                },
+                "title": {
+                    "description": "报告的标题",
+                    "type": "string",
+                    "maxLength": 30
+                },
+                "type": {
+                    "description": "报告的类型",
+                    "type": "string"
                 }
             }
         },

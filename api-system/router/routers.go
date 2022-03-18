@@ -63,6 +63,10 @@ func setRouterV1(r *gin.Engine) {
 			site.GET("/notice/last", v1.GetLastSiteNotice)
 			site.POST("/notice/", middleware.AuthCheck(), v1.PostSiteNotice)
 		}
+		bugReport := groupV1.Group("/bug_report")
+		{
+			bugReport.POST("/", v1.PostBugReport)
+		}
 		visit := groupV1.Group("/visits")
 		{
 			visit.POST("/visit", v1.PostVisit)
