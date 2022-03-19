@@ -26,7 +26,7 @@
       </template>
       <template #description>
         <n-space>
-          <n-tag type="primary" size="small" round>{{ data.title }}</n-tag>
+          <n-tag type="primary" size="small" round>{{ data.title ? data.title : '-' }}</n-tag>
           <n-tag type="info" size="small" round>{{ data.level }}级</n-tag>
         </n-space>
       </template>

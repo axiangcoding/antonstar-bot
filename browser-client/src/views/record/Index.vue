@@ -94,7 +94,7 @@ const btnLoading = ref(false)
 const searchHistory = ref([])
 
 const pagination = ref<Pagination>({
-  pageSize: 9,
+  pageSize: 6,
   pageNum: 1,
   filter: ''
 })
