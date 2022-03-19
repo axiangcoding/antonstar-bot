@@ -32,7 +32,7 @@
       </template>
       <n-descriptions column="1" label-placement="left" bordered>
         <n-descriptions-item :label-style="{'width':'40%'}" label="击杀死亡比">
-          暂不支持
+          暂未提供
         </n-descriptions-item>
         <n-descriptions-item label="街机效率">
           <n-progress
@@ -62,7 +62,7 @@
       <template #action>
         <n-space justify="end">
           <n-button type="info" size="small" disabled>战绩对比</n-button>
-          <n-button type="primary" size="small" @click="router.push({name:'recordPlayer', params:{nick:data.nick}})">
+          <n-button type="primary" size="small" @click="router.push({name:'player', params:{nick:data.nick}})">
             查看详情
           </n-button>
         </n-space>

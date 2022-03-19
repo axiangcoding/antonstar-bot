@@ -31,7 +31,7 @@ const routes: Array<RouteRecordRaw> = [{
         },
         {
             path: '/player/:nick',
-            name: 'recordPlayer',
+            name: 'player',
             component: () => import('@/views/player/Index.vue'),
             meta: {
                 title: '玩家战绩',

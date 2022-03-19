@@ -8,8 +8,17 @@
         <template #avatar>
           <n-avatar src="https://pic.imgdb.cn/item/622ea5435baa1a80ab949b2d.png"></n-avatar>
         </template>
+        <template #extra>
+          <n-button @click="refreshInfo" type="success">刷新
+            <template #icon>
+              <n-icon>
+                <SunRegular/>
+              </n-icon>
+            </template>
+          </n-button>
+        </template>
       </n-page-header>
-      <UserInfo :nick="route.params.nick"></UserInfo>
+      <UserInfo v-if="render" :nick="route.params.nick"></UserInfo>
     </n-space>
   </n-card>
 
@@ -19,15 +28,28 @@
 import {useStore} from "vuex";
 import {useRoute, useRouter} from "vue-router";
 import UserInfo from "@/views/player/components/UserInfo.vue";
+import {nextTick, onMounted, ref} from "vue";
+import {SunRegular} from "@vicons/fa";
 
 const store = useStore();
 const route = useRoute();
 const router = useRouter();
 
-
+const render = ref(true)
 const handleBack = function () {
   router.back()
 }
+
+const refreshInfo = () => {
+  render.value = false
+  nextTick(() => {
+    render.value = true
+  })
+}
+
+onMounted(() => {
+  document.title = document.title + " - " + route.params.nick
+})
 
 </script>
 

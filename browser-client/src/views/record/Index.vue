@@ -1,7 +1,7 @@
 <template>
   <n-card class="record" :bordered="false">
     <n-space vertical>
-      <n-alert title="战绩查询使用须知" type="warning">
+      <n-alert title="战绩查询使用须知" type="info">
         1. 查询到的数据来自官网和Thunder Skill，本站不对数据的可靠性负责
         <br/>
         2. 昵称大小写敏感，注意不要写错
@@ -12,6 +12,7 @@
         <br/>
         5. 如果是第一次查询，或者是刷新快照，需要登录才能使用！敬请谅解！
       </n-alert>
+
       <n-grid item-responsive>
         <n-gi offset="0 768:6 1200:6 1920:6" span="24 768:12 1200:12 1920:12">
           <n-space vertical>
@@ -48,9 +49,15 @@
           </n-space>
         </n-gi>
       </n-grid>
+
     </n-space>
     <n-divider/>
     <n-space vertical>
+      <n-h3 prefix="bar" align-text>
+        <n-text type="primary">
+          本站已记录玩家
+        </n-text>
+      </n-h3>
       <n-grid cols="1 768:3 1200:2 1920:3" :x-gap="12" :y-gap="16">
         <n-gi v-for="i in gameUserList" :key="i.nick">
           <PlayerCard :data="i"/>
@@ -115,8 +122,7 @@ const handleSearch = (i: string) => {
 const showMore = ref(false)
 
 const doSearch = () => {
-  // TODO: 进行检索
-  router.push({name: 'recordPlayer', params: {'nick': nick.value}})
+  router.push({name: 'player', params: {'nick': nick.value}})
 }
 const pageUpdate = (page: number) => {
   getGameUsers(store.state.auth, pagination.value).then(res => {

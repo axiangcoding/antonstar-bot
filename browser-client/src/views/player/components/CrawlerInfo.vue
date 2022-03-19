@@ -12,7 +12,7 @@
         <template #icon>
           <SunRegular/>
         </template>
-        点我刷新
+        更新快照
       </n-button>
     </template>
     <n-space vertical>

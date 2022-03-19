@@ -1,7 +1,7 @@
 <template>
   <n-card embedded :bordered="true">
     <n-spin :show="reloading">
-      <n-space v-if="displayStatus==='find'" vertical>
+      <n-space v-if="displayStatus==='found'" vertical>
         <div>
           <n-button quaternary type="error" size="small" disabled>
             <template #icon>
@@ -58,47 +58,38 @@
         </n-tabs>
 
       </n-space>
-      <n-space align="center" vertical v-else-if="displayStatus==='nothing'">
-        <n-result size="small" status="success" title="已发起查询">
+      <n-space align="center" vertical v-else-if="displayStatus==='first'">
+        <n-result size="small" status="success" title="已发起查询，正在生成玩家战绩数据">
           <template #default>
             <n-space vertical align="center">
               <n-gradient-text :size="14" gradient="linear-gradient(90deg, red 0%, green 50%, purple 100%)">
                 第一次总是值得期待的
               </n-gradient-text>
-              <n-button type="warning" ghost tag="a"
-                        :href="'https://warthunder.com/zh/community/userinfo/?nick='+route.params.nick" target="_blank">
-                在线等，很急，点我直接去官网
+              <n-button type="primary" @click="refreshInfoQueries(nick)">等待太久，重新更新下</n-button>
+              <n-button type="info" ghost tag="a"
+                        :href="'https://warthunder.com/zh/community/userinfo/?nick='+nick" target="_blank">
+                进入Gaijin官网确认
               </n-button>
             </n-space>
           </template>
         </n-result>
       </n-space>
-      <n-space align="center" vertical v-else-if="displayStatus==='running'">
-        <n-result size="small" status="info" title="正在查询中...">
-          <template #default>
-            <n-space vertical align="center">
-              <n-gradient-text :size="14" gradient="linear-gradient(90deg, red 0%, green 50%, purple 100%)">
-                程序本没有慢，查的人多了，就变成了慢
-              </n-gradient-text>
-              <n-button type="info" ghost @click="refreshInfoQueries(route.params.nick)">很久没刷出来？点我重新查询</n-button>
-              <n-button type="warning" ghost tag="a"
-                        :href="'https://warthunder.com/zh/community/userinfo/?nick='+route.params.nick" target="_blank">
-                在线等，很急，点我直接去官网
-              </n-button>
-            </n-space>
-          </template>
-        </n-result>
-      </n-space>
-      <n-space vertical v-else-if="displayStatus==='notfound'">
-        <n-result size="small" status="404" title="未在官网中找到该用户" description="这下是真找不到了，是不是名字输错了？">
+      <n-space vertical v-else-if="displayStatus==='notExist'">
+        <n-result size="small" status="404" title="该玩家不存在" description="请检查是否昵称拼写错误？">
           <template #footer>
-            <n-button type="error" secondary @click="refreshInfoQueries(route.params.nick)">我不信，我要再查</n-button>
+            <n-space vertical align="center">
+              <n-button type="primary" @click="refreshInfoQueries(nick)">我不信，我要重新查询</n-button>
+
+              <n-button type="info" ghost tag="a"
+                        :href="'https://warthunder.com/zh/community/userinfo/?nick='+nick" target="_blank">
+                进入Gaijin官网确认
+              </n-button>
+            </n-space>
           </template>
         </n-result>
-
       </n-space>
       <n-space vertical v-else>
-        <n-skeleton text :repeat="5" :animated="false"></n-skeleton>
+
       </n-space>
     </n-spin>
   </n-card>
@@ -134,44 +125,75 @@ const activeQuery = ref()
 const gaijinData = ref({})
 const thunderskillData = ref({})
 
-const displayStatus = ref('none')
+const displayStatus = ref('nothing')
+
 const queryList = ref()
 
 onMounted(() => {
-  // FIXME: 检查查询玩家的交互完整性
   getWTUserInfoQueries(store.state.auth, props.nick as string).then(res => {
+    let qList
     queryList.value = res.data
-    if (queryList.value !== undefined && queryList.value.gaijin !== undefined) {
-        // 找到最新的一条记录
-        let found = false
-        let done = queryList.value.gaijin[0].status === 'done'
-        let queryId = queryList.value.gaijin[0].query_id
-        for (let item of queryList.value.gaijin) {
-          if (item.found) {
-            found = true
-            done = item.status === 'done'
-            queryId = item.query_id
-            break
-          }
+    qList = res.data
+    console.log(qList)
+    if (qList != undefined && qList.gaijin != undefined) {
+      // 是否有找到的记录
+      let found = false
+      // 是否有执行完的查询
+      let done = false
+      let queryId
+      for (let item of qList.gaijin) {
+        done = (done || item.status === 'done')
+        found = (found || item.found as boolean)
+        if (item.found) {
+          queryId = item.query_id
+          break
         }
-        if (found && done) {
-          displayStatus.value = 'find'
-          getInfo(queryId)
-        } else if (!found && !done) {
-          displayStatus.value = 'running'
-        } else {
-          displayStatus.value = 'notfound'
-        }
+      }
+      /*
+       - 查询的7条记录里只要找到了，就为found，同时使用最新的一条found的id去找可用记录
+       -
+       */
+      console.log('found ' + found + ', done ' + done);
+      if (found && done) {
+        displayStatus.value = 'found'
+        getInfo(queryId)
+      } else if (!found && done) {
+        displayStatus.value = 'notExist'
+      } else {
+        displayStatus.value = 'first'
+      }
     } else {
       refreshInfoQueries(props.nick)
+      displayStatus.value = 'first'
     }
+    // if (queryList.value !== undefined && queryList.value.gaijin !== undefined) {
+    //   // 找到最新的一条记录
+    //   let found = false
+    //   let done = queryList.value.gaijin[0].status === 'done'
+    //   let queryId = queryList.value.gaijin[0].query_id
+    //   for (let item of queryList.value.gaijin) {
+    //     if (item.found) {
+    //       found = true
+    //       done = item.status === 'done'
+    //       queryId = item.query_id
+    //       break
+    //     }
+    //   }
+    //   if (found && done) {
+    //     displayStatus.value = 'found'
+    //     getInfo(queryId)
+    //   } else if (!found && !done) {
+    //     displayStatus.value = 'first'
+    //   } else {
+    //     displayStatus.value = 'notExist'
+    //   }
+    // }
+    // else {
+    //   refreshInfoQueries(props.nick)
+    // }
   })
 })
 
-const getInfoQueries = async (nick: string) => {
-  // 点击查询后，应先进行跳转，这样组件才能获得正确的nickname
-
-}
 
 const reloading = ref(false)
 const getInfo = async (queryId: string) => {
@@ -196,7 +218,7 @@ const refreshInfoQueries = (nick: any) => {
     }
     if (res.data['refresh'] === true) {
       message.success("正在获取最新快照，请稍后")
-      displayStatus.value = 'nothing'
+      router.go(0)
     } else {
       message.warning('同一个玩家24小时内只能刷新一次！')
     }
@@ -207,6 +229,7 @@ const refreshInfoQueries = (nick: any) => {
         content: '对不起，该玩家的战绩无法刷新。请登录后再访问',
         closable: false,
         positiveText: '登 录',
+        negativeText: '取消',
         onPositiveClick: () => {
           router.push({name: 'login'})
         }
