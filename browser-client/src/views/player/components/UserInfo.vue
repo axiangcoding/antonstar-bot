@@ -23,7 +23,7 @@
           </n-gi>
           <n-gi>
             <CrawlerInfo :data="queryList" :active="activeQuery" @searchQuery="getInfo"
-                         @refresh="refreshInfoQueries(route.params.nick)"></CrawlerInfo>
+                         @refresh="refreshInfoQueries(route.params.nick, false)"></CrawlerInfo>
           </n-gi>
         </n-grid>
         <TSCommonInfo :data="thunderskillData"/>
@@ -89,7 +89,15 @@
         </n-result>
       </n-space>
       <n-space vertical v-else>
-
+        <div>Q: 为什么我无法查询 {{ nick }} 的战绩？</div>
+        <div>A: 如果该玩家是第一次被查询，那么必须要
+          <n-button size="small" type="primary" text @click="router.push({name:'login'})">登录</n-button>
+          才能查。如果该玩家的战绩已在安东星上已有记录，那么无需登录就能查看
+        </div>
+        <div>Q: 为什么要登录才能查战绩？</div>
+        <div>A: 因为查战绩需要向官网发起查询，如果游客都能使用，太过频繁会导致战绩查询无法使用。同时，成为安东星的用户可以为网站带来客观的增益，站长才会有动力更新更多的功能...</div>
+        <div>Q: 垃圾网站，要我输入账号密码肯定是想盗我 DK3，1500天大会员的战雷帐号，给👴爬</div>
+        <div>A: 请注意，安东星的账号是独立的，和包括gaijin游戏账号在内的其他任何地方没有一毛钱关系。你需要在安东星上注册一个全新的账号。为了安全，你应该设置一个完全独立的用户名和密码</div>
       </n-space>
     </n-spin>
   </n-card>
@@ -134,7 +142,6 @@ onMounted(() => {
     let qList
     queryList.value = res.data
     qList = res.data
-    console.log(qList)
     if (qList != undefined && qList.gaijin != undefined) {
       // 是否有找到的记录
       let found = false
@@ -149,11 +156,6 @@ onMounted(() => {
           break
         }
       }
-      /*
-       - 查询的7条记录里只要找到了，就为found，同时使用最新的一条found的id去找可用记录
-       -
-       */
-      console.log('found ' + found + ', done ' + done);
       if (found && done) {
         displayStatus.value = 'found'
         getInfo(queryId)
@@ -164,33 +166,7 @@ onMounted(() => {
       }
     } else {
       refreshInfoQueries(props.nick)
-      displayStatus.value = 'first'
     }
-    // if (queryList.value !== undefined && queryList.value.gaijin !== undefined) {
-    //   // 找到最新的一条记录
-    //   let found = false
-    //   let done = queryList.value.gaijin[0].status === 'done'
-    //   let queryId = queryList.value.gaijin[0].query_id
-    //   for (let item of queryList.value.gaijin) {
-    //     if (item.found) {
-    //       found = true
-    //       done = item.status === 'done'
-    //       queryId = item.query_id
-    //       break
-    //     }
-    //   }
-    //   if (found && done) {
-    //     displayStatus.value = 'found'
-    //     getInfo(queryId)
-    //   } else if (!found && !done) {
-    //     displayStatus.value = 'first'
-    //   } else {
-    //     displayStatus.value = 'notExist'
-    //   }
-    // }
-    // else {
-    //   refreshInfoQueries(props.nick)
-    // }
   })
 })
 
@@ -210,7 +186,7 @@ const getInfo = async (queryId: string) => {
 }
 
 
-const refreshInfoQueries = (nick: any) => {
+const refreshInfoQueries = (nick: any, jumpNone?: boolean) => {
   postWTUserInfoRefresh(store.state.auth, nick).then((res: any) => {
     if (res.code === 13000) {
       message.warning('无法刷新，已达到今天的全站限额！')
@@ -224,6 +200,9 @@ const refreshInfoQueries = (nick: any) => {
     }
   }).catch(err => {
     if (err.response.status == 401) {
+      if(jumpNone){
+        displayStatus.value = 'none'
+      }
       dialog.warning({
         title: '查询受限',
         content: '对不起，该玩家的战绩无法刷新。请登录后再访问',
