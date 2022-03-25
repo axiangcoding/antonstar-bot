@@ -42,7 +42,6 @@ http.interceptors.response.use((res: any) => {
 
 export default http;
 
-
 export interface Pagination {
     pageNum: number,
     pageSize: number,

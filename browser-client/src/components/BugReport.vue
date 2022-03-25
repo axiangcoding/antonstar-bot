@@ -120,7 +120,6 @@ const bugOptions = [
 const handlerClick = (e: Event) => {
   e.preventDefault()
   formRef.value.validate((errors: any) => {
-    console.log(formValue.value.anonymous);
     if (!errors) {
           let reqForm: BugReportForm = {
             type: formValue.value.bugType,

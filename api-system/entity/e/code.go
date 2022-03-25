@@ -17,6 +17,11 @@ const (
 	ReachRefreshLimit = 13000
 
 	DuplicateEntry = 14000
+
+	FileFormNotValid   = 15000
+	FileCantBeOpened   = 15001
+	FileCantBeSaved    = 15002
+	FileTypeNotAllowed = 15003
 )
 
 var errCodeText = map[int]string{
@@ -35,6 +40,10 @@ var errCodeText = map[int]string{
 	ReachRefreshLimit: "Reach Refresh Limit",
 
 	DuplicateEntry: "Entry duplicated",
+
+	FileFormNotValid:   "File form not valid",
+	FileCantBeSaved:    "File can't be saved",
+	FileTypeNotAllowed: "File type not allow",
 }
 
 func CodeText(code int) string {

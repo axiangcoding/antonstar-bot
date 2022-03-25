@@ -30,7 +30,7 @@
           <n-tag type="info" size="small" round>{{ data.level }}级</n-tag>
         </n-space>
       </template>
-      <n-descriptions column="1" label-placement="left" bordered>
+      <n-descriptions :column="1" label-placement="left" bordered>
         <n-descriptions-item :label-style="{'width':'40%'}" label="击杀死亡比">
           暂未提供
         </n-descriptions-item>
@@ -57,7 +57,7 @@
 
 
       <template #footer>
-        <n-tag size="small" type="info">快照最后更新时间：{{ parseLocalTime(data.lastUpdate) }}</n-tag>
+        <n-tag size="small" type="info">更新时间：{{ parseLocalTime(data.lastUpdate) }}</n-tag>
       </template>
       <template #action>
         <n-space justify="end">

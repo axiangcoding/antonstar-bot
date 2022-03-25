@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {darkTheme} from 'naive-ui'
 import themes from '@/themes/index'
 import {useStore} from 'vuex'
 import {ref, computed, onMounted} from 'vue'
@@ -11,9 +10,11 @@ const themeOverrides = ref(themes[store.state.themes])
 
 import {v4 as uuid} from "uuid"
 import {getSystemInfo} from "@/services/system";
-
+import {zhCN, dateZhCN} from "naive-ui";
 
 onMounted(() => {
+  console.log("🚀🚀🚀千里之行，始于足下")
+  console.log("😎😎😎有兴趣参与安东星的开发吗，私信b站用户【摸鱼的33】获取更多信息，来为社区贡献能力！")
   getSystemInfo().then(res => {
     store.commit('setSystemInfo', res.data)
   })
@@ -28,7 +29,7 @@ onMounted(() => {
 
 <template>
   <!-- 调整主题变量 -->
-  <n-config-provider :theme-overrides="themeOverrides" class="h100">
+  <n-config-provider :theme-overrides="themeOverrides" class="h100" :locale="zhCN" :date-locale="dateZhCN">
     <n-message-provider>
       <n-dialog-provider>
         <n-el tag="div" class="h100">

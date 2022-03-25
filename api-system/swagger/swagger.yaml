@@ -235,6 +235,26 @@ paths:
       summary: System Info
       tags:
       - System API
+  /v1/upload/picture:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: image file
+        in: formData
+        name: file
+        required: true
+        type: file
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      security:
+      - ApiKeyAuth: []
+      summary: 上传图片
+      tags:
+      - Upload API
   /v1/user/info:
     post:
       parameters:
