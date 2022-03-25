@@ -1,5 +1,5 @@
 <template>
-全局配置
+  <n-card>全局配置</n-card>
 </template>
 
 <script>

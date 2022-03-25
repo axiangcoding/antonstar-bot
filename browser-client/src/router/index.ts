@@ -98,6 +98,14 @@ const routes: Array<RouteRecordRaw> = [{
                     },
                 },
                 {
+                    path: 'user',
+                    name: 'adminUser',
+                    component: () => import('@/views/admin/user/Index.vue'),
+                    meta: {
+                        title: '管理员 - 用户管理',
+                    },
+                },
+                {
                     path: 'global-config',
                     name: 'adminGlobalConfig',
                     component: () => import('@/views/admin/global_config/Index.vue'),

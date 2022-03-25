@@ -1,5 +1,5 @@
 <template>
-  <n-card size="small" :bordered="true" style="text-align: left">
+  <n-card size="small" :bordered="false" style="text-align: left">
     <n-space vertical>
       <n-h2 prefix="bar" align-text type="primary">修改全站公告</n-h2>
       <n-input-group>
