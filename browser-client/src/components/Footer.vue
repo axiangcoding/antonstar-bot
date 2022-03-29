@@ -13,10 +13,8 @@
       </div>
       <n-text italic>Power by 安东星 All Rights Reserved.</n-text>
     </n-space>
-    <n-modal v-model:show="showModal">
-     <BusinessWork/>
-    </n-modal>
-    <n-modal v-model:show="showBugReport"><BugReport/></n-modal>
+    <BusinessWork v-model:show="showModal"/>
+    <BugReport v-model:show="showBugReport"/>
 
   </n-layout-footer>
 </template>
