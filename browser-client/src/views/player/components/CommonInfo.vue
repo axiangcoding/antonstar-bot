@@ -36,7 +36,7 @@
       </n-gradient-text>
     </n-space>
     <n-alert title="已被官方封禁" type="error" v-if="data.banned">
-      🍾🍾🍾开香槟喽！
+      🍾🍾🍾好似，开香槟喽！
     </n-alert>
   </n-card>
 </template>
