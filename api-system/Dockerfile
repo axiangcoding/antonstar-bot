@@ -1,5 +1,5 @@
 FROM golang:1.17-alpine as build
-ENV GOPROXY https://goproxy.cn,direct
+ENV GOPROXY=https://proxy.golang.com.cn,direct
 WORKDIR /build
 COPY . /build/
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o application .
