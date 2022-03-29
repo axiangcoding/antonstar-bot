@@ -35,6 +35,7 @@ func SaveCrawlerData(c context.Context, crawlerData schema.CrawlerData) (schema.
 func CountCrawlerQuery(c context.Context, timestamp time.Time) int64 {
 	var count int64
 	model := GetDB().Model(&schema.CrawlerData{})
+	model.Where(&schema.CrawlerData{Source: schema.SourceGaijin})
 	if !timestamp.IsZero() {
 		model.Where("to_days(created_at) = to_days(?)", timestamp)
 	}
