@@ -1,13 +1,13 @@
 <template>
   <n-card bordered>
+
     <n-space align="center" vertical>
-      <n-badge v-if="data" value="已被封禁！" :show="data.banned">
-        <n-avatar
-            round
-            :size="80"
-            src="https://pic.imgdb.cn/item/622ea5435baa1a80ab949b2d.png"
-        />
-      </n-badge>
+      <n-avatar
+          v-if="data"
+          round
+          :size="80"
+          src="https://pic.imgdb.cn/item/6242d7ae27f86abb2a2fda29.png"
+      />
       <n-button
           text
           tag="a"
@@ -30,11 +30,14 @@
       </n-gradient-text>
       <n-gradient-text size="16" :gradient="{from: '#555555', to: '#aaaaaa'}">【{{ data.title }}】
       </n-gradient-text>
-      <n-gradient-text size="16" :gradient="{from: '#555555', to: '#000000'}"> {{ data.nick }}</n-gradient-text>
+      <n-gradient-text size="18" :gradient="{from: '#555555', to: '#000000'}"> {{ data.nick }}</n-gradient-text>
       <n-tag size="large" type="info"> 等级 {{ data.level }}</n-tag>
       <n-gradient-text size="14" :gradient="{from: '#555555', to: '#aaaaaa'}">注册于 {{ data.register_date }}
       </n-gradient-text>
     </n-space>
+    <n-alert title="已被官方封禁" type="error" v-if="data.banned">
+      🍾🍾🍾好似，开香槟喽！
+    </n-alert>
   </n-card>
 </template>
 

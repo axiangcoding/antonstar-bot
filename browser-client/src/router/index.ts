@@ -22,11 +22,19 @@ const routes: Array<RouteRecordRaw> = [{
             },
         },
         {
-            path: '/record/:nick?',
+            path: '/record',
             name: 'record',
             component: () => import('@/views/record/Index.vue'),
             meta: {
                 title: '战绩查询',
+            },
+        },
+        {
+            path: '/player/:nick',
+            name: 'player',
+            component: () => import('@/views/player/Index.vue'),
+            meta: {
+                title: '玩家战绩',
             },
         },
         {
@@ -87,6 +95,14 @@ const routes: Array<RouteRecordRaw> = [{
                     component: () => import('@/views/admin/notice/Index.vue'),
                     meta: {
                         title: '管理员 - 通知管理',
+                    },
+                },
+                {
+                    path: 'user',
+                    name: 'adminUser',
+                    component: () => import('@/views/admin/user/Index.vue'),
+                    meta: {
+                        title: '管理员 - 用户管理',
                     },
                 },
                 {

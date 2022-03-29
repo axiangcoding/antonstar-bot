@@ -1,7 +1,7 @@
 <template>
   <n-card embedded :bordered="true">
     <n-spin :show="reloading">
-      <n-space v-if="displayStatus==='find'" vertical>
+      <n-space v-if="displayStatus==='found'" vertical>
         <div>
           <n-button quaternary type="error" size="small" disabled>
             <template #icon>
@@ -23,11 +23,10 @@
           </n-gi>
           <n-gi>
             <CrawlerInfo :data="queryList" :active="activeQuery" @searchQuery="getInfo"
-                         @refresh="refreshInfoQueries(route.params.nick)"></CrawlerInfo>
+                         @refresh="refreshInfoQueries(route.params.nick, false)"></CrawlerInfo>
           </n-gi>
         </n-grid>
         <TSCommonInfo :data="thunderskillData"/>
-        <!--<n-divider/>-->
 
         <n-grid cols="1 768:3 1200:2 1920:3" :x-gap="12" :y-gap="8">
           <n-gi v-for="(index,key) in gaijinData.user_stat" :key="key">
@@ -59,47 +58,49 @@
         </n-tabs>
 
       </n-space>
-      <n-space align="center" vertical v-else-if="displayStatus==='nothing'">
-        <n-result size="small" status="success" title="已发起查询">
+      <n-space align="center" vertical v-else-if="displayStatus==='first'">
+        <n-result size="small" status="success" title="已发起查询，正在生成玩家战绩数据">
           <template #default>
             <n-space vertical align="center">
               <n-gradient-text :size="14" gradient="linear-gradient(90deg, red 0%, green 50%, purple 100%)">
                 第一次总是值得期待的
               </n-gradient-text>
-              <n-button type="warning" ghost tag="a"
-                        :href="'https://warthunder.com/zh/community/userinfo/?nick='+route.params.nick" target="_blank">
-                在线等，很急，点我直接去官网
+              <n-button type="primary" @click="refreshInfoQueries(nick)">等待太久，重新更新下</n-button>
+              <n-button type="info" ghost tag="a"
+                        :href="'https://warthunder.com/zh/community/userinfo/?nick='+nick" target="_blank">
+                进入Gaijin官网确认
               </n-button>
             </n-space>
           </template>
         </n-result>
       </n-space>
-      <n-space align="center" vertical v-else-if="displayStatus==='running'">
-        <n-result size="small" status="info" title="正在查询中...">
-          <template #default>
-            <n-space vertical align="center">
-              <n-gradient-text :size="14" gradient="linear-gradient(90deg, red 0%, green 50%, purple 100%)">
-                程序本没有慢，查的人多了，就变成了慢
-              </n-gradient-text>
-              <n-button type="info" ghost @click="refreshInfoQueries(route.params.nick)">很久没刷出来？点我重新查询</n-button>
-              <n-button type="warning" ghost tag="a"
-                        :href="'https://warthunder.com/zh/community/userinfo/?nick='+route.params.nick" target="_blank">
-                在线等，很急，点我直接去官网
-              </n-button>
-            </n-space>
-          </template>
-        </n-result>
-      </n-space>
-      <n-space vertical v-else-if="displayStatus==='notfound'">
-        <n-result size="small" status="404" title="未在官网中找到该用户" description="这下是真找不到了，是不是名字输错了？">
+      <n-space vertical v-else-if="displayStatus==='notExist'">
+        <n-result size="small" status="404" title="该玩家不存在" description="请检查是否昵称拼写错误？">
           <template #footer>
-            <n-button type="error" secondary @click="refreshInfoQueries(route.params.nick)">我不信，我要再查</n-button>
+            <n-space vertical align="center">
+              <n-button type="primary" @click="refreshInfoQueries(nick)">我不信，我要重新查询</n-button>
+
+              <n-button type="info" ghost tag="a"
+                        :href="'https://warthunder.com/zh/community/userinfo/?nick='+nick" target="_blank">
+                进入Gaijin官网确认
+              </n-button>
+            </n-space>
           </template>
         </n-result>
-
       </n-space>
       <n-space vertical v-else>
-        <n-skeleton text :repeat="5" :animated="false"></n-skeleton>
+        <h2>未在安东星上找到该玩家战绩</h2>
+        <div>Q: 为什么我无法查询 {{ nick }} 的战绩？</div>
+        <div>A: 如果该玩家是第一次被查询，那么必须要
+          <n-button size="small" type="primary" text @click="router.push({name:'login'})">登录</n-button>
+          才能查询。如果该玩家的战绩已在安东星上已有记录，那么无需登录就能查看
+        </div>
+        <div>Q: 为什么要登录才能查战绩？</div>
+        <div>A: 因为查战绩需要向官网发起查询，如果游客都能使用，太过频繁会导致战绩查询无法使用。因此，建议还是注册个账号</div>
+        <div>Q: 垃圾网站，要我输入账号密码肯定是想盗我 DK3，1500天大会员的战雷帐号，给👴爬</div>
+        <div>A: 安东星的账号是独立的，和包括gaijin游戏账号在内的其他任何地方没有一毛钱关系。你需要在安东星上注册一个全新的账号。为了安全，你应该设置一个完全独立的用户名和密码</div>
+        <div>Q: 我不管，我就要免费使用</div>
+        <div>A: 请点击页面最下方的问题反馈栏目，说明你的要求，后续会视情况开放，谢谢</div>
       </n-space>
     </n-spin>
   </n-card>
@@ -107,55 +108,69 @@
 
 <script lang="ts" setup>
 import {NCard, NGrid, NGi, NSpace, NTabs, NTabPane, NDivider, useMessage, useDialog} from "naive-ui";
-import CommonInfo from "@/views/record/components/CommonInfo.vue";
-import GaijinStatCard from "@/views/record/components/GaijinStatCard.vue";
-import CrawlerInfo from "@/views/record/components/CrawlerInfo.vue";
-import {getCurrentInstance, ref, watch} from "vue";
-import http from "@/services/request";
+import CommonInfo from "@/views/player/components/CommonInfo.vue";
+import GaijinStatCard from "@/views/player/components/GaijinStatCard.vue";
+import CrawlerInfo from "@/views/player/components/CrawlerInfo.vue";
+import {onMounted, ref, watch} from "vue";
 import {useRoute, useRouter} from "vue-router";
-import GaijinAviationCard from "@/views/record/components/GaijinAviationCard.vue";
-import GaijinGroundCard from "@/views/record/components/GaijinGroundCard.vue";
-import GaijinFleetCard from "@/views/record/components/GaijinFleetCard.vue";
+import GaijinAviationCard from "@/views/player/components/GaijinAviationCard.vue";
+import GaijinGroundCard from "@/views/player/components/GaijinGroundCard.vue";
+import GaijinFleetCard from "@/views/player/components/GaijinFleetCard.vue";
 import {ShareAlt, Angry} from "@vicons/fa";
-import TSCommonInfo from "@/views/record/components/TSCommonInfo.vue";
-import {getWTUserInfo, postWTUserInfoRefresh} from "@/services/war_thunder";
+import TSCommonInfo from "@/views/player/components/TSCommonInfo.vue";
+import {getWTUserInfo, getWTUserInfoQueries, postWTUserInfoRefresh} from "@/services/war_thunder";
 import {useStore} from "vuex";
 
 const props = defineProps({
-  queryList: Object
+  nick: String
 });
 
+const message = useMessage();
+const dialog = useDialog();
+const store = useStore();
+const router = useRouter();
 const route = useRoute();
+
 const activeQuery = ref()
+
 const gaijinData = ref({})
 const thunderskillData = ref({})
 
-const displayStatus = ref('none')
-watch(props, (newVal, oldVal) => {
-  if (props.queryList !== undefined && props.queryList.gaijin !== undefined) {
-    // 找到最新的一条记录
-    let found = false
-    let done = props.queryList.gaijin[0].status === 'done'
-    let queryId = props.queryList.gaijin[0].query_id
-    for (let item of props.queryList.gaijin) {
-      if (item.found) {
-        found = true
-        done = item.status === 'done'
-        queryId = item.query_id
-        break
+const displayStatus = ref('nothing')
+
+const queryList = ref()
+
+onMounted(() => {
+  getWTUserInfoQueries(store.state.auth, props.nick as string).then(res => {
+    let qList
+    queryList.value = res.data
+    qList = res.data
+    if (qList != undefined && qList.gaijin != undefined) {
+      // 是否有找到的记录
+      let found = false
+      // 是否有执行完的查询
+      let done = false
+      let queryId
+      for (let item of qList.gaijin) {
+        done = (done || item.status === 'done')
+        found = (found || item.found as boolean)
+        if (item.found) {
+          queryId = item.query_id
+          break
+        }
       }
-    }
-    if (found && done) {
-      displayStatus.value = 'find'
-      getInfo(queryId)
-    } else if (!found && !done) {
-      displayStatus.value = 'running'
+      if (found && done) {
+        displayStatus.value = 'found'
+        getInfo(queryId)
+      } else if (!found && done) {
+        displayStatus.value = 'notExist'
+      } else {
+        displayStatus.value = 'first'
+      }
     } else {
-      displayStatus.value = 'notfound'
+      refreshInfoQueries(props.nick)
     }
-  } else {
-    refreshInfoQueries(route.params.nick)
-  }
+  })
 })
 
 
@@ -173,12 +188,8 @@ const getInfo = async (queryId: string) => {
   }
 }
 
-const message = useMessage();
-const dialog = useDialog();
-const store = useStore();
-const router = useRouter();
 
-const refreshInfoQueries = (nick: any) => {
+const refreshInfoQueries = (nick: any, jumpNone?: boolean) => {
   postWTUserInfoRefresh(store.state.auth, nick).then((res: any) => {
     if (res.code === 13000) {
       message.warning('无法刷新，已达到今天的全站限额！')
@@ -186,25 +197,26 @@ const refreshInfoQueries = (nick: any) => {
     }
     if (res.data['refresh'] === true) {
       message.success("正在获取最新快照，请稍后")
-      displayStatus.value = 'nothing'
+      router.go(0)
     } else {
       message.warning('同一个玩家24小时内只能刷新一次！')
     }
   }).catch(err => {
     if (err.response.status == 401) {
+      if(jumpNone){
+        displayStatus.value = 'none'
+      }
       dialog.warning({
         title: '查询受限',
         content: '对不起，该玩家的战绩无法刷新。请登录后再访问',
         closable: false,
-        positiveText:'登 录',
-        onPositiveClick:()=>{
-          router.push({name:'login'})
+        positiveText: '登 录',
+        negativeText: '取消',
+        onPositiveClick: () => {
+          router.push({name: 'login'})
         }
       })
     }
-    // if(reloadPage){
-    //   router.go(0)
-    // }
   })
 }
 
@@ -222,10 +234,6 @@ const copyLink = async () => {
 
 }
 
-
-const toGaijin = () => {
-
-}
 </script>
 
 <style scoped>

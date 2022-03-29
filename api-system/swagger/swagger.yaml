@@ -168,6 +168,34 @@ paths:
       summary: 获取验证码图片
       tags:
       - Captcha API
+  /v1/game_users:
+    get:
+      parameters:
+      - description: 查询过滤
+        in: query
+        name: filter
+        type: string
+      - description: 分页页码，从1开始
+        in: query
+        minimum: 1
+        name: page_num
+        required: true
+        type: integer
+      - description: 分页大小，最大为1000
+        in: query
+        maximum: 1000
+        minimum: 1
+        name: page_size
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      summary: 查询游戏昵称的所有query_id
+      tags:
+      - GameUser API
   /v1/site/notice/:
     post:
       parameters:
@@ -207,6 +235,26 @@ paths:
       summary: System Info
       tags:
       - System API
+  /v1/upload/picture:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: image file
+        in: formData
+        name: file
+        required: true
+        type: file
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      security:
+      - ApiKeyAuth: []
+      summary: 上传图片
+      tags:
+      - Upload API
   /v1/user/info:
     post:
       parameters:

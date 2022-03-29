@@ -11,7 +11,7 @@ func QueryShortCrawlerData(c context.Context, crawlerData schema.CrawlerData) ([
 	var records []schema.ShortCrawlerData
 	err := GetDB().Model(&schema.CrawlerData{}).
 		Where(&crawlerData).Order("updated_at desc").
-		Order("created_at desc").Find(&records).Limit(5).Error
+		Order("created_at desc").Limit(7).Find(&records).Error
 	return records, err
 }
 

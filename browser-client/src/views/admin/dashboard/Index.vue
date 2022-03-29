@@ -1,5 +1,5 @@
 <template>
-dashboard
+  <n-card>dashboard</n-card>
 </template>
 
 <script>

@@ -111,6 +111,47 @@ var doc = `{
                 }
             }
         },
+        "/v1/game_users": {
+            "get": {
+                "tags": [
+                    "GameUser API"
+                ],
+                "summary": "查询游戏昵称的所有query_id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "查询过滤",
+                        "name": "filter",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "分页页码，从1开始",
+                        "name": "page_num",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "maximum": 1000,
+                        "minimum": 1,
+                        "type": "integer",
+                        "description": "分页大小，最大为1000",
+                        "name": "page_size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/site/notice/": {
             "post": {
                 "security": [
@@ -165,6 +206,39 @@ var doc = `{
                     "System API"
                 ],
                 "summary": "System Info",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/upload/picture": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "tags": [
+                    "Upload API"
+                ],
+                "summary": "上传图片",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "image file",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",

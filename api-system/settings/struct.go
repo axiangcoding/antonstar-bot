@@ -45,6 +45,12 @@ type App struct {
 	Response struct {
 		HideErrorDetails bool `mapstructure:"hide_error_details"`
 	}
+	Upload struct {
+		SuperBed struct {
+			Token      string
+			Categories string
+		}
+	}
 }
 
 type Server struct {

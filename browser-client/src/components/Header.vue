@@ -32,7 +32,7 @@
     <div class="rope" :class="{'pushDown': hasPush, 'pushUp': !hasPush}" @click="handlePushMenu">
       <div class="ropeLine"></div>
       <div class="laugh">
-        <n-icon-wrapper size="30">
+        <n-icon-wrapper :size="30">
           <n-icon>
             <BookOpen/>
           </n-icon>

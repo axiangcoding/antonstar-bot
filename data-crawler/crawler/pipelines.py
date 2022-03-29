@@ -23,7 +23,9 @@ class MysqlPipeline:
     def process_item(self, item, spider):
         # sql语句
         update_crawler_data_sql = """
-        update crawler_data set found=%s,http_status=%s,content=%s,updated_at=%s,status='done' where query_id=%s and source=%s
+        update crawler_data 
+        set found=%s,http_status=%s,content=%s,updated_at=%s,status='done' 
+        where query_id=%s and source=%s
         """
         # 执行插入数据到数据库操作
         self.cursor.execute(update_crawler_data_sql,
@@ -32,32 +34,45 @@ class MysqlPipeline:
         # 提交，不进行提交无法保存到数据库
         self.conn.commit()
         # 如果找到用户并且是gaijin的数据源，则进行静态记录的更新
-        if item['source'] == 'gaijin' and item['found']:
-            content = json.loads(item['content'])
-            find_wt_user_sql = """
-            select id from game_users where nick=%s
-            """
-            self.cursor.execute(find_wt_user_sql, content['nick'])
-            res = self.cursor.fetchall()
+        if item['found']:
+            if item['source'] == 'gaijin':
+                content = json.loads(item['content'])
+                find_wt_user_sql = """
+                select id from game_users where nick=%s
+                """
+                self.cursor.execute(find_wt_user_sql, content['nick'])
+                res = self.cursor.fetchall()
 
-            # 如果找到记录，说明不是第一次获取到该玩家记录
-            if len(res) != 0:
+                # 如果找到记录，说明不是第一次获取到该玩家记录
+                if len(res) != 0:
+                    update_wt_user_sql = """
+                    update game_users 
+                    set clan=%s, clan_url=%s, register_date=%s, level=%s, title=%s, banned=%s, updated_at=%s 
+                    where nick=%s 
+                    """
+                    self.cursor.execute(update_wt_user_sql,
+                                        (content['clan'], content['clan_url'],
+                                         content['register_date'], content['level'], content['title'],
+                                         content['banned'], item['updated_at'], content['nick']))
+                else:
+                    insert_wt_user_sql = """
+                    insert into game_users(nick,clan,clan_url,register_date,level,title,banned,created_at) 
+                    values (%s,%s,%s,%s,%s,%s,%s,%s)
+                    """
+                    self.cursor.execute(insert_wt_user_sql,
+                                        (content['nick'], content['clan'], content['clan_url'],
+                                         content['register_date'], content['level'], content['title'],
+                                         content['banned'], item['updated_at']))
+                self.conn.commit()
+            if item['source'] == 'thunder_skill':
+                content = json.loads(item['content'])
                 update_wt_user_sql = """
-                update game_users set clan=%s, clan_url=%s, register_date=%s, level=%s, title=%s, banned=%s, updated_at=%s where nick=%s 
+                   update game_users set ts_ab_rate=%s, ts_rb_rate=%s, ts_sb_rate=%s 
+                   where nick=%s 
                 """
                 self.cursor.execute(update_wt_user_sql,
-                                    (content['clan'], content['clan_url'],
-                                     content['register_date'], content['level'], content['title'],
-                                     content['banned'], item['updated_at'], content['nick']))
-            else:
-                insert_wt_user_sql = """
-                insert into game_users(nick,clan,clan_url,register_date,level,title,banned,created_at) values (%s,%s,%s,%s,%s,%s,%s,%s)
-                """
-                self.cursor.execute(insert_wt_user_sql,
-                                    (content['nick'], content['clan'], content['clan_url'],
-                                     content['register_date'], content['level'], content['title'],
-                                     content['banned'], item['updated_at']))
-            self.conn.commit()
+                                    (content['a']['kpd'], content['r']['kpd'], content['s']['kpd'], content['nick']))
+                self.conn.commit()
 
     def close_spider(self, spider):
         self.cursor.close()
