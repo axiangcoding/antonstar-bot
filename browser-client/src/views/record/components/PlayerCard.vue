@@ -5,8 +5,8 @@
         <n-avatar
             round
             object-fit="scale-down"
-            src="https://pic.imgdb.cn/item/622ea5435baa1a80ab949b2d.png"
-        />
+        >{{ data.nick.substring(0, 1).toUpperCase() }}
+        </n-avatar>
       </template>
       <template #header>
         {{ data.clan }}

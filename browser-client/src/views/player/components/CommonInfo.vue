@@ -6,7 +6,7 @@
           v-if="data"
           round
           :size="80"
-          src="https://pic.imgdb.cn/item/622ea5435baa1a80ab949b2d.png"
+          src="https://pic.imgdb.cn/item/6242d7ae27f86abb2a2fda29.png"
       />
       <n-button
           text

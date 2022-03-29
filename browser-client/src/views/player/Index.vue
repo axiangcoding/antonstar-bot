@@ -6,7 +6,7 @@
           {{ route.params.nick }} 的战绩
         </template>
         <template #avatar>
-          <n-avatar src="https://pic.imgdb.cn/item/622ea5435baa1a80ab949b2d.png"></n-avatar>
+          <n-avatar src="https://pic.imgdb.cn/item/6242d7ae27f86abb2a2fda29.png"></n-avatar>
         </template>
         <template #extra>
           <n-button @click="refreshInfo" type="success">刷新
