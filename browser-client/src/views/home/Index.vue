@@ -25,24 +25,20 @@ import Links from "@/views/home/components/Links.vue";
 const imgList = ref([
   {
     index: 1,
-    src: 'https://pic.imgdb.cn/item/61ec14312ab3f51d913cbd09.jpg'
+    src: 'https://pic.imgdb.cn/item/6242dc5927f86abb2a3bb53b.png'
   },
   {
     index: 2,
-    src: 'https://pic.imgdb.cn/item/61ec14312ab3f51d913cbd01.jpg'
+    src: 'https://pic.imgdb.cn/item/6242dc5927f86abb2a3bb6d9.png'
   },
   {
     index: 3,
-    src: 'https://pic.imgdb.cn/item/61ec19472ab3f51d9142c2bc.jpg'
+    src: 'https://pic.imgdb.cn/item/6242dc5a27f86abb2a3bb898.png'
   },
   {
     index: 4,
-    src: 'https://pic.imgdb.cn/item/61ec19472ab3f51d9142c2b4.png'
+    src: 'https://pic.imgdb.cn/item/6242dc5b27f86abb2a3bba78.png'
   },
-  {
-    index: 5,
-    src: 'https://pic.imgdb.cn/item/61ec19472ab3f51d9142c2ad.png'
-  }
 ])
 </script>
 
