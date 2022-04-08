@@ -62,7 +62,7 @@ if __name__ == '__main__':
     connection = pika.BlockingConnection(pika.ConnectionParameters(get_project_settings().get("MQ_SOURCE")))
     channel = connection.channel()
 
-    channel.queue_declare( queue='crawler')
+    channel.queue_declare(queue='crawler')
     channel.basic_consume(queue='crawler',
                           auto_ack=True,
                           on_message_callback=callback)
