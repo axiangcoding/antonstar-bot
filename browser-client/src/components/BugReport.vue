@@ -65,16 +65,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, defineProps, toRefs, defineEmits } from 'vue'
+import { ref, toRefs } from 'vue'
 import { useStore } from 'vuex'
 
-const message = useMessage()
-import { getRegex } from '@/util/validation'
-import { userInfo, userLogin } from '@/services/user'
 import { BugReportForm, postBugReport } from '@/services/bug-report'
-import router from '@/router'
 import { useMessage } from 'naive-ui'
 
+const message = useMessage()
 const store = useStore()
 const size = ref()
 const formRef = ref()
