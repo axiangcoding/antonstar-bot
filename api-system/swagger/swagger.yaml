@@ -188,6 +188,9 @@ paths:
         name: page_size
         required: true
         type: integer
+      - in: query
+        name: sort
+        type: string
       responses:
         "200":
           description: OK

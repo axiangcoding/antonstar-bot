@@ -12,7 +12,10 @@ func GetGameUsers(c *gin.Context, pagination app.Pagination) (map[string]interfa
 	var users []schema.GameUser
 	var total int64
 	start, limit := pagination.ToOffsetLimit()
-	err := data.GetDB().Offset(start).Limit(limit).Find(&users).Offset(-1).Limit(-1).Count(&total).Error
+	sortSql := pagination.GetSortSql()
+	filterSql := pagination.GetFilterSql()
+	err := data.GetDB().Where(filterSql).Order(sortSql).Offset(start).Limit(limit).Find(&users).
+		Offset(-1).Limit(-1).Count(&total).Error
 	if err != nil {
 		return nil, err
 	}

@@ -140,6 +140,11 @@ var doc = `{
                         "name": "page_size",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "name": "sort",
+                        "in": "query"
                     }
                 ],
                 "responses": {
