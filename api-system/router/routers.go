@@ -77,11 +77,6 @@ func setRouterV1(r *gin.Engine) {
 	setSwagger(base)
 	groupV1 := base.Group("/v1")
 	{
-		demo := groupV1.Group("/demo")
-		{
-			demo.GET("/get", v1.DemoGet)
-			demo.POST("/post", v1.DemoPost)
-		}
 		user := groupV1.Group("/user")
 		{
 			user.POST("/login", v1.UserLogin)
@@ -91,6 +86,11 @@ func setRouterV1(r *gin.Engine) {
 		system := groupV1.Group("/system")
 		{
 			system.GET("/info", v1.SystemInfo)
+		}
+		cqhttp := groupV1.Group("/cqhttp")
+		{
+			cqhttp.POST("/receive/event", v1.CqHttpReceiveEvent)
+			cqhttp.GET("/status", v1.CqHttpStatus)
 		}
 	}
 }

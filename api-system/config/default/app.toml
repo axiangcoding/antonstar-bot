@@ -20,7 +20,7 @@ enable = true
 
 [app.data.database]
 driver = "mysql"
-source = "root:example@tcp(127.0.0.1:3306)/ax-web?charset=utf8mb4&parseTime=true"
+source = "antonstar:AntonStarP@ssword.@tcp(127.0.0.1:3306)/anton_star?charset=utf8mb4&parseTime=true"
 max_open_conn = 100
 max_idle_conn = 10
 

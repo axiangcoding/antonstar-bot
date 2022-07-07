@@ -33,33 +33,21 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/v1/demo/get": {
-            "get": {
+        "/v1/cqhttp/receive/event": {
+            "post": {
                 "tags": [
-                    "Demo API"
+                    "CQHttp API"
                 ],
-                "summary": "Demo for Get",
+                "summary": "receive event from cqhttp service",
                 "parameters": [
                     {
-                        "maxLength": 255,
-                        "minLength": 10,
-                        "type": "string",
-                        "description": "param1, min 10 words and max 255 words",
-                        "name": "param1",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "param2, required",
-                        "name": "param2",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "param3, if it's null, validate nothing. if it's not null, must match email regex",
-                        "name": "param3",
-                        "in": "query"
+                        "description": "getParam",
+                        "name": "param",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
                     }
                 ],
                 "responses": {
@@ -72,23 +60,12 @@ var doc = `{
                 }
             }
         },
-        "/v1/demo/post": {
-            "post": {
+        "/v1/cqhttp/status": {
+            "get": {
                 "tags": [
-                    "Demo API"
+                    "CQHttp API"
                 ],
-                "summary": "Demo for Post",
-                "parameters": [
-                    {
-                        "description": "getParam",
-                        "name": "param",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/v1.CommonParam"
-                        }
-                    }
-                ],
+                "summary": "get cqhttp service status",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -192,28 +169,6 @@ var doc = `{
                 },
                 "data": {},
                 "msg": {
-                    "type": "string"
-                }
-            }
-        },
-        "v1.CommonParam": {
-            "type": "object",
-            "required": [
-                "param2"
-            ],
-            "properties": {
-                "param1": {
-                    "description": "param1, min 10 words and max 255 words",
-                    "type": "string",
-                    "maxLength": 255,
-                    "minLength": 10
-                },
-                "param2": {
-                    "description": "param2, required",
-                    "type": "string"
-                },
-                "param3": {
-                    "description": "param3, if it's null, validate nothing. if it's not null, must match email regex",
                     "type": "string"
                 }
             }
