@@ -1,0 +1,47 @@
+[app]
+version = "v2.x"
+name = "github.com/axiangcoding/ax-web"
+
+[app.log]
+level = "INFO"
+file.enable = false
+file.encoder = "console"
+file.path = "./logs/"
+
+[app.auth]
+secret = "r@ndomSecretForSign"
+expire_duration = "12h"
+casbin_model_path = "./config/default/"
+casbin_policy_adapter = "local"
+casbin_policy_path = "./config/default/"
+
+[app.swagger]
+enable = true
+
+[app.data.database]
+driver = "mysql"
+source = "root:example@tcp(127.0.0.1:3306)/ax-web?charset=utf8mb4&parseTime=true"
+max_open_conn = 100
+max_idle_conn = 10
+
+[app.data.cache]
+# only support cache for now
+driver = "redis"
+source = "redis://localhost:6379/0"
+
+[app.mq]
+source = "amqp://localhost:5672"
+
+
+[app.response]
+# hide error details
+hide_error_details = false
+
+
+[server]
+run_mode = "debug"
+port = 8888
+base_path = "/api"
+
+
+
