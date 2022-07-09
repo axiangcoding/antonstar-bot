@@ -25,6 +25,6 @@ func initRedis() *redis.Client {
 	return redis.NewClient(opt)
 }
 
-func GetRedis() *redis.Client {
+func GetClient() *redis.Client {
 	return rdb
 }

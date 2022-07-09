@@ -31,9 +31,9 @@ func init() {
 	validation.Setup()
 }
 
-// @title        axiangcoding/gin-template
+// @title        axiangcoding/anton-star
 // @version      1.0.0
-// @description  This project is a web application scaffold developed using the Go language. It integrates some of the most commonly used frameworks in the Go language ecology and provides a relatively light development experience, which is especially suitable for small projects as an initial template.
+// @description  api system build by ax-web
 // @termsOfService
 
 // @contact.name  axiangcoding

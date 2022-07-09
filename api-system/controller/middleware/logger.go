@@ -8,12 +8,10 @@ import (
 
 func Logger() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// Start timer
 		start := time.Now()
 		path := c.Request.URL.Path
 		raw := c.Request.URL.RawQuery
 
-		// Process request
 		c.Next()
 
 		end := time.Now()
@@ -21,7 +19,13 @@ func Logger() gin.HandlerFunc {
 		reqMethod := c.Request.Method
 		statusCode := c.Writer.Status()
 		clientIP := c.ClientIP()
-		logging.Infof("%s %s %s --> status=%d, latency_time=%s, ip=%s",
-			reqMethod, path, raw, statusCode, latencyTime, clientIP)
+		template := "%s %s %s --> status=%d, latency_time=%s, ip=%s"
+		if latencyTime > time.Second*5 {
+			logging.Warnf(template+" [slow response]", reqMethod, path, raw, statusCode, latencyTime, clientIP)
+		} else {
+			logging.Infof(template,
+				reqMethod, path, raw, statusCode, latencyTime, clientIP)
+		}
+
 	}
 }

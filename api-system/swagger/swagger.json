@@ -7,8 +7,8 @@
     ],
     "swagger": "2.0",
     "info": {
-        "description": "This project is a web application scaffold developed using the Go language. It integrates some of the most commonly used frameworks in the Go language ecology and provides a relatively light development experience, which is especially suitable for small projects as an initial template.",
-        "title": "axiangcoding/gin-template",
+        "description": "api system build by ax-web",
+        "title": "axiangcoding/anton-star",
         "contact": {
             "name": "axiangcoding",
             "email": "axiangcoding@gmail.com"
@@ -24,6 +24,13 @@
                 ],
                 "summary": "receive event from cqhttp service",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "accessToken",
+                        "name": "accessToken",
+                        "in": "query",
+                        "required": true
+                    },
                     {
                         "description": "getParam",
                         "name": "param",

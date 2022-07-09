@@ -1,49 +1,45 @@
 package cqhttp
 
+import "encoding/json"
+
 var (
-	PostTypeMessage   = "message"
-	PostTypeRequest   = "request"
-	PostTypeNotice    = "notice"
-	PostTypeMetaEvent = "meta_event"
+	PostTypeMessage    = "message"
+	PostTypeRequest    = "request"
+	PostTypeNotice     = "notice"
+	PostTypeMetaEvent  = "meta_event"
+	EventTypeHeartBeat = "heartbeat"
 )
 
-type CommonReportForm struct {
-	Time     int64  `json:"time,omitempty"`
-	SelfId   int64  `json:"self_id,omitempty"`
-	PostType string `json:"post_type,omitempty"`
+type MetaTypeHeartBeatEventMessage struct {
+	Interval      int    `json:"interval" mapstructure:"interval"`
+	MetaEventType string `json:"meta_event_type" mapstructure:"meta_event_type"`
+	PostType      string `json:"post_type" mapstructure:"post_type"`
+	SelfId        int64  `json:"self_id" mapstructure:"self_id"`
+	Status        struct {
+		AppEnabled     bool        `json:"app_enabled" mapstructure:"app_enabled"`
+		AppGood        bool        `json:"app_good" mapstructure:"app_good"`
+		AppInitialized bool        `json:"app_initialized" mapstructure:"app_initialized"`
+		Good           bool        `json:"good" mapstructure:"good"`
+		Online         bool        `json:"online" mapstructure:"online"`
+		PluginsGood    interface{} `json:"plugins_good" mapstructure:"plugins_good"`
+		Stat           struct {
+			DisconnectTimes int `json:"disconnect_times" mapstructure:"disconnect_times"`
+			LastMessageTime int `json:"last_message_time" mapstructure:"last_message_time"`
+			LostTimes       int `json:"lost_times" mapstructure:"lost_times"`
+			MessageReceived int `json:"message_received" mapstructure:"message_received"`
+			MessageSent     int `json:"message_sent" mapstructure:"message_sent"`
+			PacketLost      int `json:"packet_lost" mapstructure:"packet_lost"`
+			PacketReceived  int `json:"packet_received" mapstructure:"packet_received"`
+			PacketSent      int `json:"packet_sent" mapstructure:"packet_sent"`
+		} `json:"stat" mapstructure:"stat"`
+	} `json:"status" mapstructure:"status"`
+	Time int `json:"time" mapstructure:"time"`
 }
 
-type MessageReportForm struct {
-	CommonReportForm
-	SubType   string `json:"sub_type,omitempty"`
-	MessageId int32  `json:"message_id,omitempty"`
-	UserId    int64  `json:"user_id,omitempty"`
-	MessageForm
-	RawMessage string        `json:"raw_message,omitempty"`
-	Font       int           `json:"font,omitempty"`
-	Sender     MessageSender `json:"sender"`
+func (m *MetaTypeHeartBeatEventMessage) MarshalBinary() (data []byte, err error) {
+	return json.Marshal(m)
 }
 
-type MetaEventReportForm struct {
-	CommonReportForm
-	MetaEventType string `json:"meta_event_type,omitempty"`
-}
-
-type MessageForm struct {
-}
-
-type MessageSender struct {
-	UserId   string `json:"user_id,omitempty"`
-	Nickname string `json:"nickname,omitempty"`
-	Sex      string `json:"sex,omitempty"`
-	Age      int32  `json:"age,omitempty"`
-}
-
-type MessageSenderFromGroup struct {
-	MessageSender
-	Card  string `json:"card,omitempty"`
-	Area  string `json:"area,omitempty"`
-	Level string `json:"level,omitempty"`
-	Role  string `json:"role,omitempty"`
-	Title string `json:"title,omitempty"`
+func (m *MetaTypeHeartBeatEventMessage) UnmarshalBinary(data []byte) error {
+	return json.Unmarshal(data, &m)
 }

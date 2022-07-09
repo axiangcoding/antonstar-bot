@@ -41,6 +41,13 @@ var doc = `{
                 "summary": "receive event from cqhttp service",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "accessToken",
+                        "name": "accessToken",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
                         "description": "getParam",
                         "name": "param",
                         "in": "body",
@@ -228,8 +235,8 @@ var SwaggerInfo = swaggerInfo{
 	Host:        "",
 	BasePath:    "",
 	Schemes:     []string{},
-	Title:       "axiangcoding/gin-template",
-	Description: "This project is a web application scaffold developed using the Go language. It integrates some of the most commonly used frameworks in the Go language ecology and provides a relatively light development experience, which is especially suitable for small projects as an initial template.",
+	Title:       "axiangcoding/anton-star",
+	Description: "api system build by ax-web",
 }
 
 type s struct{}
