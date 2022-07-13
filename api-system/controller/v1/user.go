@@ -104,6 +104,10 @@ func UserRegister(c *gin.Context) {
 func UserMe(c *gin.Context) {
 	session := sessions.Default(c)
 	userId := session.Get("userId")
+	if userId == nil {
+		app.BizFailed(c, e.TokenNotExist)
+		return
+	}
 	user, err := service.FindUser(c, fmt.Sprintf("%v", userId))
 	if err != nil {
 		app.BizFailed(c, e.Error, err)

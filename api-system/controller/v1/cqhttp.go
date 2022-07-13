@@ -4,6 +4,7 @@ import (
 	"github.com/axiangcoding/ax-web/entity/app"
 	"github.com/axiangcoding/ax-web/entity/e"
 	"github.com/axiangcoding/ax-web/service"
+	"github.com/axiangcoding/ax-web/settings"
 	"github.com/gin-gonic/gin"
 )
 
@@ -42,7 +43,7 @@ func CqHttpReceiveEvent(c *gin.Context) {
 // @Success  200  {object}  app.ApiJson  ""
 // @Router   /v1/cqhttp/status [get]
 func CqHttpStatus(c *gin.Context) {
-	defaultSelfId := int64(2362794289)
+	defaultSelfId := settings.Config.CqHttp.SelfQQ
 	status, err := service.GetCqHttpStatus(c, defaultSelfId)
 	if err != nil {
 		app.BizFailed(c, e.Error, err)

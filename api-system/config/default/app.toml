@@ -32,6 +32,8 @@ source = "redis://localhost:6379/0"
 [app.mq]
 source = "amqp://localhost:5672"
 
+[app.cqhttp]
+self_qq = 2362794289
 
 [app.response]
 # hide error details

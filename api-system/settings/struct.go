@@ -1,6 +1,6 @@
 package settings
 
-type AllConfig struct {
+type ConfigStruct struct {
 	App
 	Server
 }
@@ -50,6 +50,9 @@ type App struct {
 			Token      string
 			Categories string
 		}
+	}
+	CqHttp struct {
+		SelfQQ int64 `mapstructure:"self_qq"`
 	}
 }
 

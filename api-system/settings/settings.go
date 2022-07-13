@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var Config AllConfig
+var Config ConfigStruct
 
 func Setup() {
 	setDefault()
