@@ -50,7 +50,7 @@ func (m *MetaTypeHeartBeatEvent) UnmarshalBinary(data []byte) error {
 type MessageGroupEvent struct {
 	Anonymous   interface{} `json:"anonymous" mapstructure:"anonymous"`
 	Font        int         `json:"font" mapstructure:"font"`
-	GroupId     int         `json:"group_id" mapstructure:"group_id"`
+	GroupId     int64       `json:"group_id" mapstructure:"group_id"`
 	Message     string      `json:"message" mapstructure:"message"`
 	MessageId   int         `json:"message_id" mapstructure:"message_id"`
 	MessageSeq  int         `json:"message_seq" mapstructure:"message_seq"`

@@ -1,7 +1,6 @@
 package service
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/axiangcoding/ax-web/cache"
@@ -83,12 +82,22 @@ func handleCqHttpMetaEventHeartBeat(c *gin.Context, event *cqhttp.MetaTypeHeartB
 func handleCqHttpMessageEventGroup(c *gin.Context, event *cqhttp.MessageGroupEvent) {
 	messageType := event.MessageType
 	msg := event.Message
+	groupId := event.GroupId
 	// 处理群组at消息，只有at我的群组消息才处理，其他的一律抛弃
 	settingSelfQQ := settings.Config.CqHttp.SelfQQ
 	if messageType != "group" || !cqhttp.MustContainsCqCode(msg) || settingSelfQQ != cqhttp.MustGetCqCodeAtQQ(msg) {
 		return
 	}
 	// FIXME: 处理消息，返回消息
-	marshal, _ := json.Marshal(event)
-	logging.Infof(string(marshal))
+	result, err := cqhttp.SendGroupMsg(cqhttp.SendGroupMsgForm{
+		GroupId: groupId,
+		Message: fmt.Sprintf("[CQ:at,qq=%d] 收到了，别急好么，还在开发", event.Sender.UserId),
+	})
+	if err != nil {
+		logging.Warnf("handle group message error %s", err)
+		return
+	}
+	if result != nil && result.Status == "failed" {
+		logging.Warnf("send message failed. response json: %#v", result)
+	}
 }

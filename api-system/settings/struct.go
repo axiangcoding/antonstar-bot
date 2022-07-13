@@ -52,7 +52,8 @@ type App struct {
 		}
 	}
 	CqHttp struct {
-		SelfQQ int64 `mapstructure:"self_qq"`
+		Url    string `mapstructure:"url"`
+		SelfQQ int64  `mapstructure:"self_qq"`
 	}
 }
 

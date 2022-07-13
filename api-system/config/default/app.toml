@@ -33,6 +33,7 @@ source = "redis://localhost:6379/0"
 source = "amqp://localhost:5672"
 
 [app.cqhttp]
+url = "http://localhost:5700"
 self_qq = 2362794289
 
 [app.response]
