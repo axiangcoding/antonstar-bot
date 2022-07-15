@@ -13,6 +13,7 @@ import (
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"net/http"
 	"strings"
 	"time"
 )
@@ -53,7 +54,8 @@ func setSession(r *gin.Engine) {
 	store.Options(sessions.Options{
 		MaxAge:   int(duration.Seconds()),
 		Path:     "-",
-		HttpOnly: true})
+		HttpOnly: true,
+		SameSite: http.SameSiteStrictMode})
 	r.Use(sessions.Sessions("session", store))
 }
 

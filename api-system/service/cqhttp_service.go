@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/axiangcoding/ax-web/cache"
 	"github.com/axiangcoding/ax-web/logging"
+	"github.com/axiangcoding/ax-web/service/bot"
 	"github.com/axiangcoding/ax-web/service/cqhttp"
 	"github.com/axiangcoding/ax-web/settings"
 	"github.com/gin-gonic/gin"
@@ -82,17 +83,38 @@ func handleCqHttpMetaEventHeartBeat(c *gin.Context, event *cqhttp.MetaTypeHeartB
 func handleCqHttpMessageEventGroup(c *gin.Context, event *cqhttp.MessageGroupEvent) {
 	messageType := event.MessageType
 	msg := event.Message
-	groupId := event.GroupId
 	// 处理群组at消息，只有at我的群组消息才处理，其他的一律抛弃
 	settingSelfQQ := settings.Config.CqHttp.SelfQQ
 	if messageType != "group" || !cqhttp.MustContainsCqCode(msg) || settingSelfQQ != cqhttp.MustGetCqCodeAtQQ(msg) {
 		return
 	}
-	// FIXME: 处理消息，返回消息
-	result, err := cqhttp.SendGroupMsg(cqhttp.SendGroupMsgForm{
-		GroupId: groupId,
-		Message: fmt.Sprintf("[CQ:at,qq=%d] 收到了，别急好么，还在开发", event.Sender.UserId),
-	})
+	action := bot.ParseMessageCommand(msg)
+	var retMsgForm cqhttp.SendGroupMsgForm
+	retMsgForm.GroupId = event.GroupId
+	retMsgPrefix := fmt.Sprintf("[CQ:at,qq=%d] ", event.Sender.UserId)
+	if action == nil {
+		retMsgForm.Message = retMsgPrefix + "我不道你在说什么，笨笨，呜呜"
+	} else {
+		switch action.Key {
+		case bot.ActionQuery:
+
+			async, user, err := QueryWTGamerProfile(action.Value)
+			if err != nil {
+				logging.Warnf("query WT gamer profile error. %s", err)
+			}
+			if async {
+				retMsgForm.Message = retMsgPrefix + "正在查询中，请稍后..."
+			} else {
+				retMsgForm.Message = retMsgPrefix + user.ToFriendlyString()
+			}
+			break
+		default:
+			retMsgForm.Message = retMsgPrefix + "我不道你想干啥，笨笨，呜呜"
+			break
+		}
+	}
+
+	result, err := cqhttp.SendGroupMsg(retMsgForm)
 	if err != nil {
 		logging.Warnf("handle group message error %s", err)
 		return
