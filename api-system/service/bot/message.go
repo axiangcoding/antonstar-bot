@@ -12,6 +12,7 @@ var (
 var (
 	ActionUnknown = "unknown"
 	ActionQuery   = "query"
+	ActionReport  = "report"
 )
 
 type Action struct {
@@ -34,6 +35,12 @@ func ParseMessageCommand(msg string) *Action {
 	switch split[0] {
 	case "查询":
 		key = ActionQuery
+		break
+	case "举办":
+		key = ActionReport
+		break
+	case "举报":
+		key = ActionReport
 		break
 	default:
 		key = ActionUnknown

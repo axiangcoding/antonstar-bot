@@ -97,7 +97,6 @@ func handleCqHttpMessageEventGroup(c *gin.Context, event *cqhttp.MessageGroupEve
 	} else {
 		switch action.Key {
 		case bot.ActionQuery:
-
 			async, user, err := QueryWTGamerProfile(action.Value)
 			if err != nil {
 				logging.Warnf("query WT gamer profile error. %s", err)
@@ -107,6 +106,9 @@ func handleCqHttpMessageEventGroup(c *gin.Context, event *cqhttp.MessageGroupEve
 			} else {
 				retMsgForm.Message = retMsgPrefix + user.ToFriendlyString()
 			}
+			break
+		case bot.ActionReport:
+			retMsgForm.Message = retMsgPrefix + "举办他是吧，我记住你了，晚上别锁房门"
 			break
 		default:
 			retMsgForm.Message = retMsgPrefix + "我不道你想干啥，笨笨，呜呜"
