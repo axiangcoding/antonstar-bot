@@ -3,6 +3,7 @@ package v1
 import (
 	"github.com/axiangcoding/ax-web/entity/app"
 	"github.com/axiangcoding/ax-web/entity/e"
+	"github.com/axiangcoding/ax-web/logging"
 	"github.com/axiangcoding/ax-web/service"
 	"github.com/axiangcoding/ax-web/settings"
 	"github.com/gin-gonic/gin"
@@ -30,10 +31,13 @@ func CqHttpReceiveEvent(c *gin.Context) {
 		app.BadRequest(c, e.RequestParamsNotValid, err)
 		return
 	}
-	if err := service.HandleCqHttpEvent(c, m); err != nil {
-		app.BizFailed(c, e.Error, err)
-		return
-	}
+	cp := c.Copy()
+	app.GoWithRecover(func() {
+		if err := service.HandleCqHttpEvent(cp, m); err != nil {
+			logging.Errorf("async handle cqhttp event failed. %s", err)
+		}
+	})
+
 	app.Success(c, nil)
 }
 

@@ -10,9 +10,10 @@ var (
 )
 
 var (
-	ActionUnknown = "unknown"
-	ActionQuery   = "query"
-	ActionReport  = "report"
+	ActionUnknown  = "unknown"
+	ActionQuery    = "query"
+	ActionReport   = "report"
+	ActionDrawCard = "drawCard"
 )
 
 type Action struct {
@@ -27,7 +28,7 @@ func ParseMessageCommand(msg string) *Action {
 	}
 
 	split := strings.Fields(strings.TrimSpace(sub[1]))
-	if len(split) < 2 {
+	if len(split) == 0 {
 		return nil
 	}
 	var key string
@@ -42,10 +43,15 @@ func ParseMessageCommand(msg string) *Action {
 	case "举报":
 		key = ActionReport
 		break
+	case "抽卡":
+		key = ActionDrawCard
+		break
 	default:
 		key = ActionUnknown
 	}
-
+	if len(split) == 1 {
+		return &Action{Key: key}
+	}
 	return &Action{
 		Key:   key,
 		Value: split[1],

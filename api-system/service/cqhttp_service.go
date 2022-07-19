@@ -110,6 +110,11 @@ func handleCqHttpMessageEventGroup(c *gin.Context, event *cqhttp.MessageGroupEve
 		case bot.ActionReport:
 			retMsgForm.Message = retMsgPrefix + "举办他是吧，我记住你了，晚上别锁房门"
 			break
+		case bot.ActionDrawCard:
+			id := event.Sender.UserId
+			number := DrawNumber(id)
+			retMsgForm.Message = retMsgPrefix + fmt.Sprintf("你今天的气运值是%d", number)
+			break
 		default:
 			retMsgForm.Message = retMsgPrefix + "我不道你想干啥，笨笨，呜呜"
 			break
