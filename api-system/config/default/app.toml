@@ -1,6 +1,6 @@
 [app]
-version = "1.0.0"
-name = "axiangcoding/antonstar/api-system"
+version = "v2.x"
+name = "github.com/axiangcoding/ax-web"
 
 [app.log]
 level = "INFO"
@@ -11,7 +11,6 @@ file.path = "./logs/"
 [app.auth]
 secret = "r@ndomSecretForSign"
 expire_duration = "12h"
-refresh_duration = "10m"
 casbin_model_path = "./config/default/"
 casbin_policy_adapter = "local"
 casbin_policy_path = "./config/default/"
@@ -33,14 +32,14 @@ source = "redis://localhost:6379/0"
 [app.mq]
 source = "amqp://localhost:5672"
 
+[app.cqhttp]
+url = "http://localhost:5700"
+self_qq = 2362794289
 
 [app.response]
 # hide error details
 hide_error_details = false
 
-[app.upload]
-superbed.token = ""
-superbed.categories = "antonstar"
 
 [server]
 run_mode = "debug"

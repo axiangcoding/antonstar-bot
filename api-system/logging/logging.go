@@ -1,7 +1,7 @@
 package logging
 
 import (
-	"axiangcoding/antonstar/api-system/settings"
+	"github.com/axiangcoding/ax-web/settings"
 	"log"
 	"path"
 
@@ -17,7 +17,7 @@ var enableFileLog = false
 
 func Setup() {
 	enableFileLog = settings.Config.App.Log.File.Enable
-	logger, _ := zap.NewDevelopment(zap.AddCallerSkip(1))
+	logger, _ := zap.NewDevelopment(zap.AddCallerSkip(1), zap.AddStacktrace(zapcore.ErrorLevel))
 	logConsole = logger.Sugar()
 	// 是否打印日志到文件中
 	if enableFileLog {

@@ -1,8 +1,8 @@
 package auth
 
 import (
-	"axiangcoding/antonstar/api-system/cache"
 	"context"
+	"github.com/axiangcoding/ax-web/cache"
 	"github.com/dchest/captcha"
 	"time"
 )
@@ -24,13 +24,13 @@ type RedisStore struct {
 }
 
 func (rs *RedisStore) Set(id string, digits []byte) {
-	cache.GetRedis().Set(c, captchaPrefix+id, string(digits), rs.ExpireTime)
+	cache.GetClient().Set(c, captchaPrefix+id, string(digits), rs.ExpireTime)
 }
 
 func (rs *RedisStore) Get(id string, clear bool) (digits []byte) {
-	result, _ := cache.GetRedis().Get(c, captchaPrefix+id).Bytes()
+	result, _ := cache.GetClient().Get(c, captchaPrefix+id).Bytes()
 	if clear {
-		cache.GetRedis().Del(c, captchaPrefix+id)
+		cache.GetClient().Del(c, captchaPrefix+id)
 	}
 	return result
 }

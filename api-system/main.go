@@ -1,17 +1,17 @@
 package main
 
 import (
-	"axiangcoding/antonstar/api-system/auth"
-	"axiangcoding/antonstar/api-system/cache"
-	"axiangcoding/antonstar/api-system/controller/validation"
-	"axiangcoding/antonstar/api-system/cron"
-	"axiangcoding/antonstar/api-system/data"
-	"axiangcoding/antonstar/api-system/logging"
-	"axiangcoding/antonstar/api-system/mq"
-	"axiangcoding/antonstar/api-system/router"
-	"axiangcoding/antonstar/api-system/settings"
 	"context"
 	"fmt"
+	"github.com/axiangcoding/ax-web/auth"
+	"github.com/axiangcoding/ax-web/cache"
+	"github.com/axiangcoding/ax-web/controller/validation"
+	"github.com/axiangcoding/ax-web/cron"
+	"github.com/axiangcoding/ax-web/data"
+	"github.com/axiangcoding/ax-web/logging"
+	"github.com/axiangcoding/ax-web/mq"
+	"github.com/axiangcoding/ax-web/router"
+	"github.com/axiangcoding/ax-web/settings"
 	"net/http"
 	"os"
 	"os/signal"
@@ -32,9 +32,9 @@ func init() {
 	validation.Setup()
 }
 
-// @title        安东星
+// @title        axiangcoding/anton-star
 // @version      1.0.0
-// @description  安东星接口文档
+// @description  api system build by ax-web
 // @termsOfService
 
 // @contact.name  axiangcoding
@@ -43,10 +43,6 @@ func init() {
 
 // @license.name
 // @license.url
-
-// @securityDefinitions.apikey  ApiKeyAuth
-// @in                          header
-// @name                        Authorization
 
 // @accept   json
 // @produce  json

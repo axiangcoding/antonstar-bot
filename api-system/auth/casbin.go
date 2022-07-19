@@ -1,15 +1,15 @@
 package auth
 
 import (
-	"axiangcoding/antonstar/api-system/data"
-	"axiangcoding/antonstar/api-system/logging"
-	"axiangcoding/antonstar/api-system/settings"
+	"github.com/axiangcoding/ax-web/data"
+	"github.com/axiangcoding/ax-web/logging"
+	"github.com/axiangcoding/ax-web/settings"
 	"github.com/casbin/casbin/v2"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"path"
 )
 
-var enforcer *casbin.Enforcer
+var casbinEnforcer *casbin.Enforcer
 
 func SetupCasbin() {
 
@@ -43,11 +43,11 @@ func SetupCasbin() {
 	}
 	err := e.LoadPolicy()
 	if err != nil {
-		logging.Error(err)
+		logging.Fatal(err)
 	}
-	enforcer = e
+	casbinEnforcer = e
 }
 
-func GetEnforcer() *casbin.Enforcer {
-	return enforcer
+func GetCasbinEnforcer() *casbin.Enforcer {
+	return casbinEnforcer
 }

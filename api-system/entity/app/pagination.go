@@ -5,8 +5,6 @@ type Pagination struct {
 	PageNum int `json:"page_num" binding:"required,gte=1" form:"page_num"`
 	// 分页大小，最大为1000
 	PageSize int `json:"page_size" binding:"required,gte=1,lte=1000" form:"page_size"`
-	// 查询过滤
-	Filter string `json:"filter" binding:"omitempty" form:"filter"`
 }
 
 func (p Pagination) ToOffsetLimit() (int, int) {

@@ -33,144 +33,27 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/v1/bug_report/": {
+        "/v1/cqhttp/receive/event": {
             "post": {
                 "tags": [
-                    "BugReport API"
+                    "CQHttp API"
                 ],
-                "summary": "提交一条问题反馈",
-                "parameters": [
-                    {
-                        "description": "form",
-                        "name": "form",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/v1.BugReportForm"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.ApiJson"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/captcha": {
-            "get": {
-                "tags": [
-                    "Captcha API"
-                ],
-                "summary": "请求生成验证码",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.ApiJson"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/captcha/{file}": {
-            "get": {
-                "consumes": [
-                    "image/png"
-                ],
-                "tags": [
-                    "Captcha API"
-                ],
-                "summary": "获取验证码图片",
+                "summary": "receive event from cqhttp service",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "image file name",
-                        "name": "file",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "name": "lang",
-                        "in": "query"
-                    },
-                    {
-                        "type": "boolean",
-                        "name": "reload",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": ""
-                    }
-                }
-            }
-        },
-        "/v1/game_users": {
-            "get": {
-                "tags": [
-                    "GameUser API"
-                ],
-                "summary": "查询游戏昵称的所有query_id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "查询过滤",
-                        "name": "filter",
-                        "in": "query"
-                    },
-                    {
-                        "minimum": 1,
-                        "type": "integer",
-                        "description": "分页页码，从1开始",
-                        "name": "page_num",
+                        "description": "accessToken",
+                        "name": "accessToken",
                         "in": "query",
                         "required": true
                     },
                     {
-                        "maximum": 1000,
-                        "minimum": 1,
-                        "type": "integer",
-                        "description": "分页大小，最大为1000",
-                        "name": "page_size",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.ApiJson"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/site/notice/": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "tags": [
-                    "Site API"
-                ],
-                "summary": "新增一条全站公告消息",
-                "parameters": [
-                    {
-                        "description": "form",
-                        "name": "form",
+                        "description": "getParam",
+                        "name": "param",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/v1.NoticeForm"
+                            "type": "object"
                         }
                     }
                 ],
@@ -184,12 +67,12 @@ var doc = `{
                 }
             }
         },
-        "/v1/site/notice/last": {
+        "/v1/cqhttp/status": {
             "get": {
                 "tags": [
-                    "Site API"
+                    "CQHttp API"
                 ],
-                "summary": "获取最新的一条全站公告消息",
+                "summary": "get cqhttp service status",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -216,101 +99,20 @@ var doc = `{
                 }
             }
         },
-        "/v1/upload/picture": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "multipart/form-data"
-                ],
-                "tags": [
-                    "Upload API"
-                ],
-                "summary": "上传图片",
-                "parameters": [
-                    {
-                        "type": "file",
-                        "description": "image file",
-                        "name": "file",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.ApiJson"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/user/info": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "tags": [
-                    "User API"
-                ],
-                "summary": "获取用户信息",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "如果不传入user_id参数，则查token所代表的个人信息，如果传入，则查其他用户的",
-                        "name": "user_id",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.ApiJson"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/app.ErrJson"
-                        }
-                    }
-                }
-            }
-        },
         "/v1/user/login": {
             "post": {
                 "tags": [
                     "User API"
                 ],
-                "summary": "用户登录",
                 "parameters": [
                     {
-                        "description": "register form",
-                        "name": "form",
+                        "description": "login param",
+                        "name": "param",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/v1.LoginForm"
+                            "$ref": "#/definitions/v1.LoginParam"
                         }
-                    },
-                    {
-                        "type": "string",
-                        "name": "captcha_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "name": "captcha_val",
-                        "in": "query",
-                        "required": true
                     }
                 ],
                 "responses": {
@@ -318,39 +120,21 @@ var doc = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/app.ApiJson"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/app.ErrJson"
                         }
                     }
                 }
             }
         },
-        "/v1/user/logout": {
+        "/v1/user/me": {
             "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "tags": [
                     "User API"
                 ],
-                "summary": "用户注销",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/app.ApiJson"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/app.ErrJson"
                         }
                     }
                 }
@@ -361,277 +145,15 @@ var doc = `{
                 "tags": [
                     "User API"
                 ],
-                "summary": "用户注册",
                 "parameters": [
                     {
-                        "description": "form",
-                        "name": "form",
+                        "description": "register param",
+                        "name": "param",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/v1.RegisterForm"
+                            "$ref": "#/definitions/v1.RegisterParam"
                         }
-                    },
-                    {
-                        "type": "string",
-                        "name": "captcha_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "name": "captcha_val",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.ApiJson"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/app.ErrJson"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/user/value/exist": {
-            "post": {
-                "tags": [
-                    "User API"
-                ],
-                "summary": "判断主要的用户信息的值是否存在",
-                "parameters": [
-                    {
-                        "description": "form",
-                        "name": "form",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/v1.KeyFieldExistForm"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.ApiJson"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/app.ErrJson"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/user/wt_query/history": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "tags": [
-                    "User API"
-                ],
-                "summary": "获取用户的查询历史记录",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.ApiJson"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/app.ErrJson"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/visits": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "tags": [
-                    "Visit API"
-                ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "query userinfo",
-                        "name": "form",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.ApiJson"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/visits/count": {
-            "get": {
-                "tags": [
-                    "Visit API"
-                ],
-                "summary": "获取访问统计",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "name": "timestamp",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.ApiJson"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/visits/visit": {
-            "post": {
-                "tags": [
-                    "Visit API"
-                ],
-                "summary": "登记访问信息",
-                "parameters": [
-                    {
-                        "description": "query userinfo",
-                        "name": "form",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/v1.PostVisitForm"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.ApiJson"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/war_thunder/userinfo": {
-            "get": {
-                "tags": [
-                    "WarThunder API"
-                ],
-                "summary": "获取异步查询结果",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "name": "query_id",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.ApiJson"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/war_thunder/userinfo/queries": {
-            "get": {
-                "tags": [
-                    "WarThunder API"
-                ],
-                "summary": "查询游戏昵称的所有query_id",
-                "parameters": [
-                    {
-                        "maxLength": 20,
-                        "type": "string",
-                        "description": "游戏的昵称",
-                        "name": "nickname",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.ApiJson"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/war_thunder/userinfo/query/count": {
-            "get": {
-                "tags": [
-                    "WarThunder API"
-                ],
-                "summary": "查询query的数量",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "name": "timestamp",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.ApiJson"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/war_thunder/userinfo/refresh": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "tags": [
-                    "WarThunder API"
-                ],
-                "summary": "刷新一个游戏用户数据的最新数据",
-                "parameters": [
-                    {
-                        "maxLength": 20,
-                        "type": "string",
-                        "description": "游戏的昵称",
-                        "name": "nickname",
-                        "in": "query",
-                        "required": true
                     }
                 ],
                 "responses": {
@@ -658,154 +180,42 @@ var doc = `{
                 }
             }
         },
-        "app.ErrJson": {
-            "type": "object",
-            "properties": {
-                "err": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                }
-            }
-        },
-        "v1.BugReportForm": {
+        "v1.LoginParam": {
             "type": "object",
             "required": [
-                "title",
-                "type"
+                "loginName",
+                "password"
             ],
             "properties": {
-                "anonymous": {
-                    "description": "是否匿名",
-                    "type": "boolean"
-                },
-                "content": {
-                    "description": "报告的详情",
-                    "type": "string",
-                    "maxLength": 2000
-                },
-                "title": {
-                    "description": "报告的标题",
-                    "type": "string",
-                    "maxLength": 30
-                },
-                "type": {
-                    "description": "报告的类型",
+                "loginName": {
                     "type": "string"
-                }
-            }
-        },
-        "v1.KeyFieldExistForm": {
-            "type": "object",
-            "required": [
-                "key",
-                "value"
-            ],
-            "properties": {
-                "key": {
-                    "description": "字段名称，比如username和email",
-                    "type": "string",
-                    "enum": [
-                        "username",
-                        "email"
-                    ]
                 },
-                "value": {
-                    "description": "字段值",
-                    "type": "string"
-                }
-            }
-        },
-        "v1.LoginForm": {
-            "type": "object",
-            "required": [
-                "password",
-                "username"
-            ],
-            "properties": {
                 "password": {
-                    "description": "密码",
-                    "type": "string"
-                },
-                "username": {
-                    "description": "用户名",
                     "type": "string"
                 }
             }
         },
-        "v1.NoticeForm": {
+        "v1.RegisterParam": {
             "type": "object",
             "required": [
-                "content"
+                "displayName",
+                "email",
+                "password"
             ],
             "properties": {
-                "content": {
-                    "type": "string",
-                    "maxLength": 2000
-                },
-                "title": {
-                    "type": "string",
-                    "maxLength": 30
-                }
-            }
-        },
-        "v1.PostVisitForm": {
-            "type": "object",
-            "properties": {
-                "client_id": {
-                    "description": "客户端生成id",
-                    "type": "string"
-                },
-                "page": {
-                    "description": "访问页面",
-                    "type": "string"
-                },
-                "user_id": {
-                    "description": "用户id",
-                    "type": "integer"
-                }
-            }
-        },
-        "v1.RegisterForm": {
-            "type": "object",
-            "required": [
-                "password",
-                "username"
-            ],
-            "properties": {
-                "avatar_url": {
-                    "description": "头像url地址",
+                "displayName": {
                     "type": "string"
                 },
                 "email": {
-                    "description": "邮箱",
-                    "type": "string"
-                },
-                "invited_code": {
-                    "description": "邀请码",
                     "type": "string"
                 },
                 "password": {
-                    "description": "密码",
                     "type": "string"
                 },
                 "phone": {
-                    "description": "电话",
-                    "type": "string"
-                },
-                "username": {
-                    "description": "用户名",
                     "type": "string"
                 }
             }
-        }
-    },
-    "securityDefinitions": {
-        "ApiKeyAuth": {
-            "type": "apiKey",
-            "name": "Authorization",
-            "in": "header"
         }
     }
 }`
@@ -825,8 +235,8 @@ var SwaggerInfo = swaggerInfo{
 	Host:        "",
 	BasePath:    "",
 	Schemes:     []string{},
-	Title:       "安东星",
-	Description: "安东星接口文档",
+	Title:       "axiangcoding/anton-star",
+	Description: "api system build by ax-web",
 }
 
 type s struct{}

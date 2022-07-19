@@ -1,16 +1,16 @@
 package mq
 
 import (
-	"axiangcoding/antonstar/api-system/logging"
-	"axiangcoding/antonstar/api-system/settings"
-	"github.com/streadway/amqp"
+	"github.com/axiangcoding/ax-web/logging"
+	"github.com/axiangcoding/ax-web/settings"
+	amqp "github.com/rabbitmq/amqp091-go"
 )
 
 type CrawBody struct {
 	// 查询的ID
-	QueryID string `json:"query_id"`
+	MissionId string `json:"query_id"`
 	// 调用的目标爬虫
-	Target []string `json:"target"`
+	Targets []string `json:"targets"`
 	// 查询玩家的昵称
 	Nickname string `json:"nickname"`
 }

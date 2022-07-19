@@ -1,12 +1,13 @@
 package data
 
 import (
-	"axiangcoding/antonstar/api-system/data/schema"
-	"axiangcoding/antonstar/api-system/logging"
-	"axiangcoding/antonstar/api-system/settings"
+	"github.com/axiangcoding/ax-web/data/table"
+	"github.com/axiangcoding/ax-web/logging"
+	"github.com/axiangcoding/ax-web/settings"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"gorm.io/gorm/schema"
 	"log"
 	"os"
 	"time"
@@ -21,6 +22,7 @@ func Setup() {
 func initDB() *gorm.DB {
 	db, err := gorm.Open(mysql.Open(settings.Config.App.Data.Database.Source),
 		&gorm.Config{
+			NamingStrategy:                           &schema.NamingStrategy{SingularTable: true},
 			DisableForeignKeyConstraintWhenMigrating: true,
 			Logger: logger.New(
 				log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer（日志输出的目标，前缀和日志包含的内容——译者注）
@@ -48,15 +50,8 @@ func GetDB() *gorm.DB {
 func autoMigrate(db *gorm.DB) {
 	if err := db.Set("gorm:table_options",
 		"ENGINE=InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_bin").AutoMigrate(
-		&schema.User{},
-		&schema.UserCert{},
-		&schema.CrawlerData{},
-		&schema.Visit{},
-		&schema.BugReport{},
-		&schema.SystemConfig{},
-		&schema.SiteNotice{},
-		&schema.GameUser{},
-		&schema.SearchHistory{},
+		&table.Mission{},
+		&table.GameUser{},
 	); err != nil {
 		logging.Fatal(err)
 	} else {

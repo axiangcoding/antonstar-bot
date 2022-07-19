@@ -1,9 +1,9 @@
 package cache
 
 import (
-	"axiangcoding/antonstar/api-system/logging"
-	"axiangcoding/antonstar/api-system/settings"
 	"context"
+	"github.com/axiangcoding/ax-web/logging"
+	"github.com/axiangcoding/ax-web/settings"
 	"github.com/go-redis/redis/v8"
 )
 
@@ -25,6 +25,6 @@ func initRedis() *redis.Client {
 	return redis.NewClient(opt)
 }
 
-func GetRedis() *redis.Client {
+func GetClient() *redis.Client {
 	return rdb
 }

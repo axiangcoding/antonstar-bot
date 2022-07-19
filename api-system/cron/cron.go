@@ -1,7 +1,7 @@
 package cron
 
 import (
-	"axiangcoding/antonstar/api-system/logging"
+	"github.com/axiangcoding/ax-web/logging"
 	"github.com/robfig/cron/v3"
 )
 

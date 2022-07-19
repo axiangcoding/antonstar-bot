@@ -31,3 +31,10 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+  cqhttp:
+    image: ghcr.io/mrs4s/go-cqhttp:1.0.0-rc3
+    ports:
+      - "5700:5700"
+    volumes:
+      - "./volume/cqhttp:/data"
+    entrypoint:  ["tail","-f","/dev/null"]

@@ -1,11 +1,11 @@
 package app
 
 import (
-	"axiangcoding/antonstar/api-system/entity/e"
-	"axiangcoding/antonstar/api-system/logging"
-	"axiangcoding/antonstar/api-system/settings"
 	"errors"
 	"fmt"
+	"github.com/axiangcoding/ax-web/entity/e"
+	"github.com/axiangcoding/ax-web/logging"
+	"github.com/axiangcoding/ax-web/settings"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"net/http"
@@ -37,17 +37,6 @@ func generateErrJson(errs []error) *ErrJson {
 			if errors.As(err, &validErrors) {
 				for _, err := range err.(validator.ValidationErrors) {
 					errMessages = append(errMessages, fmt.Sprintf(validFailedErrMsg, err.Field(), err.Tag()))
-					// fmt.Println(err.Namespace())
-					// fmt.Println(err.Field())
-					// fmt.Println(err.StructNamespace())
-					// fmt.Println(err.StructField())
-					// fmt.Println(err.Tag())
-					// fmt.Println(err.ActualTag())
-					// fmt.Println(err.Kind())
-					// fmt.Println(err.Type())
-					// fmt.Println(err.Value())
-					// fmt.Println(err.Param())
-					// fmt.Println()
 				}
 			} else {
 				errMessages = append(errMessages, err.Error())
@@ -79,7 +68,7 @@ func Success(c *gin.Context, data interface{}) {
 // business failed response
 // 返回业务逻辑失败
 func BizFailed(c *gin.Context, errCode int, err ...error) {
-	logging.Errorf("Biz failed with code [%d].", errCode)
+	logging.Errorf("Biz failed with code [%d], errors: %s.", errCode, err)
 	HttpResponse(c, http.StatusOK, errCode, generateErrJson(err))
 }
 
@@ -87,7 +76,7 @@ func BizFailed(c *gin.Context, errCode int, err ...error) {
 // bad request response
 // 返回错误参数请求
 func BadRequest(c *gin.Context, errCode int, err ...error) {
-	logging.Infof("Bad request with code [%d].", errCode)
+	logging.Infof("Bad request with code [%d], errors: %s.", errCode, err)
 	HttpResponse(c, http.StatusBadRequest, errCode, generateErrJson(err))
 	c.Abort()
 }

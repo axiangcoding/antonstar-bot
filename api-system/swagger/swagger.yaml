@@ -9,222 +9,72 @@ definitions:
       msg:
         type: string
     type: object
-  app.ErrJson:
+  v1.LoginParam:
     properties:
-      err:
-        items:
-          type: string
-        type: array
-    type: object
-  v1.BugReportForm:
-    properties:
-      anonymous:
-        description: 是否匿名
-        type: boolean
-      content:
-        description: 报告的详情
-        maxLength: 2000
+      loginName:
         type: string
-      title:
-        description: 报告的标题
-        maxLength: 30
-        type: string
-      type:
-        description: 报告的类型
-        type: string
-    required:
-    - title
-    - type
-    type: object
-  v1.KeyFieldExistForm:
-    properties:
-      key:
-        description: 字段名称，比如username和email
-        enum:
-        - username
-        - email
-        type: string
-      value:
-        description: 字段值
-        type: string
-    required:
-    - key
-    - value
-    type: object
-  v1.LoginForm:
-    properties:
       password:
-        description: 密码
-        type: string
-      username:
-        description: 用户名
         type: string
     required:
+    - loginName
     - password
-    - username
     type: object
-  v1.NoticeForm:
+  v1.RegisterParam:
     properties:
-      content:
-        maxLength: 2000
-        type: string
-      title:
-        maxLength: 30
-        type: string
-    required:
-    - content
-    type: object
-  v1.PostVisitForm:
-    properties:
-      client_id:
-        description: 客户端生成id
-        type: string
-      page:
-        description: 访问页面
-        type: string
-      user_id:
-        description: 用户id
-        type: integer
-    type: object
-  v1.RegisterForm:
-    properties:
-      avatar_url:
-        description: 头像url地址
+      displayName:
         type: string
       email:
-        description: 邮箱
-        type: string
-      invited_code:
-        description: 邀请码
         type: string
       password:
-        description: 密码
         type: string
       phone:
-        description: 电话
-        type: string
-      username:
-        description: 用户名
         type: string
     required:
+    - displayName
+    - email
     - password
-    - username
     type: object
 info:
   contact:
     email: axiangcoding@gmail.com
     name: axiangcoding
-  description: 安东星接口文档
+  description: api system build by ax-web
   license: {}
-  title: 安东星
+  title: axiangcoding/anton-star
   version: 1.0.0
 paths:
-  /v1/bug_report/:
+  /v1/cqhttp/receive/event:
     post:
       parameters:
-      - description: form
+      - description: accessToken
+        in: query
+        name: accessToken
+        required: true
+        type: string
+      - description: getParam
         in: body
-        name: form
+        name: param
         required: true
         schema:
-          $ref: '#/definitions/v1.BugReportForm'
+          type: object
       responses:
         "200":
           description: OK
           schema:
             $ref: '#/definitions/app.ApiJson'
-      summary: 提交一条问题反馈
+      summary: receive event from cqhttp service
       tags:
-      - BugReport API
-  /v1/captcha:
+      - CQHttp API
+  /v1/cqhttp/status:
     get:
       responses:
         "200":
           description: OK
           schema:
             $ref: '#/definitions/app.ApiJson'
-      summary: 请求生成验证码
+      summary: get cqhttp service status
       tags:
-      - Captcha API
-  /v1/captcha/{file}:
-    get:
-      consumes:
-      - image/png
-      parameters:
-      - description: image file name
-        in: path
-        name: file
-        required: true
-        type: string
-      - in: query
-        name: lang
-        type: string
-      - in: query
-        name: reload
-        type: boolean
-      responses:
-        "200":
-          description: ""
-      summary: 获取验证码图片
-      tags:
-      - Captcha API
-  /v1/game_users:
-    get:
-      parameters:
-      - description: 查询过滤
-        in: query
-        name: filter
-        type: string
-      - description: 分页页码，从1开始
-        in: query
-        minimum: 1
-        name: page_num
-        required: true
-        type: integer
-      - description: 分页大小，最大为1000
-        in: query
-        maximum: 1000
-        minimum: 1
-        name: page_size
-        required: true
-        type: integer
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.ApiJson'
-      summary: 查询游戏昵称的所有query_id
-      tags:
-      - GameUser API
-  /v1/site/notice/:
-    post:
-      parameters:
-      - description: form
-        in: body
-        name: form
-        required: true
-        schema:
-          $ref: '#/definitions/v1.NoticeForm'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.ApiJson'
-      security:
-      - ApiKeyAuth: []
-      summary: 新增一条全站公告消息
-      tags:
-      - Site API
-  /v1/site/notice/last:
-    get:
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.ApiJson'
-      summary: 获取最新的一条全站公告消息
-      tags:
-      - Site API
+      - CQHttp API
   /v1/system/info:
     get:
       responses:
@@ -235,276 +85,47 @@ paths:
       summary: System Info
       tags:
       - System API
-  /v1/upload/picture:
-    post:
-      consumes:
-      - multipart/form-data
-      parameters:
-      - description: image file
-        in: formData
-        name: file
-        required: true
-        type: file
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.ApiJson'
-      security:
-      - ApiKeyAuth: []
-      summary: 上传图片
-      tags:
-      - Upload API
-  /v1/user/info:
-    post:
-      parameters:
-      - description: 如果不传入user_id参数，则查token所代表的个人信息，如果传入，则查其他用户的
-        in: query
-        name: user_id
-        type: integer
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.ApiJson'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/app.ErrJson'
-      security:
-      - ApiKeyAuth: []
-      summary: 获取用户信息
-      tags:
-      - User API
   /v1/user/login:
     post:
       parameters:
-      - description: register form
+      - description: login param
         in: body
-        name: form
+        name: param
         required: true
         schema:
-          $ref: '#/definitions/v1.LoginForm'
-      - in: query
-        name: captcha_id
-        required: true
-        type: string
-      - in: query
-        name: captcha_val
-        required: true
-        type: string
+          $ref: '#/definitions/v1.LoginParam'
       responses:
         "200":
           description: OK
           schema:
             $ref: '#/definitions/app.ApiJson'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/app.ErrJson'
-      summary: 用户登录
       tags:
       - User API
-  /v1/user/logout:
+  /v1/user/me:
     post:
       responses:
         "200":
           description: OK
           schema:
             $ref: '#/definitions/app.ApiJson'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/app.ErrJson'
-      security:
-      - ApiKeyAuth: []
-      summary: 用户注销
       tags:
       - User API
   /v1/user/register:
     post:
       parameters:
-      - description: form
+      - description: register param
         in: body
-        name: form
+        name: param
         required: true
         schema:
-          $ref: '#/definitions/v1.RegisterForm'
-      - in: query
-        name: captcha_id
-        required: true
-        type: string
-      - in: query
-        name: captcha_val
-        required: true
-        type: string
+          $ref: '#/definitions/v1.RegisterParam'
       responses:
         "200":
           description: OK
           schema:
             $ref: '#/definitions/app.ApiJson'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/app.ErrJson'
-      summary: 用户注册
       tags:
       - User API
-  /v1/user/value/exist:
-    post:
-      parameters:
-      - description: form
-        in: body
-        name: form
-        required: true
-        schema:
-          $ref: '#/definitions/v1.KeyFieldExistForm'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.ApiJson'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/app.ErrJson'
-      summary: 判断主要的用户信息的值是否存在
-      tags:
-      - User API
-  /v1/user/wt_query/history:
-    get:
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.ApiJson'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/app.ErrJson'
-      security:
-      - ApiKeyAuth: []
-      summary: 获取用户的查询历史记录
-      tags:
-      - User API
-  /v1/visits:
-    get:
-      parameters:
-      - description: query userinfo
-        in: query
-        name: form
-        required: true
-        type: string
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.ApiJson'
-      security:
-      - ApiKeyAuth: []
-      tags:
-      - Visit API
-  /v1/visits/count:
-    get:
-      parameters:
-      - in: query
-        name: timestamp
-        type: string
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.ApiJson'
-      summary: 获取访问统计
-      tags:
-      - Visit API
-  /v1/visits/visit:
-    post:
-      parameters:
-      - description: query userinfo
-        in: body
-        name: form
-        required: true
-        schema:
-          $ref: '#/definitions/v1.PostVisitForm'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.ApiJson'
-      summary: 登记访问信息
-      tags:
-      - Visit API
-  /v1/war_thunder/userinfo:
-    get:
-      parameters:
-      - in: query
-        name: query_id
-        required: true
-        type: string
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.ApiJson'
-      summary: 获取异步查询结果
-      tags:
-      - WarThunder API
-  /v1/war_thunder/userinfo/queries:
-    get:
-      parameters:
-      - description: 游戏的昵称
-        in: query
-        maxLength: 20
-        name: nickname
-        required: true
-        type: string
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.ApiJson'
-      summary: 查询游戏昵称的所有query_id
-      tags:
-      - WarThunder API
-  /v1/war_thunder/userinfo/query/count:
-    get:
-      parameters:
-      - in: query
-        name: timestamp
-        type: string
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.ApiJson'
-      summary: 查询query的数量
-      tags:
-      - WarThunder API
-  /v1/war_thunder/userinfo/refresh:
-    post:
-      parameters:
-      - description: 游戏的昵称
-        in: query
-        maxLength: 20
-        name: nickname
-        required: true
-        type: string
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.ApiJson'
-      security:
-      - ApiKeyAuth: []
-      summary: 刷新一个游戏用户数据的最新数据
-      tags:
-      - WarThunder API
 produces:
 - application/json
-securityDefinitions:
-  ApiKeyAuth:
-    in: header
-    name: Authorization
-    type: apiKey
 swagger: "2.0"

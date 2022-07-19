@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var Config AllConfig
+var Config ConfigStruct
 
 func Setup() {
 	setDefault()
@@ -16,7 +16,7 @@ func Setup() {
 	viper.AddConfigPath("config/")
 	viper.AddConfigPath("config/default/")
 	viper.AutomaticEnv()
-	viper.SetEnvPrefix("as_api")
+	viper.SetEnvPrefix("ax")
 	replacer := strings.NewReplacer(".", "_")
 	viper.SetEnvKeyReplacer(replacer)
 	if err := viper.ReadInConfig(); err != nil {
