@@ -9,7 +9,9 @@ on:
     # branches: [develop]
 
 env:
-  REGISTRY: sgccr.ccs.tencentyun.com
+  # REGISTRY: sgccr.ccs.tencentyun.com
+  REGISTRY: ccr.ccs.tencentyun.com
+
 
 jobs:
   push_api_system:
