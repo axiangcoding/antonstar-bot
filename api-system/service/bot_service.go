@@ -1,16 +1,16 @@
 package service
 
 import (
-	"encoding/binary"
 	"fmt"
 	"golang.org/x/exp/rand"
+	"hash/crc32"
 	"time"
 )
 
 // DrawNumber 抽一个数字
-func DrawNumber(id int) int32 {
-	date := time.Now().Format("2006-01-02")
+func DrawNumber(id int, now time.Time) int32 {
+	date := now.Format("2006-01-02")
 	sprintf := fmt.Sprintf("%d+%s", id, date)
-	u := binary.BigEndian.Uint64([]byte(sprintf))
-	return rand.New(rand.NewSource(u)).Int31n(100)
+	hash := crc32.ChecksumIEEE([]byte(sprintf))
+	return rand.New(rand.NewSource(uint64(hash))).Int31n(100)
 }

@@ -112,7 +112,7 @@ func handleCqHttpMessageEventGroup(c *gin.Context, event *cqhttp.MessageGroupEve
 			break
 		case bot.ActionDrawCard:
 			id := event.Sender.UserId
-			number := DrawNumber(id)
+			number := DrawNumber(id, time.Now().In(time.FixedZone("CST", 8*3600)))
 			retMsgForm.Message = retMsgPrefix + fmt.Sprintf("你今天的气运值是%d", number)
 			break
 		default:
