@@ -84,7 +84,7 @@ func handleCqHttpMessageEventGroup(c *gin.Context, event *cqhttp.MessageGroupEve
 	messageType := event.MessageType
 	msg := event.Message
 	// 处理群组at消息，只有at我的群组消息才处理，其他的一律抛弃
-	settingSelfQQ := settings.Config.CqHttp.SelfQQ
+	settingSelfQQ := settings.Config.Service.CqHttp.SelfQQ
 	if messageType != "group" || !cqhttp.MustContainsCqCode(msg) || settingSelfQQ != cqhttp.MustGetCqCodeAtQQ(msg) {
 		return
 	}
@@ -100,6 +100,7 @@ func handleCqHttpMessageEventGroup(c *gin.Context, event *cqhttp.MessageGroupEve
 			async, user, err := QueryWTGamerProfile(action.Value)
 			if err != nil {
 				logging.Warnf("query WT gamer profile error. %s", err)
+				retMsgForm.Message = retMsgPrefix + "啊哦，目前无法查询，请稍后重试"
 			}
 			if async {
 				retMsgForm.Message = retMsgPrefix + "正在查询中，请稍后..."
@@ -107,8 +108,15 @@ func handleCqHttpMessageEventGroup(c *gin.Context, event *cqhttp.MessageGroupEve
 				retMsgForm.Message = retMsgPrefix + user.ToFriendlyString()
 			}
 			break
+		case bot.ActionRefresh:
+			if err := RefreshWTGamerProfile(action.Value); err != nil {
+				logging.Warn("refresh WT gamer profile error. ", err)
+				retMsgForm.Message = retMsgPrefix + "啊哦，目前无法刷新，请稍后重试"
+			}
+			retMsgForm.Message = retMsgPrefix + "正在刷新已有数据，请稍后..."
+			break
 		case bot.ActionReport:
-			retMsgForm.Message = retMsgPrefix + "举办他是吧，我记住你了，晚上别锁房门"
+			retMsgForm.Message = retMsgPrefix + "举办他是吧，记住你了，晚上别锁房门"
 			break
 		case bot.ActionDrawCard:
 			id := event.Sender.UserId

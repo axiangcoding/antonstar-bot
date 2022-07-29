@@ -6,25 +6,18 @@ import (
 	"github.com/axiangcoding/ax-web/logging"
 	"github.com/axiangcoding/ax-web/service"
 	"github.com/axiangcoding/ax-web/settings"
+	"github.com/axiangcoding/ax-web/tool"
 	"github.com/gin-gonic/gin"
 )
 
-type ReceiveForm struct {
-}
-
 // CqHttpReceiveEvent
-// @Summary  receive event from cqhttp service
-// @Tags     CQHttp API
-// @Param    accessToken  query     string       true  "accessToken"
-// @Param    param        body      object       true  "getParam"
-// @Success  200          {object}  app.ApiJson  ""
-// @Router   /v1/cqhttp/receive/event [post]
+// @Summary   接收cqhttp的事件
+// @Tags      CQHttp API
+// @Param     param  body      object       true  "getParam"
+// @Success   200    {object}  app.ApiJson  ""
+// @Router    /v1/cqhttp/receive/event [post]
+// @Security  AppToken
 func CqHttpReceiveEvent(c *gin.Context) {
-	accessToken := c.Query("accessToken")
-	if accessToken != "defaultAccessToken" {
-		app.Unauthorized(c, e.TokenNotValid)
-		return
-	}
 	var m map[string]any
 	err := c.ShouldBindJSON(&m)
 	if err != nil {
@@ -32,7 +25,7 @@ func CqHttpReceiveEvent(c *gin.Context) {
 		return
 	}
 	cp := c.Copy()
-	app.GoWithRecover(func() {
+	tool.GoWithRecover(func() {
 		if err := service.HandleCqHttpEvent(cp, m); err != nil {
 			logging.Errorf("async handle cqhttp event failed. %s", err)
 		}
@@ -42,12 +35,12 @@ func CqHttpReceiveEvent(c *gin.Context) {
 }
 
 // CqHttpStatus
-// @Summary  get cqhttp service status
+// @Summary  获取cqhttp的最新状态
 // @Tags     CQHttp API
 // @Success  200  {object}  app.ApiJson  ""
 // @Router   /v1/cqhttp/status [get]
 func CqHttpStatus(c *gin.Context) {
-	defaultSelfId := settings.Config.CqHttp.SelfQQ
+	defaultSelfId := settings.Config.Service.CqHttp.SelfQQ
 	status, err := service.GetCqHttpStatus(c, defaultSelfId)
 	if err != nil {
 		app.BizFailed(c, e.Error, err)

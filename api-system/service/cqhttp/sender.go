@@ -19,7 +19,7 @@ type CommonResponse struct {
 
 func SendGroupMsg(form SendGroupMsgForm) (*CommonResponse, error) {
 	// TODO: 在go 1.19中使用新特性进行附加
-	url := settings.Config.CqHttp.Url + "/send_group_msg"
+	url := settings.Config.Service.CqHttp.Url + "/send_group_msg"
 	client := resty.New().SetTimeout(time.Second * 20)
 	var commonResp CommonResponse
 	resp, err := client.R().SetHeader("Content-Type", "application/json").

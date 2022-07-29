@@ -20,7 +20,7 @@ class MysqlPipeline:
         content = json.dumps(item["content"], ensure_ascii=False)
         resp = requests.post(url=pattern.format(url, token),
                              json={
-                                 "crawler_data": content,
+                                 "crawler_data": item['content'],
                                  'mission_id': item['mission_id'],
                                  'source': item['source'],
                              })

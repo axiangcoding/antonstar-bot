@@ -12,6 +12,7 @@ var (
 var (
 	ActionUnknown  = "unknown"
 	ActionQuery    = "query"
+	ActionRefresh  = "refresh"
 	ActionReport   = "report"
 	ActionDrawCard = "drawCard"
 )
@@ -36,6 +37,9 @@ func ParseMessageCommand(msg string) *Action {
 	switch split[0] {
 	case "查询":
 		key = ActionQuery
+		break
+	case "刷新":
+		key = ActionRefresh
 		break
 	case "举办":
 		key = ActionReport
