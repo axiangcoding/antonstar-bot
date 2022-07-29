@@ -1,40 +1,25 @@
 # 部署的样例，仅作为样例，生产环境采用独立的配置
 version: "3"
 services:
-  db:
-    image: mariadb:10
-    # restart: always
-    command: --default-authentication-plugin=mysql_native_password
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: antonstar
-      MYSQL_PASSWORD: AntonStarP@ssword.
-      MYSQL_DATABASE: anton_star
+  postgres:
+    image: postgres:14-alpine
     ports:
-      - "3306:3306"
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: antonstar
+      POSTGRES_PASSWORD: AntonStarP@ssword.
+      POSTGRES_DB: anton_star
     volumes:
-      - ./volume/mysql:/var/lib/mysql
-  phpmyadmin:
-    image: phpmyadmin:latest
-    # restart: always
-    ports:
-      - "80:80"
-    environment:
-      - PMA_ARBITRARY=1
+      - ./volume/postgres:/var/lib/postgresql/data
   redis:
     image: redis:6-alpine
     # restart: always
     ports:
       - "6379:6379"
-  mq:
-    image: rabbitmq:3.9-management-alpine
-    ports:
-      - "5672:5672"
-      - "15672:15672"
   cqhttp:
     image: ghcr.io/mrs4s/go-cqhttp:1.0.0-rc3
     ports:
       - "5700:5700"
     volumes:
       - "./volume/cqhttp:/data"
-    entrypoint:  ["tail","-f","/dev/null"]
+    entrypoint: [ "tail", "-f", "/dev/null" ]

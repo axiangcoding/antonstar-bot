@@ -1,2 +1,7 @@
 __pycache__
 .idea
+/dbs/
+/eggs/
+/project.egg-info/
+/build/
+/logs/

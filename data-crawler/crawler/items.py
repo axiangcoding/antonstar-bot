@@ -7,7 +7,7 @@ import scrapy
 
 
 class TSPersonalStatItem(scrapy.Item):
-    query_id = scrapy.Field()
+    mission_id = scrapy.Field()
     found = scrapy.Field()
     http_status = scrapy.Field()
     source = scrapy.Field()
@@ -16,7 +16,7 @@ class TSPersonalStatItem(scrapy.Item):
     updated_at = scrapy.Field()
 
 class GaijinPersonalItem(scrapy.Item):
-    query_id = scrapy.Field()
+    mission_id = scrapy.Field()
     found = scrapy.Field()
     http_status = scrapy.Field()
     source = scrapy.Field()
