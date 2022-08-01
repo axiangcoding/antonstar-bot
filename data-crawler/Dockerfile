@@ -10,4 +10,5 @@ WORKDIR /app
 COPY . /app/
 RUN pip install -r requirements.txt
 RUN scrapyd-deploy -l
+EXPOSE 6800
 ENTRYPOINT ["scrapyd"]
