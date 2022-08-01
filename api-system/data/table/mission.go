@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	MissionTypeWTProfile = "wt_profile"
+	MissionTypeWTProfile = "profile"
 )
 
 const (

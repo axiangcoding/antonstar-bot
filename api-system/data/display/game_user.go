@@ -2,6 +2,7 @@ package display
 
 import (
 	"bytes"
+	"github.com/axiangcoding/ax-web/logging"
 	"text/template"
 )
 
@@ -30,6 +31,10 @@ const templateStr = `
 等级: {{.Level}}
 头衔: {{.Title}}
 是否被封禁: {{.Banned}}
+更新时间: {{.UpdatedAt}}
+ThunderSkill街机效率值: {{.TsABRate}}
+ThunderSkill历史效率值: {{.TsRBRate}}
+ThunderSkill全真效率值: {{.TsSBRate}}
 `
 
 func (u GameUser) ToFriendlyString() string {
@@ -37,9 +42,11 @@ func (u GameUser) ToFriendlyString() string {
 
 	t, err := template.New("display").Parse(templateStr)
 	if err != nil {
+		logging.Warn(err)
 		return "Error"
 	}
 	if err := t.Execute(&buf, u); err != nil {
+		logging.Error(err)
 		return "Error"
 	}
 	return buf.String()

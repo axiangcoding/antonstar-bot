@@ -9,4 +9,5 @@ RUN #pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 WORKDIR /app
 COPY . /app/
 RUN pip install -r requirements.txt
-ENTRYPOINT ["python", "-u","main.py"]
+RUN scrapyd-deploy -l
+ENTRYPOINT ["scrapyd"]

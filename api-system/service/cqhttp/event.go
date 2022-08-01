@@ -67,11 +67,11 @@ type MessageGroupEvent struct {
 		Role     string `json:"role" mapstructure:"role"`
 		Sex      string `json:"sex" mapstructure:"sex"`
 		Title    string `json:"title" mapstructure:"title"`
-		UserId   int    `json:"user_id" mapstructure:"user_id"`
+		UserId   int64  `json:"user_id" mapstructure:"user_id"`
 	} `json:"sender" mapstructure:"sender"`
 	SubType string `json:"sub_type" mapstructure:"sub_type"`
 	Time    int    `json:"time" mapstructure:"time"`
-	UserId  int    `json:"user_id" mapstructure:"user_id"`
+	UserId  int64  `json:"user_id" mapstructure:"user_id"`
 }
 
 func (m *MessageGroupEvent) MarshalBinary() (data []byte, err error) {

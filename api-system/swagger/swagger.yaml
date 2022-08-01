@@ -9,6 +9,19 @@ definitions:
       msg:
         type: string
     type: object
+  v1.CrawlerReceiveForm:
+    properties:
+      crawler_data:
+        type: string
+      mission_id:
+        type: string
+      source:
+        type: string
+    required:
+    - crawler_data
+    - mission_id
+    - source
+    type: object
   v1.LoginParam:
     properties:
       loginName:
@@ -46,11 +59,6 @@ paths:
   /v1/cqhttp/receive/event:
     post:
       parameters:
-      - description: accessToken
-        in: query
-        name: accessToken
-        required: true
-        type: string
       - description: getParam
         in: body
         name: param
@@ -62,7 +70,9 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/app.ApiJson'
-      summary: receive event from cqhttp service
+      security:
+      - AppToken: []
+      summary: 接收cqhttp的事件
       tags:
       - CQHttp API
   /v1/cqhttp/status:
@@ -72,9 +82,28 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/app.ApiJson'
-      summary: get cqhttp service status
+      summary: 获取cqhttp的最新状态
       tags:
       - CQHttp API
+  /v1/crawler/callback:
+    post:
+      parameters:
+      - description: form
+        in: body
+        name: form
+        required: true
+        schema:
+          $ref: '#/definitions/v1.CrawlerReceiveForm'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      security:
+      - AppToken: []
+      summary: 接收爬虫的回调
+      tags:
+      - Crawler API
   /v1/system/info:
     get:
       responses:
@@ -128,4 +157,9 @@ paths:
       - User API
 produces:
 - application/json
+securityDefinitions:
+  AppToken:
+    in: query
+    name: app_token
+    type: apiKey
 swagger: "2.0"

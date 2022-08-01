@@ -19,8 +19,8 @@ casbin_policy_path = "./config/default/"
 enable = true
 
 [app.data.database]
-driver = "mysql"
-source = "antonstar:AntonStarP@ssword.@tcp(127.0.0.1:3306)/anton_star?charset=utf8mb4&parseTime=true"
+driver = "postgres"
+source = "host=localhost user=antonstar password=AntonStarP@ssword. dbname=anton_star port=5432 sslmode=disable"
 max_open_conn = 100
 max_idle_conn = 10
 
@@ -29,22 +29,23 @@ max_idle_conn = 10
 driver = "redis"
 source = "redis://localhost:6379/0"
 
-[app.mq]
-source = "amqp://localhost:5672"
-
-[app.cqhttp]
+[app.service.cqhttp]
 url = "http://localhost:5700"
-self_qq = 2362794289
+self_qq = 3547589750
+
+[app.service.crawler]
+url = "http://localhost:6800"
 
 [app.response]
 # hide error details
 hide_error_details = false
 
-
 [server]
 run_mode = "debug"
 port = 8888
 base_path = "/api"
+app_token = "defaultAccessToken"
+
 
 
 

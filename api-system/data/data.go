@@ -5,6 +5,7 @@ import (
 	"github.com/axiangcoding/ax-web/logging"
 	"github.com/axiangcoding/ax-web/settings"
 	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
@@ -19,11 +20,28 @@ func Setup() {
 	db = initDB()
 }
 
+func selectDb() gorm.Dialector {
+	driver := settings.Config.App.Data.Database.Driver
+	source := settings.Config.App.Data.Database.Source
+	var dial gorm.Dialector
+	switch driver {
+	case "mysql":
+		dial = mysql.Open(source)
+		break
+	case "postgres":
+		dial = postgres.Open(source)
+		break
+	default:
+		logging.Fatalf("no such driver: %s", driver)
+	}
+	return dial
+}
+
 func initDB() *gorm.DB {
-	db, err := gorm.Open(mysql.Open(settings.Config.App.Data.Database.Source),
+	dial := selectDb()
+	db, err := gorm.Open(dial,
 		&gorm.Config{
-			NamingStrategy:                           &schema.NamingStrategy{SingularTable: true},
-			DisableForeignKeyConstraintWhenMigrating: true,
+			NamingStrategy: &schema.NamingStrategy{SingularTable: true},
 			Logger: logger.New(
 				log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer（日志输出的目标，前缀和日志包含的内容——译者注）
 				logger.Config{
@@ -48,8 +66,7 @@ func GetDB() *gorm.DB {
 
 // 自动更新表结构
 func autoMigrate(db *gorm.DB) {
-	if err := db.Set("gorm:table_options",
-		"ENGINE=InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_bin").AutoMigrate(
+	if err := db.AutoMigrate(
 		&table.Mission{},
 		&table.GameUser{},
 	); err != nil {

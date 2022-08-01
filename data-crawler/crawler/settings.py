@@ -97,10 +97,5 @@ HTTPERROR_ALLOWED_CODES = [404]
 
 LOG_LEVEL = "WARN"
 
-MQ_SOURCE = "localhost"
-
-MYSQL_HOST = "localhost"
-MYSQL_PORT = 3306
-MYSQL_USER = "antonstar"
-MYSQL_PWD = "AntonStarP@ssword."
-MYSQL_DB = "anton_star"
+API_SYSTEM_URL = "http://localhost:8888/api"
+API_SYSTEM_SECRET = "defaultAccessToken"

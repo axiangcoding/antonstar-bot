@@ -14,12 +14,14 @@ type GameUser struct {
 	Clan string `gorm:"size:255"`
 	// 联队地址
 	ClanUrl string `gorm:"size:255"`
+	// 是否被封禁
+	Banned bool
 	// 注册日期
 	RegisterDate time.Time
-	// 游戏等级
-	Level int
 	// 称号
 	Title string `gorm:"size:255"`
+	// 游戏等级
+	Level int
 	// TS街机效率值
 	TsABRate float64
 	// TS历史效率值
@@ -32,8 +34,6 @@ type GameUser struct {
 	AsRBRate float64
 	// 安东星全真效率值
 	AsSBRate float64
-	// 是否被封禁
-	Banned bool
 }
 
 func (u GameUser) ToDisplayGameUser() display.GameUser {

@@ -35,18 +35,16 @@ var doc = `{
     "paths": {
         "/v1/cqhttp/receive/event": {
             "post": {
+                "security": [
+                    {
+                        "AppToken": []
+                    }
+                ],
                 "tags": [
                     "CQHttp API"
                 ],
-                "summary": "receive event from cqhttp service",
+                "summary": "接收cqhttp的事件",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "accessToken",
-                        "name": "accessToken",
-                        "in": "query",
-                        "required": true
-                    },
                     {
                         "description": "getParam",
                         "name": "param",
@@ -72,7 +70,39 @@ var doc = `{
                 "tags": [
                     "CQHttp API"
                 ],
-                "summary": "get cqhttp service status",
+                "summary": "获取cqhttp的最新状态",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/crawler/callback": {
+            "post": {
+                "security": [
+                    {
+                        "AppToken": []
+                    }
+                ],
+                "tags": [
+                    "Crawler API"
+                ],
+                "summary": "接收爬虫的回调",
+                "parameters": [
+                    {
+                        "description": "form",
+                        "name": "form",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1.CrawlerReceiveForm"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -180,6 +210,25 @@ var doc = `{
                 }
             }
         },
+        "v1.CrawlerReceiveForm": {
+            "type": "object",
+            "required": [
+                "crawler_data",
+                "mission_id",
+                "source"
+            ],
+            "properties": {
+                "crawler_data": {
+                    "type": "string"
+                },
+                "mission_id": {
+                    "type": "string"
+                },
+                "source": {
+                    "type": "string"
+                }
+            }
+        },
         "v1.LoginParam": {
             "type": "object",
             "required": [
@@ -216,6 +265,13 @@ var doc = `{
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "AppToken": {
+            "type": "apiKey",
+            "name": "app_token",
+            "in": "query"
         }
     }
 }`
