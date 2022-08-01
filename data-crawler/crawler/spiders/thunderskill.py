@@ -22,7 +22,7 @@ class ThunderSkillSpider(scrapy.Spider):
         item = TSPersonalStatItem()
         item['mission_id'] = mission_id
         item['nick'] = nick
-        item['source'] = 'thunder_skill'
+        item['source'] = 'thunderskill'
         item['updated_at'] = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
         item['http_status'] = response.status
         if response.status == 200:

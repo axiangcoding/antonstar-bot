@@ -2,6 +2,7 @@ package v1
 
 import (
 	"encoding/json"
+	"github.com/axiangcoding/ax-web/data/table"
 	"github.com/axiangcoding/ax-web/entity/app"
 	"github.com/axiangcoding/ax-web/entity/e"
 	"github.com/axiangcoding/ax-web/service"
@@ -27,16 +28,24 @@ func ReceiveCrawlerCallback(c *gin.Context) {
 		app.BadRequest(c, e.RequestParamsNotValid, err)
 		return
 	}
-
+	crawlerData := form.CrawlerData
 	var data map[string]any
-	if err := json.Unmarshal([]byte(form.CrawlerData), &data); err != nil {
-		app.BizFailed(c, e.RequestParamsNotValid, err)
-		return
-	}
-
-	if err := service.HandleCrawlerCallback(form.MissionId, data); err != nil {
-		app.BizFailed(c, e.Error, err)
-		return
+	// 如果回调字符串为not found，代表未找到该用户
+	if crawlerData == "not found" {
+		// 中止任务，设置为未找到
+		if err := service.FinishMission(form.MissionId, table.MissionStatusSuccess, "not found"); err != nil {
+			app.BizFailed(c, e.Error, err)
+			return
+		}
+	} else {
+		if err := json.Unmarshal([]byte(crawlerData), &data); err != nil {
+			app.BizFailed(c, e.RequestParamsNotValid, err)
+			return
+		}
+		if err := service.HandleCrawlerCallback(form.MissionId, form.Source, data); err != nil {
+			app.BizFailed(c, e.Error, err)
+			return
+		}
 	}
 	app.Success(c, form)
 }

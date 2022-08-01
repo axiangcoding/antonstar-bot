@@ -22,7 +22,6 @@ type GameUser struct {
 	Title string `gorm:"size:255"`
 	// 游戏等级
 	Level int
-
 	// TS街机效率值
 	TsABRate float64
 	// TS历史效率值

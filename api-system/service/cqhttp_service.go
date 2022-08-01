@@ -8,7 +8,9 @@ import (
 	"github.com/axiangcoding/ax-web/service/bot"
 	"github.com/axiangcoding/ax-web/service/cqhttp"
 	"github.com/axiangcoding/ax-web/settings"
+	"github.com/axiangcoding/ax-web/tool"
 	"github.com/gin-gonic/gin"
+	"github.com/go-resty/resty/v2"
 	"github.com/mitchellh/mapstructure"
 	"golang.org/x/exp/slices"
 	"time"
@@ -91,50 +93,79 @@ func handleCqHttpMessageEventGroup(c *gin.Context, event *cqhttp.MessageGroupEve
 	action := bot.ParseMessageCommand(msg)
 	var retMsgForm cqhttp.SendGroupMsgForm
 	retMsgForm.GroupId = event.GroupId
-	retMsgPrefix := fmt.Sprintf("[CQ:at,qq=%d] ", event.Sender.UserId)
+	retMsgForm.MessagePrefix = fmt.Sprintf("[CQ:at,qq=%d] ", event.Sender.UserId)
 	if action == nil {
-		retMsgForm.Message = retMsgPrefix + "我不道你在说什么，笨笨，呜呜"
+		retMsgForm.Message = "我不道你在说什么，笨笨，呜呜"
 	} else {
+		value := action.Value
 		switch action.Key {
 		case bot.ActionQuery:
-			async, user, err := QueryWTGamerProfile(action.Value)
+
+			missionIds, user, err := QueryWTGamerProfile(value, retMsgForm)
 			if err != nil {
 				logging.Warnf("query WT gamer profile error. %s", err)
-				retMsgForm.Message = retMsgPrefix + "啊哦，目前无法查询，请稍后重试"
+				retMsgForm.Message = "啊哦，目前无法查询，请稍后重试"
 			}
-			if async {
-				retMsgForm.Message = retMsgPrefix + "正在查询中，请稍后..."
+			if missionIds != nil {
+				retMsgForm.Message = "正在发起查询，可能会比较久，请耐心等待..."
+				tool.GoWithRecover(func() {
+					if err := WaitForCrawlerCallback(missionIds); err != nil {
+						logging.Warnf("wait for callback error. %s", err)
+					}
+				})
 			} else {
-				retMsgForm.Message = retMsgPrefix + user.ToFriendlyString()
+				retMsgForm.Message = user.ToFriendlyString()
 			}
 			break
 		case bot.ActionRefresh:
-			if err := RefreshWTGamerProfile(action.Value); err != nil {
-				logging.Warn("refresh WT gamer profile error. ", err)
-				retMsgForm.Message = retMsgPrefix + "啊哦，目前无法刷新，请稍后重试"
+			if !CanBeRefresh(value) {
+				retMsgForm.Message = "对不起，距上次刷新间隔太短，不允许更新已有数据"
+				break
 			}
-			retMsgForm.Message = retMsgPrefix + "正在刷新已有数据，请稍后..."
+			missionId, err := RefreshWTGamerProfile(value, retMsgForm)
+			if err != nil {
+				logging.Warn("refresh WT gamer profile error. ", err)
+				retMsgForm.Message = "啊哦，目前无法刷新，请稍后重试"
+			}
+			retMsgForm.Message = "正在发起查询并刷新已有数据，请稍后..."
+			tool.GoWithRecover(func() {
+				if err := WaitForCrawlerCallback(missionId); err != nil {
+					logging.Warnf("wait for callback error. %s", err)
+				}
+			})
 			break
 		case bot.ActionReport:
-			retMsgForm.Message = retMsgPrefix + "举办他是吧，记住你了，晚上别锁房门"
+			retMsgForm.Message = "举办他是吧，记住你了，晚上别锁房门"
 			break
 		case bot.ActionDrawCard:
 			id := event.Sender.UserId
 			number := DrawNumber(id, time.Now().In(time.FixedZone("CST", 8*3600)))
-			retMsgForm.Message = retMsgPrefix + fmt.Sprintf("你今天的气运值是%d", number)
+			retMsgForm.Message = fmt.Sprintf("你今天的气运值是%d", number)
 			break
 		default:
-			retMsgForm.Message = retMsgPrefix + "我不道你想干啥，笨笨，呜呜"
+			retMsgForm.Message = "我不道你想干啥，输入“帮助“查看可用的命令"
 			break
 		}
 	}
+	MustSendGroupMsg(retMsgForm)
+}
 
-	result, err := cqhttp.SendGroupMsg(retMsgForm)
+func MustSendGroupMsg(form cqhttp.SendGroupMsgForm) {
+	url := settings.Config.Service.CqHttp.Url + "/send_group_msg"
+	client := resty.New().SetTimeout(time.Second * 20)
+	var commonResp cqhttp.CommonResponse
+	resp, err := client.R().SetHeader("Content-Type", "application/json").
+		SetBody(map[string]any{
+			"message":  form.MessagePrefix + form.Message,
+			"group_id": form.GroupId,
+		}).SetResult(&commonResp).Post(url)
 	if err != nil {
-		logging.Warnf("handle group message error %s", err)
-		return
+		logging.Warnf("send group message error. %s", err)
 	}
-	if result != nil && result.Status == "failed" {
-		logging.Warnf("send message failed. response json: %#v", result)
+	if resp.IsError() {
+		logging.Warnf("post %s error. code=%d, message=%s", url, resp.StatusCode(), resp.String())
+	}
+	if commonResp.Status == "failed" {
+		logging.Warnf("send message failed. response json: %#v", commonResp)
 	}
 }

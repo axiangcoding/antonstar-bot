@@ -7,6 +7,15 @@ import (
 	"time"
 )
 
+func FindMission(missionId string) (*table.Mission, error) {
+	db := data.GetDB()
+	var find table.Mission
+	if err := db.Where(table.Mission{MissionId: missionId}).Take(&find).Error; err != nil {
+		return nil, err
+	}
+	return &find, nil
+}
+
 func SubmitMission(missionId string, missionType string, detail any) error {
 	db := data.GetDB()
 	bytes, err := json.Marshal(detail)
