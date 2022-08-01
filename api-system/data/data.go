@@ -52,7 +52,7 @@ func initDB() *gorm.DB {
 				},
 			)})
 	if err != nil {
-		logging.Fatalf("Can't connect to MySql: %s", err)
+		logging.Fatalf("Can't connect to db: %s", err)
 	}
 	logging.Info("Database mysql connected success")
 	setProperties(db)
