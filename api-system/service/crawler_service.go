@@ -52,7 +52,6 @@ func RequestCrawlerSpider(form ScheduleForm) error {
 
 func HandleCrawlerCallback(missionId string, source string, data map[string]any) error {
 	var nick string
-
 	if source == crawler.SourceGaijin {
 		var gaijinData crawler.GaijinData
 		if err := mapstructure.Decode(data, &gaijinData); err != nil {
@@ -76,7 +75,6 @@ func HandleCrawlerCallback(missionId string, source string, data map[string]any)
 		if err := FinishMission(missionId, table.MissionStatusSuccess, gaijinData); err != nil {
 			return err
 		}
-		return nil
 	} else if source == crawler.SourceThunderSkill {
 		var thunderSkillData crawler.ThunderSkillData
 		if err := mapstructure.Decode(data, &thunderSkillData); err != nil {
@@ -100,7 +98,6 @@ func HandleCrawlerCallback(missionId string, source string, data map[string]any)
 		if err := FinishMission(missionId, table.MissionStatusSuccess, thunderSkillData); err != nil {
 			return err
 		}
-		return nil
 	} else {
 		logging.Warnf("no such source %s", source)
 	}

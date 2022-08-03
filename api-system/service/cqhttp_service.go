@@ -60,7 +60,7 @@ func HandleCqHttpEvent(c *gin.Context, data map[string]any) error {
 
 func GetCqHttpStatus(c *gin.Context, selfId int64) (cqhttp.MetaTypeHeartBeatEvent, error) {
 	var message cqhttp.MetaTypeHeartBeatEvent
-	key := generateCacheKey(cqhttp.PostTypeMetaEvent, cqhttp.EventTypeHeartBeat, selfId)
+	key := cache.GenerateCQHTTPCacheKey(cqhttp.PostTypeMetaEvent, cqhttp.EventTypeHeartBeat, selfId)
 	result, err := cache.GetClient().Get(c, key).Result()
 	if err != nil {
 		return message, err
@@ -71,12 +71,8 @@ func GetCqHttpStatus(c *gin.Context, selfId int64) (cqhttp.MetaTypeHeartBeatEven
 	return message, nil
 }
 
-func generateCacheKey(postType string, eventType string, selfId int64) string {
-	return fmt.Sprintf("CQHTTP:%s;%s;%d", postType, eventType, selfId)
-}
-
 func handleCqHttpMetaEventHeartBeat(c *gin.Context, event *cqhttp.MetaTypeHeartBeatEvent) {
-	key := generateCacheKey(event.PostType, event.MetaEventType, event.SelfId)
+	key := cache.GenerateCQHTTPCacheKey(event.PostType, event.MetaEventType, event.SelfId)
 	if err := cache.GetClient().Set(c, key, event, time.Minute).Err(); err != nil {
 		logging.Error(err)
 	}
@@ -95,19 +91,22 @@ func handleCqHttpMessageEventGroup(c *gin.Context, event *cqhttp.MessageGroupEve
 	retMsgForm.GroupId = event.GroupId
 	retMsgForm.MessagePrefix = fmt.Sprintf("[CQ:at,qq=%d] ", event.Sender.UserId)
 	if action == nil {
-		retMsgForm.Message = "我不道你在说什么，笨笨，呜呜"
+		retMsgForm.Message = bot.RespDontKnowAction
 	} else {
 		value := action.Value
 		switch action.Key {
 		case bot.ActionQuery:
-
+			if !IsValidNickname(value) {
+				retMsgForm.Message = bot.RespNotAValidNickname
+				break
+			}
 			missionIds, user, err := QueryWTGamerProfile(value, retMsgForm)
 			if err != nil {
 				logging.Warnf("query WT gamer profile error. %s", err)
-				retMsgForm.Message = "啊哦，目前无法查询，请稍后重试"
+				retMsgForm.Message = bot.RespCanNotRefresh
 			}
 			if missionIds != nil {
-				retMsgForm.Message = "正在发起查询，可能会比较久，请耐心等待..."
+				retMsgForm.Message = bot.RespRunningQuery
 				tool.GoWithRecover(func() {
 					if err := WaitForCrawlerCallback(missionIds); err != nil {
 						logging.Warnf("wait for callback error. %s", err)
@@ -119,15 +118,15 @@ func handleCqHttpMessageEventGroup(c *gin.Context, event *cqhttp.MessageGroupEve
 			break
 		case bot.ActionRefresh:
 			if !CanBeRefresh(value) {
-				retMsgForm.Message = "对不起，距上次刷新间隔太短，不允许更新已有数据"
+				retMsgForm.Message = bot.RespTooShortToRefresh
 				break
 			}
 			missionId, err := RefreshWTGamerProfile(value, retMsgForm)
 			if err != nil {
 				logging.Warn("refresh WT gamer profile error. ", err)
-				retMsgForm.Message = "啊哦，目前无法刷新，请稍后重试"
+				retMsgForm.Message = bot.RespCanNotRefresh
 			}
-			retMsgForm.Message = "正在发起查询并刷新已有数据，请稍后..."
+			retMsgForm.Message = bot.RespRunningQuery
 			tool.GoWithRecover(func() {
 				if err := WaitForCrawlerCallback(missionId); err != nil {
 					logging.Warnf("wait for callback error. %s", err)
@@ -135,15 +134,18 @@ func handleCqHttpMessageEventGroup(c *gin.Context, event *cqhttp.MessageGroupEve
 			})
 			break
 		case bot.ActionReport:
-			retMsgForm.Message = "举办他是吧，记住你了，晚上别锁房门"
+			retMsgForm.Message = bot.RespReport
 			break
 		case bot.ActionDrawCard:
 			id := event.Sender.UserId
 			number := DrawNumber(id, time.Now().In(time.FixedZone("CST", 8*3600)))
 			retMsgForm.Message = fmt.Sprintf("你今天的气运值是%d", number)
 			break
+		case bot.ActionGetHelp:
+			retMsgForm.Message = bot.RespGetHelp
+			break
 		default:
-			retMsgForm.Message = "我不道你想干啥，输入“帮助“查看可用的命令"
+			retMsgForm.Message = bot.RespHelp
 			break
 		}
 	}

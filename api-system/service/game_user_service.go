@@ -1,12 +1,26 @@
 package service
 
 import (
+	"context"
 	"errors"
+	"github.com/axiangcoding/ax-web/cache"
 	"github.com/axiangcoding/ax-web/data"
 	"github.com/axiangcoding/ax-web/data/table"
-	"gorm.io/gorm"
+	"github.com/axiangcoding/ax-web/logging"
+	"github.com/go-redis/redis/v8"
+	"regexp"
 	"time"
 )
+
+var c = context.Background()
+
+func IsValidNickname(nick string) bool {
+	matched, err := regexp.Match(`^\w+$`, []byte(nick))
+	if err != nil {
+		return false
+	}
+	return matched
+}
 
 func FindGameProfile(nick string) (*table.GameUser, error) {
 	db := data.GetDB()
@@ -34,16 +48,22 @@ func UpdateGameProfile(nick string, user table.GameUser) error {
 }
 
 func CanBeRefresh(nick string) bool {
-	profile, err := FindGameProfile(nick)
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
+	client := cache.GetClient()
+	key := cache.GenerateGameUserCacheKey(nick)
+	if _, err := client.Get(c, key).Result(); err != nil {
+		if errors.Is(err, redis.Nil) {
 			return true
-		} else {
-			return false
 		}
-	}
-	if time.Now().Sub(profile.UpdatedAt) > time.Hour*24 {
-		return true
+		logging.Warn(err)
+		return false
 	}
 	return false
+}
+
+func PutRefreshFlag(nick string) {
+	client := cache.GetClient()
+	key := cache.GenerateGameUserCacheKey(nick)
+	if err := client.Set(c, key, "", time.Hour*24).Err(); err != nil {
+		logging.Warn(err)
+	}
 }
