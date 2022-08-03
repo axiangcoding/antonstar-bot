@@ -40,7 +40,6 @@ func QueryWTGamerProfile(nickname string, sendForm cqhttp.SendGroupMsgForm) ([]s
 }
 
 // RefreshWTGamerProfile 请求爬虫，爬取玩家的游戏资料
-// FIXME: 限制同一天内对同个nickname的请求次数；保存数据到game_user表中
 func RefreshWTGamerProfile(nickname string, sendForm cqhttp.SendGroupMsgForm) ([]string, error) {
 	defaultProject := "crawler"
 
@@ -61,6 +60,8 @@ func RefreshWTGamerProfile(nickname string, sendForm cqhttp.SendGroupMsgForm) ([
 	if err := RunningMission(missionId, 10); err != nil {
 		return nil, err
 	}
+	// 执行查询时记录时间，不允许短期内重复刷新
+	PutRefreshFlag(nickname)
 
 	missionId2 := uuid.NewString()
 	form2 := ScheduleForm{

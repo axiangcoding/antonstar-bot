@@ -22,8 +22,9 @@ func Setup() {
 	viper.SetEnvKeyReplacer(replacer)
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			log.Println("Config file not found. The program will use default conf and may not work properly")
+			log.Fatal("Config file not found.")
 		}
+		log.Fatal(err)
 	}
 	err := viper.Unmarshal(&Config)
 	if err != nil {

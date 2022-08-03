@@ -7,21 +7,21 @@ import (
 )
 
 type GameUser struct {
-	CreatedAt    string  `json:"CreatedAt"`
-	UpdatedAt    string  `json:"UpdatedAt"`
-	Nick         string  `json:"Nick"`
-	Clan         string  `json:"Clan"`
-	ClanUrl      string  `json:"ClanUrl"`
-	RegisterDate string  `json:"RegisterDate"`
-	Level        int     `json:"Level"`
-	Title        string  `json:"Title"`
-	TsABRate     float64 `json:"TsABRate"`
-	TsRBRate     float64 `json:"TsRBRate"`
-	TsSBRate     float64 `json:"TsSBRate"`
-	AsABRate     float64 `json:"AsABRate"`
-	AsRBRate     float64 `json:"AsRBRate"`
-	AsSBRate     float64 `json:"AsSBRate"`
-	Banned       string  `json:"Banned"`
+	CreatedAt    string  `json:"created_at"`
+	UpdatedAt    string  `json:"updated_at"`
+	Nick         string  `json:"nick"`
+	Clan         string  `json:"clan"`
+	ClanUrl      string  `json:"clan_url"`
+	RegisterDate string  `json:"register_date"`
+	Level        int     `json:"level"`
+	Title        string  `json:"title"`
+	TsABRate     float64 `json:"ts_ab_rate"`
+	TsRBRate     float64 `json:"ts_rb_rate"`
+	TsSBRate     float64 `json:"ts_sb_rate"`
+	AsABRate     float64 `json:"as_ab_rate"`
+	AsRBRate     float64 `json:"as_rb_rate"`
+	AsSBRate     float64 `json:"as_sb_rate"`
+	Banned       string  `json:"banned"`
 }
 
 const templateStr = `
@@ -31,10 +31,12 @@ const templateStr = `
 等级: {{.Level}}
 头衔: {{.Title}}
 是否被封禁: {{.Banned}}
-更新时间: {{.UpdatedAt}}
 ThunderSkill街机效率值: {{.TsABRate}}
 ThunderSkill历史效率值: {{.TsRBRate}}
 ThunderSkill全真效率值: {{.TsSBRate}}
+数据最后刷新时间: {{.UpdatedAt}}
+
+Tips: 输入”刷新 {{.Nick}}“可以刷新游戏数据，但距离上次刷新不能小于24小时
 `
 
 func (u GameUser) ToFriendlyString() string {

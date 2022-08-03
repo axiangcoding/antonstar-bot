@@ -43,9 +43,10 @@ func (u GameUser) ToDisplayGameUser() display.GameUser {
 	} else {
 		bannedStr = "否"
 	}
+	zone := time.FixedZone("CST", 8*3600)
 	return display.GameUser{
-		CreatedAt:    u.CreatedAt.Format("2006-01-02 15:04:05"),
-		UpdatedAt:    u.UpdatedAt.Format("2006-01-02 15:04:05"),
+		CreatedAt:    u.CreatedAt.In(zone).Format("2006-01-02 15:04:05"),
+		UpdatedAt:    u.UpdatedAt.In(zone).Format("2006-01-02 15:04:05"),
 		Nick:         u.Nick,
 		Clan:         u.Clan,
 		ClanUrl:      u.ClanUrl,
