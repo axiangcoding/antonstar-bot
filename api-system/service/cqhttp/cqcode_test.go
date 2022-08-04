@@ -70,3 +70,21 @@ func TestGetAtQQ(t *testing.T) {
 		})
 	}
 }
+
+var tests5 = []string{
+	".cqbot 查询",
+	".cqbot 帮助",
+	".cqbot",
+	" .cqbot 帮助",
+}
+
+func TestMustContainsTrigger(t *testing.T) {
+	for i, tt := range tests5 {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			bContains := MustContainsTrigger(tt)
+			if !bContains {
+				t.Fail()
+			}
+		})
+	}
+}

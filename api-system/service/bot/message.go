@@ -17,7 +17,9 @@ const (
 )
 
 var (
-	MessageGetPrimaryInfoPattern = regexp.MustCompile(`^.*\[.*\](.*)$`)
+	// MessageGetAtPrimaryMsgPattern at时获取主要消息
+	MessageGetAtPrimaryMsgPattern  = regexp.MustCompile(`^.*\[.*\](.*)$`)
+	MessageGetCmdPrimaryMsgPattern = regexp.MustCompile(`^\s*\.cqbot\s*(.*)$`)
 )
 
 var (
@@ -35,7 +37,7 @@ type Action struct {
 }
 
 func ParseMessageCommand(msg string) *Action {
-	sub := MessageGetPrimaryInfoPattern.FindStringSubmatch(msg)
+	sub := MessageGetCmdPrimaryMsgPattern.FindStringSubmatch(msg)
 	if len(sub) <= 1 {
 		return nil
 	}
