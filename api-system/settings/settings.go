@@ -1,7 +1,6 @@
 package settings
 
 import (
-	"encoding/json"
 	"log"
 	"strings"
 
@@ -30,8 +29,6 @@ func Setup() {
 	if err != nil {
 		log.Fatalf("Config Properties unable to decode into struct, %v", err)
 	}
-	marshal, _ := json.MarshalIndent(Config, "-- ", "  ")
-	log.Println("Effective configuration: " + string(marshal))
 }
 
 func setDefault() {

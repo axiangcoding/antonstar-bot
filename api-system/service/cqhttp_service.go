@@ -81,9 +81,7 @@ func handleCqHttpMetaEventHeartBeat(c *gin.Context, event *cqhttp.MetaTypeHeartB
 func handleCqHttpMessageEventGroup(c *gin.Context, event *cqhttp.MessageGroupEvent) {
 	messageType := event.MessageType
 	msg := event.Message
-	// 处理群组at消息，只有at我的群组消息才处理，其他的一律抛弃
-	settingSelfQQ := settings.Config.Service.CqHttp.SelfQQ
-	if messageType != "group" || !cqhttp.MustContainsCqCode(msg) || settingSelfQQ != cqhttp.MustGetCqCodeAtQQ(msg) {
+	if messageType != "group" || !cqhttp.MustContainsTrigger(msg) {
 		return
 	}
 	action := bot.ParseMessageCommand(msg)
