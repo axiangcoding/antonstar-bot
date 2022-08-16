@@ -3,6 +3,7 @@ package crawler
 import (
 	"github.com/axiangcoding/ax-web/data/table"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -55,6 +56,32 @@ func (d GaijinData) ToTableGameUser() table.GameUser {
 		RegisterDate: parse,
 		Title:        d.Title,
 		Level:        level,
+		StatAb:       convertStat(d.UserStat.Ab),
+		StatRb:       convertStat(d.UserStat.Rb),
+		StatSb:       convertStat(d.UserStat.Sb),
+	}
+}
+
+func convertStat(stat map[string]string) table.UserStat {
+	tm, _ := strconv.Atoi(stat["任务总数"])
+	wr, _ := strconv.Atoi(strings.TrimRight(stat["作战胜率"], "%"))
+	gdc, _ := strconv.Atoi(stat["地面单位摧毁数"])
+	fdc, _ := strconv.Atoi(stat["水面单位摧毁数"])
+	adc, _ := strconv.Atoi(stat["空中单位摧毁数"])
+	wc, _ := strconv.Atoi(stat["胜利场次"])
+	dc, _ := strconv.Atoi(strings.ReplaceAll(stat["阵亡数"], ",", ""))
+	see, _ := strconv.ParseInt(strings.ReplaceAll(stat["银狮获得数"], ",", ""), 10, 64)
+
+	return table.UserStat{
+		TotalMission:         tm,
+		WinRate:              float64(wr) * 0.01,
+		GroundDestroyCount:   gdc,
+		FleetDestroyCount:    fdc,
+		GameTime:             stat["游戏时间"],
+		AviationDestroyCount: adc,
+		WinCount:             wc,
+		SliverEagleEarned:    see,
+		DeadCount:            dc,
 	}
 }
 

@@ -1,4 +1,8 @@
 #!/bin/bash
 
-bash -c 'sleep 15; scrapyd-deploy' &
-scrapyd
+set -m
+
+scrapyd &
+scrapyd-deploy
+
+fg %1
