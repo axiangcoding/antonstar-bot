@@ -1,8 +1,11 @@
 #!/bin/bash
+# FIXME: 依然有问题
 
 set -m
 
 scrapyd &
 scrapyd-deploy
 
-fg %1
+jobs
+
+fg 1

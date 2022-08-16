@@ -51,8 +51,8 @@ const templateStr = `
 街机任务数: {{.StatAb.TotalMission}}
 街机胜率: {{.StatAb.WinRate}}
 街机KD: {{.StatAb.Kd}}
-陆历任务数: {{.StatRb.TotalMission}}
-陆历胜率: {{.StatRb.WinRate}}
+历史任务数: {{.StatRb.TotalMission}}
+历史胜率: {{.StatRb.WinRate}}
 陆历KD: {{.StatRb.Kd}}
 全真任务数: {{.StatSb.TotalMission}}
 全真胜率: {{.StatSb.WinRate}}
