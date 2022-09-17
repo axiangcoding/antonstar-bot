@@ -9,19 +9,6 @@ definitions:
       msg:
         type: string
     type: object
-  v1.CrawlerReceiveForm:
-    properties:
-      crawler_data:
-        type: string
-      mission_id:
-        type: string
-      source:
-        type: string
-    required:
-    - crawler_data
-    - mission_id
-    - source
-    type: object
   v1.LoginParam:
     properties:
       loginName:
@@ -85,25 +72,6 @@ paths:
       summary: 获取cqhttp的最新状态
       tags:
       - CQHttp API
-  /v1/crawler/callback:
-    post:
-      parameters:
-      - description: form
-        in: body
-        name: form
-        required: true
-        schema:
-          $ref: '#/definitions/v1.CrawlerReceiveForm'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.ApiJson'
-      security:
-      - AppToken: []
-      summary: 接收爬虫的回调
-      tags:
-      - Crawler API
   /v1/system/info:
     get:
       responses:

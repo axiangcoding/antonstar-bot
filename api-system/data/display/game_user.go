@@ -18,13 +18,26 @@ type GameUser struct {
 	StatAb       UserStat
 	StatRb       UserStat
 	StatSb       UserStat
-	TsABRate     float64 `json:"ts_ab_rate"`
-	TsRBRate     float64 `json:"ts_rb_rate"`
-	TsSBRate     float64 `json:"ts_sb_rate"`
-	AsABRate     float64 `json:"as_ab_rate"`
-	AsRBRate     float64 `json:"as_rb_rate"`
-	AsSBRate     float64 `json:"as_sb_rate"`
-	Banned       string  `json:"banned"`
+
+	GroundRateAb UserRate
+	GroundRateRb UserRate
+	GroundRateSb UserRate
+
+	AviationRateAb UserRate
+	AviationRateRb UserRate
+	AviationRateSb UserRate
+
+	FleetRateAb UserRate
+	FleetRateRb UserRate
+	FleetRateSb UserRate
+
+	TsABRate float64 `json:"ts_ab_rate"`
+	TsRBRate float64 `json:"ts_rb_rate"`
+	TsSBRate float64 `json:"ts_sb_rate"`
+	AsABRate float64 `json:"as_ab_rate"`
+	AsRBRate float64 `json:"as_rb_rate"`
+	AsSBRate float64 `json:"as_sb_rate"`
+	Banned   string  `json:"banned"`
 }
 
 type UserStat struct {
@@ -40,20 +53,25 @@ type UserStat struct {
 	Kd                   string `json:"kd,omitempty"`
 }
 
-const templateStr = `
-是否被封禁: {{.Banned}}
+type UserRate struct {
+	Ad string `json:"ad,omitempty"`
+}
+
+const templateShortStr = `
+{{if .Banned}}==== 已被封禁 ===={{end}}
 游戏昵称: {{.Nick}}
 联队: {{.Clan}}
 注册时间: {{.RegisterDate}}
 等级: {{.Level}}
 头衔: {{.Title}}
+{{if .Banned}}==== 已被封禁 ===={{end}}
 
 街机任务数: {{.StatAb.TotalMission}}
 街机胜率: {{.StatAb.WinRate}}
 街机KD: {{.StatAb.Kd}}
 历史任务数: {{.StatRb.TotalMission}}
 历史胜率: {{.StatRb.WinRate}}
-陆历KD: {{.StatRb.Kd}}
+历史KD: {{.StatRb.Kd}}
 全真任务数: {{.StatSb.TotalMission}}
 全真胜率: {{.StatSb.WinRate}}
 全真KD: {{.StatSb.Kd}}
@@ -61,17 +79,81 @@ const templateStr = `
 ThunderSkill街机效率值: {{.TsABRate}}
 ThunderSkill历史效率值: {{.TsRBRate}}
 ThunderSkill全真效率值: {{.TsSBRate}}
-（初次使用需要到TS官网生成，否则均为0）
+（TS数据可能会因为bot保护而无法获取）
 
 数据最后刷新时间: {{.UpdatedAt}}
 
-Tips: 输入”.cqbot 刷新 {{.Nick}}“可以刷新游戏数据
+Tips: 
+输入”.cqbot 刷新 {{.Nick}}“可以刷新游戏数据
+输入”.cqbot 完整查询 {{.Nick}}“可以查询完整数据
 `
 
-func (u GameUser) ToFriendlyString() string {
+const templateFullStr = `
+{{if .Banned}}==== 已被封禁 ===={{end}}
+游戏昵称: {{.Nick}}
+联队: {{.Clan}}
+注册时间: {{.RegisterDate}}
+等级: {{.Level}}
+头衔: {{.Title}}
+{{if .Banned}}==== 已被封禁 ===={{end}}
+
+街机任务数: {{.StatAb.TotalMission}}
+街机胜率: {{.StatAb.WinRate}}
+街机KD: {{.StatAb.Kd}}
+街机游戏时间: {{.StatAb.GameTime}}
+历史任务数: {{.StatRb.TotalMission}}
+历史胜率: {{.StatRb.WinRate}}
+历史KD: {{.StatRb.Kd}}
+历史游戏时间: {{.StatRb.GameTime}}
+全真任务数: {{.StatSb.TotalMission}}
+全真胜率: {{.StatSb.WinRate}}
+全真KD: {{.StatSb.Kd}}
+全真游戏时间: {{.StatSb.GameTime}}
+
+（击杀数/出击数简称为'AD'）
+空战街机AD: {{.AviationRateAb.Ad}}
+空战历史AD: {{.AviationRateRb.Ad}}
+空战全真AD: {{.AviationRateSb.Ad}}
+
+陆战街机AD: {{.GroundRateAb.Ad}}
+陆战历史AD: {{.GroundRateRb.Ad}}
+陆战全真AD: {{.GroundRateSb.Ad}}
+
+海战街机AD: {{.FleetRateAb.Ad}}
+海战历史AD: {{.FleetRateRb.Ad}}
+海战全真AD: {{.FleetRateSb.Ad}}
+
+ThunderSkill街机效率值: {{.TsABRate}}
+ThunderSkill历史效率值: {{.TsRBRate}}
+ThunderSkill全真效率值: {{.TsSBRate}}
+（TS数据可能会因为bot保护而无法获取）
+
+数据最后刷新时间: {{.UpdatedAt}}
+
+Tips: 
+输入”.cqbot 刷新 {{.Nick}}“可以刷新游戏数据
+输入”.cqbot 查询 {{.Nick}}“可以查询简要数据
+`
+
+func (u GameUser) ToFriendlyShortString() string {
 	var buf bytes.Buffer
 
-	t, err := template.New("display").Parse(templateStr)
+	t, err := template.New("displayShort").Parse(templateShortStr)
+	if err != nil {
+		logging.Warn(err)
+		return "Error"
+	}
+	if err := t.Execute(&buf, u); err != nil {
+		logging.Error(err)
+		return "Error"
+	}
+	return buf.String()
+}
+
+func (u GameUser) ToFriendlyFullString() string {
+	var buf bytes.Buffer
+
+	t, err := template.New("displayFull").Parse(templateFullStr)
 	if err != nil {
 		logging.Warn(err)
 		return "Error"

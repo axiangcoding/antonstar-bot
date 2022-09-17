@@ -81,38 +81,6 @@ var doc = `{
                 }
             }
         },
-        "/v1/crawler/callback": {
-            "post": {
-                "security": [
-                    {
-                        "AppToken": []
-                    }
-                ],
-                "tags": [
-                    "Crawler API"
-                ],
-                "summary": "接收爬虫的回调",
-                "parameters": [
-                    {
-                        "description": "form",
-                        "name": "form",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/v1.CrawlerReceiveForm"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.ApiJson"
-                        }
-                    }
-                }
-            }
-        },
         "/v1/system/info": {
             "get": {
                 "tags": [
@@ -206,25 +174,6 @@ var doc = `{
                 },
                 "data": {},
                 "msg": {
-                    "type": "string"
-                }
-            }
-        },
-        "v1.CrawlerReceiveForm": {
-            "type": "object",
-            "required": [
-                "crawler_data",
-                "mission_id",
-                "source"
-            ],
-            "properties": {
-                "crawler_data": {
-                    "type": "string"
-                },
-                "mission_id": {
-                    "type": "string"
-                },
-                "source": {
                     "type": "string"
                 }
             }

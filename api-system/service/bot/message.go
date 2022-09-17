@@ -25,13 +25,14 @@ var (
 )
 
 var (
-	ActionUnknown  = "unknown"
-	ActionQuery    = "query"
-	ActionRefresh  = "refresh"
-	ActionReport   = "report"
-	ActionDrawCard = "drawCard"
-	ActionLuck     = "luck"
-	ActionGetHelp  = "getHelp"
+	ActionUnknown   = "unknown"
+	ActionQuery     = "query"
+	ActionFullQuery = "fullQuery"
+	ActionRefresh   = "refresh"
+	ActionReport    = "report"
+	ActionDrawCard  = "drawCard"
+	ActionLuck      = "luck"
+	ActionGetHelp   = "getHelp"
 )
 
 type Action struct {
@@ -54,6 +55,9 @@ func ParseMessageCommand(msg string) *Action {
 	switch split[0] {
 	case "查询":
 		key = ActionQuery
+		break
+	case "完整查询":
+		key = ActionFullQuery
 		break
 	case "刷新":
 		key = ActionRefresh

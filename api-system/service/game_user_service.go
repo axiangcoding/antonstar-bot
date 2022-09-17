@@ -60,7 +60,7 @@ func CanBeRefresh(nick string) bool {
 	return false
 }
 
-func PutRefreshFlag(nick string) {
+func MustPutRefreshFlag(nick string) {
 	client := cache.GetClient()
 	key := cache.GenerateGameUserCacheKey(nick)
 	if err := client.Set(c, key, "", time.Hour*24).Err(); err != nil {

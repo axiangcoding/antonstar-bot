@@ -1,4 +1,5 @@
 import json
+import logging
 from datetime import datetime
 
 import scrapy
@@ -18,6 +19,7 @@ class GaijinSpider(scrapy.Spider):
             yield scrapy.Request(url, method='POST')
 
     def parse(self, response):
+        logging.info("parse gaijin personal data")
         nick = getattr(self, "nick", None)
         mission_id = getattr(self, "mission_id", None)
         item = GaijinPersonalItem()

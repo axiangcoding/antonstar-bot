@@ -14,6 +14,7 @@ from scrapy.utils.project import get_project_settings
 
 class MysqlPipeline:
     def process_item(self, item, spider):
+        logging.warning("send callback to api-system")
         pattern = "{}/v1/crawler/callback?app_token={}"
         url = get_project_settings().get("API_SYSTEM_URL")
         token = get_project_settings().get("API_SYSTEM_SECRET")

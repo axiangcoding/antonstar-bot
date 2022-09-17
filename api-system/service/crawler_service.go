@@ -3,24 +3,28 @@ package service
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/axiangcoding/ax-web/data/table"
 	"github.com/axiangcoding/ax-web/logging"
 	"github.com/axiangcoding/ax-web/service/cqhttp"
 	"github.com/axiangcoding/ax-web/service/crawler"
-	"github.com/axiangcoding/ax-web/settings"
-	"github.com/go-resty/resty/v2"
-	"github.com/mitchellh/mapstructure"
+	"github.com/gocolly/colly/v2"
+	"github.com/gocolly/colly/v2/extensions"
 	"gorm.io/gorm"
 	"time"
 )
 
+type CrawlerResult struct {
+	StartCrawlerSuccess bool   `json:"start_crawler_success"`
+	ResponseStatus      int    `json:"response_status"`
+	Found               bool   `json:"found"`
+	Nick                string `json:"nick"`
+	Data                any    `json:"data"`
+}
+
 type ScheduleForm struct {
-	SendForm         cqhttp.SendGroupMsgForm `json:"send_form"`
-	Project          string                  `json:"project,omitempty"`
-	Spider           string                  `json:"spider,omitempty"`
-	MissionId        string                  `json:"missionId,omitempty"`
-	Nick             string                  `json:"nick,omitempty"`
-	CallbackEndpoint string                  `json:"callback_endpoint,omitempty"`
+	Nick     string                  `json:"nick,omitempty"`
+	SendForm cqhttp.SendGroupMsgForm `json:"send_form"`
 }
 
 type ScheduleResult struct {
@@ -29,112 +33,34 @@ type ScheduleResult struct {
 	JobId    string `json:"jobid,omitempty"`
 }
 
-func RequestCrawlerSpider(form ScheduleForm) error {
-	url := settings.Config.Service.Crawler.Url + "/schedule.json"
-	var result ScheduleResult
-	client := resty.New().SetTimeout(time.Second * 20)
-	resp, err := client.R().
-		SetFormData(map[string]string{
-			"project":    form.Project,
-			"spider":     form.Spider,
-			"mission_id": form.MissionId,
-			"nick":       form.Nick,
-			// "callback_endpoint": form.CallbackEndpoint,
-		}).SetResult(&result).Post(url)
-	if err != nil {
-		return err
-	}
-	if resp.IsError() {
-		return errors.New("request crawler spider error")
-	}
-	return nil
-}
-
-func HandleCrawlerCallback(missionId string, source string, data map[string]any) error {
-	var nick string
-	if source == crawler.SourceGaijin {
-		var gaijinData crawler.GaijinData
-		if err := mapstructure.Decode(data, &gaijinData); err != nil {
-			return err
-		}
-		nick = gaijinData.Nick
-		// upsert
-		_, err := FindGameProfile(nick)
-		if err != nil {
-			if errors.Is(err, gorm.ErrRecordNotFound) {
-				if err := SaveGameProfile(table.GameUser{Nick: nick}); err != nil {
-					return err
-				}
-			} else {
-				return err
-			}
-		}
-		if err := UpdateGameProfile(nick, gaijinData.ToTableGameUser()); err != nil {
-			return err
-		}
-		if err := FinishMission(missionId, table.MissionStatusSuccess, gaijinData); err != nil {
-			return err
-		}
-	} else if source == crawler.SourceThunderSkill {
-		var thunderSkillData crawler.ThunderSkillData
-		if err := mapstructure.Decode(data, &thunderSkillData); err != nil {
-			return err
-		}
-		nick = thunderSkillData.Nick
-		// upsert
-		_, err := FindGameProfile(nick)
-		if err != nil {
-			if errors.Is(err, gorm.ErrRecordNotFound) {
-				if err := SaveGameProfile(table.GameUser{Nick: nick}); err != nil {
-					return err
-				}
-			} else {
-				return err
-			}
-		}
-		if err := UpdateGameProfile(nick, thunderSkillData.ToTableGameUser()); err != nil {
-			return err
-		}
-		if err := FinishMission(missionId, table.MissionStatusSuccess, thunderSkillData); err != nil {
-			return err
-		}
-	} else {
-		logging.Warnf("no such source %s", source)
-	}
-	return nil
-}
-
-func WaitForCrawlerCallback(missionIds []string) error {
+func WaitForCrawlerFinished(missionId string) error {
 	totalDelay := 60
 	duration := 3
 	i := 0
 	var detailForm ScheduleForm
 	for i <= totalDelay {
 		time.Sleep(time.Second * time.Duration(duration))
-		allDone := true
-
-		for _, id := range missionIds {
-			mission, err := FindMission(id)
-			if err != nil {
-				logging.Warnf("polling find mission failed. %s", err)
-				i += duration
-				continue
-			}
-			detail := mission.Detail
-			if err := json.Unmarshal([]byte(detail), &detailForm); err != nil {
-				logging.Warnf("unmarshal mission.detail error. %s", err)
-			}
-			allDone = mission.Status == table.MissionStatusSuccess && allDone
+		mission, err := FindMission(missionId)
+		if err != nil {
+			logging.Warnf("polling find mission failed. %s", err)
+			i += duration
+			continue
 		}
-		if allDone {
+		_ = json.Unmarshal([]byte(mission.Detail), &detailForm)
+
+		if mission.Status == table.MissionStatusSuccess {
 			user, err := FindGameProfile(detailForm.Nick)
 			if err != nil {
 				if errors.Is(err, gorm.ErrRecordNotFound) {
 					detailForm.SendForm.Message = "未找到该用户，请检查游戏昵称是否正确"
+					break
 				}
 			} else {
-				detailForm.SendForm.Message = user.ToDisplayGameUser().ToFriendlyString()
+				detailForm.SendForm.Message = user.ToDisplayGameUser().ToFriendlyShortString()
+				break
 			}
+		} else if mission.Status == table.MissionStatusFailed {
+			detailForm.SendForm.Message = "查询失败，请稍后重试"
 			break
 		}
 		i += duration
@@ -143,5 +69,111 @@ func WaitForCrawlerCallback(missionIds []string) error {
 		detailForm.SendForm.Message = "对不起，查询超时，请稍后重试"
 	}
 	MustSendGroupMsg(detailForm.SendForm)
+	return nil
+}
+
+func GetUserInfoFromWarThunder(missionId string, nick string) error {
+	urlTemplate := "https://warthunder.com/zh/community/userinfo/?nick=%s"
+	url := fmt.Sprintf(urlTemplate, nick)
+
+	c := colly.NewCollector(
+		colly.AllowedDomains("warthunder.com"),
+		colly.MaxDepth(1),
+		colly.IgnoreRobotsTxt(),
+	)
+	extensions.RandomUserAgent(c)
+
+	c.OnHTML("div[class=user__unavailable-title]", func(e *colly.HTMLElement) {
+		logging.Warnf("%s userinfo not found", nick)
+		MustPutRefreshFlag(nick)
+		MustFinishMissionWithResult(missionId, table.MissionStatusSuccess, CrawlerResult{
+			Found: false,
+			Nick:  nick,
+		})
+	})
+
+	c.OnHTML("div[class=user-info]", func(e *colly.HTMLElement) {
+		data := crawler.ExtractGaijinData(e)
+		_, err := FindGameProfile(nick)
+		if err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				if err := SaveGameProfile(data); err != nil {
+					logging.Warn(err)
+				}
+			}
+		} else {
+			if err := UpdateGameProfile(nick, data); err != nil {
+				logging.Warn(err)
+			}
+		}
+
+		if err := GetUserInfoFromThunderskill(nick); err != nil {
+			logging.Warn("failed on update thunder skill profile. ", err)
+		}
+		MustPutRefreshFlag(nick)
+		MustFinishMissionWithResult(missionId, table.MissionStatusSuccess, CrawlerResult{
+			Found: false,
+			Nick:  nick,
+			Data:  data},
+		)
+	})
+
+	c.OnRequest(func(r *colly.Request) {
+		logging.Infof("start visiting %s", r.URL.String())
+	})
+
+	c.OnError(func(r *colly.Response, err error) {
+		logging.Warnf("visiting %s failed. %s", r.Request.URL.String(), err)
+		MustFinishMissionWithResult(missionId, table.MissionStatusFailed, CrawlerResult{
+			Found:          false,
+			Nick:           nick,
+			ResponseStatus: r.StatusCode,
+		})
+	})
+
+	err := c.Post(url, nil)
+	if err != nil {
+		logging.Warn("colly post failed", err)
+		MustFinishMissionWithResult(missionId, table.MissionStatusFailed, CrawlerResult{
+			Found:               false,
+			Nick:                nick,
+			StartCrawlerSuccess: false,
+		})
+		return err
+	}
+	return nil
+}
+
+// GetUserInfoFromThunderskill
+// TODO: thunderskill启用了cloudflare，暂不爬取
+func GetUserInfoFromThunderskill(nick string) error {
+	urlTemplate := "https://thunderskill.com/en/stat/%s/export/json"
+	url := fmt.Sprintf(urlTemplate, nick)
+
+	c := colly.NewCollector(
+		colly.AllowedDomains("thunderskill.com"),
+		colly.MaxDepth(1),
+		colly.IgnoreRobotsTxt(),
+	)
+
+	c.OnResponse(func(r *colly.Response) {
+		mp := make(map[string]any)
+		_ = json.Unmarshal(r.Body, &mp)
+		logging.Info(r.Body)
+	})
+
+	c.OnRequest(func(r *colly.Request) {
+		logging.Infof("start visiting %s", r.URL.String())
+	})
+
+	c.OnError(func(r *colly.Response, err error) {
+		logging.Warnf("visiting %s failed. %s", r.Request.URL.String(), err)
+	})
+
+	err := c.Visit(url)
+	if err != nil {
+		logging.Warn("colly get failed. ", err)
+		return err
+	}
 	return nil
 }

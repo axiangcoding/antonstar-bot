@@ -98,35 +98,60 @@ func handleCqHttpMessageEventGroup(c *gin.Context, event *cqhttp.MessageGroupEve
 				retMsgForm.Message = bot.RespNotAValidNickname
 				break
 			}
-			missionIds, user, err := QueryWTGamerProfile(value, retMsgForm)
+			mId, user, err := QueryWTGamerProfile(value, retMsgForm)
 			if err != nil {
 				logging.Warnf("query WT gamer profile error. %s", err)
 				retMsgForm.Message = bot.RespCanNotRefresh
 			}
-			if missionIds != nil {
+			if mId != nil {
 				retMsgForm.Message = bot.RespRunningQuery
 				tool.GoWithRecover(func() {
-					if err := WaitForCrawlerCallback(missionIds); err != nil {
+					if err := WaitForCrawlerFinished(*mId); err != nil {
 						logging.Warnf("wait for callback error. %s", err)
 					}
 				})
 			} else {
-				retMsgForm.Message = user.ToFriendlyString()
+				retMsgForm.Message = user.ToFriendlyShortString()
+			}
+			break
+		case bot.ActionFullQuery:
+			if !IsValidNickname(value) {
+				retMsgForm.Message = bot.RespNotAValidNickname
+				break
+			}
+			mId, user, err := QueryWTGamerProfile(value, retMsgForm)
+			if err != nil {
+				logging.Warnf("query WT gamer profile error. %s", err)
+				retMsgForm.Message = bot.RespCanNotRefresh
+			}
+			if mId != nil {
+				retMsgForm.Message = bot.RespRunningQuery
+				tool.GoWithRecover(func() {
+					if err := WaitForCrawlerFinished(*mId); err != nil {
+						logging.Warnf("wait for callback error. %s", err)
+					}
+				})
+			} else {
+				retMsgForm.Message = user.ToFriendlyFullString()
 			}
 			break
 		case bot.ActionRefresh:
+			if !IsValidNickname(value) {
+				retMsgForm.Message = bot.RespNotAValidNickname
+				break
+			}
 			if !CanBeRefresh(value) {
 				retMsgForm.Message = bot.RespTooShortToRefresh
 				break
 			}
-			missionId, err := RefreshWTGamerProfile(value, retMsgForm)
+			missionId, err := RefreshWTUserInfo(value, retMsgForm)
 			if err != nil {
 				logging.Warn("refresh WT gamer profile error. ", err)
 				retMsgForm.Message = bot.RespCanNotRefresh
 			}
 			retMsgForm.Message = bot.RespRunningQuery
 			tool.GoWithRecover(func() {
-				if err := WaitForCrawlerCallback(missionId); err != nil {
+				if err := WaitForCrawlerFinished(*missionId); err != nil {
 					logging.Warnf("wait for callback error. %s", err)
 				}
 			})

@@ -97,9 +97,5 @@ func setRouterV1(r *gin.Engine) {
 			cqhttp.POST("/receive/event", middleware.AppToken(), v1.CqHttpReceiveEvent)
 			cqhttp.GET("/status", v1.CqHttpStatus)
 		}
-		crawler := groupV1.Group("/crawler")
-		{
-			crawler.POST("/callback", middleware.AppToken(), v1.ReceiveCrawlerCallback)
-		}
 	}
 }
