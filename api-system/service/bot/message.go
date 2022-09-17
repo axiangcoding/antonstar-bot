@@ -14,6 +14,8 @@ const (
 	RespRunningQuery      = "正在发起查询，请耐心等待..."
 	RespNotAValidNickname = "我说你这id不对吧，别逗我玩"
 	RespGetHelp           = "我啷个晓得怎么帮你，找33去"
+	RespDrawCard          = "你今天的气运值是 %d\n后续请使用 .cqbot 气运 或者 .cqbot 运气查询哦"
+	RespLuck              = "你今天的气运值是%d，%s"
 )
 
 var (
@@ -28,6 +30,7 @@ var (
 	ActionRefresh  = "refresh"
 	ActionReport   = "report"
 	ActionDrawCard = "drawCard"
+	ActionLuck     = "luck"
 	ActionGetHelp  = "getHelp"
 )
 
@@ -66,6 +69,12 @@ func ParseMessageCommand(msg string) *Action {
 		break
 	case "帮助":
 		key = ActionGetHelp
+		break
+	case "气运":
+		key = ActionLuck
+		break
+	case "运气":
+		key = ActionLuck
 		break
 	default:
 		key = ActionUnknown

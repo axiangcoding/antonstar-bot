@@ -137,7 +137,12 @@ func handleCqHttpMessageEventGroup(c *gin.Context, event *cqhttp.MessageGroupEve
 		case bot.ActionDrawCard:
 			id := event.Sender.UserId
 			number := DrawNumber(id, time.Now().In(time.FixedZone("CST", 8*3600)))
-			retMsgForm.Message = fmt.Sprintf("你今天的气运值是%d", number)
+			retMsgForm.Message = fmt.Sprintf(bot.RespDrawCard, number)
+			break
+		case bot.ActionLuck:
+			id := event.Sender.UserId
+			number := DrawNumber(id, time.Now().In(time.FixedZone("CST", 8*3600)))
+			retMsgForm.Message = fmt.Sprintf(bot.RespLuck, number, NumberBasedResponse(number))
 			break
 		case bot.ActionGetHelp:
 			retMsgForm.Message = bot.RespGetHelp

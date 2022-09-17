@@ -22,6 +22,22 @@ func DrawNumber(id int64, now time.Time) int32 {
 	return rand.New(rand.NewSource(uint64(hash))).Int31n(101)
 }
 
+func NumberBasedResponse(number int32) string {
+	if number == 0 {
+		return "你是个诡计多端的0"
+	} else if number <= 30 {
+		return "就这？"
+	} else if number <= 60 {
+		return "至少不算丢人"
+	} else if number <= 80 {
+		return "有没有考虑过转发抽奖"
+	} else if number < 100 {
+		return "分我点运气呗"
+	} else {
+		return "你是一个个个100"
+	}
+}
+
 // QueryWTGamerProfile 查询系统中已有的玩家的游戏资料。如果资料不存在，则调用爬虫爬取
 func QueryWTGamerProfile(nickname string, sendForm cqhttp.SendGroupMsgForm) ([]string, *display.GameUser, error) {
 	find, err := FindGameProfile(nickname)

@@ -4,8 +4,8 @@ name = "github.com/axiangcoding/ax-web"
 
 [app.log]
 level = "INFO"
-file.enable = false
-file.encoder = "console"
+file.enable = true
+file.encoder = "json"
 file.path = "./logs/"
 
 [app.auth]

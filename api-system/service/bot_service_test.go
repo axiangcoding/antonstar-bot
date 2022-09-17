@@ -8,23 +8,23 @@ import (
 )
 
 var tests = []struct {
-	id     int
+	id     int64
 	time   string
 	number int32
 }{
 	{
 		id:     123456789,
 		time:   "2022-07-20",
-		number: 8,
+		number: 70,
 	}, {
 		id:     123456789,
 		time:   "2022-07-21",
-		number: 13,
+		number: 32,
 	},
 	{
 		id:     123456789,
 		time:   "2022-07-22",
-		number: 6,
+		number: 26,
 	},
 }
 
