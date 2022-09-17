@@ -100,6 +100,8 @@ func GetUserInfoFromWarThunder(missionId string, nick string) error {
 				if err := SaveGameProfile(data); err != nil {
 					logging.Warn(err)
 				}
+			} else {
+				logging.Warn(err)
 			}
 		} else {
 			if err := UpdateGameProfile(nick, data); err != nil {

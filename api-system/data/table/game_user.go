@@ -121,12 +121,6 @@ type FleetRate struct {
 }
 
 func (u GameUser) ToDisplayGameUser() display.GameUser {
-	var bannedStr string
-	if u.Banned {
-		bannedStr = "是"
-	} else {
-		bannedStr = "否"
-	}
 	zone := time.FixedZone("CST", 8*3600)
 	return display.GameUser{
 		CreatedAt:      u.CreatedAt.In(zone).Format("2006-01-02 15:04:05"),
@@ -143,7 +137,7 @@ func (u GameUser) ToDisplayGameUser() display.GameUser {
 		AsABRate:       u.AsABRate,
 		AsRBRate:       u.AsRBRate,
 		AsSBRate:       u.AsSBRate,
-		Banned:         bannedStr,
+		Banned:         u.Banned,
 		StatSb:         convertToStat(u.StatSb),
 		StatAb:         convertToStat(u.StatAb),
 		StatRb:         convertToStat(u.StatRb),

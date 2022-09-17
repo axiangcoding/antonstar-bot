@@ -37,7 +37,7 @@ type GameUser struct {
 	AsABRate float64 `json:"as_ab_rate"`
 	AsRBRate float64 `json:"as_rb_rate"`
 	AsSBRate float64 `json:"as_sb_rate"`
-	Banned   string  `json:"banned"`
+	Banned   bool    `json:"banned"`
 }
 
 type UserStat struct {
