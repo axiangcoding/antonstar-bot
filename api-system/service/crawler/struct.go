@@ -52,7 +52,7 @@ func (d GaijinData) ToTableGameUser() table.GameUser {
 		Nick:         d.Nick,
 		Clan:         d.Clan,
 		ClanUrl:      d.ClanUrl,
-		Banned:       d.Banned,
+		Banned:       &d.Banned,
 		RegisterDate: parse,
 		Title:        d.Title,
 		Level:        level,

@@ -16,7 +16,7 @@ type GameUser struct {
 	// 联队地址
 	ClanUrl string `gorm:"size:255"`
 	// 是否被封禁
-	Banned bool
+	Banned *bool
 	// 注册日期
 	RegisterDate time.Time
 	// 称号
@@ -137,7 +137,7 @@ func (u GameUser) ToDisplayGameUser() display.GameUser {
 		AsABRate:       u.AsABRate,
 		AsRBRate:       u.AsRBRate,
 		AsSBRate:       u.AsSBRate,
-		Banned:         u.Banned,
+		Banned:         *u.Banned,
 		StatSb:         convertToStat(u.StatSb),
 		StatAb:         convertToStat(u.StatAb),
 		StatRb:         convertToStat(u.StatRb),

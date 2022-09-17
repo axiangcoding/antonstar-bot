@@ -16,7 +16,8 @@ func ExtractGaijinData(e *colly.HTMLElement) table.GameUser {
 	data.Clan = dom.Find("a[class=user-profile__data-link]").Text()
 	data.ClanUrl = "https://warthunder.com" + dom.Find("a[class=user-profile__data-link]").AttrOr("href", "")
 	length := dom.Find("div[class=user-profile__data-nick--banned]").Length()
-	data.Banned = length == 1
+	banned := length == 1
+	data.Banned = &banned
 	data.RegisterDate = extractRegisterDate(dom.Find("li[class=user-profile__data-regdate]").Text())
 	data.Title = extractTitle(dom.Find("li[class=user-profile__data-item]").Eq(0).Text())
 	data.Level = extractLevel(dom.Find("li[class=user-profile__data-item]").Eq(1).Text())
