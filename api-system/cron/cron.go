@@ -17,7 +17,7 @@ func Setup() {
 }
 
 func addJob(c *cron.Cron) {
-	_, err := c.AddFunc("@every 1m", CheckRoomLiving)
+	_, err := c.AddFunc("@every 5m", CheckRoomLiving)
 	if err != nil {
 		logging.Fatalf("Add cron job failed. %s", err)
 	}
