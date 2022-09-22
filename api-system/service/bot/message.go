@@ -19,6 +19,8 @@ const (
 	RespLuck              = "你今天的气运值是%d，%s"
 	RespGroupGetBanned    = "对不起，你群因为违反规则，所有功能已被禁用"
 	RespVersion           = "当前机器人版本为 %s"
+
+	RespRoomIsLiving = "直播间”%s“开播啦，还不快去看看？ %s"
 )
 
 var (

@@ -5,12 +5,14 @@ import "gorm.io/gorm"
 type QQGroupConfig struct {
 	gorm.Model
 	GroupId             int64 `gorm:"uniqueIndex;"`
+	BindBiliRoomId      int64
 	Banned              *bool
 	AllowAdminConfig    *bool
 	Shutdown            *bool
 	EnableActionQuery   *bool
 	EnableActionLuck    *bool
 	EnableActionSetting *bool
+	EnableCheckBiliRoom *bool
 }
 
 func DefaultGroupConfig(groupId int64) QQGroupConfig {
@@ -24,5 +26,6 @@ func DefaultGroupConfig(groupId int64) QQGroupConfig {
 		EnableActionQuery:   &trueVal,
 		EnableActionLuck:    &trueVal,
 		EnableActionSetting: &falseVal,
+		EnableCheckBiliRoom: &falseVal,
 	}
 }
