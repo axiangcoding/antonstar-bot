@@ -39,7 +39,7 @@ func CheckRoomLiving() {
 			logging.Warn(err)
 			continue
 		}
-		if info.Data.LiveStatus == 1 || info.Data.LiveStatus == 2 {
+		if info.Data.LiveStatus == 1 {
 			exist := service.ExistBiliRoomFlag(qc.BindBiliRoomId)
 			if !exist {
 				url := fmt.Sprintf("https://live.bilibili.com/%d", qc.BindBiliRoomId)
