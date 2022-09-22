@@ -4,15 +4,16 @@ import (
 	"errors"
 	"fmt"
 	"github.com/axiangcoding/ax-web/cache"
+	"github.com/axiangcoding/ax-web/data/table"
 	"github.com/axiangcoding/ax-web/logging"
 	"github.com/axiangcoding/ax-web/service/bot"
 	"github.com/axiangcoding/ax-web/service/cqhttp"
 	"github.com/axiangcoding/ax-web/settings"
-	"github.com/axiangcoding/ax-web/tool"
 	"github.com/gin-gonic/gin"
 	"github.com/go-resty/resty/v2"
 	"github.com/mitchellh/mapstructure"
 	"golang.org/x/exp/slices"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -84,97 +85,59 @@ func handleCqHttpMessageEventGroup(c *gin.Context, event *cqhttp.MessageGroupEve
 	if messageType != "group" || !cqhttp.MustContainsTrigger(msg) {
 		return
 	}
-	action := bot.ParseMessageCommand(msg)
+	groupId := event.GroupId
+	gc, err := FindGroupConfig(groupId)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			defaultGC := table.DefaultGroupConfig(groupId)
+			gc = &defaultGC
+			if err := SaveGroupConfig(defaultGC); err != nil {
+				logging.Warn(err)
+			}
+		} else {
+			logging.Warn(err)
+		}
+	}
 	var retMsgForm cqhttp.SendGroupMsgForm
-	retMsgForm.GroupId = event.GroupId
-	retMsgForm.MessagePrefix = fmt.Sprintf("[CQ:at,qq=%d] ", event.Sender.UserId)
-	if action == nil {
-		retMsgForm.Message = bot.RespDontKnowAction
+	retMsgForm.GroupId = groupId
+	if *gc.Banned {
+		retMsgForm.Message = bot.RespGroupGetBanned
 	} else {
-		value := action.Value
-		switch action.Key {
-		case bot.ActionQuery:
-			if !IsValidNickname(value) {
-				retMsgForm.Message = bot.RespNotAValidNickname
+		retMsgForm.MessagePrefix = fmt.Sprintf("[CQ:at,qq=%d] ", event.Sender.UserId)
+		action := bot.ParseMessageCommand(msg)
+		if action == nil {
+			retMsgForm.Message = bot.RespCommon
+		} else {
+			value := action.Value
+			switch action.Key {
+			case bot.ActionQuery:
+				DoActionQuery(&retMsgForm, value, false)
+				break
+			case bot.ActionFullQuery:
+				DoActionQuery(&retMsgForm, value, true)
+				break
+			case bot.ActionRefresh:
+				DoActionRefresh(&retMsgForm, value)
+				break
+			case bot.ActionReport:
+				retMsgForm.Message = bot.RespReport
+				break
+			case bot.ActionDrawCard:
+				DoActionDrawCard(&retMsgForm, value, event.Sender.UserId)
+				break
+			case bot.ActionLuck:
+				DoActionLuck(&retMsgForm, value, event.Sender.UserId)
+				break
+			case bot.ActionVersion:
+				retMsgForm.Message = fmt.Sprintf(bot.RespVersion, settings.Config.Version)
+				break
+			case bot.ActionGetHelp:
+				retMsgForm.Message = bot.RespGetHelp
+				break
+			default:
+				retMsgForm.Message = bot.RespGetHelp
 				break
 			}
-			mId, user, err := QueryWTGamerProfile(value, retMsgForm)
-			if err != nil {
-				logging.Warnf("query WT gamer profile error. %s", err)
-				retMsgForm.Message = bot.RespCanNotRefresh
-			}
-			if mId != nil {
-				retMsgForm.Message = bot.RespRunningQuery
-				tool.GoWithRecover(func() {
-					if err := WaitForCrawlerFinished(*mId); err != nil {
-						logging.Warnf("wait for callback error. %s", err)
-					}
-				})
-			} else {
-				retMsgForm.Message = user.ToFriendlyShortString()
-			}
-			break
-		case bot.ActionFullQuery:
-			if !IsValidNickname(value) {
-				retMsgForm.Message = bot.RespNotAValidNickname
-				break
-			}
-			mId, user, err := QueryWTGamerProfile(value, retMsgForm)
-			if err != nil {
-				logging.Warnf("query WT gamer profile error. %s", err)
-				retMsgForm.Message = bot.RespCanNotRefresh
-			}
-			if mId != nil {
-				retMsgForm.Message = bot.RespRunningQuery
-				tool.GoWithRecover(func() {
-					if err := WaitForCrawlerFinished(*mId); err != nil {
-						logging.Warnf("wait for callback error. %s", err)
-					}
-				})
-			} else {
-				retMsgForm.Message = user.ToFriendlyFullString()
-			}
-			break
-		case bot.ActionRefresh:
-			if !IsValidNickname(value) {
-				retMsgForm.Message = bot.RespNotAValidNickname
-				break
-			}
-			if !CanBeRefresh(value) {
-				retMsgForm.Message = bot.RespTooShortToRefresh
-				break
-			}
-			missionId, err := RefreshWTUserInfo(value, retMsgForm)
-			if err != nil {
-				logging.Warn("refresh WT gamer profile error. ", err)
-				retMsgForm.Message = bot.RespCanNotRefresh
-			}
-			retMsgForm.Message = bot.RespRunningQuery
-			tool.GoWithRecover(func() {
-				if err := WaitForCrawlerFinished(*missionId); err != nil {
-					logging.Warnf("wait for callback error. %s", err)
-				}
-			})
-			break
-		case bot.ActionReport:
-			retMsgForm.Message = bot.RespReport
-			break
-		case bot.ActionDrawCard:
-			id := event.Sender.UserId
-			number := DrawNumber(id, time.Now().In(time.FixedZone("CST", 8*3600)))
-			retMsgForm.Message = fmt.Sprintf(bot.RespDrawCard, number)
-			break
-		case bot.ActionLuck:
-			id := event.Sender.UserId
-			number := DrawNumber(id, time.Now().In(time.FixedZone("CST", 8*3600)))
-			retMsgForm.Message = fmt.Sprintf(bot.RespLuck, number, NumberBasedResponse(number))
-			break
-		case bot.ActionGetHelp:
-			retMsgForm.Message = bot.RespGetHelp
-			break
-		default:
-			retMsgForm.Message = bot.RespHelp
-			break
 		}
 	}
 	MustSendGroupMsg(retMsgForm)

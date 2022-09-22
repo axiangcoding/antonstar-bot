@@ -6,6 +6,7 @@ import (
 	"github.com/axiangcoding/ax-web/data/display"
 	"github.com/axiangcoding/ax-web/data/table"
 	"github.com/axiangcoding/ax-web/logging"
+	"github.com/axiangcoding/ax-web/service/bot"
 	"github.com/axiangcoding/ax-web/service/cqhttp"
 	"github.com/axiangcoding/ax-web/tool"
 	"github.com/google/uuid"
@@ -71,4 +72,62 @@ func RefreshWTUserInfo(nickname string, sendForm cqhttp.SendGroupMsgForm) (*stri
 		}
 	})
 	return &missionId, nil
+}
+
+func DoActionQuery(retMsgForm *cqhttp.SendGroupMsgForm, value string, fullMsg bool) {
+	if !IsValidNickname(value) {
+		retMsgForm.Message = bot.RespNotAValidNickname
+		return
+	}
+	mId, user, err := QueryWTGamerProfile(value, *retMsgForm)
+	if err != nil {
+		logging.Warnf("query WT gamer profile error. %s", err)
+		retMsgForm.Message = bot.RespCanNotRefresh
+	}
+	if mId != nil {
+		retMsgForm.Message = bot.RespRunningQuery
+		tool.GoWithRecover(func() {
+			if err := WaitForCrawlerFinished(*mId); err != nil {
+				logging.Warnf("wait for callback error. %s", err)
+			}
+		})
+	} else {
+		if fullMsg {
+			retMsgForm.Message = user.ToFriendlyFullString()
+		} else {
+			retMsgForm.Message = user.ToFriendlyShortString()
+		}
+	}
+}
+
+func DoActionRefresh(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
+	if !IsValidNickname(value) {
+		retMsgForm.Message = bot.RespNotAValidNickname
+		return
+	}
+	if !CanBeRefresh(value) {
+		retMsgForm.Message = bot.RespTooShortToRefresh
+		return
+	}
+	missionId, err := RefreshWTUserInfo(value, *retMsgForm)
+	if err != nil {
+		logging.Warn("refresh WT gamer profile error. ", err)
+		retMsgForm.Message = bot.RespCanNotRefresh
+	}
+	retMsgForm.Message = bot.RespRunningQuery
+	tool.GoWithRecover(func() {
+		if err := WaitForCrawlerFinished(*missionId); err != nil {
+			logging.Warnf("wait for callback error. %s", err)
+		}
+	})
+}
+
+func DoActionDrawCard(retMsgForm *cqhttp.SendGroupMsgForm, value string, id int64) {
+	number := DrawNumber(id, time.Now().In(time.FixedZone("CST", 8*3600)))
+	retMsgForm.Message = fmt.Sprintf(bot.RespDrawCard, number)
+}
+
+func DoActionLuck(retMsgForm *cqhttp.SendGroupMsgForm, value string, id int64) {
+	number := DrawNumber(id, time.Now().In(time.FixedZone("CST", 8*3600)))
+	retMsgForm.Message = fmt.Sprintf(bot.RespLuck, number, NumberBasedResponse(number))
 }

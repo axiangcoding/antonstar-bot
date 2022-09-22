@@ -69,6 +69,7 @@ func autoMigrate(db *gorm.DB) {
 	if err := db.AutoMigrate(
 		&table.Mission{},
 		&table.GameUser{},
+		&table.QQGroupConfig{},
 	); err != nil {
 		logging.Fatal(err)
 	} else {

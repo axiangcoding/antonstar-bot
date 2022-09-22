@@ -6,6 +6,7 @@ import (
 )
 
 const (
+	RespCommon            = "我是一个机器人，但是我真的不是AI"
 	RespDontKnowAction    = "我不道你在说什么，请按照指令提问，注意不要缺少空格"
 	RespHelp              = "我不道你想干啥，输入”帮助“查看可用的命令"
 	RespReport            = "举报已被记录，该举报仅代表玩家意见，仅作为参考，不是官方实锤"
@@ -14,8 +15,10 @@ const (
 	RespRunningQuery      = "正在发起查询，请耐心等待..."
 	RespNotAValidNickname = "我说你这id不对吧，别逗我玩"
 	RespGetHelp           = "我啷个晓得怎么帮你，找33去"
-	RespDrawCard          = "你今天的气运值是 %d\n后续请使用 .cqbot 气运 或者 .cqbot 运气查询哦"
+	RespDrawCard          = "你今天的气运值是 %d\n后续请使用“.cqbot 气运”或者“.cqbot 运气“查询哦"
 	RespLuck              = "你今天的气运值是%d，%s"
+	RespGroupGetBanned    = "对不起，你群因为违反规则，所有功能已被禁用"
+	RespVersion           = "当前机器人版本为 %s"
 )
 
 var (
@@ -32,6 +35,7 @@ var (
 	ActionReport    = "report"
 	ActionDrawCard  = "drawCard"
 	ActionLuck      = "luck"
+	ActionVersion   = "version"
 	ActionGetHelp   = "getHelp"
 )
 
@@ -79,6 +83,9 @@ func ParseMessageCommand(msg string) *Action {
 		break
 	case "运气":
 		key = ActionLuck
+		break
+	case "版本":
+		key = ActionVersion
 		break
 	default:
 		key = ActionUnknown

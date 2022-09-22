@@ -114,7 +114,7 @@ func GetUserInfoFromWarThunder(missionId string, nick string) error {
 		}
 		MustPutRefreshFlag(nick)
 		MustFinishMissionWithResult(missionId, table.MissionStatusSuccess, CrawlerResult{
-			Found: false,
+			Found: true,
 			Nick:  nick,
 			Data:  data},
 		)

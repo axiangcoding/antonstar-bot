@@ -14,7 +14,14 @@ func ExtractGaijinData(e *colly.HTMLElement) table.GameUser {
 	dom := e.DOM
 	data.Nick = strings.TrimSpace(dom.Find("li[class=user-profile__data-nick]").Text())
 	data.Clan = dom.Find("a[class=user-profile__data-link]").Text()
-	data.ClanUrl = "https://warthunder.com" + dom.Find("a[class=user-profile__data-link]").AttrOr("href", "")
+	var clanUrl string
+	clanUrlSuffix := dom.Find("a[class=user-profile__data-link]").AttrOr("href", "")
+	if clanUrlSuffix == "" {
+		clanUrl = ""
+	} else {
+		clanUrl = "https://warthunder.com" + clanUrlSuffix
+	}
+	data.ClanUrl = clanUrl
 	length := dom.Find("div[class=user-profile__data-nick--banned]").Length()
 	banned := length == 1
 	data.Banned = &banned
