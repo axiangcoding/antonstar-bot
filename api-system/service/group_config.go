@@ -36,9 +36,9 @@ func SaveGroupConfig(gc table.QQGroupConfig) error {
 	return nil
 }
 
-func ExistBiliRoomFlag(roomId int64) bool {
+func ExistBiliRoomFlag(groupId int64, roomId int64) bool {
 	client := cache.GetClient()
-	key := cache.GenerateBiliRoomLivingCacheKey(roomId)
+	key := cache.GenerateBiliRoomLivingCacheKey(groupId, roomId)
 	if _, err := client.Get(c, key).Result(); err != nil {
 		if errors.Is(err, redis.Nil) {
 			return false
@@ -49,9 +49,9 @@ func ExistBiliRoomFlag(roomId int64) bool {
 	return true
 }
 
-func MustPutBiliRoomFlag(roomId int64) {
+func MustPutBiliRoomFlag(groupId int64, roomId int64) {
 	client := cache.GetClient()
-	key := cache.GenerateBiliRoomLivingCacheKey(roomId)
+	key := cache.GenerateBiliRoomLivingCacheKey(groupId, roomId)
 	if err := client.Set(c, key, "", time.Minute*10).Err(); err != nil {
 		logging.Warn(err)
 	}

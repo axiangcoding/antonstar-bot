@@ -17,7 +17,7 @@ func Setup() {
 }
 
 func addJob(c *cron.Cron) {
-	_, err := c.AddFunc("@every 5m", CheckRoomLiving)
+	_, err := c.AddFunc("@every 2m", CheckRoomLiving)
 	if err != nil {
 		logging.Fatalf("Add cron job failed. %s", err)
 	}
@@ -40,13 +40,13 @@ func CheckRoomLiving() {
 			continue
 		}
 		if info.Data.LiveStatus == 1 {
-			exist := service.ExistBiliRoomFlag(qc.BindBiliRoomId)
+			exist := service.ExistBiliRoomFlag(qc.GroupId, qc.BindBiliRoomId)
 			if !exist {
 				url := fmt.Sprintf("https://live.bilibili.com/%d", qc.BindBiliRoomId)
 				sgmf.Message = fmt.Sprintf(bot.RespRoomIsLiving, info.Data.Title, url)
 				service.MustSendGroupMsg(sgmf)
 			}
-			service.MustPutBiliRoomFlag(qc.BindBiliRoomId)
+			service.MustPutBiliRoomFlag(qc.GroupId, qc.BindBiliRoomId)
 		}
 	}
 

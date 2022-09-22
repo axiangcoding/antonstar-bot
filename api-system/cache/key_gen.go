@@ -16,7 +16,7 @@ func GenerateGameUserCacheKey(nickname string) string {
 	return fmt.Sprintf("%s:%s", GameUserPrefix, nickname)
 }
 
-func GenerateBiliRoomLivingCacheKey(roomId int64) string {
-	return fmt.Sprintf("%s:%d", BiliRoomLivingPrefix, roomId)
+func GenerateBiliRoomLivingCacheKey(groupId, roomId int64) string {
+	return fmt.Sprintf("%s:%d;%d", BiliRoomLivingPrefix, groupId, roomId)
 
 }
