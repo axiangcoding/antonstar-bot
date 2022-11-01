@@ -14,7 +14,7 @@ const (
 	RespTooShortToRefresh = "对不起，距上次刷新间隔太短，不允许刷新"
 	RespRunningQuery      = "正在发起查询，请耐心等待..."
 	RespNotAValidNickname = "我说你这id不对吧，别逗我玩"
-	RespGetHelp           = "我啷个晓得怎么帮你，找33去"
+	RespGetHelp           = "QBot使用文档请看：https://www.yuque.com/docs/share/effb37b2-c0f0-4f6c-ab5c-bec3fb2c13c5\n如有其他问题请咨询33"
 	RespDrawCard          = "你今天的气运值是 %d\n后续请使用“.cqbot 气运”或者“.cqbot 运气“查询哦"
 	RespLuck              = "你今天的气运值是%d，%s"
 	RespGroupGetBanned    = "对不起，你群因为违反规则，所有功能已被禁用"
