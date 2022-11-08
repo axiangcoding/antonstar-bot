@@ -43,7 +43,8 @@ func CheckRoomLiving() {
 			exist := service.ExistBiliRoomFlag(qc.GroupId, qc.BindBiliRoomId)
 			if !exist {
 				url := fmt.Sprintf("https://live.bilibili.com/%d", qc.BindBiliRoomId)
-				sgmf.Message = fmt.Sprintf(bot.RespRoomIsLiving, info.Data.Title, url)
+				config, _ := service.FindGroupConfig(qc.GroupId)
+				sgmf.Message = fmt.Sprintf(bot.SelectStaticMessage(config.MessageTemplate).CommonResp.LiveBroadcast, info.Data.Title, url)
 				service.MustSendGroupMsg(sgmf)
 			}
 			service.MustPutBiliRoomFlag(qc.GroupId, qc.BindBiliRoomId)

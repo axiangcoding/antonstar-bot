@@ -27,19 +27,23 @@ func DrawNumber(id int64, now time.Time) int32 {
 	return rand.New(rand.NewSource(uint64(hash))).Int31n(101)
 }
 
-func NumberBasedResponse(number int32) string {
+func NumberBasedResponse(number int32, template int) string {
 	if number == 0 {
-		return "你是个诡计多端的0"
+		return bot.SelectStaticMessage(template).LuckResp.Is0
 	} else if number <= 30 {
-		return "就这？"
-	} else if number <= 60 {
-		return "至少不算丢人"
+		return bot.SelectStaticMessage(template).LuckResp.Between0130
+	} else if number <= 50 {
+		return bot.SelectStaticMessage(template).LuckResp.Between3050
+	} else if number <= 70 {
+		return bot.SelectStaticMessage(template).LuckResp.Between5070
 	} else if number <= 80 {
-		return "有没有考虑过转发抽奖"
+		return bot.SelectStaticMessage(template).LuckResp.Between7080
+	} else if number <= 95 {
+		return bot.SelectStaticMessage(template).LuckResp.Between8095
 	} else if number < 100 {
-		return "分我点运气呗"
+		return bot.SelectStaticMessage(template).LuckResp.Between95100
 	} else {
-		return "你是一个个个100"
+		return bot.SelectStaticMessage(template).LuckResp.Is100
 	}
 }
 
@@ -96,16 +100,16 @@ func GetBiliBiliRoomInfo(roomId int64) (*bilibili.RoomInfoResp, error) {
 
 func DoActionQuery(retMsgForm *cqhttp.SendGroupMsgForm, value string, fullMsg bool) {
 	if !IsValidNickname(value) {
-		retMsgForm.Message = bot.RespNotAValidNickname
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.NotValidNickname
 		return
 	}
 	mId, user, err := QueryWTGamerProfile(value, *retMsgForm)
 	if err != nil {
 		logging.Warnf("query WT gamer profile error. %s", err)
-		retMsgForm.Message = bot.RespCanNotRefresh
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.CanNotRefresh
 	}
 	if mId != nil {
-		retMsgForm.Message = bot.RespRunningQuery
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.QueryIsRunning
 		tool.GoWithRecover(func() {
 			if err := WaitForCrawlerFinished(*mId); err != nil {
 				logging.Warnf("wait for callback error. %s", err)
@@ -122,19 +126,19 @@ func DoActionQuery(retMsgForm *cqhttp.SendGroupMsgForm, value string, fullMsg bo
 
 func DoActionRefresh(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
 	if !IsValidNickname(value) {
-		retMsgForm.Message = bot.RespNotAValidNickname
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.NotValidNickname
 		return
 	}
 	if !CanBeRefresh(value) {
-		retMsgForm.Message = bot.RespTooShortToRefresh
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.TooShortToRefresh
 		return
 	}
 	missionId, err := RefreshWTUserInfo(value, *retMsgForm)
 	if err != nil {
 		logging.Warn("refresh WT gamer profile error. ", err)
-		retMsgForm.Message = bot.RespCanNotRefresh
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.CanNotRefresh
 	}
-	retMsgForm.Message = bot.RespRunningQuery
+	retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.QueryIsRunning
 	tool.GoWithRecover(func() {
 		if err := WaitForCrawlerFinished(*missionId); err != nil {
 			logging.Warnf("wait for callback error. %s", err)
@@ -144,10 +148,10 @@ func DoActionRefresh(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
 
 func DoActionDrawCard(retMsgForm *cqhttp.SendGroupMsgForm, value string, id int64) {
 	number := DrawNumber(id, time.Now().In(time.FixedZone("CST", 8*3600)))
-	retMsgForm.Message = fmt.Sprintf(bot.RespDrawCard, number)
+	retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.DrawCard, number)
 }
 
 func DoActionLuck(retMsgForm *cqhttp.SendGroupMsgForm, value string, id int64) {
 	number := DrawNumber(id, time.Now().In(time.FixedZone("CST", 8*3600)))
-	retMsgForm.Message = fmt.Sprintf(bot.RespLuck, number, NumberBasedResponse(number))
+	retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.Luck, number, NumberBasedResponse(number, retMsgForm.MessageTemplate))
 }

@@ -13,6 +13,7 @@ type QQGroupConfig struct {
 	EnableActionLuck    *bool
 	EnableActionSetting *bool
 	EnableCheckBiliRoom *bool
+	MessageTemplate     int
 }
 
 func DefaultGroupConfig(groupId int64) QQGroupConfig {

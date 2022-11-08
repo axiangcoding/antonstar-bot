@@ -1,49 +1,28 @@
 package bot
 
 import (
-	"regexp"
+	"encoding/json"
+	"github.com/axiangcoding/ax-web/logging"
+	"github.com/axiangcoding/ax-web/static"
 	"strings"
 )
 
-const (
-	RespCommon            = "我是一个机器人，但是我真的不是AI"
-	RespDontKnowAction    = "我不道你在说什么，请按照指令提问，注意不要缺少空格"
-	RespHelp              = "我不道你想干啥，输入”帮助“查看可用的命令"
-	RespReport            = "举报已被记录，该举报仅代表玩家意见，仅作为参考，不是官方实锤"
-	RespCanNotRefresh     = "目前无法查询，请稍后重试"
-	RespTooShortToRefresh = "对不起，距上次刷新间隔太短，不允许刷新"
-	RespRunningQuery      = "正在发起查询，请耐心等待..."
-	RespNotAValidNickname = "我说你这id不对吧，别逗我玩"
-	RespGetHelp           = "QBot使用文档请看：https://www.yuque.com/docs/share/effb37b2-c0f0-4f6c-ab5c-bec3fb2c13c5\n如有其他问题请咨询33"
-	RespDrawCard          = "你今天的气运值是 %d\n后续请使用“.cqbot 气运”或者“.cqbot 运气“查询哦"
-	RespLuck              = "你今天的气运值是%d，%s"
-	RespGroupGetBanned    = "对不起，你群因为违反规则，所有功能已被禁用"
-	RespVersion           = "当前机器人版本为 %s"
-
-	RespRoomIsLiving = "直播间”%s“开播啦，还不快去看看？ %s"
-)
-
-var (
-	// MessageGetAtPrimaryMsgPattern at时获取主要消息
-	MessageGetAtPrimaryMsgPattern  = regexp.MustCompile(`^.*\[.*\](.*)$`)
-	MessageGetCmdPrimaryMsgPattern = regexp.MustCompile(`^\s*\.cqbot\s*(.*)$`)
-)
-
-var (
-	ActionUnknown   = "unknown"
-	ActionQuery     = "query"
-	ActionFullQuery = "fullQuery"
-	ActionRefresh   = "refresh"
-	ActionReport    = "report"
-	ActionDrawCard  = "drawCard"
-	ActionLuck      = "luck"
-	ActionVersion   = "version"
-	ActionGetHelp   = "getHelp"
-)
-
-type Action struct {
-	Key   string `json:"key,omitempty"`
-	Value string `json:"value,omitempty"`
+func SelectStaticMessage(id int) StaticMessage {
+	var filename string
+	if id == 0 {
+		filename = "default.json"
+	} else if id == 1 {
+		filename = "two_dim.json"
+	} else {
+		filename = "default.json"
+	}
+	bytes := static.MustReadMessageFileAsBytes(filename)
+	msg := StaticMessage{}
+	err := json.Unmarshal(bytes, &msg)
+	if err != nil {
+		logging.Warn(err)
+	}
+	return msg
 }
 
 func ParseMessageCommand(msg string) *Action {

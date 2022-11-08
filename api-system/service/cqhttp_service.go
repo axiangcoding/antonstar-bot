@@ -100,13 +100,14 @@ func handleCqHttpMessageEventGroup(c *gin.Context, event *cqhttp.MessageGroupEve
 	}
 	var retMsgForm cqhttp.SendGroupMsgForm
 	retMsgForm.GroupId = groupId
+	retMsgForm.MessageTemplate = gc.MessageTemplate
 	if *gc.Banned {
-		retMsgForm.Message = bot.RespGroupGetBanned
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.GroupGetBanned
 	} else {
 		retMsgForm.MessagePrefix = fmt.Sprintf("[CQ:at,qq=%d] ", event.Sender.UserId)
 		action := bot.ParseMessageCommand(msg)
 		if action == nil {
-			retMsgForm.Message = bot.RespCommon
+			retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.Common
 		} else {
 			value := action.Value
 			switch action.Key {
@@ -120,7 +121,7 @@ func handleCqHttpMessageEventGroup(c *gin.Context, event *cqhttp.MessageGroupEve
 				DoActionRefresh(&retMsgForm, value)
 				break
 			case bot.ActionReport:
-				retMsgForm.Message = bot.RespReport
+				retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.Report
 				break
 			case bot.ActionDrawCard:
 				DoActionDrawCard(&retMsgForm, value, event.Sender.UserId)
@@ -129,13 +130,13 @@ func handleCqHttpMessageEventGroup(c *gin.Context, event *cqhttp.MessageGroupEve
 				DoActionLuck(&retMsgForm, value, event.Sender.UserId)
 				break
 			case bot.ActionVersion:
-				retMsgForm.Message = fmt.Sprintf(bot.RespVersion, settings.Config.Version)
+				retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.Version, settings.Config.Version)
 				break
 			case bot.ActionGetHelp:
-				retMsgForm.Message = bot.RespGetHelp
+				retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.GetHelp
 				break
 			default:
-				retMsgForm.Message = bot.RespGetHelp
+				retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.GetHelp
 				break
 			}
 		}
