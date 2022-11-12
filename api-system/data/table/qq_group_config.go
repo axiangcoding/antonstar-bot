@@ -1,6 +1,9 @@
 package table
 
-import "gorm.io/gorm"
+import (
+	"github.com/axiangcoding/ax-web/data/display"
+	"gorm.io/gorm"
+)
 
 type QQGroupConfig struct {
 	gorm.Model
@@ -28,5 +31,20 @@ func DefaultGroupConfig(groupId int64) QQGroupConfig {
 		EnableActionLuck:    &trueVal,
 		EnableActionSetting: &falseVal,
 		EnableCheckBiliRoom: &falseVal,
+	}
+}
+
+func (c QQGroupConfig) ToDisplay() display.QQGroupConfig {
+	return display.QQGroupConfig{
+		GroupId:             c.GroupId,
+		BindBiliRoomId:      c.BindBiliRoomId,
+		Banned:              *c.Banned,
+		AllowAdminConfig:    *c.AllowAdminConfig,
+		Shutdown:            *c.Shutdown,
+		EnableActionQuery:   *c.EnableActionQuery,
+		EnableActionLuck:    *c.EnableActionLuck,
+		EnableActionSetting: *c.EnableActionSetting,
+		EnableCheckBiliRoom: *c.EnableCheckBiliRoom,
+		MessageTemplate:     c.MessageTemplate,
 	}
 }

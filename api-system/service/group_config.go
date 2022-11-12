@@ -19,6 +19,14 @@ func FindGroupConfig(groupId int64) (*table.QQGroupConfig, error) {
 	return &find, nil
 }
 
+func MustFindGroupConfig(groupId int64) *table.QQGroupConfig {
+	config, err := FindGroupConfig(groupId)
+	if err != nil {
+		logging.Warn(err)
+	}
+	return config
+}
+
 func GetGroupConfigWithCondition(condition table.QQGroupConfig) ([]table.QQGroupConfig, error) {
 	db := data.GetDB()
 	var finds []table.QQGroupConfig

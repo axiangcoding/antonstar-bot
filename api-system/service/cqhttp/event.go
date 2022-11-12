@@ -9,6 +9,11 @@ var (
 	PostTypeMetaEvent  = "meta_event"
 	EventTypeHeartBeat = "heartbeat"
 	MessageTypeGroup   = "group"
+	RequestTypeGroup   = "group"
+	RequestTypeFriend  = "friend"
+
+	SubTypeAdd    = "add"
+	SubTypeInvite = "invite"
 )
 
 // MetaTypeHeartBeatEvent 心跳事件
@@ -46,8 +51,8 @@ func (m *MetaTypeHeartBeatEvent) UnmarshalBinary(data []byte) error {
 	return json.Unmarshal(data, &m)
 }
 
-// MessageGroupEvent 群聊事件
-type MessageGroupEvent struct {
+// CommonEvent 群聊事件
+type CommonEvent struct {
 	Anonymous   interface{} `json:"anonymous" mapstructure:"anonymous"`
 	Font        int         `json:"font" mapstructure:"font"`
 	GroupId     int64       `json:"group_id" mapstructure:"group_id"`
@@ -55,6 +60,7 @@ type MessageGroupEvent struct {
 	MessageId   int         `json:"message_id" mapstructure:"message_id"`
 	MessageSeq  int         `json:"message_seq" mapstructure:"message_seq"`
 	MessageType string      `json:"message_type" mapstructure:"message_type"`
+	RequestType string      `json:"request_type" mapstructure:"request_type"`
 	PostType    string      `json:"post_type" mapstructure:"post_type"`
 	RawMessage  string      `json:"raw_message" mapstructure:"raw_message"`
 	SelfId      int64       `json:"self_id" mapstructure:"self_id"`
@@ -70,14 +76,16 @@ type MessageGroupEvent struct {
 		UserId   int64  `json:"user_id" mapstructure:"user_id"`
 	} `json:"sender" mapstructure:"sender"`
 	SubType string `json:"sub_type" mapstructure:"sub_type"`
+	Comment string `json:"comment" mapstructure:"comment"`
+	Flag    string `json:"flag" mapstructure:"flag"`
 	Time    int    `json:"time" mapstructure:"time"`
 	UserId  int64  `json:"user_id" mapstructure:"user_id"`
 }
 
-func (m *MessageGroupEvent) MarshalBinary() (data []byte, err error) {
+func (m *CommonEvent) MarshalBinary() (data []byte, err error) {
 	return json.Marshal(m)
 }
 
-func (m *MessageGroupEvent) UnmarshalBinary(data []byte) error {
+func (m *CommonEvent) UnmarshalBinary(data []byte) error {
 	return json.Unmarshal(data, &m)
 }

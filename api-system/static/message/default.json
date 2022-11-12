@@ -1,18 +1,18 @@
 {
   "mode": "default",
   "common_resp": {
-    "common": "我是练习两年半的机器人实习生，不会唱，跳，rap，并且我真的不是AI",
+    "common": "我是33手下练习两年半的机器人实习生，不会唱，跳，rap，并且我真的不是AI",
     "report": "暂不支持举办玩家，敬请期待",
     "can_not_refresh": "目前暂时无法查询，请稍后重试",
     "too_short_to_refresh": "对不起，距上次刷新间隔太短，不允许刷新",
     "query_is_running": "正在发起查询，请耐心等待...",
-    "not_valid_nickname": "你输入了一个不对的昵称，请检查是否包括了特殊字符",
-    "get_help": "QBot使用文档请看：https://www.yuque.com/docs/share/effb37b2-c0f0-4f6c-ab5c-bec3fb2c13c5\n如有疑问请咨询开发者",
+    "not_valid_nickname": "你输入了一个错误的昵称，请检查是否包括了特殊字符",
+    "get_help": "如有疑问请加群：689874918",
     "draw_card": "暂不支持塔罗牌抽取，敬请期待",
     "luck": "你今天的气运值是 %d，%s",
     "group_get_banned": "对不起，本群因为违反机器人规则，所有功能已被禁用",
     "version": "当前机器人版本为 %s",
-    "live_broadcast": "直播间“%s“开播啦，还不快去看看？ %s"
+    "live_broadcast": "直播间“%s“开播啦，这不得去看看？\n%s",
   },
   "luck_resp": {
     "is_0": "往好处想，没有更低的了",

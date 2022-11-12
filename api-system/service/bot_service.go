@@ -155,3 +155,8 @@ func DoActionLuck(retMsgForm *cqhttp.SendGroupMsgForm, value string, id int64) {
 	number := DrawNumber(id, time.Now().In(time.FixedZone("CST", 8*3600)))
 	retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.Luck, number, NumberBasedResponse(number, retMsgForm.MessageTemplate))
 }
+
+func DoActionGroupStatus(retMsgForm *cqhttp.SendGroupMsgForm) {
+	config := MustFindGroupConfig(retMsgForm.GroupId)
+	retMsgForm.Message = config.ToDisplay().ToFriendlyString()
+}
