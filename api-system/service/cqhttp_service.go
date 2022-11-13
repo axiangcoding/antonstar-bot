@@ -165,7 +165,7 @@ func handleCqHttpMessageEventGroup(event *cqhttp.CommonEvent) {
 func handleAddGroup(event *cqhttp.CommonEvent) {
 	if event.SubType == cqhttp.SubTypeInvite {
 		config := MustFindGroupConfig(event.GroupId)
-		if !(*config.Banned) {
+		if config == nil || !(*config.Banned) {
 			MustAcceptInviteToGroup(event.Flag, event.SubType, true, "")
 		}
 	}
