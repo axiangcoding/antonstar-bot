@@ -76,11 +76,6 @@ const templateShortStr = `
 全真胜率: {{.StatSb.WinRate}}
 全真KD: {{.StatSb.Kd}}
 
-ThunderSkill街机效率值: {{.TsABRate}}
-ThunderSkill历史效率值: {{.TsRBRate}}
-ThunderSkill全真效率值: {{.TsSBRate}}
-（TS数据可能会因为bot保护而无法获取）
-
 数据最后刷新时间: {{.UpdatedAt}}
 
 Tips: 
@@ -122,11 +117,6 @@ const templateFullStr = `
 海战街机AD: {{.FleetRateAb.Ad}}
 海战历史AD: {{.FleetRateRb.Ad}}
 海战全真AD: {{.FleetRateSb.Ad}}
-
-ThunderSkill街机效率值: {{.TsABRate}}
-ThunderSkill历史效率值: {{.TsRBRate}}
-ThunderSkill全真效率值: {{.TsSBRate}}
-（TS数据可能会因为bot保护而无法获取）
 
 数据最后刷新时间: {{.UpdatedAt}}
 

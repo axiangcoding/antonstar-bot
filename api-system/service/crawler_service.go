@@ -109,9 +109,9 @@ func GetUserInfoFromWarThunder(missionId string, nick string) error {
 			}
 		}
 
-		if err := GetUserInfoFromThunderskill(nick); err != nil {
-			logging.Warn("failed on update thunder skill profile. ", err)
-		}
+		// if err := GetUserInfoFromThunderskill(nick); err != nil {
+		// 	logging.Warn("failed on update thunder skill profile. ", err)
+		// }
 		MustPutRefreshFlag(nick)
 		MustFinishMissionWithResult(missionId, table.MissionStatusSuccess, CrawlerResult{
 			Found: true,
