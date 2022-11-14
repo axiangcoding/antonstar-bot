@@ -17,11 +17,13 @@ func Setup() {
 }
 
 func addJob(c *cron.Cron) {
-	_, err := c.AddFunc("@every 5m", CheckRoomLiving)
-	if err != nil {
-		logging.Fatalf("Add cron job failed. %s", err)
+	if _, err := c.AddFunc("@every 5m", CheckRoomLiving); err != nil {
+		logging.Fatalf("Add cron job CheckRoomLiving failed. %s", err)
 	}
-	logging.Info("Add cron job success")
+	if _, err := c.AddFunc("@daily", RefreshUserTodayCount); err != nil {
+		logging.Fatalf("Add cron job RefreshUserTodayCount failed. %s", err)
+	}
+	logging.Info("All cron job add success")
 }
 
 func CheckRoomLiving() {
@@ -51,4 +53,12 @@ func CheckRoomLiving() {
 		}
 	}
 
+}
+
+func RefreshUserTodayCount() {
+	if err := service.ResetAllUserConfigTodayQueryCount(); err != nil {
+		logging.Error("reset all qq user today_query_count failed. ", err)
+	} else {
+		logging.Info("reset all qq user today_query_count to 0")
+	}
 }

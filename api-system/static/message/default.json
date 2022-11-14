@@ -11,6 +11,8 @@
     "draw_card": "暂不支持塔罗牌抽取，敬请期待",
     "luck": "你今天的气运值是 %d，%s",
     "group_get_banned": "对不起，本群因为违反机器人规则，所有功能已被禁用",
+    "user_get_banned": "对不起，你的qq号因为违反机器人规则，所有功能已被禁用",
+    "today_query_limit": "你今日的查询已达到上限 (%d/%d)，明天八点后重置",
     "version": "当前机器人版本为 %s",
     "live_broadcast": "直播间“%s“开播啦，这不得去看看？\n%s"
   },

@@ -54,7 +54,7 @@ type UserStat struct {
 }
 
 type UserRate struct {
-	Ad string `json:"ad,omitempty"`
+	Ka string `json:"ad,omitempty"`
 }
 
 const templateShortStr = `
@@ -105,24 +105,25 @@ const templateFullStr = `
 全真KD: {{.StatSb.Kd}}
 全真游戏时间: {{.StatSb.GameTime}}
 
-（击杀数/出击数简称为'AD'）
-空战街机AD: {{.AviationRateAb.Ad}}
-空战历史AD: {{.AviationRateRb.Ad}}
-空战全真AD: {{.AviationRateSb.Ad}}
+（击杀数/出击数简称为'KA'）
+空战街机KA: {{.AviationRateAb.Ka}}
+空战历史KA: {{.AviationRateRb.Ka}}
+空战全真KA: {{.AviationRateSb.Ka}}
 
-陆战街机AD: {{.GroundRateAb.Ad}}
-陆战历史AD: {{.GroundRateRb.Ad}}
-陆战全真AD: {{.GroundRateSb.Ad}}
+陆战街机KA: {{.GroundRateAb.Ka}}
+陆战历史KA: {{.GroundRateRb.Ka}}
+陆战全真KA: {{.GroundRateSb.Ka}}
 
-海战街机AD: {{.FleetRateAb.Ad}}
-海战历史AD: {{.FleetRateRb.Ad}}
-海战全真AD: {{.FleetRateSb.Ad}}
+海战街机KA: {{.FleetRateAb.Ka}}
+海战历史KA: {{.FleetRateRb.Ka}}
+海战全真KA: {{.FleetRateSb.Ka}}
 
 数据最后刷新时间: {{.UpdatedAt}}
 
 Tips: 
 输入”.cqbot 刷新 {{.Nick}}“可以刷新游戏数据
 输入”.cqbot 查询 {{.Nick}}“可以查询简要数据
+关注B站up主：摸鱼又开摆的三三，助力up主认证官方主播
 `
 
 func (u GameUser) ToFriendlyShortString() string {

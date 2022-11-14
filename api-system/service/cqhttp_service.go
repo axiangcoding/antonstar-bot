@@ -114,12 +114,27 @@ func handleCqHttpMessageEventGroup(event *cqhttp.CommonEvent) {
 			logging.Warn(err)
 		}
 	}
+	uc, err := FindUserConfig(userId)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			defaultUC := table.DefaultUserConfig(userId)
+			uc = &defaultUC
+			if err := SaveUserConfig(defaultUC); err != nil {
+				logging.Warn(err)
+			}
+		} else {
+			logging.Warn(err)
+		}
+	}
+
 	var retMsgForm cqhttp.SendGroupMsgForm
 	retMsgForm.GroupId = groupId
 	retMsgForm.MessageTemplate = gc.MessageTemplate
 	retMsgForm.UserId = userId
 	if *gc.Banned {
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.GroupGetBanned
+	} else if *uc.Banned {
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.UserGetBanned
 	} else {
 		retMsgForm.MessagePrefix = fmt.Sprintf("[CQ:at,qq=%d] ", event.Sender.UserId)
 		action := bot.ParseMessageCommand(msg)

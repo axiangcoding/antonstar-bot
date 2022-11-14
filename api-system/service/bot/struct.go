@@ -40,6 +40,8 @@ type StaticMessage struct {
 		DrawCard          string `json:"draw_card"`
 		Luck              string `json:"luck"`
 		GroupGetBanned    string `json:"group_get_banned"`
+		UserGetBanned     string `json:"user_get_banned"`
+		TodayQueryLimit   string `json:"today_query_limit"`
 		Version           string `json:"version"`
 		LiveBroadcast     string `json:"live_broadcast"`
 	} `json:"common_resp"`

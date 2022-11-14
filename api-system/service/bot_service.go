@@ -103,6 +103,11 @@ func DoActionQuery(retMsgForm *cqhttp.SendGroupMsgForm, value string, fullMsg bo
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.NotValidNickname
 		return
 	}
+	limit, usage, total := CheckQueryLimit(retMsgForm.UserId)
+	if limit {
+		retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.TodayQueryLimit, usage, total)
+		return
+	}
 	mId, user, err := QueryWTGamerProfile(value, *retMsgForm)
 	if err != nil {
 		logging.Warnf("query WT gamer profile error. %s", err)
@@ -122,6 +127,8 @@ func DoActionQuery(retMsgForm *cqhttp.SendGroupMsgForm, value string, fullMsg bo
 			retMsgForm.Message = user.ToFriendlyShortString()
 		}
 	}
+	MustAddUserConfigTodayQueryCount(retMsgForm.UserId, 1)
+	MustAddUserConfigTotalQueryCount(retMsgForm.UserId, 1)
 }
 
 func DoActionRefresh(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
@@ -131,6 +138,11 @@ func DoActionRefresh(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
 	}
 	if !CanBeRefresh(value) {
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.TooShortToRefresh
+		return
+	}
+	limit, usage, total := CheckQueryLimit(retMsgForm.UserId)
+	if limit {
+		retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.TodayQueryLimit, usage, total)
 		return
 	}
 	missionId, err := RefreshWTUserInfo(value, *retMsgForm)
@@ -144,6 +156,8 @@ func DoActionRefresh(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
 			logging.Warnf("wait for callback error. %s", err)
 		}
 	})
+	MustAddUserConfigTodayQueryCount(retMsgForm.UserId, 1)
+	MustAddUserConfigTotalQueryCount(retMsgForm.UserId, 1)
 }
 
 func DoActionDrawCard(retMsgForm *cqhttp.SendGroupMsgForm, value string, id int64) {
