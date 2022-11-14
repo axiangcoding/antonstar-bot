@@ -111,7 +111,7 @@ func DoActionQuery(retMsgForm *cqhttp.SendGroupMsgForm, value string, fullMsg bo
 	if mId != nil {
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.QueryIsRunning
 		tool.GoWithRecover(func() {
-			if err := WaitForCrawlerFinished(*mId); err != nil {
+			if err := WaitForCrawlerFinished(*mId, fullMsg); err != nil {
 				logging.Warnf("wait for callback error. %s", err)
 			}
 		})
@@ -140,7 +140,7 @@ func DoActionRefresh(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
 	}
 	retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.QueryIsRunning
 	tool.GoWithRecover(func() {
-		if err := WaitForCrawlerFinished(*missionId); err != nil {
+		if err := WaitForCrawlerFinished(*missionId, false); err != nil {
 			logging.Warnf("wait for callback error. %s", err)
 		}
 	})

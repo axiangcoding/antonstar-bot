@@ -101,6 +101,7 @@ func handleCqHttpMessageEventGroup(event *cqhttp.CommonEvent) {
 		return
 	}
 	groupId := event.GroupId
+	userId := event.UserId
 	gc, err := FindGroupConfig(groupId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -116,6 +117,7 @@ func handleCqHttpMessageEventGroup(event *cqhttp.CommonEvent) {
 	var retMsgForm cqhttp.SendGroupMsgForm
 	retMsgForm.GroupId = groupId
 	retMsgForm.MessageTemplate = gc.MessageTemplate
+	retMsgForm.UserId = userId
 	if *gc.Banned {
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.GroupGetBanned
 	} else {
