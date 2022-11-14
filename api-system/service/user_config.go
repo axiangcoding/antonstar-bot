@@ -1,9 +1,13 @@
 package service
 
 import (
+	"errors"
+	"github.com/axiangcoding/ax-web/cache"
 	"github.com/axiangcoding/ax-web/data"
 	"github.com/axiangcoding/ax-web/data/table"
 	"github.com/axiangcoding/ax-web/logging"
+	"github.com/go-redis/redis/v8"
+	"time"
 )
 
 func FindUserConfig(userId int64) (*table.QQUserConfig, error) {
@@ -57,12 +61,59 @@ func MustAddUserConfigTotalQueryCount(userId int64, count int) {
 	}
 }
 
-func ResetAllUserConfigTodayQueryCount() error {
+func CheckUserTodayUsageLimit(userId int64) (bool, int, int) {
+	config := MustFindUserConfig(userId)
+	if config == nil {
+		return true, 0, 0
+	}
+	return config.TodayUsageCount >= config.OneDayUsageLimit, config.TodayUsageCount, config.OneDayUsageLimit
+}
+
+func MustAddUserConfigTodayUsageCount(userId int64, count int) {
+	config := MustFindUserConfig(userId)
+	config.TodayUsageCount += count
+	err := SaveUserConfig(*config)
+	if err != nil {
+		logging.Warn(err)
+	}
+}
+
+func MustAddUserConfigTotalUsageCount(userId int64, count int) {
+	config := MustFindUserConfig(userId)
+	config.TotalUsageCount += count
+	err := SaveUserConfig(*config)
+	if err != nil {
+		logging.Warn(err)
+	}
+}
+
+func ResetAllUserConfigTodayCount() error {
 	db := data.GetDB()
 	if err := db.Model(&table.QQUserConfig{}).
-		Select("today_query_count").Where("1=1").
-		Updates(table.QQUserConfig{TodayQueryCount: 0}).Error; err != nil {
+		Select("today_query_count", "today_usage_count").Where("1=1").
+		Updates(table.QQUserConfig{TodayQueryCount: 0, TodayUsageCount: 0}).Error; err != nil {
 		return err
 	}
 	return nil
+}
+
+func ExistUserUsageLimitFlag(userId int64) bool {
+	client := cache.GetClient()
+	key := cache.GenerateUserUsageLimitCacheKey(userId)
+	if _, err := client.Get(c, key).Result(); err != nil {
+		if errors.Is(err, redis.Nil) {
+			return false
+		}
+		logging.Warn(err)
+		return false
+	}
+	return true
+}
+
+func MustPutUserUsageLimitFlag(userId int64) {
+	client := cache.GetClient()
+	key := cache.GenerateUserUsageLimitCacheKey(userId)
+	if err := client.Set(c, key, "", time.Hour*1).Err(); err != nil {
+		logging.Warn(err)
+	}
 }

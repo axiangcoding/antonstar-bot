@@ -56,9 +56,15 @@ func CheckRoomLiving() {
 }
 
 func RefreshUserTodayCount() {
-	if err := service.ResetAllUserConfigTodayQueryCount(); err != nil {
+	if err := service.ResetAllUserConfigTodayCount(); err != nil {
 		logging.Error("reset all qq user today_query_count failed. ", err)
 	} else {
 		logging.Info("reset all qq user today_query_count to 0")
+	}
+
+	if err := service.ResetAllGroupConfigTodayCount(); err != nil {
+		logging.Error("reset all qq group today_query_count failed. ", err)
+	} else {
+		logging.Info("reset all qq group today_query_count to 0")
 	}
 }

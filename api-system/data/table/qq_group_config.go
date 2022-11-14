@@ -40,6 +40,9 @@ func DefaultGroupConfig(groupId int64) QQGroupConfig {
 		TodayQueryCount:     0,
 		OneDayQueryLimit:    50,
 		TotalQueryCount:     0,
+		TodayUsageCount:     0,
+		OneDayUsageLimit:    200,
+		TotalUsageCount:     0,
 	}
 }
 

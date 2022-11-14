@@ -23,5 +23,8 @@ func DefaultUserConfig(userId int64) QQUserConfig {
 		TodayQueryCount:  0,
 		OneDayQueryLimit: 5,
 		TotalQueryCount:  0,
+		TodayUsageCount:  0,
+		OneDayUsageLimit: 50,
+		TotalUsageCount:  0,
 	}
 }

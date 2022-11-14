@@ -43,6 +43,8 @@ type StaticMessage struct {
 		UserGetBanned        string `json:"user_get_banned"`
 		TodayUserQueryLimit  string `json:"today_user_query_limit"`
 		TodayGroupQueryLimit string `json:"today_group_query_limit"`
+		TodayUserUsageLimit  string `json:"today_user_usage_limit"`
+		TodayGroupUsageLimit string `json:"today_group_usage_limit"`
 		Version              string `json:"version"`
 		LiveBroadcast        string `json:"live_broadcast"`
 	} `json:"common_resp"`

@@ -131,55 +131,82 @@ func handleCqHttpMessageEventGroup(event *cqhttp.CommonEvent) {
 	retMsgForm.GroupId = groupId
 	retMsgForm.MessageTemplate = gc.MessageTemplate
 	retMsgForm.UserId = userId
-	if *gc.Banned {
-		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.GroupGetBanned
-	} else if *uc.Banned {
-		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.UserGetBanned
-	} else {
-		// 检查群查询限制
-		limit, usage, total := CheckGroupTodayQueryLimit(retMsgForm.GroupId)
-		if limit {
-			retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.TodayGroupQueryLimit, usage, total)
+	// 检查qq群请求限制
+	if limit, usage, total := CheckGroupTodayUsageLimit(groupId); limit {
+		if !ExistGroupUsageLimitFlag(groupId) {
+			retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.TodayGroupUsageLimit, usage, total)
+			MustSendGroupMsg(retMsgForm)
+			MustPutGroupUsageLimitFlag(groupId)
+			return
+		} else {
 			return
 		}
-		retMsgForm.MessagePrefix = fmt.Sprintf("[CQ:at,qq=%d] ", event.Sender.UserId)
-		action := bot.ParseMessageCommand(msg)
-		if action == nil {
-			retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.Common
+	}
+	// 检查qq请求限制
+	if limit, usage, total := CheckUserTodayUsageLimit(userId); limit {
+		if !ExistUserUsageLimitFlag(userId) {
+			retMsgForm.MessagePrefix = fmt.Sprintf("[CQ:at,qq=%d] ", event.Sender.UserId)
+			retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.TodayUserUsageLimit, usage, total)
+			MustSendGroupMsg(retMsgForm)
+			MustPutUserUsageLimitFlag(userId)
+			return
 		} else {
-			value := action.Value
-			switch action.Key {
-			case bot.ActionQuery:
-				DoActionQuery(&retMsgForm, value, false)
-				break
-			case bot.ActionFullQuery:
-				DoActionQuery(&retMsgForm, value, true)
-				break
-			case bot.ActionRefresh:
-				DoActionRefresh(&retMsgForm, value)
-				break
-			case bot.ActionReport:
-				retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.Report
-				break
-			case bot.ActionDrawCard:
-				DoActionDrawCard(&retMsgForm, value, event.Sender.UserId)
-				break
-			case bot.ActionLuck:
-				DoActionLuck(&retMsgForm, value, event.Sender.UserId)
-				break
-			case bot.ActionVersion:
-				retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.Version, settings.Config.Version)
-				break
-			case bot.ActionGetHelp:
-				retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.GetHelp
-				break
-			case bot.ActionGroupStatus:
-				DoActionGroupStatus(&retMsgForm)
-				break
-			default:
-				retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.GetHelp
-				break
-			}
+			return
+		}
+	}
+	MustAddGroupConfigTodayUsageCount(groupId, 1)
+	MustAddGroupConfigTotalUsageCount(groupId, 1)
+	MustAddUserConfigTodayUsageCount(userId, 1)
+	MustAddUserConfigTotalUsageCount(userId, 1)
+
+	if *gc.Banned {
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.GroupGetBanned
+		MustSendGroupMsg(retMsgForm)
+		return
+	}
+	if *uc.Banned {
+		retMsgForm.MessagePrefix = fmt.Sprintf("[CQ:at,qq=%d] ", event.Sender.UserId)
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.UserGetBanned
+		MustSendGroupMsg(retMsgForm)
+		return
+	}
+	retMsgForm.MessagePrefix = fmt.Sprintf("[CQ:at,qq=%d] ", event.Sender.UserId)
+	action := bot.ParseMessageCommand(msg)
+	if action == nil {
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.Common
+	} else {
+		value := action.Value
+		switch action.Key {
+		case bot.ActionQuery:
+			DoActionQuery(&retMsgForm, value, false)
+			break
+		case bot.ActionFullQuery:
+			DoActionQuery(&retMsgForm, value, true)
+			break
+		case bot.ActionRefresh:
+			DoActionRefresh(&retMsgForm, value)
+			break
+		case bot.ActionReport:
+			retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.Report
+			break
+		case bot.ActionDrawCard:
+			DoActionDrawCard(&retMsgForm, value, event.Sender.UserId)
+			break
+		case bot.ActionLuck:
+			DoActionLuck(&retMsgForm, value, event.Sender.UserId)
+			break
+		case bot.ActionVersion:
+			retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.Version, settings.Config.Version)
+			break
+		case bot.ActionGetHelp:
+			retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.GetHelp
+			break
+		case bot.ActionGroupStatus:
+			DoActionGroupStatus(&retMsgForm)
+			break
+		default:
+			retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.GetHelp
+			break
 		}
 	}
 	MustSendGroupMsg(retMsgForm)

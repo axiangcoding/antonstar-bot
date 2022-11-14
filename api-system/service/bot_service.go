@@ -103,8 +103,13 @@ func DoActionQuery(retMsgForm *cqhttp.SendGroupMsgForm, value string, fullMsg bo
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.NotValidNickname
 		return
 	}
-	limit, usage, total := CheckUserTodayQueryLimit(retMsgForm.UserId)
-	if limit {
+	// 检查群查询限制
+	if limit, usage, total := CheckGroupTodayQueryLimit(retMsgForm.GroupId); limit {
+		retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.TodayGroupQueryLimit, usage, total)
+		return
+	}
+	// 检查qq查询限制
+	if limit, usage, total := CheckUserTodayQueryLimit(retMsgForm.UserId); limit {
 		retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.TodayUserQueryLimit, usage, total)
 		return
 	}
@@ -142,8 +147,13 @@ func DoActionRefresh(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.TooShortToRefresh
 		return
 	}
-	limit, usage, total := CheckUserTodayQueryLimit(retMsgForm.UserId)
-	if limit {
+	// 检查群查询限制
+	if limit, usage, total := CheckGroupTodayQueryLimit(retMsgForm.GroupId); limit {
+		retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.TodayGroupQueryLimit, usage, total)
+		return
+	}
+	// 检查qq查询限制
+	if limit, usage, total := CheckUserTodayQueryLimit(retMsgForm.UserId); limit {
 		retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.TodayUserQueryLimit, usage, total)
 		return
 	}
