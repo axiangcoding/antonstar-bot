@@ -31,7 +31,7 @@ func SaveUserConfig(gc table.QQUserConfig) error {
 	return nil
 }
 
-func CheckQueryLimit(userId int64) (bool, int, int) {
+func CheckUserTodayQueryLimit(userId int64) (bool, int, int) {
 	config := MustFindUserConfig(userId)
 	if config == nil {
 		return true, 0, 0

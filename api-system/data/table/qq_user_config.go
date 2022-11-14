@@ -9,6 +9,9 @@ type QQUserConfig struct {
 	TodayQueryCount  int
 	OneDayQueryLimit int
 	TotalQueryCount  int
+	TodayUsageCount  int
+	OneDayUsageLimit int
+	TotalUsageCount  int
 }
 
 func DefaultUserConfig(userId int64) QQUserConfig {
@@ -18,7 +21,7 @@ func DefaultUserConfig(userId int64) QQUserConfig {
 		UserId:           userId,
 		Banned:           &falseVal,
 		TodayQueryCount:  0,
-		OneDayQueryLimit: 10,
+		OneDayQueryLimit: 5,
 		TotalQueryCount:  0,
 	}
 }

@@ -64,3 +64,39 @@ func MustPutBiliRoomFlag(groupId int64, roomId int64) {
 		logging.Warn(err)
 	}
 }
+
+func CheckGroupTodayQueryLimit(groupId int64) (bool, int, int) {
+	config := MustFindGroupConfig(groupId)
+	if config == nil {
+		return true, 0, 0
+	}
+	return config.TodayQueryCount >= config.OneDayQueryLimit, config.TodayQueryCount, config.OneDayQueryLimit
+}
+
+func MustAddGroupConfigTodayQueryCount(groupId int64, count int) {
+	config := MustFindGroupConfig(groupId)
+	config.TodayQueryCount += count
+	err := SaveGroupConfig(*config)
+	if err != nil {
+		logging.Warn(err)
+	}
+}
+
+func MustAddGroupConfigTotalQueryCount(groupId int64, count int) {
+	config := MustFindGroupConfig(groupId)
+	config.TotalQueryCount += count
+	err := SaveGroupConfig(*config)
+	if err != nil {
+		logging.Warn(err)
+	}
+}
+
+func ResetAllGroupConfigTodayQueryCount() error {
+	db := data.GetDB()
+	if err := db.Model(&table.QQGroupConfig{}).
+		Select("today_query_count").Where("1=1").
+		Updates(table.QQGroupConfig{TodayQueryCount: 0}).Error; err != nil {
+		return err
+	}
+	return nil
+}

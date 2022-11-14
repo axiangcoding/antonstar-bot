@@ -17,6 +17,12 @@ type QQGroupConfig struct {
 	EnableActionSetting *bool
 	EnableCheckBiliRoom *bool
 	MessageTemplate     int
+	TodayQueryCount     int
+	OneDayQueryLimit    int
+	TotalQueryCount     int
+	TodayUsageCount     int
+	OneDayUsageLimit    int
+	TotalUsageCount     int
 }
 
 func DefaultGroupConfig(groupId int64) QQGroupConfig {
@@ -31,6 +37,9 @@ func DefaultGroupConfig(groupId int64) QQGroupConfig {
 		EnableActionLuck:    &trueVal,
 		EnableActionSetting: &falseVal,
 		EnableCheckBiliRoom: &falseVal,
+		TodayQueryCount:     0,
+		OneDayQueryLimit:    50,
+		TotalQueryCount:     0,
 	}
 }
 

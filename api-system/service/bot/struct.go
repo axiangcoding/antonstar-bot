@@ -30,20 +30,21 @@ type StaticMessage struct {
 	Id         int    `json:"id"`
 	Mode       string `json:"mode"`
 	CommonResp struct {
-		Common            string `json:"common"`
-		Report            string `json:"report"`
-		CanNotRefresh     string `json:"can_not_refresh"`
-		TooShortToRefresh string `json:"too_short_to_refresh"`
-		QueryIsRunning    string `json:"query_is_running"`
-		NotValidNickname  string `json:"not_valid_nickname"`
-		GetHelp           string `json:"get_help"`
-		DrawCard          string `json:"draw_card"`
-		Luck              string `json:"luck"`
-		GroupGetBanned    string `json:"group_get_banned"`
-		UserGetBanned     string `json:"user_get_banned"`
-		TodayQueryLimit   string `json:"today_query_limit"`
-		Version           string `json:"version"`
-		LiveBroadcast     string `json:"live_broadcast"`
+		Common               string `json:"common"`
+		Report               string `json:"report"`
+		CanNotRefresh        string `json:"can_not_refresh"`
+		TooShortToRefresh    string `json:"too_short_to_refresh"`
+		QueryIsRunning       string `json:"query_is_running"`
+		NotValidNickname     string `json:"not_valid_nickname"`
+		GetHelp              string `json:"get_help"`
+		DrawCard             string `json:"draw_card"`
+		Luck                 string `json:"luck"`
+		GroupGetBanned       string `json:"group_get_banned"`
+		UserGetBanned        string `json:"user_get_banned"`
+		TodayUserQueryLimit  string `json:"today_user_query_limit"`
+		TodayGroupQueryLimit string `json:"today_group_query_limit"`
+		Version              string `json:"version"`
+		LiveBroadcast        string `json:"live_broadcast"`
 	} `json:"common_resp"`
 	LuckResp struct {
 		Is0          string `json:"is_0"`

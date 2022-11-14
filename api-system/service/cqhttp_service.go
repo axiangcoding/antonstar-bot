@@ -136,6 +136,12 @@ func handleCqHttpMessageEventGroup(event *cqhttp.CommonEvent) {
 	} else if *uc.Banned {
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.UserGetBanned
 	} else {
+		// 检查群查询限制
+		limit, usage, total := CheckGroupTodayQueryLimit(retMsgForm.GroupId)
+		if limit {
+			retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.TodayGroupQueryLimit, usage, total)
+			return
+		}
 		retMsgForm.MessagePrefix = fmt.Sprintf("[CQ:at,qq=%d] ", event.Sender.UserId)
 		action := bot.ParseMessageCommand(msg)
 		if action == nil {
