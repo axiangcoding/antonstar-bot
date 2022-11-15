@@ -216,8 +216,15 @@ func handleAddGroup(event *cqhttp.CommonEvent) {
 	if event.SubType == cqhttp.SubTypeInvite {
 		groupConfig := MustFindGroupConfig(event.GroupId)
 		userConfig := MustFindUserConfig(event.UserId)
-
-		if userConfig != nil && (*userConfig.SuperAdmin || *userConfig.Admin) {
+		isSuperAdmin := false
+		isAdmin := false
+		if userConfig.SuperAdmin != nil && (*userConfig.SuperAdmin) {
+			isSuperAdmin = true
+		}
+		if userConfig.Admin != nil && (*userConfig.Admin) {
+			isAdmin = true
+		}
+		if userConfig != nil && (isSuperAdmin || isAdmin) {
 			if groupConfig == nil || !(*groupConfig.Banned) {
 				MustAcceptInviteToGroup(event.Flag, event.SubType, true, "")
 			}
