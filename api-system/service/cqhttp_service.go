@@ -214,9 +214,15 @@ func handleCqHttpMessageEventGroup(event *cqhttp.CommonEvent) {
 
 func handleAddGroup(event *cqhttp.CommonEvent) {
 	if event.SubType == cqhttp.SubTypeInvite {
-		config := MustFindGroupConfig(event.GroupId)
-		if config == nil || !(*config.Banned) {
-			MustAcceptInviteToGroup(event.Flag, event.SubType, true, "")
+		groupConfig := MustFindGroupConfig(event.GroupId)
+		userConfig := MustFindUserConfig(event.UserId)
+
+		if userConfig != nil && (*userConfig.SuperAdmin || *userConfig.Admin) {
+			if groupConfig == nil || !(*groupConfig.Banned) {
+				MustAcceptInviteToGroup(event.Flag, event.SubType, true, "")
+			}
+		} else {
+			logging.Warnf("user_id %d invite bot to join group %d failed", event.UserId, event.GroupId)
 		}
 	}
 }

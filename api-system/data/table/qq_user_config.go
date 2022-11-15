@@ -12,6 +12,8 @@ type QQUserConfig struct {
 	TodayUsageCount  int
 	OneDayUsageLimit int
 	TotalUsageCount  int
+	Admin            *bool
+	SuperAdmin       *bool
 }
 
 func DefaultUserConfig(userId int64) QQUserConfig {
@@ -26,5 +28,7 @@ func DefaultUserConfig(userId int64) QQUserConfig {
 		TodayUsageCount:  0,
 		OneDayUsageLimit: 50,
 		TotalUsageCount:  0,
+		Admin:            &falseVal,
+		SuperAdmin:       &falseVal,
 	}
 }
