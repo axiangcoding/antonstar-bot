@@ -123,7 +123,6 @@ const templateFullStr = `
 Tips: 
 输入”.cqbot 刷新 {{.Nick}}“可以刷新游戏数据
 输入”.cqbot 查询 {{.Nick}}“可以查询简要数据
-关注B站up主：摸鱼又开摆的三三，助力up主认证官方主播
 `
 
 func (u GameUser) ToFriendlyShortString() string {

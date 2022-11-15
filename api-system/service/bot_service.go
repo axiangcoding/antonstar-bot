@@ -175,8 +175,8 @@ func DoActionRefresh(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
 }
 
 func DoActionDrawCard(retMsgForm *cqhttp.SendGroupMsgForm, value string, id int64) {
-	number := DrawNumber(id, time.Now().In(time.FixedZone("CST", 8*3600)))
-	retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.DrawCard, number)
+	// number := DrawNumber(id, time.Now().In(time.FixedZone("CST", 8*3600)))
+	retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.DrawCard
 }
 
 func DoActionLuck(retMsgForm *cqhttp.SendGroupMsgForm, value string, id int64) {

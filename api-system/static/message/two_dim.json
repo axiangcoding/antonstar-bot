@@ -7,7 +7,7 @@
     "too_short_to_refresh": "对不起，距上次刷新间隔太短，不允许刷新喵",
     "query_is_running": "正在发起查询喵，请耐心等待...",
     "not_valid_nickname": "你输入了一个不对的昵称喵，请检查是否包括了特殊字符喵",
-    "get_help": "\n如果你需要体验机器人请加群喵：169657216\n如果你是开发者的粉丝请加群喵：689874918\n关注B站主播：摸鱼又开摆的三三，助力up主认证官方主播喵\n主播首页：https://space.bilibili.com/8696650",
+    "get_help": "\n使用文档：https://www.yuque.com/axiangcoding/anton_star/sfw0d8\n如果你需要体验机器人请加群喵：169657216\n如果你是开发者的粉丝请加群喵：689874918\n关注B站主播：摸鱼又开摆的三三，助力up主认证官方主播喵\n主播首页：https://space.bilibili.com/8696650",
     "draw_card": "暂不支持塔罗牌抽取喵，敬请期待喵",
     "luck": "喵喵喵，你今天的气运值是 %d，%s",
     "group_get_banned": "对不起，本群因为违反机器人规则，所有功能已被禁用喵",
