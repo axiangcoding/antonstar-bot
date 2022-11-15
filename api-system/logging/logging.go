@@ -66,7 +66,7 @@ func Setup() {
 			zapLevel,
 		)
 		// 打印调用者时跳过一级封装显示真实调用，同时只在Error和以上级别的日志里显示堆栈信息
-		logger := zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1), zap.AddStacktrace(zapcore.ErrorLevel))
+		logger := zap.New(core, zap.AddCaller(), zap.AddCallerSkip(2), zap.AddStacktrace(zapcore.ErrorLevel))
 		logFile = logger.Sugar()
 	}
 
