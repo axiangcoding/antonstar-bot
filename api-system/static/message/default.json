@@ -18,7 +18,7 @@
     "today_group_usage_limit": "你群今日的召唤已达到上限 (%d/%d)，接下来一小时我不会理你们了嗷",
     "version": "当前机器人版本为 %s",
     "live_broadcast": "直播间“%s“开播啦，这不得去看看？\n%s",
-    "stop_global_query": "Bvvd觉得官网全境遭到了攻击，所以开启了Bot防护，第一次查询用户的战绩查询功能不可用，所有用户的刷新功能不可用"
+    "stop_global_query": "Bvvd觉得官网全境遭到了攻击，所以开启了Bot防护，战绩查询功能不可用"
   },
   "luck_resp": {
     "is_0": "往好处想，没有更低的了",

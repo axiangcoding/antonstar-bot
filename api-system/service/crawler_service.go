@@ -139,7 +139,7 @@ func GetUserInfoFromWarThunder(missionId string, nick string) error {
 
 	err := c.Post(url, nil)
 	if err != nil {
-		logging.Warn("colly post failed", err)
+		logging.Warn("colly post failed. ", err)
 		MustFinishMissionWithResult(missionId, table.MissionStatusFailed, CrawlerResult{
 			Found:               false,
 			Nick:                nick,
