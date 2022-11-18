@@ -47,6 +47,7 @@ type StaticMessage struct {
 		TodayGroupUsageLimit string `json:"today_group_usage_limit"`
 		Version              string `json:"version"`
 		LiveBroadcast        string `json:"live_broadcast"`
+		StopGlobalQuery      string `json:"stop_global_query"`
 	} `json:"common_resp"`
 	LuckResp struct {
 		Is0          string `json:"is_0"`

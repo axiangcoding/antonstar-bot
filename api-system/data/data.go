@@ -71,6 +71,7 @@ func autoMigrate(db *gorm.DB) {
 		&table.GameUser{},
 		&table.QQGroupConfig{},
 		&table.QQUserConfig{},
+		&table.GlobalConfig{},
 	); err != nil {
 		logging.Fatal(err)
 	} else {

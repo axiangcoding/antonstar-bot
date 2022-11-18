@@ -99,6 +99,10 @@ func GetBiliBiliRoomInfo(roomId int64) (*bilibili.RoomInfoResp, error) {
 }
 
 func DoActionQuery(retMsgForm *cqhttp.SendGroupMsgForm, value string, fullMsg bool) {
+	if IsStopGlobalQuery() {
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.StopGlobalQuery
+		return
+	}
 	if !IsValidNickname(value) {
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.NotValidNickname
 		return
@@ -139,6 +143,10 @@ func DoActionQuery(retMsgForm *cqhttp.SendGroupMsgForm, value string, fullMsg bo
 }
 
 func DoActionRefresh(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
+	if IsStopGlobalQuery() {
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.StopGlobalQuery
+		return
+	}
 	if !IsValidNickname(value) {
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.NotValidNickname
 		return
