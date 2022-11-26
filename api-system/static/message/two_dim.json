@@ -19,7 +19,7 @@
     "version": "当前机器人版本为 %s 喵",
     "live_broadcast": "直播间“%s“开播啦，还不快去看看喵？ %s",
     "stop_global_query": "Bvvd觉得官网全境遭到了攻击，所以开启了Bot防护，战绩查询功能不可用",
-    "data_options": "安东星Qbot数据可用命令\n%s",
+    "data_options": "【Qbot数据中心】可用命令\n%s",
     "missile_data": "红外导弹性能表\nhttps://docs.qq.com/sheet/DTFJ3dkxQV3hudUdY\n由B站UP主 库撒的幽灵 整理"
   },
   "luck_resp": {
