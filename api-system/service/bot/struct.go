@@ -19,6 +19,7 @@ var (
 	ActionVersion     = "version"
 	ActionGetHelp     = "getHelp"
 	ActionGroupStatus = "groupStatus"
+	ActionData        = "data"
 )
 
 type Action struct {
@@ -48,6 +49,8 @@ type StaticMessage struct {
 		Version              string `json:"version"`
 		LiveBroadcast        string `json:"live_broadcast"`
 		StopGlobalQuery      string `json:"stop_global_query"`
+		DataOptions          string `json:"data_options"`
+		MissileData          string `json:"missile_data"`
 	} `json:"common_resp"`
 	LuckResp struct {
 		Is0          string `json:"is_0"`

@@ -16,6 +16,7 @@ import (
 	"gorm.io/gorm"
 	"hash/crc32"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -195,4 +196,20 @@ func DoActionLuck(retMsgForm *cqhttp.SendGroupMsgForm, value string, id int64) {
 func DoActionGroupStatus(retMsgForm *cqhttp.SendGroupMsgForm) {
 	config := MustFindGroupConfig(retMsgForm.GroupId)
 	retMsgForm.Message = config.ToDisplay().ToFriendlyString()
+}
+
+func DoActionData(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
+	botQueryPrefix := ".cqbot 数据 "
+	retMsgForm.MessagePrefix = ""
+	opt1 := "导弹数据"
+	switch value {
+	case opt1:
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.MissileData
+		break
+	default:
+		var lst []string
+		lst = append(lst, botQueryPrefix+opt1)
+		retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.DataOptions, strings.Join(lst, "\n"))
+	}
+
 }

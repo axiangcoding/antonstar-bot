@@ -204,6 +204,9 @@ func handleCqHttpMessageEventGroup(event *cqhttp.CommonEvent) {
 		case bot.ActionGroupStatus:
 			DoActionGroupStatus(&retMsgForm)
 			break
+		case bot.ActionData:
+			DoActionData(&retMsgForm, value)
+			break
 		default:
 			retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.GetHelp
 			break

@@ -71,6 +71,9 @@ func ParseMessageCommand(msg string) *Action {
 	case "群状态":
 		key = ActionGroupStatus
 		break
+	case "数据":
+		key = ActionData
+		break
 	default:
 		key = ActionUnknown
 	}
