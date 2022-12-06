@@ -102,7 +102,7 @@ func handleCqHttpMessageEventGroup(event *cqhttp.CommonEvent) {
 	}
 	action := bot.ParseMessageCommand(msg)
 	stopAllResponse := IsStopAllResponse()
-	if stopAllResponse && (action != nil && action.Key != bot.ActionManager) {
+	if stopAllResponse && (action == nil || action.Key != bot.ActionManager) {
 		return
 	}
 	groupId := event.GroupId
