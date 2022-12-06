@@ -40,40 +40,30 @@ func ParseMessageCommand(msg string) *Action {
 	switch split[0] {
 	case "查询":
 		key = ActionQuery
-		break
 	case "完整查询":
 		key = ActionFullQuery
-		break
 	case "刷新":
 		key = ActionRefresh
-		break
 	case "举办":
 		key = ActionReport
-		break
 	case "举报":
 		key = ActionReport
-		break
 	case "抽卡":
 		key = ActionDrawCard
-		break
 	case "帮助":
 		key = ActionGetHelp
-		break
 	case "气运":
 		key = ActionLuck
-		break
 	case "运气":
 		key = ActionLuck
-		break
 	case "版本":
 		key = ActionVersion
-		break
 	case "群状态":
 		key = ActionGroupStatus
-		break
 	case "数据":
 		key = ActionData
-		break
+	case "管理":
+		key = ActionManager
 	default:
 		key = ActionUnknown
 	}

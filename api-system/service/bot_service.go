@@ -205,11 +205,38 @@ func DoActionData(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
 	switch value {
 	case opt1:
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.MissileData
-		break
 	default:
 		var lst []string
 		lst = append(lst, botQueryPrefix+opt1)
 		retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.DataOptions, strings.Join(lst, "\n"))
 	}
+}
 
+func DoActionManager(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
+	botQueryPrefix := ".cqbot 管理 "
+	keyCloseResponse := "关闭回复"
+	keyOpenResponse := "开启回复"
+	keyOpenQuery := "开启查询"
+	keyCloseQuery := "关闭查询"
+	switch value {
+	case keyOpenResponse:
+		MustUpsertGlobalConfig(table.ConfigStopAllResponse, "false")
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.ConfStartGlobalResponse
+	case keyCloseResponse:
+		MustUpsertGlobalConfig(table.ConfigStopAllResponse, "true")
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.ConfStopGlobalResponse
+	case keyOpenQuery:
+		MustUpsertGlobalConfig(table.ConfigStopQuery, "false")
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.ConfStartGlobalQuery
+	case keyCloseQuery:
+		MustUpsertGlobalConfig(table.ConfigStopQuery, "true")
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.ConfStopGlobalQuery
+	default:
+		var lst []string
+		lst = append(lst, botQueryPrefix+keyCloseResponse)
+		lst = append(lst, botQueryPrefix+keyOpenResponse)
+		lst = append(lst, botQueryPrefix+keyOpenQuery)
+		lst = append(lst, botQueryPrefix+keyCloseQuery)
+		retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.ConfOptions, strings.Join(lst, "\n"))
+	}
 }

@@ -179,38 +179,37 @@ func handleCqHttpMessageEventGroup(event *cqhttp.CommonEvent) {
 		switch action.Key {
 		case bot.ActionQuery:
 			DoActionQuery(&retMsgForm, value, false)
-			break
 		case bot.ActionFullQuery:
 			DoActionQuery(&retMsgForm, value, true)
-			break
 		case bot.ActionRefresh:
 			DoActionRefresh(&retMsgForm, value)
-			break
 		case bot.ActionReport:
 			retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.Report
-			break
 		case bot.ActionDrawCard:
 			DoActionDrawCard(&retMsgForm, value, event.Sender.UserId)
-			break
 		case bot.ActionLuck:
 			DoActionLuck(&retMsgForm, value, event.Sender.UserId)
-			break
 		case bot.ActionVersion:
 			retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.Version, settings.Config.Version)
-			break
 		case bot.ActionGetHelp:
 			retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.GetHelp
-			break
 		case bot.ActionGroupStatus:
 			DoActionGroupStatus(&retMsgForm)
-			break
 		case bot.ActionData:
 			DoActionData(&retMsgForm, value)
-			break
+		case bot.ActionManager:
+			if uc.SuperAdmin == nil || !*uc.SuperAdmin {
+				retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.ConfNotPermit
+			} else {
+				DoActionManager(&retMsgForm, value)
+			}
 		default:
 			retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.GetHelp
-			break
 		}
+	}
+	stopAllResponse := IsStopAllResponse()
+	if stopAllResponse && action.Key != bot.ActionManager {
+		return
 	}
 	MustSendGroupMsg(retMsgForm)
 }

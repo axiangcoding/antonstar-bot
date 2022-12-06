@@ -20,6 +20,7 @@ var (
 	ActionGetHelp     = "getHelp"
 	ActionGroupStatus = "groupStatus"
 	ActionData        = "data"
+	ActionManager     = "manager"
 )
 
 type Action struct {
@@ -31,26 +32,32 @@ type StaticMessage struct {
 	Id         int    `json:"id"`
 	Mode       string `json:"mode"`
 	CommonResp struct {
-		Common               string `json:"common"`
-		Report               string `json:"report"`
-		CanNotRefresh        string `json:"can_not_refresh"`
-		TooShortToRefresh    string `json:"too_short_to_refresh"`
-		QueryIsRunning       string `json:"query_is_running"`
-		NotValidNickname     string `json:"not_valid_nickname"`
-		GetHelp              string `json:"get_help"`
-		DrawCard             string `json:"draw_card"`
-		Luck                 string `json:"luck"`
-		GroupGetBanned       string `json:"group_get_banned"`
-		UserGetBanned        string `json:"user_get_banned"`
-		TodayUserQueryLimit  string `json:"today_user_query_limit"`
-		TodayGroupQueryLimit string `json:"today_group_query_limit"`
-		TodayUserUsageLimit  string `json:"today_user_usage_limit"`
-		TodayGroupUsageLimit string `json:"today_group_usage_limit"`
-		Version              string `json:"version"`
-		LiveBroadcast        string `json:"live_broadcast"`
-		StopGlobalQuery      string `json:"stop_global_query"`
-		DataOptions          string `json:"data_options"`
-		MissileData          string `json:"missile_data"`
+		Common                  string `json:"common"`
+		Report                  string `json:"report"`
+		CanNotRefresh           string `json:"can_not_refresh"`
+		TooShortToRefresh       string `json:"too_short_to_refresh"`
+		QueryIsRunning          string `json:"query_is_running"`
+		NotValidNickname        string `json:"not_valid_nickname"`
+		GetHelp                 string `json:"get_help"`
+		DrawCard                string `json:"draw_card"`
+		Luck                    string `json:"luck"`
+		GroupGetBanned          string `json:"group_get_banned"`
+		UserGetBanned           string `json:"user_get_banned"`
+		TodayUserQueryLimit     string `json:"today_user_query_limit"`
+		TodayGroupQueryLimit    string `json:"today_group_query_limit"`
+		TodayUserUsageLimit     string `json:"today_user_usage_limit"`
+		TodayGroupUsageLimit    string `json:"today_group_usage_limit"`
+		Version                 string `json:"version"`
+		LiveBroadcast           string `json:"live_broadcast"`
+		StopGlobalQuery         string `json:"stop_global_query"`
+		DataOptions             string `json:"data_options"`
+		MissileData             string `json:"missile_data"`
+		ConfOptions             string `json:"conf_options"`
+		ConfNotPermit           string `json:"conf_not_permit"`
+		ConfStopGlobalResponse  string `json:"conf_stop_global_response"`
+		ConfStartGlobalResponse string `json:"conf_start_global_response"`
+		ConfStopGlobalQuery     string `json:"conf_stop_global_query"`
+		ConfStartGlobalQuery    string `json:"conf_start_global_query"`
 	} `json:"common_resp"`
 	LuckResp struct {
 		Is0          string `json:"is_0"`

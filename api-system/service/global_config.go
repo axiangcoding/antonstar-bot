@@ -31,3 +31,23 @@ func IsStopGlobalQuery() bool {
 		return config.Value == "true"
 	}
 }
+
+func IsStopAllResponse() bool {
+	config := MustFindGlobalConfig(table.ConfigStopAllResponse)
+	if config == nil {
+		return false
+	} else {
+		return config.Value == "true"
+	}
+}
+
+func MustUpsertGlobalConfig(key string, value string) {
+	config := MustFindGlobalConfig(key)
+	if config == nil {
+		config = &table.GlobalConfig{Key: key, Value: value}
+	} else {
+		config.Value = value
+	}
+	db := data.GetDB()
+	db.Save(&config)
+}
