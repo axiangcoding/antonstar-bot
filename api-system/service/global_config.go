@@ -9,7 +9,7 @@ import (
 func FindGlobalConfig(key string) (*table.GlobalConfig, error) {
 	db := data.GetDB()
 	var find table.GlobalConfig
-	if err := db.Where(table.GlobalConfig{Key: key}).Take(&find).Error; err != nil {
+	if err := db.Where(table.GlobalConfig{Key: key}, "key").Take(&find).Error; err != nil {
 		return nil, err
 	}
 	return &find, nil

@@ -35,6 +35,18 @@ func SaveUserConfig(gc table.QQUserConfig) error {
 	return nil
 }
 
+func UpdateUserConfigBindingGameNick(userId int64, gameNick *string) error {
+	config := MustFindUserConfig(userId)
+	if config == nil {
+		return errors.New("qq_user_config not exist")
+	} else {
+		config.BindingGameNick = gameNick
+	}
+	db := data.GetDB()
+	db.Save(&config)
+	return nil
+}
+
 func CheckUserTodayQueryLimit(userId int64) (bool, int, int) {
 	config := MustFindUserConfig(userId)
 	if config == nil {

@@ -100,6 +100,11 @@ func handleCqHttpMessageEventGroup(event *cqhttp.CommonEvent) {
 	if messageType != "group" || !cqhttp.MustContainsTrigger(msg) {
 		return
 	}
+	action := bot.ParseMessageCommand(msg)
+	stopAllResponse := IsStopAllResponse()
+	if stopAllResponse && (action != nil && action.Key != bot.ActionManager) {
+		return
+	}
 	groupId := event.GroupId
 	userId := event.UserId
 	gc, err := FindGroupConfig(groupId)
@@ -126,7 +131,6 @@ func handleCqHttpMessageEventGroup(event *cqhttp.CommonEvent) {
 			logging.Warn(err)
 		}
 	}
-
 	var retMsgForm cqhttp.SendGroupMsgForm
 	retMsgForm.GroupId = groupId
 	retMsgForm.MessageTemplate = gc.MessageTemplate
@@ -171,7 +175,6 @@ func handleCqHttpMessageEventGroup(event *cqhttp.CommonEvent) {
 		return
 	}
 	retMsgForm.MessagePrefix = fmt.Sprintf("[CQ:at,qq=%d] ", event.Sender.UserId)
-	action := bot.ParseMessageCommand(msg)
 	if action == nil {
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.Common
 	} else {
@@ -197,6 +200,10 @@ func handleCqHttpMessageEventGroup(event *cqhttp.CommonEvent) {
 			DoActionGroupStatus(&retMsgForm)
 		case bot.ActionData:
 			DoActionData(&retMsgForm, value)
+		case bot.ActionBinding:
+			DoActionBinding(&retMsgForm, value)
+		case bot.ActionUnbinding:
+			DoActionUnbinding(&retMsgForm)
 		case bot.ActionManager:
 			if uc.SuperAdmin == nil || !*uc.SuperAdmin {
 				retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.ConfNotPermit
@@ -207,10 +214,7 @@ func handleCqHttpMessageEventGroup(event *cqhttp.CommonEvent) {
 			retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.GetHelp
 		}
 	}
-	stopAllResponse := IsStopAllResponse()
-	if stopAllResponse && action.Key != bot.ActionManager {
-		return
-	}
+
 	MustSendGroupMsg(retMsgForm)
 }
 

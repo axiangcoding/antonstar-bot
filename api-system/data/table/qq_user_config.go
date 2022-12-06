@@ -14,6 +14,7 @@ type QQUserConfig struct {
 	TotalUsageCount  int
 	Admin            *bool
 	SuperAdmin       *bool
+	BindingGameNick  *string
 }
 
 func DefaultUserConfig(userId int64) QQUserConfig {
@@ -30,5 +31,6 @@ func DefaultUserConfig(userId int64) QQUserConfig {
 		TotalUsageCount:  0,
 		Admin:            &falseVal,
 		SuperAdmin:       &falseVal,
+		BindingGameNick:  nil,
 	}
 }

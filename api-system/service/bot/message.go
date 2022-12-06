@@ -64,6 +64,10 @@ func ParseMessageCommand(msg string) *Action {
 		key = ActionData
 	case "管理":
 		key = ActionManager
+	case "绑定":
+		key = ActionBinding
+	case "解绑":
+		key = ActionUnbinding
 	default:
 		key = ActionUnknown
 	}

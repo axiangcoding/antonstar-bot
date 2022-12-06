@@ -13,7 +13,7 @@ import (
 func FindGroupConfig(groupId int64) (*table.QQGroupConfig, error) {
 	db := data.GetDB()
 	var find table.QQGroupConfig
-	if err := db.Where(table.QQGroupConfig{GroupId: groupId}).Take(&find).Error; err != nil {
+	if err := db.Where(table.QQGroupConfig{GroupId: groupId}, "group_id").Take(&find).Error; err != nil {
 		return nil, err
 	}
 	return &find, nil

@@ -25,7 +25,7 @@ func IsValidNickname(nick string) bool {
 func FindGameProfile(nick string) (*table.GameUser, error) {
 	db := data.GetDB()
 	var find table.GameUser
-	if err := db.Where(table.GameUser{Nick: nick}).Take(&find).Error; err != nil {
+	if err := db.Where(table.GameUser{Nick: nick}, "nick").Take(&find).Error; err != nil {
 		return nil, err
 	}
 	return &find, nil

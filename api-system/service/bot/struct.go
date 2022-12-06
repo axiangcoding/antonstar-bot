@@ -21,6 +21,8 @@ var (
 	ActionGroupStatus = "groupStatus"
 	ActionData        = "data"
 	ActionManager     = "manager"
+	ActionBinding     = "binding"
+	ActionUnbinding   = "unbinding"
 )
 
 type Action struct {
@@ -52,6 +54,12 @@ type StaticMessage struct {
 		StopGlobalQuery         string `json:"stop_global_query"`
 		DataOptions             string `json:"data_options"`
 		MissileData             string `json:"missile_data"`
+		BindingNickNotExist     string `json:"binding_nick_not_exist"`
+		BindingExist            string `json:"binding_exist"`
+		BindingSuccess          string `json:"binding_success"`
+		BindingError            string `json:"binding_error"`
+		UnbindingError          string `json:"unbinding_error"`
+		UnbindingSuccess        string `json:"unbinding_success"`
 		ConfOptions             string `json:"conf_options"`
 		ConfNotPermit           string `json:"conf_not_permit"`
 		ConfStopGlobalResponse  string `json:"conf_stop_global_response"`

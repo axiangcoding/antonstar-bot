@@ -104,6 +104,14 @@ func DoActionQuery(retMsgForm *cqhttp.SendGroupMsgForm, value string, fullMsg bo
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.StopGlobalQuery
 		return
 	}
+
+	if value == "我" {
+		config := MustFindUserConfig(retMsgForm.UserId)
+		if config.BindingGameNick != nil && *config.BindingGameNick != "" {
+			value = *config.BindingGameNick
+		}
+	}
+
 	if !IsValidNickname(value) {
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.NotValidNickname
 		return
@@ -148,6 +156,13 @@ func DoActionRefresh(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.StopGlobalQuery
 		return
 	}
+	if value == "我" {
+		config := MustFindUserConfig(retMsgForm.UserId)
+		if config.BindingGameNick != nil && *config.BindingGameNick != "" {
+			value = *config.BindingGameNick
+		}
+	}
+
 	if !IsValidNickname(value) {
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.NotValidNickname
 		return
@@ -210,6 +225,42 @@ func DoActionData(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
 		lst = append(lst, botQueryPrefix+opt1)
 		retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.DataOptions, strings.Join(lst, "\n"))
 	}
+}
+
+func DoActionBinding(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
+	profile, err := FindGameProfile(value)
+	if err != nil {
+		logging.Warn(err)
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.BindingNickNotExist
+		return
+	}
+
+	config, err := FindUserConfig(retMsgForm.UserId)
+	if err != nil {
+		logging.Warn(err)
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.BindingError
+		return
+	}
+	if config.BindingGameNick != nil && *config.BindingGameNick != "" {
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.BindingExist
+		return
+	}
+	config.BindingGameNick = &profile.Nick
+	if err := SaveUserConfig(*config); err != nil {
+		logging.Warn(err)
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.BindingError
+		return
+	}
+	retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.BindingSuccess
+}
+
+func DoActionUnbinding(retMsgForm *cqhttp.SendGroupMsgForm) {
+	if err := UpdateUserConfigBindingGameNick(retMsgForm.UserId, nil); err != nil {
+		logging.Warn(err)
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.UnbindingError
+		return
+	}
+	retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.UnbindingSuccess
 }
 
 func DoActionManager(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
