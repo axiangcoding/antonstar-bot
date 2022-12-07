@@ -173,22 +173,22 @@ func convertToStat(stat UserStat) display.UserStat {
 }
 
 func convertToAviationRate(rate AviationRate) display.UserRate {
-	ad := float64(rate.TotalDestroyCount) / float64(rate.GameCount)
+	ka := float64(rate.TotalDestroyCount) / float64(rate.GameCount)
 	return display.UserRate{
-		Ad: fmt.Sprintf("%.2f", ad),
+		Ka: fmt.Sprintf("%.2f", ka),
 	}
 }
 
 func convertToGroundRate(rate GroundRate) display.UserRate {
-	ad := float64(rate.TotalDestroyCount) / float64(rate.GameCount)
+	ka := float64(rate.TotalDestroyCount) / float64(rate.GameCount)
 	return display.UserRate{
-		Ad: fmt.Sprintf("%.2f", ad),
+		Ka: fmt.Sprintf("%.2f", ka),
 	}
 }
 
 func convertToFleetRate(rate FleetRate) display.UserRate {
-	ad := float64(rate.TotalDestroyCount) / float64(rate.GameCount)
+	ka := float64(rate.TotalDestroyCount) / float64(rate.GameCount)
 	return display.UserRate{
-		Ad: fmt.Sprintf("%.2f", ad),
+		Ka: fmt.Sprintf("%.2f", ka),
 	}
 }

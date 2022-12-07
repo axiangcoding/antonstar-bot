@@ -16,6 +16,7 @@ import (
 	"gorm.io/gorm"
 	"hash/crc32"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -99,8 +100,30 @@ func GetBiliBiliRoomInfo(roomId int64) (*bilibili.RoomInfoResp, error) {
 }
 
 func DoActionQuery(retMsgForm *cqhttp.SendGroupMsgForm, value string, fullMsg bool) {
+	if IsStopGlobalQuery() {
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.StopGlobalQuery
+		return
+	}
+
+	if value == "我" {
+		config := MustFindUserConfig(retMsgForm.UserId)
+		if config.BindingGameNick != nil && *config.BindingGameNick != "" {
+			value = *config.BindingGameNick
+		}
+	}
+
 	if !IsValidNickname(value) {
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.NotValidNickname
+		return
+	}
+	// 检查群查询限制
+	if limit, usage, total := CheckGroupTodayQueryLimit(retMsgForm.GroupId); limit {
+		retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.TodayGroupQueryLimit, usage, total)
+		return
+	}
+	// 检查qq查询限制
+	if limit, usage, total := CheckUserTodayQueryLimit(retMsgForm.UserId); limit {
+		retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.TodayUserQueryLimit, usage, total)
 		return
 	}
 	mId, user, err := QueryWTGamerProfile(value, *retMsgForm)
@@ -111,7 +134,7 @@ func DoActionQuery(retMsgForm *cqhttp.SendGroupMsgForm, value string, fullMsg bo
 	if mId != nil {
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.QueryIsRunning
 		tool.GoWithRecover(func() {
-			if err := WaitForCrawlerFinished(*mId); err != nil {
+			if err := WaitForCrawlerFinished(*mId, fullMsg); err != nil {
 				logging.Warnf("wait for callback error. %s", err)
 			}
 		})
@@ -122,15 +145,40 @@ func DoActionQuery(retMsgForm *cqhttp.SendGroupMsgForm, value string, fullMsg bo
 			retMsgForm.Message = user.ToFriendlyShortString()
 		}
 	}
+	MustAddUserConfigTodayQueryCount(retMsgForm.UserId, 1)
+	MustAddUserConfigTotalQueryCount(retMsgForm.UserId, 1)
+	MustAddGroupConfigTodayQueryCount(retMsgForm.GroupId, 1)
+	MustAddGroupConfigTotalQueryCount(retMsgForm.GroupId, 1)
 }
 
 func DoActionRefresh(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
+	if IsStopGlobalQuery() {
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.StopGlobalQuery
+		return
+	}
+	if value == "我" {
+		config := MustFindUserConfig(retMsgForm.UserId)
+		if config.BindingGameNick != nil && *config.BindingGameNick != "" {
+			value = *config.BindingGameNick
+		}
+	}
+
 	if !IsValidNickname(value) {
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.NotValidNickname
 		return
 	}
 	if !CanBeRefresh(value) {
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.TooShortToRefresh
+		return
+	}
+	// 检查群查询限制
+	if limit, usage, total := CheckGroupTodayQueryLimit(retMsgForm.GroupId); limit {
+		retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.TodayGroupQueryLimit, usage, total)
+		return
+	}
+	// 检查qq查询限制
+	if limit, usage, total := CheckUserTodayQueryLimit(retMsgForm.UserId); limit {
+		retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.TodayUserQueryLimit, usage, total)
 		return
 	}
 	missionId, err := RefreshWTUserInfo(value, *retMsgForm)
@@ -140,18 +188,106 @@ func DoActionRefresh(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
 	}
 	retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.QueryIsRunning
 	tool.GoWithRecover(func() {
-		if err := WaitForCrawlerFinished(*missionId); err != nil {
+		if err := WaitForCrawlerFinished(*missionId, false); err != nil {
 			logging.Warnf("wait for callback error. %s", err)
 		}
 	})
+	MustAddUserConfigTodayQueryCount(retMsgForm.UserId, 1)
+	MustAddUserConfigTotalQueryCount(retMsgForm.UserId, 1)
+	MustAddGroupConfigTodayQueryCount(retMsgForm.GroupId, 1)
+	MustAddGroupConfigTotalQueryCount(retMsgForm.GroupId, 1)
 }
 
 func DoActionDrawCard(retMsgForm *cqhttp.SendGroupMsgForm, value string, id int64) {
-	number := DrawNumber(id, time.Now().In(time.FixedZone("CST", 8*3600)))
-	retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.DrawCard, number)
+	// number := DrawNumber(id, time.Now().In(time.FixedZone("CST", 8*3600)))
+	retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.DrawCard
 }
 
 func DoActionLuck(retMsgForm *cqhttp.SendGroupMsgForm, value string, id int64) {
 	number := DrawNumber(id, time.Now().In(time.FixedZone("CST", 8*3600)))
 	retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.Luck, number, NumberBasedResponse(number, retMsgForm.MessageTemplate))
+}
+
+func DoActionGroupStatus(retMsgForm *cqhttp.SendGroupMsgForm) {
+	config := MustFindGroupConfig(retMsgForm.GroupId)
+	retMsgForm.Message = config.ToDisplay().ToFriendlyString()
+}
+
+func DoActionData(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
+	botQueryPrefix := ".cqbot 数据 "
+	retMsgForm.MessagePrefix = ""
+	opt1 := "导弹数据"
+	switch value {
+	case opt1:
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.MissileData
+	default:
+		var lst []string
+		lst = append(lst, botQueryPrefix+opt1)
+		retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.DataOptions, strings.Join(lst, "\n"))
+	}
+}
+
+func DoActionBinding(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
+	profile, err := FindGameProfile(value)
+	if err != nil {
+		logging.Warn(err)
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.BindingNickNotExist
+		return
+	}
+
+	config, err := FindUserConfig(retMsgForm.UserId)
+	if err != nil {
+		logging.Warn(err)
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.BindingError
+		return
+	}
+	if config.BindingGameNick != nil && *config.BindingGameNick != "" {
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.BindingExist
+		return
+	}
+	config.BindingGameNick = &profile.Nick
+	if err := SaveUserConfig(*config); err != nil {
+		logging.Warn(err)
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.BindingError
+		return
+	}
+	retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.BindingSuccess
+}
+
+func DoActionUnbinding(retMsgForm *cqhttp.SendGroupMsgForm) {
+	if err := UpdateUserConfigBindingGameNick(retMsgForm.UserId, nil); err != nil {
+		logging.Warn(err)
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.UnbindingError
+		return
+	}
+	retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.UnbindingSuccess
+}
+
+func DoActionManager(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
+	botQueryPrefix := ".cqbot 管理 "
+	keyCloseResponse := "关闭回复"
+	keyOpenResponse := "开启回复"
+	keyOpenQuery := "开启查询"
+	keyCloseQuery := "关闭查询"
+	switch value {
+	case keyOpenResponse:
+		MustUpsertGlobalConfig(table.ConfigStopAllResponse, "false")
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.ConfStartGlobalResponse
+	case keyCloseResponse:
+		MustUpsertGlobalConfig(table.ConfigStopAllResponse, "true")
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.ConfStopGlobalResponse
+	case keyOpenQuery:
+		MustUpsertGlobalConfig(table.ConfigStopQuery, "false")
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.ConfStartGlobalQuery
+	case keyCloseQuery:
+		MustUpsertGlobalConfig(table.ConfigStopQuery, "true")
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.ConfStopGlobalQuery
+	default:
+		var lst []string
+		lst = append(lst, botQueryPrefix+keyCloseResponse)
+		lst = append(lst, botQueryPrefix+keyOpenResponse)
+		lst = append(lst, botQueryPrefix+keyOpenQuery)
+		lst = append(lst, botQueryPrefix+keyCloseQuery)
+		retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.ConfOptions, strings.Join(lst, "\n"))
+	}
 }

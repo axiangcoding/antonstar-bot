@@ -3,9 +3,11 @@ package cache
 import "fmt"
 
 const (
-	CqHttpPrefix         = "CQHTTP"
-	GameUserPrefix       = "GameUser"
-	BiliRoomLivingPrefix = "BiliRoom"
+	CqHttpPrefix          = "CQHTTP"
+	GameUserPrefix        = "GameUser"
+	BiliRoomLivingPrefix  = "BiliRoom"
+	GroupUsageLimitPrefix = "GroupUsageLimit"
+	UserUsageLimitPrefix  = "UserUsageLimit"
 )
 
 func GenerateCQHTTPCacheKey(postType string, eventType string, selfId int64) string {
@@ -18,5 +20,12 @@ func GenerateGameUserCacheKey(nickname string) string {
 
 func GenerateBiliRoomLivingCacheKey(groupId, roomId int64) string {
 	return fmt.Sprintf("%s:%d;%d", BiliRoomLivingPrefix, groupId, roomId)
+}
 
+func GenerateGroupUsageLimitCacheKey(groupId int64) string {
+	return fmt.Sprintf("%s:%d", GroupUsageLimitPrefix, groupId)
+}
+
+func GenerateUserUsageLimitCacheKey(userId int64) string {
+	return fmt.Sprintf("%s:%d", UserUsageLimitPrefix, userId)
 }

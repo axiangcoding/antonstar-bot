@@ -33,7 +33,7 @@ type ScheduleResult struct {
 	JobId    string `json:"jobid,omitempty"`
 }
 
-func WaitForCrawlerFinished(missionId string) error {
+func WaitForCrawlerFinished(missionId string, fullMsg bool) error {
 	totalDelay := 60
 	duration := 3
 	i := 0
@@ -56,7 +56,11 @@ func WaitForCrawlerFinished(missionId string) error {
 					break
 				}
 			} else {
-				detailForm.SendForm.Message = user.ToDisplayGameUser().ToFriendlyShortString()
+				if fullMsg {
+					detailForm.SendForm.Message = user.ToDisplayGameUser().ToFriendlyFullString()
+				} else {
+					detailForm.SendForm.Message = user.ToDisplayGameUser().ToFriendlyShortString()
+				}
 				break
 			}
 		} else if mission.Status == table.MissionStatusFailed {
@@ -109,9 +113,9 @@ func GetUserInfoFromWarThunder(missionId string, nick string) error {
 			}
 		}
 
-		if err := GetUserInfoFromThunderskill(nick); err != nil {
-			logging.Warn("failed on update thunder skill profile. ", err)
-		}
+		// if err := GetUserInfoFromThunderskill(nick); err != nil {
+		// 	logging.Warn("failed on update thunder skill profile. ", err)
+		// }
 		MustPutRefreshFlag(nick)
 		MustFinishMissionWithResult(missionId, table.MissionStatusSuccess, CrawlerResult{
 			Found: true,
@@ -135,7 +139,7 @@ func GetUserInfoFromWarThunder(missionId string, nick string) error {
 
 	err := c.Post(url, nil)
 	if err != nil {
-		logging.Warn("colly post failed", err)
+		logging.Warn("colly post failed. ", err)
 		MustFinishMissionWithResult(missionId, table.MissionStatusFailed, CrawlerResult{
 			Found:               false,
 			Nick:                nick,

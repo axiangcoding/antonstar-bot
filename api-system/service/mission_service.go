@@ -11,7 +11,7 @@ import (
 func FindMission(missionId string) (*table.Mission, error) {
 	db := data.GetDB()
 	var find table.Mission
-	if err := db.Where(table.Mission{MissionId: missionId}).Take(&find).Error; err != nil {
+	if err := db.Where(table.Mission{MissionId: missionId}, "mission_id").Take(&find).Error; err != nil {
 		return nil, err
 	}
 	return &find, nil
