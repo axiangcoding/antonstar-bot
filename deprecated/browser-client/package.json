@@ -18,7 +18,7 @@
     "@vicons/utils": "^0.1.4",
     "@vitejs/plugin-vue": "^2.0.1",
     "axios": "^0.26.0",
-    "moment-timezone": "^0.5.34",
+    "moment-timezone": "^0.5.35",
     "naive-ui": "^2.26.4",
     "sass": "^1.49.9",
     "sass-loader": "^12.6.0",
