@@ -1,34 +1,35 @@
 <template>
-  <n-layout embedded class="layout">
-    <Header></Header>
-    <n-layout-content ref="scrollContainer" class="content">
-      <router-view></router-view>
+  <n-layout embedded>
+    <n-layout-header>
+      <Header/>
+    </n-layout-header>
+    <n-layout-content content-style="min-height:1800px">
+      <router-view/>
     </n-layout-content>
-    <n-back-top  :right="30"/>
-    <Footer></Footer>
+    <n-layout-footer>成府路</n-layout-footer>
   </n-layout>
-
 </template>
 
-<script lang="ts" setup>
+<script lang="ts">
 import Header from '@/components/Header.vue'
-import Footer from '@/components/Footer.vue'
-import {useMessage} from "naive-ui";
 
-// 在组件外的js中调用message，需要挂载到全局变量中，同时需要在n-message-provider的子级组件中挂载
-window.$message = useMessage()
+export default {
+  components: {Header}
+}
 </script>
 
-<style lang="scss" scoped>
-.content {
-  padding-top: calc(var(--header-height) + 8px);
-  min-height: calc(100vh - var(--footer-height));
-  max-width: 1200px;
-  margin: 0 auto;
+<style scoped>
+.n-layout-header,
+.n-layout-footer {
+  background: rgba(128, 128, 128, 0.2);
+  padding: 24px;
 }
 
-.layout {
-  height: 100%;
-  background-image: linear-gradient(135deg, #FFF5C3 10%, #9452A5 100%);
+.n-layout-sider {
+  background: rgba(128, 128, 128, 0.3);
+}
+
+.n-layout-content {
+  background: rgba(128, 128, 128, 0.4);
 }
 </style>

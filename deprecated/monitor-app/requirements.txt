@@ -1,3 +1,0 @@
-requests~=2.25.1
-future~=0.18.2
-pyecharts~=1.9.0

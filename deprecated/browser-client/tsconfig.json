@@ -8,12 +8,13 @@
     "jsx": "preserve",
     "sourceMap": true,
     "resolveJsonModule": true,
+    "isolatedModules": true,
     "esModuleInterop": true,
     "lib": [
       "esnext",
       "dom"
     ],
-    "baseUrl": ".",
+    "skipLibCheck": true,
     "paths": {
       "@/*": [
         "./src/*"
@@ -25,5 +26,10 @@
     "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
   ]
 }
