@@ -76,6 +76,6 @@ func ParseMessageCommand(msg string) *Action {
 	}
 	return &Action{
 		Key:   key,
-		Value: split[1],
+		Value: strings.Join(split[1:], " "),
 	}
 }
