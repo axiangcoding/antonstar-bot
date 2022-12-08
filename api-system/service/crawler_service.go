@@ -11,6 +11,7 @@ import (
 	"github.com/gocolly/colly/v2"
 	"github.com/gocolly/colly/v2/extensions"
 	"gorm.io/gorm"
+	"net/url"
 	"time"
 )
 
@@ -78,7 +79,7 @@ func WaitForCrawlerFinished(missionId string, fullMsg bool) error {
 
 func GetUserInfoFromWarThunder(missionId string, nick string) error {
 	urlTemplate := "https://warthunder.com/zh/community/userinfo/?nick=%s"
-	url := fmt.Sprintf(urlTemplate, nick)
+	queryUrl := fmt.Sprintf(urlTemplate, url.QueryEscape(nick))
 
 	c := colly.NewCollector(
 		colly.AllowedDomains("warthunder.com"),
@@ -98,6 +99,8 @@ func GetUserInfoFromWarThunder(missionId string, nick string) error {
 
 	c.OnHTML("div[class=user-info]", func(e *colly.HTMLElement) {
 		data := crawler.ExtractGaijinData(e)
+		// live, psn等用户的昵称会被cf认为是邮箱而隐藏，这里需要覆盖
+		data.Nick = nick
 		_, err := FindGameProfile(nick)
 		if err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -137,7 +140,7 @@ func GetUserInfoFromWarThunder(missionId string, nick string) error {
 		})
 	})
 
-	err := c.Post(url, nil)
+	err := c.Post(queryUrl, nil)
 	if err != nil {
 		logging.Warn("colly post failed. ", err)
 		MustFinishMissionWithResult(missionId, table.MissionStatusFailed, CrawlerResult{

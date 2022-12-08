@@ -269,6 +269,8 @@ func DoActionManager(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
 	keyOpenResponse := "开启回复"
 	keyOpenQuery := "开启查询"
 	keyCloseQuery := "关闭查询"
+	keySetAdmin := "添加管理员"
+	keyUnsetAdmin := "解除管理员"
 	switch value {
 	case keyOpenResponse:
 		MustUpsertGlobalConfig(table.ConfigStopAllResponse, "false")
@@ -282,12 +284,18 @@ func DoActionManager(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
 	case keyCloseQuery:
 		MustUpsertGlobalConfig(table.ConfigStopQuery, "true")
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.ConfStopGlobalQuery
+	case keySetAdmin:
+	// 	TODO
+	case keyUnsetAdmin:
+	// 	TODO
 	default:
 		var lst []string
 		lst = append(lst, botQueryPrefix+keyCloseResponse)
 		lst = append(lst, botQueryPrefix+keyOpenResponse)
 		lst = append(lst, botQueryPrefix+keyOpenQuery)
 		lst = append(lst, botQueryPrefix+keyCloseQuery)
+		lst = append(lst, botQueryPrefix+keySetAdmin)
+		lst = append(lst, botQueryPrefix+keyUnsetAdmin)
 		retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.ConfOptions, strings.Join(lst, "\n"))
 	}
 }

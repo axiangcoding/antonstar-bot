@@ -15,7 +15,7 @@ import (
 var c = context.Background()
 
 func IsValidNickname(nick string) bool {
-	matched, err := regexp.Match(`^\w+$`, []byte(nick))
+	matched, err := regexp.Match(`^[\w\s@]+$`, []byte(nick))
 	if err != nil {
 		return false
 	}

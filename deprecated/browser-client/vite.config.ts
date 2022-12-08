@@ -1,30 +1,29 @@
-import { defineConfig } from 'vite'
-import path from 'path'
+import {defineConfig} from 'vite'
 import vue from '@vitejs/plugin-vue'
+import Components from 'unplugin-vue-components/vite'
+import {NaiveUiResolver} from 'unplugin-vue-components/resolvers'
+import * as path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-	plugins: [vue()],
-	server: {
-		open: false,
-		proxy: {
-			'/api': {
-				target: 'http://localhost:8888',
-				changeOrigin: true,
-			},
-		},
-	},
-	resolve: {
-		alias: {
-			'@': path.resolve(__dirname, 'src'),
-		},
-	},
-	// 引入全局scss
-	css: {
-		preprocessorOptions: {
-			scss: {
-				additionalData: `@import "./src/scss/layout.scss";`,
-			},
-		},
-	},
+    plugins: [
+        vue(),
+        Components({
+            resolvers: [NaiveUiResolver()]
+        })
+    ],
+    server: {
+        open: false,
+        proxy: {
+            "/api": {
+                target: 'http://localhost:8888',
+                changeOrigin: true
+            }
+        }
+    },
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, 'src'),
+        },
+    },
 })
