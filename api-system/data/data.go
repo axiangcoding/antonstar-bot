@@ -4,7 +4,6 @@ import (
 	"github.com/axiangcoding/ax-web/data/table"
 	"github.com/axiangcoding/ax-web/logging"
 	"github.com/axiangcoding/ax-web/settings"
-	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -25,9 +24,6 @@ func selectDb() gorm.Dialector {
 	source := settings.Config.App.Data.Database.Source
 	var dial gorm.Dialector
 	switch driver {
-	case "mysql":
-		dial = mysql.Open(source)
-		break
 	case "postgres":
 		dial = postgres.Open(source)
 		break

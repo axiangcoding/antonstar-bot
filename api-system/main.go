@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/axiangcoding/ax-web/auth"
 	"github.com/axiangcoding/ax-web/cache"
 	"github.com/axiangcoding/ax-web/controller/validation"
 	"github.com/axiangcoding/ax-web/cron"
@@ -26,7 +25,6 @@ func init() {
 	data.Setup()
 	cache.Setup()
 	cron.Setup()
-	auth.Setup()
 	validation.Setup()
 }
 
