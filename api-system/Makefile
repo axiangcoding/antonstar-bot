@@ -4,25 +4,25 @@ all: swag run
 
 swag:
 	@echo "latest swag tool required"
-	swag init -o ./swagger -g ./main.go
-	swag fmt -g ./main.go
+	swag init -o ./swagger -g ./cmd/app/main.go
+	swag fmt -g ./cmd/app/main.go
 
 clean:
 	go clean
 
 upgrade:
-	go get -u ./
+	go get -u ./cmd/app
 
 check:
-	go fmt ./
-	go vet ./
+	go fmt ./cmd/app
+	go vet ./cmd/app
 
 build-image:
 	@echo "docker required"
 	docker build . -t axiangcoding/go-gin-template:latest
 
 run:
-	go run ./main.go
+	go run ./cmd/app
 
 run-dev-env:
 	@echo "docker-compose required"
