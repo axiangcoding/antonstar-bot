@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/axiangcoding/ax-web/cache"
 	"github.com/axiangcoding/ax-web/data"
+	"github.com/axiangcoding/ax-web/data/dal"
 	"github.com/axiangcoding/ax-web/data/table"
 	"github.com/axiangcoding/ax-web/logging"
 	"github.com/go-redis/redis/v8"
@@ -23,17 +24,15 @@ func IsValidNickname(nick string) bool {
 }
 
 func FindGameProfile(nick string) (*table.GameUser, error) {
-	db := data.GetDB()
-	var find table.GameUser
-	if err := db.Where(table.GameUser{Nick: nick}, "nick").Take(&find).Error; err != nil {
+	take, err := dal.Q.GameUser.Where(dal.GameUser.Nick.Eq(nick)).Take()
+	if err != nil {
 		return nil, err
 	}
-	return &find, nil
+	return take, err
 }
 
 func SaveGameProfile(gameUser table.GameUser) error {
-	db := data.GetDB()
-	if err := db.Save(&gameUser).Error; err != nil {
+	if err := dal.Q.GameUser.Save(&gameUser); err != nil {
 		return err
 	}
 	return nil

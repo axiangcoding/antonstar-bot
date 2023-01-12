@@ -1,10 +1,12 @@
 package data
 
 import (
+	"github.com/axiangcoding/ax-web/data/dal"
 	"github.com/axiangcoding/ax-web/data/table"
 	"github.com/axiangcoding/ax-web/logging"
 	"github.com/axiangcoding/ax-web/settings"
 	"gorm.io/driver/postgres"
+	"gorm.io/gen"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
@@ -53,6 +55,7 @@ func initDB() *gorm.DB {
 	logging.Info("Database mysql connected success")
 	setProperties(db)
 	autoMigrate(db)
+	dal.SetDefault(db)
 	return db
 }
 
@@ -82,4 +85,26 @@ func setProperties(db *gorm.DB) {
 	}
 	s.SetMaxOpenConns(settings.Config.App.Data.Database.MaxOpenConn)
 	s.SetMaxIdleConns(settings.Config.App.Data.Database.MaxIdleConn)
+}
+
+func GenCode(db *gorm.DB) {
+	g := gen.NewGenerator(gen.Config{
+		OutPath:       "./data/dal",
+		Mode:          gen.WithDefaultQuery | gen.WithQueryInterface | gen.WithoutContext,
+		FieldNullable: true,
+	})
+
+	// Use the above `*gorm.DB` instance to initialize the generator,
+	// which is required to generate structs from db when using `GenerateModel/GenerateModelAs`
+	g.UseDB(db)
+
+	// Generate default DAO interface for those specified structs
+	g.ApplyBasic(table.Mission{},
+		table.GameUser{},
+		table.QQGroupConfig{},
+		table.QQUserConfig{},
+		table.GlobalConfig{})
+
+	// Execute the generator
+	g.Execute()
 }
