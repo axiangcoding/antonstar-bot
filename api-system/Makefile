@@ -19,7 +19,7 @@ check:
 
 build-image:
 	@echo "docker required"
-	docker build . -t axiangcoding/go-gin-template:latest
+	docker build --build-arg=APP_VERSION=latest . -t axiangcoding/go-gin-template:latest
 
 run:
 	go run ./cmd/app
