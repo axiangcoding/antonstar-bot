@@ -2,7 +2,6 @@ package cron
 
 import (
 	"fmt"
-	"github.com/axiangcoding/ax-web/data/table"
 	"github.com/axiangcoding/ax-web/logging"
 	"github.com/axiangcoding/ax-web/service"
 	"github.com/axiangcoding/ax-web/service/bot"
@@ -27,8 +26,7 @@ func addJob(c *cron.Cron) {
 }
 
 func CheckRoomLiving() {
-	enableCheckBiliRoom := true
-	qcs, err := service.GetGroupConfigWithCondition(table.QQGroupConfig{EnableCheckBiliRoom: &enableCheckBiliRoom})
+	qcs, err := service.GetEnableCheckBiliRoomGroupConfig(true)
 	if err != nil {
 		logging.Warn(err)
 		return

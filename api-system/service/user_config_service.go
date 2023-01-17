@@ -3,7 +3,7 @@ package service
 import (
 	"errors"
 	"github.com/axiangcoding/ax-web/cache"
-	"github.com/axiangcoding/ax-web/data"
+	"github.com/axiangcoding/ax-web/data/dal"
 	"github.com/axiangcoding/ax-web/data/table"
 	"github.com/axiangcoding/ax-web/logging"
 	"github.com/go-redis/redis/v8"
@@ -11,12 +11,8 @@ import (
 )
 
 func FindUserConfig(userId int64) (*table.QQUserConfig, error) {
-	db := data.GetDB()
-	var find table.QQUserConfig
-	if err := db.Where(table.QQUserConfig{UserId: userId}).Take(&find).Error; err != nil {
-		return nil, err
-	}
-	return &find, nil
+	take, err := dal.Q.QQUserConfig.Where(dal.QQUserConfig.UserId.Eq(userId)).Take()
+	return take, err
 }
 
 func MustFindUserConfig(userId int64) *table.QQUserConfig {
@@ -28,8 +24,7 @@ func MustFindUserConfig(userId int64) *table.QQUserConfig {
 }
 
 func SaveUserConfig(gc table.QQUserConfig) error {
-	db := data.GetDB()
-	if err := db.Save(&gc).Error; err != nil {
+	if err := dal.Q.QQUserConfig.Save(&gc); err != nil {
 		return err
 	}
 	return nil
@@ -42,8 +37,9 @@ func UpdateUserConfigBindingGameNick(userId int64, gameNick *string) error {
 	} else {
 		config.BindingGameNick = gameNick
 	}
-	db := data.GetDB()
-	db.Save(&config)
+	if err := SaveUserConfig(*config); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -100,10 +96,11 @@ func MustAddUserConfigTotalUsageCount(userId int64, count int) {
 }
 
 func ResetAllUserConfigTodayCount() error {
-	db := data.GetDB()
-	if err := db.Model(&table.QQUserConfig{}).
-		Select("today_query_count", "today_usage_count").Where("1=1").
-		Updates(table.QQUserConfig{TodayQueryCount: 0, TodayUsageCount: 0}).Error; err != nil {
+	quc := dal.QQUserConfig
+	if _, err := dal.QQUserConfig.
+		Select(quc.TodayQueryCount, quc.TodayUsageCount).
+		Where(quc.ID.IsNotNull()).
+		Updates(table.QQUserConfig{TodayQueryCount: 0, TodayUsageCount: 0}); err != nil {
 		return err
 	}
 	return nil

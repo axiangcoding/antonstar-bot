@@ -9,31 +9,6 @@ definitions:
       msg:
         type: string
     type: object
-  v1.LoginParam:
-    properties:
-      loginName:
-        type: string
-      password:
-        type: string
-    required:
-    - loginName
-    - password
-    type: object
-  v1.RegisterParam:
-    properties:
-      displayName:
-        type: string
-      email:
-        type: string
-      password:
-        type: string
-      phone:
-        type: string
-    required:
-    - displayName
-    - email
-    - password
-    type: object
 info:
   contact:
     email: axiangcoding@gmail.com
@@ -82,47 +57,6 @@ paths:
       summary: System Info
       tags:
       - System API
-  /v1/user/login:
-    post:
-      parameters:
-      - description: login param
-        in: body
-        name: param
-        required: true
-        schema:
-          $ref: '#/definitions/v1.LoginParam'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.ApiJson'
-      tags:
-      - User API
-  /v1/user/me:
-    post:
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.ApiJson'
-      tags:
-      - User API
-  /v1/user/register:
-    post:
-      parameters:
-      - description: register param
-        in: body
-        name: param
-        required: true
-        schema:
-          $ref: '#/definitions/v1.RegisterParam'
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.ApiJson'
-      tags:
-      - User API
 produces:
 - application/json
 securityDefinitions:

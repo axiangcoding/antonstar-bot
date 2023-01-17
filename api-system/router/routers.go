@@ -3,11 +3,9 @@ package router
 import (
 	"github.com/axiangcoding/ax-web/controller/middleware"
 	"github.com/axiangcoding/ax-web/controller/v1"
-	"github.com/axiangcoding/ax-web/entity/app"
 	"github.com/axiangcoding/ax-web/logging"
 	"github.com/axiangcoding/ax-web/settings"
 	"github.com/axiangcoding/ax-web/swagger"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
@@ -27,7 +25,6 @@ func InitRouter() *gin.Engine {
 	r.Use(middleware.Logger())
 	// Recovery 中间件会 recover 任何 panic。如果有 panic 的话，会写入 500。
 	r.Use(gin.Recovery())
-	setCors(r)
 	setSession(r)
 	setRouterV1(r)
 	return r
@@ -59,15 +56,6 @@ func setSession(r *gin.Engine) {
 	r.Use(sessions.Sessions("session", store))
 }
 
-// 设置cors头
-func setCors(r *gin.Engine) {
-	config := cors.DefaultConfig()
-	config.AllowAllOrigins = false
-	config.AddAllowMethods("OPTIONS")
-	config.AddAllowHeaders(app.AuthHeader)
-	// r.Use(cors.New(config))
-}
-
 func setSwagger(r *gin.RouterGroup) {
 	if settings.Config.App.Swagger.Enable {
 		swagger.SwaggerInfo.Version = settings.Config.App.Version
@@ -82,12 +70,6 @@ func setRouterV1(r *gin.Engine) {
 	setSwagger(base)
 	groupV1 := base.Group("/v1")
 	{
-		user := groupV1.Group("/user")
-		{
-			user.POST("/login", v1.UserLogin)
-			user.POST("/register", v1.UserRegister)
-			user.POST("/me", v1.UserMe)
-		}
 		system := groupV1.Group("/system")
 		{
 			system.GET("/info", v1.SystemInfo)
