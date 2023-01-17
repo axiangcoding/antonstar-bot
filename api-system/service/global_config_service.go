@@ -1,18 +1,17 @@
 package service
 
 import (
-	"github.com/axiangcoding/ax-web/data"
+	"github.com/axiangcoding/ax-web/data/dal"
 	"github.com/axiangcoding/ax-web/data/table"
 	"github.com/axiangcoding/ax-web/logging"
 )
 
 func FindGlobalConfig(key string) (*table.GlobalConfig, error) {
-	db := data.GetDB()
-	var find table.GlobalConfig
-	if err := db.Where(table.GlobalConfig{Key: key}, "key").Take(&find).Error; err != nil {
+	take, err := dal.Q.GlobalConfig.Where(dal.GlobalConfig.Key.Eq(key)).Take()
+	if err != nil {
 		return nil, err
 	}
-	return &find, nil
+	return take, nil
 }
 
 func MustFindGlobalConfig(key string) *table.GlobalConfig {
@@ -48,6 +47,7 @@ func MustUpsertGlobalConfig(key string, value string) {
 	} else {
 		config.Value = value
 	}
-	db := data.GetDB()
-	db.Save(&config)
+	if err := dal.Q.GlobalConfig.Save(config); err != nil {
+		logging.Warn(err)
+	}
 }

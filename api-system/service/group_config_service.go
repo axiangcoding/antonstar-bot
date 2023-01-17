@@ -3,7 +3,7 @@ package service
 import (
 	"errors"
 	"github.com/axiangcoding/ax-web/cache"
-	"github.com/axiangcoding/ax-web/data"
+	"github.com/axiangcoding/ax-web/data/dal"
 	"github.com/axiangcoding/ax-web/data/table"
 	"github.com/axiangcoding/ax-web/logging"
 	"github.com/go-redis/redis/v8"
@@ -11,12 +11,11 @@ import (
 )
 
 func FindGroupConfig(groupId int64) (*table.QQGroupConfig, error) {
-	db := data.GetDB()
-	var find table.QQGroupConfig
-	if err := db.Where(table.QQGroupConfig{GroupId: groupId}, "group_id").Take(&find).Error; err != nil {
+	take, err := dal.Q.QQGroupConfig.Where(dal.QQGroupConfig.GroupId.Eq(groupId)).Take()
+	if err != nil {
 		return nil, err
 	}
-	return &find, nil
+	return take, nil
 }
 
 func MustFindGroupConfig(groupId int64) *table.QQGroupConfig {
@@ -27,18 +26,13 @@ func MustFindGroupConfig(groupId int64) *table.QQGroupConfig {
 	return config
 }
 
-func GetGroupConfigWithCondition(condition table.QQGroupConfig) ([]table.QQGroupConfig, error) {
-	db := data.GetDB()
-	var finds []table.QQGroupConfig
-	if err := db.Where(condition).Find(&finds).Error; err != nil {
-		return nil, err
-	}
-	return finds, nil
+func GetEnableCheckBiliRoomGroupConfig(enableCheckBiliBiliRoom bool) ([]*table.QQGroupConfig, error) {
+	find, err := dal.QQGroupConfig.Where(dal.QQGroupConfig.EnableCheckBiliRoom.Is(enableCheckBiliBiliRoom)).Find()
+	return find, err
 }
 
 func SaveGroupConfig(gc table.QQGroupConfig) error {
-	db := data.GetDB()
-	if err := db.Save(&gc).Error; err != nil {
+	if err := dal.QQGroupConfig.Save(&gc); err != nil {
 		return err
 	}
 	return nil
@@ -139,10 +133,11 @@ func MustAddGroupConfigTotalUsageCount(groupId int64, count int) {
 }
 
 func ResetAllGroupConfigTodayCount() error {
-	db := data.GetDB()
-	if err := db.Model(&table.QQGroupConfig{}).
-		Select("today_query_count", "today_usage_count").Where("1=1").
-		Updates(table.QQGroupConfig{TodayQueryCount: 0, TodayUsageCount: 0}).Error; err != nil {
+	quc := dal.QQGroupConfig
+	if _, err := dal.QQGroupConfig.
+		Select(quc.TodayQueryCount, quc.TodayUsageCount).
+		Where(quc.ID.IsNotNull()).
+		Updates(table.QQGroupConfig{TodayQueryCount: 0, TodayUsageCount: 0}); err != nil {
 		return err
 	}
 	return nil

@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"github.com/axiangcoding/ax-web/cache"
-	"github.com/axiangcoding/ax-web/data"
 	"github.com/axiangcoding/ax-web/data/dal"
 	"github.com/axiangcoding/ax-web/data/table"
 	"github.com/axiangcoding/ax-web/logging"
@@ -39,8 +38,7 @@ func SaveGameProfile(gameUser table.GameUser) error {
 }
 
 func UpdateGameProfile(nick string, user table.GameUser) error {
-	db := data.GetDB()
-	if err := db.Where(table.GameUser{Nick: nick}).Updates(&user).Error; err != nil {
+	if _, err := dal.GameUser.Where(dal.GameUser.Nick.Eq(nick)).Updates(&user); err != nil {
 		return err
 	}
 	return nil
