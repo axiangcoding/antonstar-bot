@@ -19,7 +19,7 @@ require (
 	github.com/swaggo/gin-swagger v1.5.3
 	github.com/swaggo/swag v1.8.9
 	go.uber.org/zap v1.24.0
-	golang.org/x/exp v0.0.0-20230111222715-75897c7a292a
+	golang.org/x/exp v0.0.0-20230116083435-1de6713980de
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	gorm.io/driver/postgres v1.4.6
 	gorm.io/gen v0.3.19
@@ -40,8 +40,8 @@ require (
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-openapi/jsonpointer v0.19.6 // indirect
-	github.com/go-openapi/jsonreference v0.20.1 // indirect
-	github.com/go-openapi/spec v0.20.7 // indirect
+	github.com/go-openapi/jsonreference v0.20.2 // indirect
+	github.com/go-openapi/spec v0.20.8 // indirect
 	github.com/go-openapi/swag v0.22.3 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
