@@ -76,6 +76,8 @@ var tests5 = []string{
 	".cqbot 帮助",
 	".cqbot",
 	" .cqbot 帮助",
+	"cqbot",
+	"cqbot 查询",
 }
 
 func TestMustContainsTrigger(t *testing.T) {

@@ -5,7 +5,7 @@ import "regexp"
 var (
 	// MessageGetAtPrimaryMsgPattern at时获取主要消息
 	MessageGetAtPrimaryMsgPattern  = regexp.MustCompile(`^.*\[.*\](.*)$`)
-	MessageGetCmdPrimaryMsgPattern = regexp.MustCompile(`^\s*\.cqbot\s*(.*)$`)
+	MessageGetCmdPrimaryMsgPattern = regexp.MustCompile(`^\s*\.?cqbot\s*(.*)$`)
 )
 
 var (

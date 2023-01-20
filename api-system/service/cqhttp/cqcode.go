@@ -9,7 +9,7 @@ import (
 var (
 	CqCodePattern     = regexp.MustCompile(`^.*\[(.*)\].*$`)
 	CqCodeAtQQPattern = regexp.MustCompile(`^CQ:at,qq=(\d+)$`)
-	CqTriggerPattern  = regexp.MustCompile(`^\s*\.cqbot.*$`)
+	CqTriggerPattern  = regexp.MustCompile(`^\s*\.?cqbot.*$`)
 )
 
 func MustContainsTrigger(message string) bool {
