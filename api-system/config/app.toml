@@ -33,8 +33,6 @@ source = "redis://localhost:6379/0"
 url = "http://localhost:5700"
 self_qq = 3547589750
 
-[app.service.crawler]
-url = "http://localhost:6800"
 
 [app.response]
 # hide error details
