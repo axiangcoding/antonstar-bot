@@ -39,9 +39,9 @@ func Setup() {
 		w := zapcore.AddSync(&lumberjack.Logger{
 			Filename: path.Join(settings.Config.App.Log.File.Path,
 				"application.log"),
-			MaxSize:    1, // megabytes
+			MaxSize:    100, // megabytes
 			MaxBackups: 100,
-			MaxAge:     30, // days
+			MaxAge:     60, // days
 		})
 		var encoder zapcore.Encoder
 		encoderConfig := zap.NewProductionEncoderConfig()
