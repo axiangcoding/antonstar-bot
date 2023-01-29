@@ -250,7 +250,7 @@ func MustSendGroupMsg(form cqhttp.SendGroupMsgForm) {
 	url := settings.Config.Service.CqHttp.Url + "/send_group_msg"
 	client := resty.New().SetTimeout(time.Second * 20)
 	var commonResp cqhttp.CommonResponse
-	resp, err := client.R().SetHeader("Content-Type", "application/json").
+	resp, err := client.R().SetHeader("Content-cardType", "application/json").
 		SetBody(map[string]any{
 			"message":  form.MessagePrefix + form.Message,
 			"group_id": form.GroupId,
@@ -271,7 +271,7 @@ func MustSendGroupMsg(form cqhttp.SendGroupMsgForm) {
 func MustAcceptInviteToGroup(flag string, subType string, approve bool, reason string) {
 	url := settings.Config.Service.CqHttp.Url + "/set_group_add_request"
 	client := resty.New().SetTimeout(time.Second * 20)
-	resp, err := client.R().SetHeader("Content-Type", "application/json").
+	resp, err := client.R().SetHeader("Content-cardType", "application/json").
 		SetBody(map[string]any{
 			"flag":     flag,
 			"sub_type": subType,
