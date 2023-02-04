@@ -1,4 +1,4 @@
-# AntonStar-Bot
+# AntonStar-Bot 安东星机器人
 
 ![GitHub](https://img.shields.io/github/license/axiangcoding/antonstar-bot) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/axiangcoding/antonstar-bot/build_docker_image.yml) 
 
