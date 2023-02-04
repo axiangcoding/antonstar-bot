@@ -75,7 +75,7 @@ AntonStar-Bot，即安东星机器人（下文简称bot），是一个能在QQ�
   docker-compose -f ./services/docker-compose.yml
   ```
 
-  **注意：**请配置好cqhttp的相关配置项
+  **注意：** 请配置好cqhttp的相关配置项
 
 - 启动bot
 
