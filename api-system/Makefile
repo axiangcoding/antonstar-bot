@@ -24,10 +24,6 @@ build-image:
 run:
 	go run ./cmd/app
 
-run-dev-env:
-	@echo "docker-compose required"
-	docker-compose -f docker/docker-compose.yaml up -d
-
 help:
 	@echo "make - generate swagger docs, run application"
 	@echo "make swag - generate swagger docs"
