@@ -73,7 +73,7 @@ func WaitForCrawlerFinished(missionId string, fullMsg bool) error {
 	if i > totalDelay {
 		detailForm.SendForm.Message = "对不起，查询超时，请稍后重试"
 	}
-	MustSendGroupMsg(detailForm.SendForm)
+	cqhttp.MustSendGroupMsg(detailForm.SendForm)
 	return nil
 }
 
