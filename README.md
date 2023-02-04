@@ -1,5 +1,9 @@
 # AntonStar-Bot
+
+![GitHub](https://img.shields.io/github/license/axiangcoding/antonstar-bot) ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/axiangcoding/antonstar-bot/build_docker_image.yml) 
+
 AntonStar-Bot，即安东星机器人（下文简称bot），是一个能在QQ、Kook等社交软件上使用的，具有一些有趣的交互功能的机器人，其设计初衷是为了使用者能便捷地查询游戏《战争雷霆》中的一些数据，包括玩家战绩，游戏数据等。
+
 > “安东星”三个字在中国玩家群体中习惯性代指《战争雷霆》，其本身并不具有贬义
 
 ## 使用手册
