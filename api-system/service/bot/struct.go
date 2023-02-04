@@ -54,6 +54,7 @@ type StaticMessage struct {
 		StopGlobalQuery         string `json:"stop_global_query"`
 		DataOptions             string `json:"data_options"`
 		MissileData             string `json:"missile_data"`
+		BindingFirst            string `json:"binding_first"`
 		BindingNickNotExist     string `json:"binding_nick_not_exist"`
 		BindingExist            string `json:"binding_exist"`
 		BindingSuccess          string `json:"binding_success"`

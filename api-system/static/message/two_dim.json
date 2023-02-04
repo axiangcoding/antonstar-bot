@@ -21,6 +21,7 @@
     "stop_global_query": "Bvvd觉得官网全境遭到了攻击，所以开启了Bot防护，战绩查询功能不可用",
     "data_options": "【Qbot数据中心】可用命令\n%s",
     "missile_data": "红外导弹性能表\nhttps://docs.qq.com/sheet/DTFJ3dkxQV3hudUdY\n由B站UP主 库撒的幽灵 整理",
+    "binding_first": "请先绑定游戏账号",
     "binding_nick_not_exist": "请绑定一个已有数据的游戏账号喵",
     "binding_exist": "已绑定游戏账号，请先解绑后再绑定新账号喵",
     "binding_success": "绑定成功，后续可使用“我”来代指该游戏昵称喵",

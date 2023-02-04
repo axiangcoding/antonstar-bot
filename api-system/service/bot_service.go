@@ -109,6 +109,9 @@ func DoActionQuery(retMsgForm *cqhttp.SendGroupMsgForm, value string, fullMsg bo
 		config := MustFindUserConfig(retMsgForm.UserId)
 		if config.BindingGameNick != nil && *config.BindingGameNick != "" {
 			value = *config.BindingGameNick
+		} else {
+			retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.BindingFirst
+			return
 		}
 	}
 
