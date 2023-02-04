@@ -30,8 +30,8 @@ var errCodeText = map[int]string{
 
 	UserLoginFailed:        "Login failed",
 	UserRegisterFailed:     "Register failed",
-	UserExist:              "User Exist",
-	UserPasswordNotMatched: "User username or password not matched",
+	UserExist:              "user Exist",
+	UserPasswordNotMatched: "user username or password not matched",
 }
 
 func CodeText(code int) string {

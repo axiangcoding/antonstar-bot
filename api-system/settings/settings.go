@@ -14,7 +14,6 @@ func Setup() {
 	viper.SetConfigName("app.toml")
 	viper.SetConfigType("toml")
 	viper.AddConfigPath("config/")
-	viper.AddConfigPath("config/default/")
 	viper.AutomaticEnv()
 	viper.SetEnvPrefix("ax")
 	replacer := strings.NewReplacer(".", "_")

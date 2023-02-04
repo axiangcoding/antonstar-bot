@@ -45,7 +45,7 @@ func CheckRoomLiving() {
 				url := fmt.Sprintf("https://live.bilibili.com/%d", qc.BindBiliRoomId)
 				config, _ := service.FindGroupConfig(qc.GroupId)
 				sgmf.Message = fmt.Sprintf(bot.SelectStaticMessage(config.MessageTemplate).CommonResp.LiveBroadcast, info.Data.Title, url)
-				service.MustSendGroupMsg(sgmf)
+				cqhttp.MustSendGroupMsg(sgmf)
 			}
 			service.MustPutBiliRoomFlag(qc.GroupId, qc.BindBiliRoomId)
 		}

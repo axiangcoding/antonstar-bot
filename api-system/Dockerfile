@@ -5,11 +5,12 @@ COPY . /build/
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o application ./cmd/app
 
 FROM alpine:latest as prod
+LABEL maintainer=axiangcoding@gmail.com
 ARG APP_VERSION
+WORKDIR /app
 ENV AX_APP_VERSION=${APP_VERSION}
 COPY --from=build /build/application /app/application
-# copy config file
+# 复制config文件夹到镜像中
 COPY --from=build /build/config /app/config
 EXPOSE 8888
-WORKDIR /app
 CMD ["/app/application"]

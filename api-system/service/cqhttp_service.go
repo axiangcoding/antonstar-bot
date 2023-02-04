@@ -10,7 +10,6 @@ import (
 	"github.com/axiangcoding/ax-web/service/cqhttp"
 	"github.com/axiangcoding/ax-web/settings"
 	"github.com/gin-gonic/gin"
-	"github.com/go-resty/resty/v2"
 	"github.com/mitchellh/mapstructure"
 	"golang.org/x/exp/slices"
 	"gorm.io/gorm"
@@ -139,7 +138,7 @@ func handleCqHttpMessageEventGroup(event *cqhttp.CommonEvent) {
 	if limit, usage, total := CheckGroupTodayUsageLimit(groupId); limit {
 		if !ExistGroupUsageLimitFlag(groupId) {
 			retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.TodayGroupUsageLimit, usage, total)
-			MustSendGroupMsg(retMsgForm)
+			cqhttp.MustSendGroupMsg(retMsgForm)
 			MustPutGroupUsageLimitFlag(groupId)
 			return
 		} else {
@@ -151,7 +150,7 @@ func handleCqHttpMessageEventGroup(event *cqhttp.CommonEvent) {
 		if !ExistUserUsageLimitFlag(userId) {
 			retMsgForm.MessagePrefix = fmt.Sprintf("[CQ:at,qq=%d] ", event.Sender.UserId)
 			retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.TodayUserUsageLimit, usage, total)
-			MustSendGroupMsg(retMsgForm)
+			cqhttp.MustSendGroupMsg(retMsgForm)
 			MustPutUserUsageLimitFlag(userId)
 			return
 		} else {
@@ -165,13 +164,13 @@ func handleCqHttpMessageEventGroup(event *cqhttp.CommonEvent) {
 
 	if *gc.Banned {
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.GroupGetBanned
-		MustSendGroupMsg(retMsgForm)
+		cqhttp.MustSendGroupMsg(retMsgForm)
 		return
 	}
 	if *uc.Banned {
 		retMsgForm.MessagePrefix = fmt.Sprintf("[CQ:at,qq=%d] ", event.Sender.UserId)
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.UserGetBanned
-		MustSendGroupMsg(retMsgForm)
+		cqhttp.MustSendGroupMsg(retMsgForm)
 		return
 	}
 	retMsgForm.MessagePrefix = fmt.Sprintf("[CQ:at,qq=%d] ", event.Sender.UserId)
@@ -215,73 +214,23 @@ func handleCqHttpMessageEventGroup(event *cqhttp.CommonEvent) {
 		}
 	}
 
-	MustSendGroupMsg(retMsgForm)
+	cqhttp.MustSendGroupMsg(retMsgForm)
 }
 
 func handleAddGroup(event *cqhttp.CommonEvent) {
 	if event.SubType == cqhttp.SubTypeInvite {
-		groupConfig := MustFindGroupConfig(event.GroupId)
-		userConfig := MustFindUserConfig(event.UserId)
-		isSuperAdmin := false
-		isAdmin := false
-		if userConfig.SuperAdmin != nil && (*userConfig.SuperAdmin) {
-			isSuperAdmin = true
-		}
-		if userConfig.Admin != nil && (*userConfig.Admin) {
-			isAdmin = true
-		}
-		if userConfig != nil && (isSuperAdmin || isAdmin) {
-			if groupConfig == nil || !(*groupConfig.Banned) {
-				MustAcceptInviteToGroup(event.Flag, event.SubType, true, "")
-			}
+		groupId := event.GroupId
+		userId := event.UserId
+		groupConfig := MustFindGroupConfig(groupId)
+		userConfig := MustFindUserConfig(userId)
+		if (groupConfig == nil || !(*groupConfig.Banned)) && (userConfig == nil || !(*userConfig.Banned)) {
+			cqhttp.MustAcceptInviteToGroup(event.Flag, event.SubType, true, "")
 		} else {
-			logging.Warnf("user_id %d invite bot to join group %d failed", event.UserId, event.GroupId)
+			logging.Warn("due to the ban policy, the application for joining the group was rejected. userId: %d, groupId: %d", userId, groupId)
 		}
 	}
 }
 
 func handleAddFriend(c *gin.Context, event *cqhttp.CommonEvent) {
 
-}
-
-// MustSendGroupMsg
-// https://docs.go-cqhttp.org/api/#%E5%A4%84%E7%90%86%E5%8A%A0%E7%BE%A4%E8%AF%B7%E6%B1%82-%E9%82%80%E8%AF%B7
-func MustSendGroupMsg(form cqhttp.SendGroupMsgForm) {
-	url := settings.Config.Service.CqHttp.Url + "/send_group_msg"
-	client := resty.New().SetTimeout(time.Second * 20)
-	var commonResp cqhttp.CommonResponse
-	resp, err := client.R().SetHeader("Content-Type", "application/json").
-		SetBody(map[string]any{
-			"message":  form.MessagePrefix + form.Message,
-			"group_id": form.GroupId,
-		}).SetResult(&commonResp).Post(url)
-	if err != nil {
-		logging.Warnf("send group message error. %s", err)
-	}
-	if resp.IsError() {
-		logging.Warnf("post %s error. code=%d, message=%s", url, resp.StatusCode(), resp.String())
-	}
-	if commonResp.Status == "failed" {
-		logging.Warnf("send message failed. response json: %#v", commonResp)
-	}
-}
-
-// MustAcceptInviteToGroup
-// https://docs.go-cqhttp.org/api/#%E5%A4%84%E7%90%86%E5%8A%A0%E7%BE%A4%E8%AF%B7%E6%B1%82-%E9%82%80%E8%AF%B7
-func MustAcceptInviteToGroup(flag string, subType string, approve bool, reason string) {
-	url := settings.Config.Service.CqHttp.Url + "/set_group_add_request"
-	client := resty.New().SetTimeout(time.Second * 20)
-	resp, err := client.R().SetHeader("Content-Type", "application/json").
-		SetBody(map[string]any{
-			"flag":     flag,
-			"sub_type": subType,
-			"approve":  approve,
-			"reason":   reason,
-		}).Post(url)
-	if err != nil {
-		logging.Warnf("send group add request error. %s", err)
-	}
-	if resp.IsError() {
-		logging.Warnf("post %s error. code=%d, message=%s", url, resp.StatusCode(), resp.String())
-	}
 }

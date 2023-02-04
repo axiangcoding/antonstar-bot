@@ -73,7 +73,7 @@ func WaitForCrawlerFinished(missionId string, fullMsg bool) error {
 	if i > totalDelay {
 		detailForm.SendForm.Message = "对不起，查询超时，请稍后重试"
 	}
-	MustSendGroupMsg(detailForm.SendForm)
+	cqhttp.MustSendGroupMsg(detailForm.SendForm)
 	return nil
 }
 
@@ -99,7 +99,7 @@ func GetUserInfoFromWarThunder(missionId string, nick string) error {
 
 	c.OnHTML("div[class=user-info]", func(e *colly.HTMLElement) {
 		data := crawler.ExtractGaijinData(e)
-		// live, psn等用户的昵称会被cf认为是邮箱而隐藏，这里需要覆盖
+		// live, psn等用户的昵称在html中会被cf认为是邮箱而隐藏，这里需要覆盖
 		data.Nick = nick
 		_, err := FindGameProfile(nick)
 		if err != nil {
@@ -116,9 +116,9 @@ func GetUserInfoFromWarThunder(missionId string, nick string) error {
 			}
 		}
 
-		// if err := GetUserInfoFromThunderskill(nick); err != nil {
-		// 	logging.Warn("failed on update thunder skill profile. ", err)
-		// }
+		if err := GetUserInfoFromThunderskill(nick); err != nil {
+			logging.Warn("failed on update thunder skill profile. ", err)
+		}
 		MustPutRefreshFlag(nick)
 		MustFinishMissionWithResult(missionId, table.MissionStatusSuccess, CrawlerResult{
 			Found: true,
@@ -153,8 +153,6 @@ func GetUserInfoFromWarThunder(missionId string, nick string) error {
 	return nil
 }
 
-// GetUserInfoFromThunderskill
-// TODO: thunderskill启用了cloudflare，暂不爬取
 func GetUserInfoFromThunderskill(nick string) error {
 	urlTemplate := "https://thunderskill.com/en/stat/%s/export/json"
 	url := fmt.Sprintf(urlTemplate, nick)
@@ -166,9 +164,20 @@ func GetUserInfoFromThunderskill(nick string) error {
 	)
 
 	c.OnResponse(func(r *colly.Response) {
-		mp := make(map[string]any)
-		_ = json.Unmarshal(r.Body, &mp)
-		logging.Info(r.Body)
+		var resp crawler.ThunderSkillResp
+		_ = json.Unmarshal(r.Body, &resp)
+		skillData := resp.Stats
+		data, err := FindGameProfile(nick)
+		data.TsSBRate = skillData.S.Kpd
+		data.TsRBRate = skillData.R.Kpd
+		data.TsABRate = skillData.A.Kpd
+		if err != nil {
+			logging.Warn(err)
+		} else {
+			if err := UpdateGameProfile(nick, *data); err != nil {
+				logging.Warn(err)
+			}
+		}
 	})
 
 	c.OnRequest(func(r *colly.Request) {

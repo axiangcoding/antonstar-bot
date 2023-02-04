@@ -17,12 +17,9 @@ type App struct {
 		}
 	}
 	Auth struct {
-		Secret              string
-		ExpireDuration      string `mapstructure:"expire_duration"`
-		RefreshDuration     string `mapstructure:"refresh_duration"`
-		CasbinModelPath     string `mapstructure:"casbin_model_path"`
-		CasbinPolicyAdapter string `mapstructure:"casbin_policy_adapter"`
-		CasbinPolicyPath    string `mapstructure:"casbin_policy_path"`
+		Secret          string
+		ExpireDuration  string `mapstructure:"expire_duration"`
+		RefreshDuration string `mapstructure:"refresh_duration"`
 	}
 	Swagger struct {
 		Enable bool
@@ -55,10 +52,6 @@ type App struct {
 		CqHttp struct {
 			Url    string `mapstructure:"url"`
 			SelfQQ int64  `mapstructure:"self_qq"`
-		}
-		Crawler struct {
-			Url    string `mapstructure:"url"`
-			Secret string `mapstructure:"secret"`
 		}
 	}
 }
