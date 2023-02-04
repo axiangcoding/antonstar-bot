@@ -16,9 +16,7 @@ type CardCarAction interface {
 	repair() string
 }
 
-type matchAction interface {
-	generateText(steps []string) string
+type MatchAction interface {
 	decideOrderBothCar() (*CardCarItem, *CardCarItem)
-
-	Fight() string
+	Fight() []string
 }
