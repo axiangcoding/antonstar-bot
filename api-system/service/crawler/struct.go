@@ -165,3 +165,7 @@ func (d ThunderSkillData) ToTableGameUser() table.GameUser {
 		TsRBRate: d.R.Kpd,
 	}
 }
+
+type ThunderSkillResp struct {
+	Stats ThunderSkillData `json:"stats"`
+}

@@ -76,11 +76,12 @@ const templateShortStr = `
 全真胜率: {{.StatSb.WinRate}}
 全真KD: {{.StatSb.Kd}}
 
-数据最后刷新时间: {{.UpdatedAt}}
+（ThunderSkill效率值需要到其网站更新）
+TS街机效率: {{.TsABRate}}%
+TS历史效率: {{.TsRBRate}}%
+TS全真效率: {{.TsSBRate}}%
 
-Tips: 
-输入”.cqbot 刷新 {{.Nick}}“可以刷新游戏数据
-输入”.cqbot 完整查询 {{.Nick}}“可以查询完整数据
+数据最后刷新时间: {{.UpdatedAt}}
 `
 
 const templateFullStr = `
@@ -118,11 +119,12 @@ const templateFullStr = `
 海战历史KA: {{.FleetRateRb.Ka}}
 海战全真KA: {{.FleetRateSb.Ka}}
 
-数据最后刷新时间: {{.UpdatedAt}}
+（ThunderSkill效率值需要到其网站更新）
+TS街机效率: {{.TsABRate}}%
+TS历史效率: {{.TsRBRate}}%
+TS全真效率: {{.TsSBRate}}%
 
-Tips: 
-输入”.cqbot 刷新 {{.Nick}}“可以刷新游戏数据
-输入”.cqbot 查询 {{.Nick}}“可以查询简要数据
+数据最后刷新时间: {{.UpdatedAt}}
 `
 
 func (u GameUser) ToFriendlyShortString() string {
