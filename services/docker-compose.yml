@@ -22,4 +22,4 @@ services:
       - "5700:5700"
     volumes:
       - "./volume/cqhttp/:/data/"
-    entrypoint: [ "tail", "-f", "/dev/null" ]
+    # entrypoint: [ "tail", "-f", "/dev/null" ]
