@@ -1,4 +1,4 @@
-module github.com/axiangcoding/ax-web
+module github.com/axiangcoding/antonstar-bot
 
 go 1.18
 

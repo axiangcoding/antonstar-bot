@@ -1,7 +1,7 @@
 package validation
 
 import (
-	"github.com/axiangcoding/ax-web/logging"
+	"github.com/axiangcoding/antonstar-bot/logging"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 	"regexp"

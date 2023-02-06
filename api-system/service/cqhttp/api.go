@@ -1,8 +1,8 @@
 package cqhttp
 
 import (
-	"github.com/axiangcoding/ax-web/logging"
-	"github.com/axiangcoding/ax-web/settings"
+	"github.com/axiangcoding/antonstar-bot/logging"
+	"github.com/axiangcoding/antonstar-bot/settings"
 	"github.com/go-resty/resty/v2"
 	"time"
 )

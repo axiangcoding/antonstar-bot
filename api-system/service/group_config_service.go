@@ -2,10 +2,10 @@ package service
 
 import (
 	"errors"
-	"github.com/axiangcoding/ax-web/cache"
-	"github.com/axiangcoding/ax-web/data/dal"
-	"github.com/axiangcoding/ax-web/data/table"
-	"github.com/axiangcoding/ax-web/logging"
+	"github.com/axiangcoding/antonstar-bot/cache"
+	"github.com/axiangcoding/antonstar-bot/data/dal"
+	"github.com/axiangcoding/antonstar-bot/data/table"
+	"github.com/axiangcoding/antonstar-bot/logging"
 	"github.com/go-redis/redis/v8"
 	"time"
 )

@@ -1,12 +1,12 @@
 package v1
 
 import (
-	"github.com/axiangcoding/ax-web/entity/app"
-	"github.com/axiangcoding/ax-web/entity/e"
-	"github.com/axiangcoding/ax-web/logging"
-	"github.com/axiangcoding/ax-web/service"
-	"github.com/axiangcoding/ax-web/settings"
-	"github.com/axiangcoding/ax-web/tool"
+	"github.com/axiangcoding/antonstar-bot/entity/app"
+	"github.com/axiangcoding/antonstar-bot/entity/e"
+	"github.com/axiangcoding/antonstar-bot/logging"
+	"github.com/axiangcoding/antonstar-bot/service"
+	"github.com/axiangcoding/antonstar-bot/settings"
+	"github.com/axiangcoding/antonstar-bot/tool"
 	"github.com/gin-gonic/gin"
 )
 

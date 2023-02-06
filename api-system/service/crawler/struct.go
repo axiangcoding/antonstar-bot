@@ -1,7 +1,7 @@
 package crawler
 
 import (
-	"github.com/axiangcoding/ax-web/data/table"
+	"github.com/axiangcoding/antonstar-bot/data/table"
 	"strconv"
 	"strings"
 	"time"

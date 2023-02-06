@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"github.com/axiangcoding/ax-web/logging"
+	"github.com/axiangcoding/antonstar-bot/logging"
 	"github.com/gin-gonic/gin"
 	"time"
 )

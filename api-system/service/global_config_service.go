@@ -1,9 +1,9 @@
 package service
 
 import (
-	"github.com/axiangcoding/ax-web/data/dal"
-	"github.com/axiangcoding/ax-web/data/table"
-	"github.com/axiangcoding/ax-web/logging"
+	"github.com/axiangcoding/antonstar-bot/data/dal"
+	"github.com/axiangcoding/antonstar-bot/data/table"
+	"github.com/axiangcoding/antonstar-bot/logging"
 )
 
 func FindGlobalConfig(key string) (*table.GlobalConfig, error) {

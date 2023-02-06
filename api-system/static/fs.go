@@ -2,7 +2,7 @@ package static
 
 import (
 	"embed"
-	"github.com/axiangcoding/ax-web/logging"
+	"github.com/axiangcoding/antonstar-bot/logging"
 )
 
 //go:embed message

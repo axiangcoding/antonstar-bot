@@ -2,8 +2,8 @@ package cache
 
 import (
 	"context"
-	"github.com/axiangcoding/ax-web/logging"
-	"github.com/axiangcoding/ax-web/settings"
+	"github.com/axiangcoding/antonstar-bot/logging"
+	"github.com/axiangcoding/antonstar-bot/settings"
 	"github.com/go-redis/redis/v8"
 )
 

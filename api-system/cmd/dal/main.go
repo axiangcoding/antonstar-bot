@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/axiangcoding/ax-web/data"
-	"github.com/axiangcoding/ax-web/logging"
-	"github.com/axiangcoding/ax-web/settings"
+	"github.com/axiangcoding/antonstar-bot/data"
+	"github.com/axiangcoding/antonstar-bot/logging"
+	"github.com/axiangcoding/antonstar-bot/settings"
 )
 
 func main() {

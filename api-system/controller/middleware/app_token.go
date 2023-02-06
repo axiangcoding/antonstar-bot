@@ -1,9 +1,9 @@
 package middleware
 
 import (
-	"github.com/axiangcoding/ax-web/entity/app"
-	"github.com/axiangcoding/ax-web/entity/e"
-	"github.com/axiangcoding/ax-web/settings"
+	"github.com/axiangcoding/antonstar-bot/entity/app"
+	"github.com/axiangcoding/antonstar-bot/entity/e"
+	"github.com/axiangcoding/antonstar-bot/settings"
 	"github.com/gin-gonic/gin"
 )
 

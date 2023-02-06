@@ -2,7 +2,7 @@ package display
 
 import (
 	"bytes"
-	"github.com/axiangcoding/ax-web/logging"
+	"github.com/axiangcoding/antonstar-bot/logging"
 	"text/template"
 )
 

@@ -2,10 +2,10 @@ package cron
 
 import (
 	"fmt"
-	"github.com/axiangcoding/ax-web/logging"
-	"github.com/axiangcoding/ax-web/service"
-	"github.com/axiangcoding/ax-web/service/bot"
-	"github.com/axiangcoding/ax-web/service/cqhttp"
+	"github.com/axiangcoding/antonstar-bot/logging"
+	"github.com/axiangcoding/antonstar-bot/service"
+	"github.com/axiangcoding/antonstar-bot/service/bot"
+	"github.com/axiangcoding/antonstar-bot/service/cqhttp"
 	"github.com/robfig/cron/v3"
 )
 

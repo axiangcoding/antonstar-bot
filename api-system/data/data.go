@@ -1,10 +1,10 @@
 package data
 
 import (
-	"github.com/axiangcoding/ax-web/data/dal"
-	"github.com/axiangcoding/ax-web/data/table"
-	"github.com/axiangcoding/ax-web/logging"
-	"github.com/axiangcoding/ax-web/settings"
+	"github.com/axiangcoding/antonstar-bot/data/dal"
+	"github.com/axiangcoding/antonstar-bot/data/table"
+	"github.com/axiangcoding/antonstar-bot/logging"
+	"github.com/axiangcoding/antonstar-bot/settings"
 	"gorm.io/driver/postgres"
 	"gorm.io/gen"
 	"gorm.io/gorm"
