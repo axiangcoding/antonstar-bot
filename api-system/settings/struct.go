@@ -17,9 +17,9 @@ type App struct {
 		}
 	}
 	Auth struct {
-		Secret          string
-		ExpireDuration  string `mapstructure:"expire_duration"`
-		RefreshDuration string `mapstructure:"refresh_duration"`
+		AppToken       string `mapstructure:"app_token"`
+		Secret         string
+		ExpireDuration string `mapstructure:"expire_duration"`
 	}
 	Swagger struct {
 		Enable bool
@@ -36,23 +36,14 @@ type App struct {
 			Source string
 		}
 	}
-	MQ struct {
-		Source string
-	}
-	Response struct {
-		HideErrorDetails bool `mapstructure:"hide_error_details"`
-	}
-	Upload struct {
-		SuperBed struct {
-			Token      string
-			Categories string
-		}
-	}
 	Service struct {
 		CqHttp struct {
 			Url    string `mapstructure:"url"`
 			SelfQQ int64  `mapstructure:"self_qq"`
 		}
+	}
+	Response struct {
+		HideErrorDetails bool `mapstructure:"hide_error_details"`
 	}
 }
 
@@ -60,5 +51,4 @@ type Server struct {
 	RunMode  string `mapstructure:"run_mode"`
 	Port     string
 	BasePath string `mapstructure:"base_path"`
-	AppToken string `mapstructure:"app_token"`
 }
