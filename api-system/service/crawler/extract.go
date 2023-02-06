@@ -2,7 +2,7 @@ package crawler
 
 import (
 	"github.com/PuerkitoBio/goquery"
-	"github.com/axiangcoding/ax-web/data/table"
+	"github.com/axiangcoding/antonstar-bot/data/table"
 	"github.com/gocolly/colly/v2"
 	"strconv"
 	"strings"

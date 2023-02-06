@@ -1,48 +1,68 @@
+# 通用配置项
 [app]
+# 版本号，会被环境变量覆盖
 version = "v2.x"
-name = "github.com/axiangcoding/ax-web"
+# 项目名称
+name = "github.com/axiangcoding/antonstar-bot"
 
 [app.log]
+# 打印的最低日志等级
 level = "INFO"
+# 是否启用文件日志
 file.enable = true
-file.encoder = "json"
+# 文件日志的存放路径
 file.path = "./logs/"
+# 文件日志的格式
+file.encoder = "json"
 
 [app.auth]
+# 内部连接密钥
+app_token = "defaultAccessToken"
+# session加密密钥
 secret = "r@ndomSecretForSign"
+# session过期时间
 expire_duration = "12h"
-casbin_model_path = "./config/default/"
-casbin_policy_adapter = "local"
-casbin_policy_path = "./config/default/"
 
 [app.swagger]
+# 是否启用swagger
 enable = true
 
+# 数据库配置相关
 [app.data.database]
+# 数据库标识
 driver = "postgres"
+# 数据库连接字段
 source = "host=localhost user=antonstar password=AntonStarP@ssword. dbname=anton_star port=5432 sslmode=disable"
+# 最大连接数
 max_open_conn = 100
+# 最大空闲连接数
 max_idle_conn = 10
 
+# 缓存配置相关
 [app.data.cache]
-# only support cache for now
+# 缓存数据库标识
 driver = "redis"
+# 数据库连接字段
 source = "redis://localhost:6379/0"
 
+# cqhttp的配置项
 [app.service.cqhttp]
+# cqhttp对外端口地址
 url = "http://localhost:5700"
+# 配置的qq号
 self_qq = 3547589750
 
-
 [app.response]
-# hide error details
+# 是否隐藏返回值的报错信息
 hide_error_details = false
 
 [server]
+# 运行模式
 run_mode = "debug"
+# 运行端口
 port = 8888
+# 基本路径
 base_path = "/api"
-app_token = "defaultAccessToken"
 
 
 

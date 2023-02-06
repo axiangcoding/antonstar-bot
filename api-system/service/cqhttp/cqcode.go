@@ -1,7 +1,7 @@
 package cqhttp
 
 import (
-	"github.com/axiangcoding/ax-web/logging"
+	"github.com/axiangcoding/antonstar-bot/logging"
 	"regexp"
 	"strconv"
 )

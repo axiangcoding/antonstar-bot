@@ -1,7 +1,7 @@
 package table
 
 import (
-	"github.com/axiangcoding/ax-web/data/display"
+	"github.com/axiangcoding/antonstar-bot/data/display"
 	"gorm.io/gorm"
 )
 

@@ -3,9 +3,9 @@ package app
 import (
 	"errors"
 	"fmt"
-	"github.com/axiangcoding/ax-web/entity/e"
-	"github.com/axiangcoding/ax-web/logging"
-	"github.com/axiangcoding/ax-web/settings"
+	"github.com/axiangcoding/antonstar-bot/entity/e"
+	"github.com/axiangcoding/antonstar-bot/logging"
+	"github.com/axiangcoding/antonstar-bot/settings"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"net/http"

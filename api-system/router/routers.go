@@ -1,11 +1,11 @@
 package router
 
 import (
-	"github.com/axiangcoding/ax-web/controller/middleware"
-	"github.com/axiangcoding/ax-web/controller/v1"
-	"github.com/axiangcoding/ax-web/logging"
-	"github.com/axiangcoding/ax-web/settings"
-	"github.com/axiangcoding/ax-web/swagger"
+	"github.com/axiangcoding/antonstar-bot/controller/middleware"
+	"github.com/axiangcoding/antonstar-bot/controller/v1"
+	"github.com/axiangcoding/antonstar-bot/logging"
+	"github.com/axiangcoding/antonstar-bot/settings"
+	"github.com/axiangcoding/antonstar-bot/swagger"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"

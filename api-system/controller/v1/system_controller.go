@@ -1,8 +1,8 @@
 package v1
 
 import (
-	"github.com/axiangcoding/ax-web/entity/app"
-	"github.com/axiangcoding/ax-web/settings"
+	"github.com/axiangcoding/antonstar-bot/entity/app"
+	"github.com/axiangcoding/antonstar-bot/settings"
 	"github.com/gin-gonic/gin"
 )
 

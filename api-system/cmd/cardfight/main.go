@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/axiangcoding/ax-web/service/cardfight"
+	"github.com/axiangcoding/antonstar-bot/service/cardfight"
 )
 
 func main() {

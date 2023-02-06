@@ -2,8 +2,8 @@ package bot
 
 import (
 	"encoding/json"
-	"github.com/axiangcoding/ax-web/logging"
-	"github.com/axiangcoding/ax-web/static"
+	"github.com/axiangcoding/antonstar-bot/logging"
+	"github.com/axiangcoding/antonstar-bot/static"
 	"strings"
 )
 

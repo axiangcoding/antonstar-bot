@@ -1,7 +1,7 @@
 package logging
 
 import (
-	"github.com/axiangcoding/ax-web/settings"
+	"github.com/axiangcoding/antonstar-bot/settings"
 	"log"
 	"path"
 

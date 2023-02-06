@@ -16,7 +16,7 @@ import (
 
 	"gorm.io/plugin/dbresolver"
 
-	"github.com/axiangcoding/ax-web/data/table"
+	"github.com/axiangcoding/antonstar-bot/data/table"
 )
 
 func newGameUser(db *gorm.DB, opts ...gen.DOOption) gameUser {
