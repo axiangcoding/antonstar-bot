@@ -29,7 +29,7 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
           images: |
             ${{ github.repository }}
@@ -54,6 +54,6 @@ jobs:
         with:
           context: api-system/.
           push: true
-          build-args: APP_VERSION=${{ github.base.ref }}
+          build-args: APP_VERSION=${{ github.ref }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
