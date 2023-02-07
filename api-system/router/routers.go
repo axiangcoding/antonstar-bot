@@ -76,7 +76,10 @@ func setRouterV1(r *gin.Engine) {
 		}
 		cqhttp := groupV1.Group("/cqhttp")
 		{
-			cqhttp.POST("/receive/event", middleware.AppToken(), v1.CqHttpReceiveEvent)
+			cqhttpAuth := middleware.CqhttpAuth(
+				settings.Config.Service.CqHttp.SelfQQ,
+				settings.Config.Service.CqHttp.Secret)
+			cqhttp.POST("/receive/event", cqhttpAuth, v1.CqHttpReceiveEvent)
 			cqhttp.GET("/status", v1.CqHttpStatus)
 		}
 	}

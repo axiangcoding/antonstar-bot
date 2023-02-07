@@ -51,6 +51,7 @@ source = "redis://localhost:6379/0"
 url = "http://localhost:5700"
 # 配置的qq号
 self_qq = 3547589750
+secret = "something like it"
 
 [app.response]
 # 是否隐藏返回值的报错信息
