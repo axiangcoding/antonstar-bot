@@ -197,6 +197,8 @@ func handleCqHttpMessageEventGroup(event *cqhttp.CommonEvent) {
 			retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.GetHelp
 		case bot.ActionGroupStatus:
 			DoActionGroupStatus(&retMsgForm)
+		case bot.ActionGroupManager:
+			DoActionGroupManager(&retMsgForm, uc, value)
 		case bot.ActionData:
 			DoActionData(&retMsgForm, value)
 		case bot.ActionBinding:
@@ -204,11 +206,7 @@ func handleCqHttpMessageEventGroup(event *cqhttp.CommonEvent) {
 		case bot.ActionUnbinding:
 			DoActionUnbinding(&retMsgForm)
 		case bot.ActionManager:
-			if uc.SuperAdmin == nil || !*uc.SuperAdmin {
-				retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.ConfNotPermit
-			} else {
-				DoActionManager(&retMsgForm, value)
-			}
+			DoActionManager(&retMsgForm, uc, value)
 		default:
 			retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.GetHelp
 		}

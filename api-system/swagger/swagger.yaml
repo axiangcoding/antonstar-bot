@@ -21,9 +21,9 @@ paths:
   /v1/cqhttp/receive/event:
     post:
       parameters:
-      - description: getParam
+      - description: cqhttp event
         in: body
-        name: param
+        name: event
         required: true
         schema:
           type: object

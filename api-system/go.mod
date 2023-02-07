@@ -20,7 +20,7 @@ require (
 	github.com/swaggo/swag v1.8.10
 	go.uber.org/zap v1.24.0
 	golang.org/x/exp v0.0.0-20230116083435-1de6713980de
-	gopkg.in/natefinch/lumberjack.v2 v2.0.0
+	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 	gorm.io/driver/postgres v1.4.6
 	gorm.io/gen v0.3.19
 	gorm.io/gorm v1.24.3

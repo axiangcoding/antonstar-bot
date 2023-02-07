@@ -266,7 +266,12 @@ func DoActionUnbinding(retMsgForm *cqhttp.SendGroupMsgForm) {
 	retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.UnbindingSuccess
 }
 
-func DoActionManager(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
+func DoActionManager(retMsgForm *cqhttp.SendGroupMsgForm, uc *table.QQUserConfig, value string) {
+	// 只有超级管理员可以进行全局设置
+	if uc.SuperAdmin == nil || !*uc.SuperAdmin {
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.ConfNotPermit
+		return
+	}
 	botQueryPrefix := ".cqbot 管理 "
 	keyCloseResponse := "关闭回复"
 	keyOpenResponse := "开启回复"
@@ -301,4 +306,8 @@ func DoActionManager(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
 		lst = append(lst, botQueryPrefix+keyUnsetAdmin)
 		retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.ConfOptions, strings.Join(lst, "\n"))
 	}
+}
+
+func DoActionGroupManager(retMsgForm *cqhttp.SendGroupMsgForm, uc *table.QQUserConfig, value string) {
+	// TODO 群管理
 }

@@ -13,7 +13,7 @@ import (
 // CqHttpReceiveEvent
 // @Summary   接收cqhttp的事件
 // @Tags      CQHttp API
-// @Param     param  body      object       true  "getParam"
+// @Param     event  body      object       true  "cqhttp event"
 // @Success   200    {object}  app.ApiJson  ""
 // @Router    /v1/cqhttp/receive/event [post]
 // @Security  AppToken

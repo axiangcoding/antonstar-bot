@@ -1,7 +1,7 @@
 # 通用配置项
 [app]
 # 版本号，会被环境变量覆盖
-version = "v2.x"
+version = "v1.0.0"
 # 项目名称
 name = "github.com/axiangcoding/antonstar-bot"
 

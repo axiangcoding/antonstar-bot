@@ -46,8 +46,8 @@ var doc = `{
                 "summary": "接收cqhttp的事件",
                 "parameters": [
                     {
-                        "description": "getParam",
-                        "name": "param",
+                        "description": "cqhttp event",
+                        "name": "event",
                         "in": "body",
                         "required": true,
                         "schema": {

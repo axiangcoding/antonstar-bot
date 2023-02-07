@@ -20,7 +20,7 @@ func Logger() gin.HandlerFunc {
 		statusCode := c.Writer.Status()
 		clientIP := c.ClientIP()
 		template := "%s %s %s --> status=%d, latency_time=%s, ip=%s"
-		if latencyTime > time.Second*5 {
+		if latencyTime > time.Second*3 {
 			logging.Warnf(template+" [slow response]", reqMethod, path, raw, statusCode, latencyTime, clientIP)
 		} else {
 			logging.Infof(template,
