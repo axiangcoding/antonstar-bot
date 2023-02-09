@@ -1,7 +1,7 @@
 # 通用配置项
 [app]
 # 版本号，会被环境变量覆盖
-version = "v2.x"
+version = "v1.0.0"
 # 项目名称
 name = "github.com/axiangcoding/antonstar-bot"
 
@@ -51,6 +51,7 @@ source = "redis://localhost:6379/0"
 url = "http://localhost:5700"
 # 配置的qq号
 self_qq = 3547589750
+secret = "something like it"
 
 [app.response]
 # 是否隐藏返回值的报错信息

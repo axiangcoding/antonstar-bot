@@ -60,6 +60,8 @@ func ParseMessageCommand(msg string) *Action {
 		key = ActionVersion
 	case "群状态":
 		key = ActionGroupStatus
+	case "群管理":
+		key = ActionGroupManager
 	case "数据":
 		key = ActionData
 	case "管理":

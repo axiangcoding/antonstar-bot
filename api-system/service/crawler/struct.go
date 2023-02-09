@@ -7,11 +7,6 @@ import (
 	"time"
 )
 
-var (
-	SourceGaijin       = "gaijin"
-	SourceThunderSkill = "thunderskill"
-)
-
 type GaijinData struct {
 	Nick         string `json:"nick" mapstructure:"nick"`
 	Clan         string `json:"clan" mapstructure:"clan"`

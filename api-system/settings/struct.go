@@ -40,6 +40,7 @@ type App struct {
 		CqHttp struct {
 			Url    string `mapstructure:"url"`
 			SelfQQ int64  `mapstructure:"self_qq"`
+			Secret string
 		}
 	}
 	Response struct {

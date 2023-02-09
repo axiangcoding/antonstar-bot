@@ -46,6 +46,14 @@ func init() {
 // @securityDefinitions.apikey  AppToken
 // @in                          query
 // @name                        app_token
+
+// @securityDefinitions.apikey  CqhttpSelfID
+// @in                          header
+// @name                        X-Self-ID
+
+// @securityDefinitions.apikey  CqhttpSignature
+// @in                          header
+// @name                        X-Signature
 func main() {
 	runMode := settings.Config.Server.RunMode
 	gin.SetMode(runMode)

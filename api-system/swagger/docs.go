@@ -37,7 +37,10 @@ var doc = `{
             "post": {
                 "security": [
                     {
-                        "AppToken": []
+                        "CqhttpSelfID": []
+                    },
+                    {
+                        "CqhttpSignature": []
                     }
                 ],
                 "tags": [
@@ -46,8 +49,8 @@ var doc = `{
                 "summary": "接收cqhttp的事件",
                 "parameters": [
                     {
-                        "description": "getParam",
-                        "name": "param",
+                        "description": "cqhttp event",
+                        "name": "event",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -117,6 +120,16 @@ var doc = `{
             "type": "apiKey",
             "name": "app_token",
             "in": "query"
+        },
+        "CqhttpSelfID": {
+            "type": "apiKey",
+            "name": "X-Self-ID",
+            "in": "header"
+        },
+        "CqhttpSignature": {
+            "type": "apiKey",
+            "name": "X-Signature",
+            "in": "header"
         }
     }
 }`

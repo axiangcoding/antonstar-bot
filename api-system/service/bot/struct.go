@@ -9,20 +9,21 @@ var (
 )
 
 var (
-	ActionUnknown     = "unknown"
-	ActionQuery       = "query"
-	ActionFullQuery   = "fullQuery"
-	ActionRefresh     = "refresh"
-	ActionReport      = "report"
-	ActionDrawCard    = "drawCard"
-	ActionLuck        = "luck"
-	ActionVersion     = "version"
-	ActionGetHelp     = "getHelp"
-	ActionGroupStatus = "groupStatus"
-	ActionData        = "data"
-	ActionManager     = "manager"
-	ActionBinding     = "binding"
-	ActionUnbinding   = "unbinding"
+	ActionUnknown      = "unknown"
+	ActionQuery        = "query"
+	ActionFullQuery    = "fullQuery"
+	ActionRefresh      = "refresh"
+	ActionReport       = "report"
+	ActionDrawCard     = "drawCard"
+	ActionLuck         = "luck"
+	ActionVersion      = "version"
+	ActionGetHelp      = "getHelp"
+	ActionGroupStatus  = "groupStatus"
+	ActionData         = "data"
+	ActionManager      = "manager"
+	ActionGroupManager = "groupManager"
+	ActionBinding      = "binding"
+	ActionUnbinding    = "unbinding"
 )
 
 type Action struct {

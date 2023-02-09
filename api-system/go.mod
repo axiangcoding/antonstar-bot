@@ -1,6 +1,6 @@
 module github.com/axiangcoding/antonstar-bot
 
-go 1.18
+go 1.20
 
 require (
 	github.com/PuerkitoBio/goquery v1.8.0
@@ -19,20 +19,20 @@ require (
 	github.com/swaggo/gin-swagger v1.5.3
 	github.com/swaggo/swag v1.8.10
 	go.uber.org/zap v1.24.0
-	golang.org/x/exp v0.0.0-20230116083435-1de6713980de
-	gopkg.in/natefinch/lumberjack.v2 v2.0.0
-	gorm.io/driver/postgres v1.4.6
-	gorm.io/gen v0.3.19
-	gorm.io/gorm v1.24.3
-	gorm.io/plugin/dbresolver v1.4.0
+	golang.org/x/exp v0.0.0-20230206171751-46f607a40771
+	gopkg.in/natefinch/lumberjack.v2 v2.2.1
+	gorm.io/driver/postgres v1.4.7
+	gorm.io/gen v0.3.21
+	gorm.io/gorm v1.24.5
+	gorm.io/plugin/dbresolver v1.4.1
 )
 
 require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/andybalholm/cascadia v1.3.1 // indirect
-	github.com/antchfx/htmlquery v1.2.6 // indirect
-	github.com/antchfx/xmlquery v1.3.14 // indirect
-	github.com/antchfx/xpath v1.2.2 // indirect
+	github.com/antchfx/htmlquery v1.3.0 // indirect
+	github.com/antchfx/xmlquery v1.3.15 // indirect
+	github.com/antchfx/xpath v1.2.3 // indirect
 	github.com/boj/redistore v0.0.0-20180917114910-cd5dcc76aeff // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
@@ -78,15 +78,15 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.4.2 // indirect
 	github.com/temoto/robotstxt v1.1.2 // indirect
-	github.com/ugorji/go/codec v1.2.8 // indirect
+	github.com/ugorji/go/codec v1.2.9 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/goleak v1.1.12 // indirect
 	go.uber.org/multierr v1.9.0 // indirect
-	golang.org/x/crypto v0.5.0 // indirect
-	golang.org/x/mod v0.7.0 // indirect
-	golang.org/x/net v0.5.0 // indirect
-	golang.org/x/sys v0.4.0 // indirect
-	golang.org/x/text v0.6.0 // indirect
+	golang.org/x/crypto v0.6.0 // indirect
+	golang.org/x/mod v0.8.0 // indirect
+	golang.org/x/net v0.6.0 // indirect
+	golang.org/x/sys v0.5.0 // indirect
+	golang.org/x/text v0.7.0 // indirect
 	golang.org/x/tools v0.5.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
@@ -94,6 +94,6 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gorm.io/datatypes v1.1.0 // indirect
-	gorm.io/driver/mysql v1.4.5 // indirect
+	gorm.io/driver/mysql v1.4.6 // indirect
 	gorm.io/hints v1.1.1 // indirect
 )

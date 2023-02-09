@@ -21,9 +21,9 @@ paths:
   /v1/cqhttp/receive/event:
     post:
       parameters:
-      - description: getParam
+      - description: cqhttp event
         in: body
-        name: param
+        name: event
         required: true
         schema:
           type: object
@@ -33,7 +33,8 @@ paths:
           schema:
             $ref: '#/definitions/app.ApiJson'
       security:
-      - AppToken: []
+      - CqhttpSelfID: []
+      - CqhttpSignature: []
       summary: 接收cqhttp的事件
       tags:
       - CQHttp API
@@ -63,5 +64,13 @@ securityDefinitions:
   AppToken:
     in: query
     name: app_token
+    type: apiKey
+  CqhttpSelfID:
+    in: header
+    name: X-Self-ID
+    type: apiKey
+  CqhttpSignature:
+    in: header
+    name: X-Signature
     type: apiKey
 swagger: "2.0"

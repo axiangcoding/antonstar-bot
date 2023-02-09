@@ -6,16 +6,14 @@ import (
 	"github.com/axiangcoding/antonstar-bot/data/display"
 	"github.com/axiangcoding/antonstar-bot/data/table"
 	"github.com/axiangcoding/antonstar-bot/logging"
-	"github.com/axiangcoding/antonstar-bot/service/bilibili"
 	"github.com/axiangcoding/antonstar-bot/service/bot"
 	"github.com/axiangcoding/antonstar-bot/service/cqhttp"
+	"github.com/axiangcoding/antonstar-bot/service/crawler"
 	"github.com/axiangcoding/antonstar-bot/tool"
-	"github.com/go-resty/resty/v2"
 	"github.com/google/uuid"
 	"golang.org/x/exp/rand"
 	"gorm.io/gorm"
 	"hash/crc32"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -65,6 +63,7 @@ func QueryWTGamerProfile(nickname string, sendForm cqhttp.SendGroupMsgForm) (*st
 	}
 }
 
+// RefreshWTUserInfo 刷新游戏数据
 func RefreshWTUserInfo(nickname string, sendForm cqhttp.SendGroupMsgForm) (*string, error) {
 	missionId := uuid.NewString()
 	form := ScheduleForm{
@@ -75,28 +74,66 @@ func RefreshWTUserInfo(nickname string, sendForm cqhttp.SendGroupMsgForm) (*stri
 		return nil, err
 	}
 	tool.GoWithRecover(func() {
-		if err := GetUserInfoFromWarThunder(missionId, nickname); err != nil {
+		if err := crawler.GetProfileFromWTOfficial(nickname,
+			func(status int, user *table.GameUser) {
+				switch status {
+				case crawler.StatusQueryFailed:
+					MustFinishMissionWithResult(missionId, table.MissionStatusFailed, CrawlerResult{
+						Found: false,
+						Nick:  nickname,
+					})
+				case crawler.StatusNotFound:
+					MustPutRefreshFlag(nickname)
+					MustFinishMissionWithResult(missionId, table.MissionStatusSuccess, CrawlerResult{
+						Found: false,
+						Nick:  nickname,
+					})
+				case crawler.StatusFound:
+					// live, psn等用户的昵称在html中会被cf认为是邮箱而隐藏，这里需要覆盖爬取来的数据
+					user.Nick = nickname
+					_, err := FindGameProfile(nickname)
+					if err != nil {
+						if errors.Is(err, gorm.ErrRecordNotFound) {
+							if err := SaveGameProfile(*user); err != nil {
+								logging.Warn(err)
+							}
+						} else {
+							logging.Warn(err)
+						}
+					} else {
+						if err := UpdateGameProfile(nickname, *user); err != nil {
+							logging.Warn(err)
+						}
+					}
+
+					if err := crawler.GetProfileFromThunderskill(nickname, func(status int, skill *crawler.ThunderSkillResp) {
+						skillData := skill.Stats
+						data, err := FindGameProfile(nickname)
+						data.TsSBRate = skillData.S.Kpd
+						data.TsRBRate = skillData.R.Kpd
+						data.TsABRate = skillData.A.Kpd
+						if err != nil {
+							logging.Warn(err)
+						} else {
+							if err := UpdateGameProfile(nickname, *data); err != nil {
+								logging.Warn(err)
+							}
+						}
+					}); err != nil {
+						logging.Warn("failed on update thunder skill profile. ", err)
+					}
+					MustPutRefreshFlag(nickname)
+					MustFinishMissionWithResult(missionId, table.MissionStatusSuccess, CrawlerResult{
+						Found: true,
+						Nick:  nickname,
+						Data:  *user},
+					)
+				}
+			}); err != nil {
 			logging.Warn("start crawler failed. ", err)
 		}
 	})
 	return &missionId, nil
-}
-
-func GetBiliBiliRoomInfo(roomId int64) (*bilibili.RoomInfoResp, error) {
-	client := resty.New().SetTimeout(time.Second * 10)
-	var roomInfo bilibili.RoomInfoResp
-	url := "https://api.live.bilibili.com/room/v1/Room/get_info"
-	resp, err := client.R().SetQueryParam("room_id", strconv.FormatInt(roomId, 10)).
-		SetResult(&roomInfo).
-		Get(url)
-	if err != nil {
-		logging.Warn(err)
-		return nil, err
-	}
-	if resp.IsError() {
-		return nil, errors.New("response status code error")
-	}
-	return &roomInfo, err
 }
 
 func DoActionQuery(retMsgForm *cqhttp.SendGroupMsgForm, value string, fullMsg bool) {
@@ -266,7 +303,12 @@ func DoActionUnbinding(retMsgForm *cqhttp.SendGroupMsgForm) {
 	retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.UnbindingSuccess
 }
 
-func DoActionManager(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
+func DoActionManager(retMsgForm *cqhttp.SendGroupMsgForm, uc *table.QQUserConfig, value string) {
+	// 只有超级管理员可以进行全局设置
+	if uc.SuperAdmin == nil || !*uc.SuperAdmin {
+		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.ConfNotPermit
+		return
+	}
 	botQueryPrefix := ".cqbot 管理 "
 	keyCloseResponse := "关闭回复"
 	keyOpenResponse := "开启回复"
@@ -301,4 +343,8 @@ func DoActionManager(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
 		lst = append(lst, botQueryPrefix+keyUnsetAdmin)
 		retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.ConfOptions, strings.Join(lst, "\n"))
 	}
+}
+
+func DoActionGroupManager(retMsgForm *cqhttp.SendGroupMsgForm, uc *table.QQUserConfig, value string) {
+	// TODO 群管理
 }
