@@ -21,14 +21,16 @@ func TestGetProfileFromWTOfficial(t *testing.T) {
 }
 
 func TestGetProfileFromThunderskill(t *testing.T) {
-	GetProfileFromThunderskill("OnTheRocks", func(status int, skill *ThunderSkillResp) {
+	if err := GetProfileFromThunderskill("OnTheRocks", func(status int, skill *ThunderSkillResp) {
 		if status != StatusFound {
 			t.Failed()
 		}
 		assert.Equal(t, 84.72, skill.Stats.R.Kpd)
 		assert.Equal(t, 88.57, skill.Stats.S.Kpd)
 		assert.Equal(t, 82.48, skill.Stats.A.Kpd)
-	})
+	}); err != nil {
+		t.Failed()
+	}
 }
 
 func TestMain(m *testing.M) {
