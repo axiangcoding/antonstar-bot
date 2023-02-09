@@ -70,6 +70,7 @@ func Success(c *gin.Context, data interface{}) {
 func BizFailed(c *gin.Context, errCode int, err ...error) {
 	logging.Errorf("Biz failed with code [%d], errors: %s.", errCode, err)
 	HttpResponse(c, http.StatusOK, errCode, generateErrJson(err))
+	c.Abort()
 }
 
 // BadRequest
@@ -87,6 +88,7 @@ func BadRequest(c *gin.Context, errCode int, err ...error) {
 func ServerFailed(c *gin.Context, errCode int, err ...error) {
 	logging.Errorf("Server failed with code [%d].", errCode)
 	HttpResponse(c, http.StatusInternalServerError, errCode, generateErrJson(err))
+	c.Abort()
 }
 
 // Unauthorized

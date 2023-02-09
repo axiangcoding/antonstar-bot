@@ -34,7 +34,7 @@ func CqhttpAuth(selfQQ int64, secret string) gin.HandlerFunc {
 		hSelfQQ, err := strconv.ParseInt(hSelfQQStr, 10, 64)
 		if err != nil {
 			logging.Warn(err)
-			app.ServerFailed(c, e.Error)
+			app.Unauthorized(c, e.TokenNotValid)
 			return
 		}
 		if selfQQ != hSelfQQ {
@@ -49,14 +49,14 @@ func CqhttpAuth(selfQQ int64, secret string) gin.HandlerFunc {
 			body, err := io.ReadAll(c.Request.Body)
 			if err != nil {
 				logging.Warn(err)
-				app.ServerFailed(c, e.Error)
+				app.Unauthorized(c, e.TokenNotValid)
 				return
 			}
 			c.Request.Body = io.NopCloser(bytes.NewBuffer(body))
 			mac := hmac.New(sha1.New, []byte(secret))
 			if _, err := mac.Write(body); err != nil {
 				logging.Warn(err)
-				app.ServerFailed(c, e.Error)
+				app.Unauthorized(c, e.TokenNotValid)
 				return
 			}
 			if "sha1="+hex.EncodeToString(mac.Sum(nil)) != hSignature {
