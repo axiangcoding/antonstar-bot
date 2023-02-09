@@ -9,6 +9,7 @@ import (
 	"github.com/axiangcoding/antonstar-bot/service/bilibili"
 	"github.com/axiangcoding/antonstar-bot/service/bot"
 	"github.com/axiangcoding/antonstar-bot/service/cqhttp"
+	"github.com/axiangcoding/antonstar-bot/service/crawler"
 	"github.com/axiangcoding/antonstar-bot/tool"
 	"github.com/go-resty/resty/v2"
 	"github.com/google/uuid"
@@ -65,6 +66,7 @@ func QueryWTGamerProfile(nickname string, sendForm cqhttp.SendGroupMsgForm) (*st
 	}
 }
 
+// RefreshWTUserInfo 刷新游戏数据
 func RefreshWTUserInfo(nickname string, sendForm cqhttp.SendGroupMsgForm) (*string, error) {
 	missionId := uuid.NewString()
 	form := ScheduleForm{
@@ -75,7 +77,62 @@ func RefreshWTUserInfo(nickname string, sendForm cqhttp.SendGroupMsgForm) (*stri
 		return nil, err
 	}
 	tool.GoWithRecover(func() {
-		if err := GetUserInfoFromWarThunder(missionId, nickname); err != nil {
+		if err := crawler.GetProfileFromWTOfficial(nickname,
+			func(status int, user *table.GameUser) {
+				switch status {
+				case crawler.StatusQueryFailed:
+					MustFinishMissionWithResult(missionId, table.MissionStatusFailed, CrawlerResult{
+						Found: false,
+						Nick:  nickname,
+					})
+				case crawler.StatusNotFound:
+					MustPutRefreshFlag(nickname)
+					MustFinishMissionWithResult(missionId, table.MissionStatusSuccess, CrawlerResult{
+						Found: false,
+						Nick:  nickname,
+					})
+				case crawler.StatusFound:
+					// live, psn等用户的昵称在html中会被cf认为是邮箱而隐藏，这里需要覆盖爬取来的数据
+					user.Nick = nickname
+					_, err := FindGameProfile(nickname)
+					if err != nil {
+						if errors.Is(err, gorm.ErrRecordNotFound) {
+							if err := SaveGameProfile(*user); err != nil {
+								logging.Warn(err)
+							}
+						} else {
+							logging.Warn(err)
+						}
+					} else {
+						if err := UpdateGameProfile(nickname, *user); err != nil {
+							logging.Warn(err)
+						}
+					}
+
+					if err := crawler.GetProfileFromThunderskill(nickname, func(status int, skill *crawler.ThunderSkillResp) {
+						skillData := skill.Stats
+						data, err := FindGameProfile(nickname)
+						data.TsSBRate = skillData.S.Kpd
+						data.TsRBRate = skillData.R.Kpd
+						data.TsABRate = skillData.A.Kpd
+						if err != nil {
+							logging.Warn(err)
+						} else {
+							if err := UpdateGameProfile(nickname, *data); err != nil {
+								logging.Warn(err)
+							}
+						}
+					}); err != nil {
+						logging.Warn("failed on update thunder skill profile. ", err)
+					}
+					MustPutRefreshFlag(nickname)
+					MustFinishMissionWithResult(missionId, table.MissionStatusSuccess, CrawlerResult{
+						Found: true,
+						Nick:  nickname,
+						Data:  *user},
+					)
+				}
+			}); err != nil {
 			logging.Warn("start crawler failed. ", err)
 		}
 	})
