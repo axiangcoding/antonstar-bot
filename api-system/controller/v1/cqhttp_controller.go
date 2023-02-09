@@ -6,8 +6,8 @@ import (
 	"github.com/axiangcoding/antonstar-bot/logging"
 	"github.com/axiangcoding/antonstar-bot/service"
 	"github.com/axiangcoding/antonstar-bot/settings"
-	"github.com/axiangcoding/antonstar-bot/tool"
 	"github.com/gin-gonic/gin"
+	"github.com/panjf2000/ants/v2"
 )
 
 // CqHttpReceiveEvent
@@ -26,12 +26,13 @@ func CqHttpReceiveEvent(c *gin.Context) {
 		return
 	}
 	cp := c.Copy()
-	tool.GoWithRecover(func() {
+	if err := ants.Submit(func() {
 		if err := service.HandleCqHttpEvent(cp, m); err != nil {
 			logging.Errorf("async handle cqhttp event failed. %s", err)
 		}
-	})
-
+	}); err != nil {
+		logging.Error(err)
+	}
 	app.Success(c, nil)
 }
 
