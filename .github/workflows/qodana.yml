@@ -2,9 +2,11 @@ name: Qodana
 
 on:
   push:
-    branches: [master, develop]
+    branches: ["master"]
     tags:
       - "v*"
+  pull_request:
+    branches: ["master"]
 
 jobs:
   qodana:

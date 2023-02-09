@@ -15,7 +15,7 @@ func Setup() {
 	viper.SetConfigType("toml")
 	viper.AddConfigPath("config/")
 	viper.AutomaticEnv()
-	viper.SetEnvPrefix("ax")
+	viper.SetEnvPrefix("as")
 	replacer := strings.NewReplacer(".", "_")
 	viper.SetEnvKeyReplacer(replacer)
 	if err := viper.ReadInConfig(); err != nil {

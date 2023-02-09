@@ -9,8 +9,8 @@ import (
 	"github.com/axiangcoding/antonstar-bot/service/bot"
 	"github.com/axiangcoding/antonstar-bot/service/cqhttp"
 	"github.com/axiangcoding/antonstar-bot/service/crawler"
-	"github.com/axiangcoding/antonstar-bot/tool"
 	"github.com/google/uuid"
+	"github.com/panjf2000/ants/v2"
 	"golang.org/x/exp/rand"
 	"gorm.io/gorm"
 	"hash/crc32"
@@ -73,7 +73,7 @@ func RefreshWTUserInfo(nickname string, sendForm cqhttp.SendGroupMsgForm) (*stri
 	if err := SubmitMissionWithDetail(missionId, table.MissionTypeUserInfo, form); err != nil {
 		return nil, err
 	}
-	tool.GoWithRecover(func() {
+	if err := ants.Submit(func() {
 		if err := crawler.GetProfileFromWTOfficial(nickname,
 			func(status int, user *table.GameUser) {
 				switch status {
@@ -132,7 +132,9 @@ func RefreshWTUserInfo(nickname string, sendForm cqhttp.SendGroupMsgForm) (*stri
 			}); err != nil {
 			logging.Warn("start crawler failed. ", err)
 		}
-	})
+	}); err != nil {
+		return nil, err
+	}
 	return &missionId, nil
 }
 
@@ -173,11 +175,13 @@ func DoActionQuery(retMsgForm *cqhttp.SendGroupMsgForm, value string, fullMsg bo
 	}
 	if mId != nil {
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.QueryIsRunning
-		tool.GoWithRecover(func() {
+		if err := ants.Submit(func() {
 			if err := WaitForCrawlerFinished(*mId, fullMsg); err != nil {
 				logging.Warnf("wait for callback error. %s", err)
 			}
-		})
+		}); err != nil {
+			logging.Error(err)
+		}
 	} else {
 		if fullMsg {
 			retMsgForm.Message = user.ToFriendlyFullString()
@@ -227,11 +231,13 @@ func DoActionRefresh(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.CanNotRefresh
 	}
 	retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.QueryIsRunning
-	tool.GoWithRecover(func() {
+	if err := ants.Submit(func() {
 		if err := WaitForCrawlerFinished(*missionId, false); err != nil {
 			logging.Warnf("wait for callback error. %s", err)
 		}
-	})
+	}); err != nil {
+		logging.Error(err)
+	}
 	MustAddUserConfigTodayQueryCount(retMsgForm.UserId, 1)
 	MustAddUserConfigTotalQueryCount(retMsgForm.UserId, 1)
 	MustAddGroupConfigTodayQueryCount(retMsgForm.GroupId, 1)
