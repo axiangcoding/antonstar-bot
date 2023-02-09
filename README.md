@@ -123,7 +123,7 @@ asbot的运行不仅依赖核心组件，同时也依赖其他独立的服务，
        volumes:
          - "/path/to/cqhttp:/data"
      asbot:
-       image: axiangcoding/antonstar-bot:$TAG
+       image: axiangcoding/antonstar-bot:latest
         # 挂载数据文件
        volumes:
          - "/path/to/app.toml:/app/config/app.toml"
