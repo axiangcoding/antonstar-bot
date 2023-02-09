@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/axiangcoding/antonstar-bot/logging"
 	"github.com/axiangcoding/antonstar-bot/service"
+	"github.com/axiangcoding/antonstar-bot/service/bilibili"
 	"github.com/axiangcoding/antonstar-bot/service/bot"
 	"github.com/axiangcoding/antonstar-bot/service/cqhttp"
 	"github.com/robfig/cron/v3"
@@ -34,7 +35,7 @@ func CheckRoomLiving() {
 	for _, qc := range qcs {
 		var sgmf cqhttp.SendGroupMsgForm
 		sgmf.GroupId = qc.GroupId
-		info, err := service.GetBiliBiliRoomInfo(qc.BindBiliRoomId)
+		info, err := bilibili.GetBiliBiliRoomInfo(qc.BindBiliRoomId)
 		if err != nil {
 			logging.Warn(err)
 			continue

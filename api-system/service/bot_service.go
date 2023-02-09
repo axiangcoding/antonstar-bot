@@ -6,17 +6,14 @@ import (
 	"github.com/axiangcoding/antonstar-bot/data/display"
 	"github.com/axiangcoding/antonstar-bot/data/table"
 	"github.com/axiangcoding/antonstar-bot/logging"
-	"github.com/axiangcoding/antonstar-bot/service/bilibili"
 	"github.com/axiangcoding/antonstar-bot/service/bot"
 	"github.com/axiangcoding/antonstar-bot/service/cqhttp"
 	"github.com/axiangcoding/antonstar-bot/service/crawler"
 	"github.com/axiangcoding/antonstar-bot/tool"
-	"github.com/go-resty/resty/v2"
 	"github.com/google/uuid"
 	"golang.org/x/exp/rand"
 	"gorm.io/gorm"
 	"hash/crc32"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -137,23 +134,6 @@ func RefreshWTUserInfo(nickname string, sendForm cqhttp.SendGroupMsgForm) (*stri
 		}
 	})
 	return &missionId, nil
-}
-
-func GetBiliBiliRoomInfo(roomId int64) (*bilibili.RoomInfoResp, error) {
-	client := resty.New().SetTimeout(time.Second * 10)
-	var roomInfo bilibili.RoomInfoResp
-	url := "https://api.live.bilibili.com/room/v1/Room/get_info"
-	resp, err := client.R().SetQueryParam("room_id", strconv.FormatInt(roomId, 10)).
-		SetResult(&roomInfo).
-		Get(url)
-	if err != nil {
-		logging.Warn(err)
-		return nil, err
-	}
-	if resp.IsError() {
-		return nil, errors.New("response status code error")
-	}
-	return &roomInfo, err
 }
 
 func DoActionQuery(retMsgForm *cqhttp.SendGroupMsgForm, value string, fullMsg bool) {
