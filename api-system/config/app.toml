@@ -1,3 +1,5 @@
+# 该文件设置为开发使用
+
 # 通用配置项
 [app]
 # 版本号，会被环境变量覆盖
@@ -6,11 +8,11 @@ version = "v1.0.0"
 name = "github.com/axiangcoding/antonstar-bot"
 
 [app.log]
-# 打印的最低日志等级
+# 打印的最低日志等级，可选项 debug|info|error|fatal|panic
 level = "INFO"
 # 文件日志的存放路径
 file.dir = "./logs/"
-# 文件日志的格式
+# 文件日志的格式，可选项 json|console
 file.encoder = "json"
 
 [app.auth]
@@ -43,11 +45,12 @@ source = "redis://localhost:6379/0"
 url = "http://localhost:5700"
 # 配置的qq号
 self_qq = 3547589750
+# cqhttp http签名密钥
 secret = "something like it"
 
 
 [server]
-# 运行模式
+# 运行模式，可选项 debug|release
 run_mode = "debug"
 # 运行端口
 port = 8888

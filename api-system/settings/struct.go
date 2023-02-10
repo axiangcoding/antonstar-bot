@@ -12,6 +12,7 @@ const (
 	AppLogFileEncoderConsole = "console"
 )
 
+// GlobalConf 对应 /config/app.toml
 type GlobalConf struct {
 	App    appConf
 	Server serverConf

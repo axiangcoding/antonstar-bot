@@ -52,7 +52,7 @@ asbot的运行不仅依赖核心组件，同时也依赖其他独立的服务，
    - 日志文件的生成路径为 `/app/logs/`
 
 3. 部署antonstar-bot
-   下载完镜像后，便可以部署antonstar-bot了。不过在部署前，请先调整配置文件。你可以点击 [这里](https://github.com/axiangcoding/antonstar-bot/blob/master/api-system/config/app-prod.toml) 查看推荐的生产环境的配置文件，并根据实际情况进行修改。修改完的文件建议以挂载的方式挂载到容器中，这样保证重启容器不会丢失配置
+   下载完镜像后，便可以部署antonstar-bot了。不过在部署前，请先调整配置文件。你可以点击 [这里](https://github.com/axiangcoding/antonstar-bot/blob/master/api-system/config/app.toml) 查看推荐的生产环境的配置文件，并根据实际情况进行修改。修改完的文件建议以挂载的方式挂载到容器中，这样保证重启容器不会丢失配置
    当然你也可以通过环境变量的形式进行配置项的修改，环境变量以 `AS_XXX` 的形式进行命名，并以特定的规则和配置文件中的配置项一一对应。对应的规则为小写转大写，点号修改为下划线，并添加 ‘AS_’ 前缀。如：app.verison = AS_APP_VERSION
    **注意：环境变量的配置项会覆盖文件配置项，其优先级最高**
 

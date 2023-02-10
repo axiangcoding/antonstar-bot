@@ -17,6 +17,47 @@ var (
 	_sugarLogger = _logger.Sugar()
 )
 
+func getLogLevel(level string) zapcore.Level {
+	level = strings.ToUpper(level)
+	var zapLevel zapcore.Level
+	switch level {
+	case "DEBUG":
+		zapLevel = zapcore.DebugLevel
+	case "INFO":
+		zapLevel = zapcore.InfoLevel
+	case "WARN":
+		zapLevel = zapcore.WarnLevel
+	case "ERROR":
+		zapLevel = zapcore.ErrorLevel
+	case "FATAL":
+		zapLevel = zapcore.FatalLevel
+	default:
+		log.Fatalln("no such log level")
+	}
+	return zapLevel
+}
+
+func getEncoder(enc string) zapcore.Encoder {
+	var encoder zapcore.Encoder
+	encConf := zap.NewProductionEncoderConfig()
+	// 可读性时间戳
+	encConf.EncodeTime = zapcore.ISO8601TimeEncoder
+	// 将日志等级大写
+	encConf.EncodeLevel = zapcore.CapitalLevelEncoder
+	// 调用者命名
+	encConf.EncodeCaller = zapcore.FullCallerEncoder
+	switch enc {
+	case settings.AppLogFileEncoderJson:
+		encoder = zapcore.NewJSONEncoder(encConf)
+	case settings.AppLogFileEncoderConsole:
+		encConf.EncodeCaller = zapcore.ShortCallerEncoder
+		encoder = zapcore.NewConsoleEncoder(encConf)
+	default:
+		log.Fatalln("no such log file encoder")
+	}
+	return encoder
+}
+
 func InitLogger() {
 	logLevel := getLogLevel(settings.C().App.Log.Level)
 
@@ -69,45 +110,4 @@ func Error(err error) zapcore.Field {
 
 func Errors(key string, errors []error) zapcore.Field {
 	return zap.Errors(key, errors)
-}
-
-func getLogLevel(level string) zapcore.Level {
-	level = strings.ToUpper(level)
-	var zapLevel zapcore.Level
-	switch level {
-	case "DEBUG":
-		zapLevel = zapcore.DebugLevel
-	case "INFO":
-		zapLevel = zapcore.InfoLevel
-	case "WARN":
-		zapLevel = zapcore.WarnLevel
-	case "ERROR":
-		zapLevel = zapcore.ErrorLevel
-	case "FATAL":
-		zapLevel = zapcore.FatalLevel
-	default:
-		log.Fatalln("no such log level")
-	}
-	return zapLevel
-}
-
-func getEncoder(enc string) zapcore.Encoder {
-	var encoder zapcore.Encoder
-	encConf := zap.NewProductionEncoderConfig()
-	// 可读性时间戳
-	encConf.EncodeTime = zapcore.ISO8601TimeEncoder
-	// 将日志等级大写
-	encConf.EncodeLevel = zapcore.CapitalLevelEncoder
-	// 调用者命名
-	encConf.EncodeCaller = zapcore.FullCallerEncoder
-	switch enc {
-	case settings.AppLogFileEncoderJson:
-		encoder = zapcore.NewJSONEncoder(encConf)
-	case settings.AppLogFileEncoderConsole:
-		encConf.EncodeCaller = zapcore.ShortCallerEncoder
-		encoder = zapcore.NewConsoleEncoder(encConf)
-	default:
-		log.Fatalln("no such log file encoder")
-	}
-	return encoder
 }

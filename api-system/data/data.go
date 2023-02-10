@@ -15,10 +15,10 @@ import (
 	"time"
 )
 
-var db *gorm.DB
+var _db *gorm.DB
 
 func InitData() {
-	db = initDB()
+	_db = initDB()
 }
 
 func initDB() *gorm.DB {
@@ -49,7 +49,7 @@ func initDB() *gorm.DB {
 }
 
 func GetDB() *gorm.DB {
-	return db
+	return _db
 }
 
 // 自动更新表结构
