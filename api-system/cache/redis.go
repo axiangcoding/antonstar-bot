@@ -13,14 +13,17 @@ func Setup() {
 	rdb = initRedis()
 	err := rdb.Ping(context.Background()).Err()
 	if err != nil {
-		logging.Fatal(err)
+		logging.L().Fatal("redis connect failed", logging.Error(err))
 	}
 }
 
 func initRedis() *redis.Client {
-	opt, err := redis.ParseURL(settings.Config.App.Data.Cache.Source)
+	source := settings.C().App.Data.Cache.Source
+	opt, err := redis.ParseURL(source)
 	if err != nil {
-		logging.Fatal(err)
+		logging.L().Fatal("parse redis url failed",
+			logging.Error(err),
+			logging.Any("source", source))
 	}
 	return redis.NewClient(opt)
 }

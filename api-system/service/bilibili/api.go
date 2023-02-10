@@ -2,7 +2,6 @@ package bilibili
 
 import (
 	"errors"
-	"github.com/axiangcoding/antonstar-bot/logging"
 	"github.com/go-resty/resty/v2"
 	"strconv"
 	"time"
@@ -16,7 +15,6 @@ func GetBiliBiliRoomInfo(roomId int64) (*RoomInfoResp, error) {
 		SetResult(&roomInfo).
 		Get(url)
 	if err != nil {
-		logging.Warn(err)
 		return nil, err
 	}
 	if resp.IsError() {

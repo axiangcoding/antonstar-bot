@@ -32,7 +32,8 @@ func HandleCqHttpEvent(c *gin.Context, data map[string]any) error {
 				handleCqHttpMetaEventHeartBeat(c, &event)
 				break
 			default:
-				logging.Warnf("meta_event_type %s not supported yet.", data["meta_event_type"])
+				logging.L().Warn("meta_event_type not supported yet",
+					logging.Any("meta_event_type", data["meta_event_type"]))
 			}
 			break
 		case cqhttp.PostTypeMessage:
@@ -45,7 +46,8 @@ func HandleCqHttpEvent(c *gin.Context, data map[string]any) error {
 				handleCqHttpMessageEventGroup(&event)
 				break
 			default:
-				logging.Warnf("message_type %s not supported yet.", data["message_type"])
+				logging.L().Warn("message_type not supported yet",
+					logging.Any("message_type", data["message_type"]))
 			}
 		case cqhttp.PostTypeRequest:
 			var event cqhttp.CommonEvent
@@ -89,7 +91,7 @@ func GetCqHttpStatus(c *gin.Context, selfId int64) (cqhttp.MetaTypeHeartBeatEven
 func handleCqHttpMetaEventHeartBeat(c *gin.Context, event *cqhttp.MetaTypeHeartBeatEvent) {
 	key := cache.GenerateCQHTTPCacheKey(event.PostType, event.MetaEventType, event.SelfId)
 	if err := cache.GetClient().Set(c, key, event, time.Minute).Err(); err != nil {
-		logging.Error(err)
+		logging.L().Error("set cache error", logging.Error(err))
 	}
 }
 
@@ -111,11 +113,9 @@ func handleCqHttpMessageEventGroup(event *cqhttp.CommonEvent) {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			defaultGC := table.DefaultGroupConfig(groupId)
 			gc = &defaultGC
-			if err := SaveGroupConfig(defaultGC); err != nil {
-				logging.Warn(err)
-			}
+			MustSaveGroupConfig(gc)
 		} else {
-			logging.Warn(err)
+			logging.L().Warn("find group config failed", logging.Error(err))
 		}
 	}
 	uc, err := FindUserConfig(userId)
@@ -123,11 +123,9 @@ func handleCqHttpMessageEventGroup(event *cqhttp.CommonEvent) {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			defaultUC := table.DefaultUserConfig(userId)
 			uc = &defaultUC
-			if err := SaveUserConfig(defaultUC); err != nil {
-				logging.Warn(err)
-			}
+			MustSaveUserConfig(uc)
 		} else {
-			logging.Warn(err)
+			logging.L().Warn("find user config failed", logging.Error(err))
 		}
 	}
 	var retMsgForm cqhttp.SendGroupMsgForm
@@ -192,7 +190,7 @@ func handleCqHttpMessageEventGroup(event *cqhttp.CommonEvent) {
 		case bot.ActionLuck:
 			DoActionLuck(&retMsgForm, value, event.Sender.UserId)
 		case bot.ActionVersion:
-			retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.Version, settings.Config.Version)
+			retMsgForm.Message = fmt.Sprintf(bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.Version, settings.C().App.Version)
 		case bot.ActionGetHelp:
 			retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.GetHelp
 		case bot.ActionGroupStatus:
@@ -224,7 +222,9 @@ func handleAddGroup(event *cqhttp.CommonEvent) {
 		if (groupConfig == nil || !(*groupConfig.Banned)) && (userConfig == nil || !(*userConfig.Banned)) {
 			cqhttp.MustAcceptInviteToGroup(event.Flag, event.SubType, true, "")
 		} else {
-			logging.Warn("due to the ban policy, the application for joining the group was rejected. userId: %d, groupId: %d", userId, groupId)
+			logging.L().Warn("application for joining the group was rejected",
+				logging.Any("userId", userId),
+				logging.Any("groupId", groupId))
 		}
 	}
 }

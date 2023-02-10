@@ -12,8 +12,6 @@ import (
 	"time"
 )
 
-var c = context.Background()
-
 func IsValidNickname(nick string) bool {
 	matched, err := regexp.Match(`^[\w\s@]+$`, []byte(nick))
 	if err != nil {
@@ -30,28 +28,26 @@ func FindGameProfile(nick string) (*table.GameUser, error) {
 	return take, err
 }
 
-func SaveGameProfile(gameUser table.GameUser) error {
-	if err := dal.Q.GameUser.Save(&gameUser); err != nil {
-		return err
+func MustSaveGameProfile(gameUser *table.GameUser) {
+	if err := dal.Q.GameUser.Save(gameUser); err != nil {
+		logging.L().Error("dal error", logging.Error(err))
 	}
-	return nil
 }
 
-func UpdateGameProfile(nick string, user table.GameUser) error {
-	if _, err := dal.GameUser.Where(dal.GameUser.Nick.Eq(nick)).Updates(&user); err != nil {
-		return err
+func MustUpdateGameProfile(nick string, user *table.GameUser) {
+	if _, err := dal.GameUser.Where(dal.GameUser.Nick.Eq(nick)).Updates(user); err != nil {
+		logging.L().Error("dal error", logging.Error(err))
 	}
-	return nil
 }
 
 func CanBeRefresh(nick string) bool {
 	client := cache.GetClient()
 	key := cache.GenerateGameUserCacheKey(nick)
-	if _, err := client.Get(c, key).Result(); err != nil {
+	if _, err := client.Get(context.Background(), key).Result(); err != nil {
 		if errors.Is(err, redis.Nil) {
 			return true
 		}
-		logging.Warn(err)
+		logging.L().Error("get cache error", logging.Error(err))
 		return false
 	}
 	return false
@@ -60,7 +56,7 @@ func CanBeRefresh(nick string) bool {
 func MustPutRefreshFlag(nick string) {
 	client := cache.GetClient()
 	key := cache.GenerateGameUserCacheKey(nick)
-	if err := client.Set(c, key, "", time.Hour*24).Err(); err != nil {
-		logging.Warn(err)
+	if err := client.Set(context.Background(), key, "", time.Hour*24).Err(); err != nil {
+		logging.L().Error("set cache error", logging.Error(err))
 	}
 }

@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"errors"
 	"github.com/axiangcoding/antonstar-bot/cache"
 	"github.com/axiangcoding/antonstar-bot/data/dal"
@@ -18,7 +19,7 @@ func FindUserConfig(userId int64) (*table.QQUserConfig, error) {
 func MustFindUserConfig(userId int64) *table.QQUserConfig {
 	config, err := FindUserConfig(userId)
 	if err != nil {
-		logging.Warn(err)
+		logging.L().Warn("dal failed", logging.Error(err))
 	}
 	return config
 }
@@ -28,6 +29,12 @@ func SaveUserConfig(gc table.QQUserConfig) error {
 		return err
 	}
 	return nil
+}
+
+func MustSaveUserConfig(gc *table.QQUserConfig) {
+	if err := dal.Q.QQUserConfig.Save(gc); err != nil {
+		logging.L().Error("dal failed", logging.Error(err))
+	}
 }
 
 func UpdateUserConfigBindingGameNick(userId int64, gameNick *string) error {
@@ -56,7 +63,7 @@ func MustAddUserConfigTodayQueryCount(userId int64, count int) {
 	config.TodayQueryCount += count
 	err := SaveUserConfig(*config)
 	if err != nil {
-		logging.Warn(err)
+		logging.L().Warn("dal failed", logging.Error(err))
 	}
 }
 
@@ -65,7 +72,7 @@ func MustAddUserConfigTotalQueryCount(userId int64, count int) {
 	config.TotalQueryCount += count
 	err := SaveUserConfig(*config)
 	if err != nil {
-		logging.Warn(err)
+		logging.L().Warn("dal failed", logging.Error(err))
 	}
 }
 
@@ -82,7 +89,7 @@ func MustAddUserConfigTodayUsageCount(userId int64, count int) {
 	config.TodayUsageCount += count
 	err := SaveUserConfig(*config)
 	if err != nil {
-		logging.Warn(err)
+		logging.L().Warn("dal failed", logging.Error(err))
 	}
 }
 
@@ -91,7 +98,7 @@ func MustAddUserConfigTotalUsageCount(userId int64, count int) {
 	config.TotalUsageCount += count
 	err := SaveUserConfig(*config)
 	if err != nil {
-		logging.Warn(err)
+		logging.L().Warn("dal failed", logging.Error(err))
 	}
 }
 
@@ -109,11 +116,11 @@ func ResetAllUserConfigTodayCount() error {
 func ExistUserUsageLimitFlag(userId int64) bool {
 	client := cache.GetClient()
 	key := cache.GenerateUserUsageLimitCacheKey(userId)
-	if _, err := client.Get(c, key).Result(); err != nil {
+	if _, err := client.Get(context.Background(), key).Result(); err != nil {
 		if errors.Is(err, redis.Nil) {
 			return false
 		}
-		logging.Warn(err)
+		logging.L().Warn("dal failed", logging.Error(err))
 		return false
 	}
 	return true
@@ -122,7 +129,7 @@ func ExistUserUsageLimitFlag(userId int64) bool {
 func MustPutUserUsageLimitFlag(userId int64) {
 	client := cache.GetClient()
 	key := cache.GenerateUserUsageLimitCacheKey(userId)
-	if err := client.Set(c, key, "", time.Hour*1).Err(); err != nil {
-		logging.Warn(err)
+	if err := client.Set(context.Background(), key, "", time.Hour*1).Err(); err != nil {
+		logging.L().Warn("dal failed", logging.Error(err))
 	}
 }

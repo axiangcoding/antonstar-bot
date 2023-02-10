@@ -45,6 +45,6 @@ func MustFinishMissionWithResult(missionId string, status string, result any) {
 	if _, err := dal.Q.Mission.
 		Where(dal.Mission.MissionId.Eq(missionId)).
 		Updates(update); err != nil {
-		logging.Warn(err)
+		logging.L().Warn("dal failed", logging.Error(err))
 	}
 }

@@ -7,10 +7,9 @@ import (
 	"github.com/spf13/viper"
 )
 
-var Config ConfigStruct
+var _conf *GlobalConf
 
-func Setup() {
-	setDefault()
+func InitConf() {
 	viper.SetConfigName("app.toml")
 	viper.SetConfigType("toml")
 	viper.AddConfigPath("config/")
@@ -19,18 +18,14 @@ func Setup() {
 	replacer := strings.NewReplacer(".", "_")
 	viper.SetEnvKeyReplacer(replacer)
 	if err := viper.ReadInConfig(); err != nil {
-		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			log.Fatal("Config file not found.")
-		}
-		log.Fatal(err)
+		log.Fatalln(err)
 	}
-	err := viper.Unmarshal(&Config)
-	if err != nil {
-		log.Fatalf("Config Properties unable to decode into struct, %v", err)
+
+	if err := viper.Unmarshal(&_conf); err != nil {
+		log.Fatalln(err)
 	}
 }
 
-func setDefault() {
-	// generate a default config file maybe?
-	// 是否要生成一个默认的配置文件？
+func C() *GlobalConf {
+	return _conf
 }

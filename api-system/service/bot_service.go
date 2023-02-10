@@ -94,16 +94,12 @@ func RefreshWTUserInfo(nickname string, sendForm cqhttp.SendGroupMsgForm) (*stri
 					_, err := FindGameProfile(nickname)
 					if err != nil {
 						if errors.Is(err, gorm.ErrRecordNotFound) {
-							if err := SaveGameProfile(*user); err != nil {
-								logging.Warn(err)
-							}
+							MustSaveGameProfile(user)
 						} else {
-							logging.Warn(err)
+							logging.L().Warn("find game profile failed", logging.Error(err))
 						}
 					} else {
-						if err := UpdateGameProfile(nickname, *user); err != nil {
-							logging.Warn(err)
-						}
+						MustUpdateGameProfile(nickname, user)
 					}
 
 					if err := crawler.GetProfileFromThunderskill(nickname, func(status int, skill *crawler.ThunderSkillResp) {
@@ -112,15 +108,11 @@ func RefreshWTUserInfo(nickname string, sendForm cqhttp.SendGroupMsgForm) (*stri
 						data.TsSBRate = skillData.S.Kpd
 						data.TsRBRate = skillData.R.Kpd
 						data.TsABRate = skillData.A.Kpd
-						if err != nil {
-							logging.Warn(err)
-						} else {
-							if err := UpdateGameProfile(nickname, *data); err != nil {
-								logging.Warn(err)
-							}
+						if err == nil {
+							MustUpdateGameProfile(nickname, data)
 						}
 					}); err != nil {
-						logging.Warn("failed on update thunder skill profile. ", err)
+						logging.L().Warn("failed on update thunder skill profile. ", logging.Error(err))
 					}
 					MustPutRefreshFlag(nickname)
 					MustFinishMissionWithResult(missionId, table.MissionStatusSuccess, CrawlerResult{
@@ -130,7 +122,7 @@ func RefreshWTUserInfo(nickname string, sendForm cqhttp.SendGroupMsgForm) (*stri
 					)
 				}
 			}); err != nil {
-			logging.Warn("start crawler failed. ", err)
+			logging.L().Warn("start crawler failed. ", logging.Error(err))
 		}
 	}); err != nil {
 		return nil, err
@@ -170,17 +162,17 @@ func DoActionQuery(retMsgForm *cqhttp.SendGroupMsgForm, value string, fullMsg bo
 	}
 	mId, user, err := QueryWTGamerProfile(value, *retMsgForm)
 	if err != nil {
-		logging.Warnf("query WT gamer profile error. %s", err)
+		logging.L().Warn("query WT gamer profile error", logging.Error(err))
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.CanNotRefresh
 	}
 	if mId != nil {
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.QueryIsRunning
 		if err := ants.Submit(func() {
 			if err := WaitForCrawlerFinished(*mId, fullMsg); err != nil {
-				logging.Warnf("wait for callback error. %s", err)
+				logging.L().Error("wait for callback error", logging.Error(err))
 			}
 		}); err != nil {
-			logging.Error(err)
+			logging.L().Error("submit ant job failed", logging.Error(err))
 		}
 	} else {
 		if fullMsg {
@@ -227,16 +219,16 @@ func DoActionRefresh(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
 	}
 	missionId, err := RefreshWTUserInfo(value, *retMsgForm)
 	if err != nil {
-		logging.Warn("refresh WT gamer profile error. ", err)
+		logging.L().Warn("refresh WT gamer profile error", logging.Error(err))
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.CanNotRefresh
 	}
 	retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.QueryIsRunning
 	if err := ants.Submit(func() {
 		if err := WaitForCrawlerFinished(*missionId, false); err != nil {
-			logging.Warnf("wait for callback error. %s", err)
+			logging.L().Error("wait for callback error", logging.Error(err))
 		}
 	}); err != nil {
-		logging.Error(err)
+		logging.L().Error("submit ant job failed", logging.Error(err))
 	}
 	MustAddUserConfigTodayQueryCount(retMsgForm.UserId, 1)
 	MustAddUserConfigTotalQueryCount(retMsgForm.UserId, 1)
@@ -245,7 +237,6 @@ func DoActionRefresh(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
 }
 
 func DoActionDrawCard(retMsgForm *cqhttp.SendGroupMsgForm, value string, id int64) {
-	// number := DrawNumber(id, time.Now().In(time.FixedZone("CST", 8*3600)))
 	retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.DrawCard
 }
 
@@ -276,14 +267,14 @@ func DoActionData(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
 func DoActionBinding(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
 	profile, err := FindGameProfile(value)
 	if err != nil {
-		logging.Warn(err)
+		logging.L().Warn("dal failed", logging.Error(err))
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.BindingNickNotExist
 		return
 	}
 
 	config, err := FindUserConfig(retMsgForm.UserId)
 	if err != nil {
-		logging.Warn(err)
+		logging.L().Warn("dal failed", logging.Error(err))
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.BindingError
 		return
 	}
@@ -293,7 +284,7 @@ func DoActionBinding(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
 	}
 	config.BindingGameNick = &profile.Nick
 	if err := SaveUserConfig(*config); err != nil {
-		logging.Warn(err)
+		logging.L().Warn("dal failed", logging.Error(err))
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.BindingError
 		return
 	}
@@ -302,7 +293,7 @@ func DoActionBinding(retMsgForm *cqhttp.SendGroupMsgForm, value string) {
 
 func DoActionUnbinding(retMsgForm *cqhttp.SendGroupMsgForm) {
 	if err := UpdateUserConfigBindingGameNick(retMsgForm.UserId, nil); err != nil {
-		logging.Warn(err)
+		logging.L().Warn("dal failed", logging.Error(err))
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.UnbindingError
 		return
 	}

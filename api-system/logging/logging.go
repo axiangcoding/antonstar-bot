@@ -3,156 +3,111 @@ package logging
 import (
 	"github.com/axiangcoding/antonstar-bot/settings"
 	"log"
+	"os"
 	"path"
+	"strings"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
-var logFile *zap.SugaredLogger
-var logConsole *zap.SugaredLogger
+var (
+	_logger      = zap.NewNop()
+	_sugarLogger = _logger.Sugar()
+)
 
-var enableFileLog = false
+func InitLogger() {
+	logLevel := getLogLevel(settings.C().App.Log.Level)
 
-func Setup() {
-	enableFileLog = settings.Config.App.Log.File.Enable
-	logger, _ := zap.NewDevelopment(zap.AddCallerSkip(1), zap.AddStacktrace(zapcore.ErrorLevel))
-	logConsole = logger.Sugar()
-	// 是否打印日志到文件中
-	if enableFileLog {
-		// 设置application的日志输出
-		zapLevel := zapcore.InfoLevel
-		level := settings.Config.App.Log.Level
-		switch level {
-		case "info":
-			zapLevel = zapcore.InfoLevel
-		case "warn":
-			zapLevel = zapcore.WarnLevel
-		case "error":
-			zapLevel = zapcore.ErrorLevel
-		case "fatal":
-			zapLevel = zapcore.FatalLevel
-		}
-		// lumberjack.Logger is already safe for concurrent use, so we don't need to
-		// lock it.
-		w := zapcore.AddSync(&lumberjack.Logger{
-			Filename: path.Join(settings.Config.App.Log.File.Path,
-				"application.log"),
-			MaxSize:    100, // megabytes
-			MaxBackups: 100,
-			MaxAge:     60, // days
-			Compress:   true,
-		})
-		var encoder zapcore.Encoder
-		encoderConfig := zap.NewProductionEncoderConfig()
-		// 可读性时间戳
-		encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
-		// 将日志等级大写
-		encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
-		// 调用者命名
-		encoderConfig.EncodeCaller = zapcore.FullCallerEncoder
+	w := zapcore.AddSync(&lumberjack.Logger{
+		Filename: path.Join(settings.C().App.Log.File.Dir,
+			"application.log"),
+		MaxSize:    100, // megabytes
+		MaxBackups: 100,
+		MaxAge:     60, // days
+		Compress:   true,
+	})
+	encoder := getEncoder(settings.C().App.Log.File.Encoder)
 
-		if settings.Config.Log.File.Encoder == "json" {
-			encoder = zapcore.NewJSONEncoder(encoderConfig)
-		} else if settings.Config.Log.File.Encoder == "console" {
-			encoder = zapcore.NewConsoleEncoder(encoderConfig)
-		} else {
-			log.Println("File log encoder invalid. Reset to default console encoder.")
-			encoder = zapcore.NewConsoleEncoder(encoderConfig)
-		}
-		core := zapcore.NewCore(
-			encoder,
-			w,
-			zapLevel,
-		)
-		// 打印调用者时跳过一级封装显示真实调用，同时只在Error和以上级别的日志里显示堆栈信息
-		logger := zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1), zap.AddStacktrace(zapcore.ErrorLevel))
-		logFile = logger.Sugar()
+	var cores []zapcore.Core
+	prodCore := zapcore.NewCore(
+		encoder,
+		w,
+		logLevel,
+	)
+	cores = append(cores, prodCore)
+
+	runMode := settings.C().Server.RunMode
+	if runMode == settings.AppRunModeDebug {
+		debugCore := zapcore.NewCore(getEncoder("console"), os.Stdout, logLevel)
+		cores = append(cores, debugCore)
 	}
 
+	tee := zapcore.NewTee(cores...)
+	_logger = zap.New(tee).WithOptions(
+		zap.AddCaller(),
+		zap.AddStacktrace(zapcore.ErrorLevel))
+	zap.ReplaceGlobals(_logger)
 }
 
-func Debug(args ...interface{}) {
-	logConsole.Debug(args...)
-	if enableFileLog {
-		logFile.Debug(args...)
-	}
+func S() *zap.SugaredLogger {
+	return _sugarLogger
 }
 
-func Debugf(template string, args ...interface{}) {
-	logConsole.Debugf(template, args...)
-	if enableFileLog {
-		logFile.Debugf(template, args...)
-	}
+func L() *zap.Logger {
+	return _logger
 }
 
-func Info(args ...interface{}) {
-	logConsole.Info(args...)
-	if enableFileLog {
-		logFile.Info(args...)
-	}
+func Any(key string, value any) zapcore.Field {
+	return zap.Any(key, value)
 }
 
-func Infof(template string, args ...interface{}) {
-	logConsole.Infof(template, args...)
-	if enableFileLog {
-		logFile.Infof(template, args...)
-	}
+func Error(err error) zapcore.Field {
+	return zap.Error(err)
 }
 
-func Warn(args ...interface{}) {
-	logConsole.Warn(args...)
-	if enableFileLog {
-		logFile.Warn(args...)
-	}
+func Errors(key string, errors []error) zapcore.Field {
+	return zap.Errors(key, errors)
 }
 
-func Warnf(template string, args ...interface{}) {
-	logConsole.Warnf(template, args...)
-	if enableFileLog {
-		logFile.Warnf(template, args...)
+func getLogLevel(level string) zapcore.Level {
+	level = strings.ToUpper(level)
+	var zapLevel zapcore.Level
+	switch level {
+	case "DEBUG":
+		zapLevel = zapcore.DebugLevel
+	case "INFO":
+		zapLevel = zapcore.InfoLevel
+	case "WARN":
+		zapLevel = zapcore.WarnLevel
+	case "ERROR":
+		zapLevel = zapcore.ErrorLevel
+	case "FATAL":
+		zapLevel = zapcore.FatalLevel
+	default:
+		log.Fatalln("no such log level")
 	}
+	return zapLevel
 }
 
-func Error(args ...interface{}) {
-	logConsole.Error(args...)
-	if enableFileLog {
-		logFile.Error(args...)
+func getEncoder(enc string) zapcore.Encoder {
+	var encoder zapcore.Encoder
+	encConf := zap.NewProductionEncoderConfig()
+	// 可读性时间戳
+	encConf.EncodeTime = zapcore.ISO8601TimeEncoder
+	// 将日志等级大写
+	encConf.EncodeLevel = zapcore.CapitalLevelEncoder
+	// 调用者命名
+	encConf.EncodeCaller = zapcore.FullCallerEncoder
+	switch enc {
+	case settings.AppLogFileEncoderJson:
+		encoder = zapcore.NewJSONEncoder(encConf)
+	case settings.AppLogFileEncoderConsole:
+		encConf.EncodeCaller = zapcore.ShortCallerEncoder
+		encoder = zapcore.NewConsoleEncoder(encConf)
+	default:
+		log.Fatalln("no such log file encoder")
 	}
-}
-
-func Errorf(template string, args ...interface{}) {
-	logConsole.Errorf(template, args...)
-	if enableFileLog {
-		logFile.Errorf(template, args...)
-	}
-}
-
-func Fatal(args ...interface{}) {
-	logConsole.Fatal(args...)
-	if enableFileLog {
-		logFile.Fatal(args...)
-	}
-}
-
-func Fatalf(template string, args ...interface{}) {
-	logConsole.Fatalf(template, args...)
-	if enableFileLog {
-		logFile.Fatalf(template, args...)
-	}
-}
-
-func Panic(args ...interface{}) {
-	logConsole.Panic(args...)
-	if enableFileLog {
-		logFile.Panic(args...)
-	}
-}
-
-func Panicf(template string, args ...interface{}) {
-	logConsole.Panicf(template, args...)
-	if enableFileLog {
-		logFile.Panicf(template, args...)
-	}
+	return encoder
 }

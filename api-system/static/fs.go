@@ -11,7 +11,9 @@ var fs embed.FS
 func MustReadMessageFileAsBytes(filename string) []byte {
 	bytes, err := fs.ReadFile("message/" + filename)
 	if err != nil {
-		logging.Warnf("read message file {%s} error.", filename)
+		logging.L().Warn("read message file error.",
+			logging.Any("filename", filename),
+			logging.Error(err))
 		return nil
 	}
 	return bytes

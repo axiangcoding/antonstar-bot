@@ -18,18 +18,19 @@ func Setup() {
 
 func addJob(c *cron.Cron) {
 	if _, err := c.AddFunc("@every 5m", CheckRoomLiving); err != nil {
-		logging.Fatalf("Add cron job CheckRoomLiving failed. %s", err)
+		logging.L().Fatal("add cron job CheckRoomLiving failed", logging.Error(err))
 	}
 	if _, err := c.AddFunc("@daily", RefreshUserTodayCount); err != nil {
-		logging.Fatalf("Add cron job RefreshUserTodayCount failed. %s", err)
+		logging.L().Fatal("add cron job RefreshUserTodayCount failed", logging.Error(err))
 	}
-	logging.Info("All cron job add success")
+
+	logging.L().Info("All cron job add success")
 }
 
 func CheckRoomLiving() {
 	qcs, err := service.GetEnableCheckBiliRoomGroupConfig(true)
 	if err != nil {
-		logging.Warn(err)
+		logging.L().Warn("get group config checkbilibiliroom failed", logging.Error(err))
 		return
 	}
 	for _, qc := range qcs {
@@ -37,7 +38,7 @@ func CheckRoomLiving() {
 		sgmf.GroupId = qc.GroupId
 		info, err := bilibili.GetBiliBiliRoomInfo(qc.BindBiliRoomId)
 		if err != nil {
-			logging.Warn(err)
+			logging.L().Error("get bilibiliroom info failed", logging.Error(err))
 			continue
 		}
 		if info.Data.LiveStatus == 1 {
@@ -56,14 +57,14 @@ func CheckRoomLiving() {
 
 func RefreshUserTodayCount() {
 	if err := service.ResetAllUserConfigTodayCount(); err != nil {
-		logging.Error("reset all qq user today_query_count failed. ", err)
+		logging.L().Error("reset all qq user today_query_count failed. ", logging.Error(err))
 	} else {
-		logging.Info("reset all qq user today_query_count to 0")
+		logging.L().Info("reset all qq user today_query_count to 0")
 	}
 
 	if err := service.ResetAllGroupConfigTodayCount(); err != nil {
-		logging.Error("reset all qq group today_query_count failed. ", err)
+		logging.L().Error("reset all qq group today_query_count failed. ", logging.Error(err))
 	} else {
-		logging.Info("reset all qq group today_query_count to 0")
+		logging.L().Info("reset all qq group today_query_count to 0")
 	}
 }
