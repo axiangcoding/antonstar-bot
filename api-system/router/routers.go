@@ -28,14 +28,13 @@ func setSwagger(r *gin.RouterGroup) {
 	if settings.C().App.Swagger.Enable {
 		swagger.SwaggerInfo.Version = settings.C().App.Version
 		swagger.SwaggerInfo.Title = settings.C().App.Name
-		swagger.SwaggerInfo.BasePath = settings.C().Server.BasePath
+		swagger.SwaggerInfo.BasePath = r.BasePath()
 		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 }
 
 func setRouterApiV1(r *gin.RouterGroup) {
-	base := r.Group(settings.C().Server.BasePath)
-	api := base.Group("/api")
+	api := r.Group("/api")
 	setSwagger(api)
 	groupV1 := api.Group("/v1")
 	{
