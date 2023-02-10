@@ -42,6 +42,7 @@ func Setup() {
 			MaxSize:    100, // megabytes
 			MaxBackups: 100,
 			MaxAge:     60, // days
+			Compress:   true,
 		})
 		var encoder zapcore.Encoder
 		encoderConfig := zap.NewProductionEncoderConfig()
