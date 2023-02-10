@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/axiangcoding/antonstar-bot/logging"
 	"github.com/axiangcoding/antonstar-bot/static"
+	"go.uber.org/zap"
 	"strings"
 )
 
@@ -20,7 +21,7 @@ func SelectStaticMessage(id int) StaticMessage {
 	msg := StaticMessage{}
 	err := json.Unmarshal(bytes, &msg)
 	if err != nil {
-		logging.Warn(err)
+		logging.L().Warn("unmarshal failed", zap.Error(err))
 	}
 	return msg
 }

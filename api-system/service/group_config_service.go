@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"errors"
 	"github.com/axiangcoding/antonstar-bot/cache"
 	"github.com/axiangcoding/antonstar-bot/data/dal"
@@ -21,7 +22,7 @@ func FindGroupConfig(groupId int64) (*table.QQGroupConfig, error) {
 func MustFindGroupConfig(groupId int64) *table.QQGroupConfig {
 	config, err := FindGroupConfig(groupId)
 	if err != nil {
-		logging.Warn(err)
+		logging.L().Warn("dal failed", logging.Error(err))
 	}
 	return config
 }
@@ -38,14 +39,20 @@ func SaveGroupConfig(gc table.QQGroupConfig) error {
 	return nil
 }
 
+func MustSaveGroupConfig(gc *table.QQGroupConfig) {
+	if err := dal.QQGroupConfig.Save(gc); err != nil {
+		logging.L().Error("dal failed", logging.Error(err))
+	}
+}
+
 func ExistBiliRoomFlag(groupId int64, roomId int64) bool {
 	client := cache.GetClient()
 	key := cache.GenerateBiliRoomLivingCacheKey(groupId, roomId)
-	if _, err := client.Get(c, key).Result(); err != nil {
+	if _, err := client.Get(context.Background(), key).Result(); err != nil {
 		if errors.Is(err, redis.Nil) {
 			return false
 		}
-		logging.Warn(err)
+		logging.L().Warn("get cache failed", logging.Error(err))
 		return false
 	}
 	return true
@@ -54,11 +61,11 @@ func ExistBiliRoomFlag(groupId int64, roomId int64) bool {
 func ExistGroupUsageLimitFlag(groupId int64) bool {
 	client := cache.GetClient()
 	key := cache.GenerateGroupUsageLimitCacheKey(groupId)
-	if _, err := client.Get(c, key).Result(); err != nil {
+	if _, err := client.Get(context.Background(), key).Result(); err != nil {
 		if errors.Is(err, redis.Nil) {
 			return false
 		}
-		logging.Warn(err)
+		logging.L().Warn("get cache failed", logging.Error(err))
 		return false
 	}
 	return true
@@ -67,16 +74,16 @@ func ExistGroupUsageLimitFlag(groupId int64) bool {
 func MustPutBiliRoomFlag(groupId int64, roomId int64) {
 	client := cache.GetClient()
 	key := cache.GenerateBiliRoomLivingCacheKey(groupId, roomId)
-	if err := client.Set(c, key, "", time.Minute*10).Err(); err != nil {
-		logging.Warn(err)
+	if err := client.Set(context.Background(), key, "", time.Minute*10).Err(); err != nil {
+		logging.L().Warn("set cache failed", logging.Error(err))
 	}
 }
 
 func MustPutGroupUsageLimitFlag(groupId int64) {
 	client := cache.GetClient()
 	key := cache.GenerateGroupUsageLimitCacheKey(groupId)
-	if err := client.Set(c, key, "", time.Hour*1).Err(); err != nil {
-		logging.Warn(err)
+	if err := client.Set(context.Background(), key, "", time.Hour*1).Err(); err != nil {
+		logging.L().Warn("set cache failed", logging.Error(err))
 	}
 }
 
@@ -91,19 +98,13 @@ func CheckGroupTodayQueryLimit(groupId int64) (bool, int, int) {
 func MustAddGroupConfigTodayQueryCount(groupId int64, count int) {
 	config := MustFindGroupConfig(groupId)
 	config.TodayQueryCount += count
-	err := SaveGroupConfig(*config)
-	if err != nil {
-		logging.Warn(err)
-	}
+	MustSaveGroupConfig(config)
 }
 
 func MustAddGroupConfigTotalQueryCount(groupId int64, count int) {
 	config := MustFindGroupConfig(groupId)
 	config.TotalQueryCount += count
-	err := SaveGroupConfig(*config)
-	if err != nil {
-		logging.Warn(err)
-	}
+	MustSaveGroupConfig(config)
 }
 
 func CheckGroupTodayUsageLimit(groupId int64) (bool, int, int) {
@@ -117,19 +118,13 @@ func CheckGroupTodayUsageLimit(groupId int64) (bool, int, int) {
 func MustAddGroupConfigTodayUsageCount(groupId int64, count int) {
 	config := MustFindGroupConfig(groupId)
 	config.TodayUsageCount += count
-	err := SaveGroupConfig(*config)
-	if err != nil {
-		logging.Warn(err)
-	}
+	MustSaveGroupConfig(config)
 }
 
 func MustAddGroupConfigTotalUsageCount(groupId int64, count int) {
 	config := MustFindGroupConfig(groupId)
 	config.TotalUsageCount += count
-	err := SaveGroupConfig(*config)
-	if err != nil {
-		logging.Warn(err)
-	}
+	MustSaveGroupConfig(config)
 }
 
 func ResetAllGroupConfigTodayCount() error {

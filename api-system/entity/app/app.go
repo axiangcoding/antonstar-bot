@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/axiangcoding/antonstar-bot/entity/e"
 	"github.com/axiangcoding/antonstar-bot/logging"
-	"github.com/axiangcoding/antonstar-bot/settings"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"net/http"
@@ -29,9 +28,8 @@ func generateErrJson(errs []error) *ErrJson {
 	if len(errs) == 0 {
 		return nil
 	}
-	hideDetail := settings.Config.App.Response.HideErrorDetails
 	var errMessages []string
-	if !hideDetail {
+	if true {
 		for _, err := range errs {
 			var validErrors validator.ValidationErrors
 			if errors.As(err, &validErrors) {
@@ -68,7 +66,9 @@ func Success(c *gin.Context, data interface{}) {
 // business failed response
 // 返回业务逻辑失败
 func BizFailed(c *gin.Context, errCode int, err ...error) {
-	logging.Errorf("Biz failed with code [%d], errors: %s.", errCode, err)
+	logging.L().Error("Biz failed",
+		logging.Any("errCode", errCode),
+		logging.Errors("errors", err))
 	HttpResponse(c, http.StatusOK, errCode, generateErrJson(err))
 	c.Abort()
 }
@@ -77,7 +77,9 @@ func BizFailed(c *gin.Context, errCode int, err ...error) {
 // bad request response
 // 返回错误参数请求
 func BadRequest(c *gin.Context, errCode int, err ...error) {
-	logging.Infof("Bad request with code [%d], errors: %s.", errCode, err)
+	logging.L().Warn("Bad request",
+		logging.Any("errCode", errCode),
+		logging.Any("errors", err))
 	HttpResponse(c, http.StatusBadRequest, errCode, generateErrJson(err))
 	c.Abort()
 }
@@ -86,7 +88,9 @@ func BadRequest(c *gin.Context, errCode int, err ...error) {
 // server internal failed response
 // 返回服务器内部故障
 func ServerFailed(c *gin.Context, errCode int, err ...error) {
-	logging.Errorf("Server failed with code [%d].", errCode)
+	logging.L().Error("Server failed",
+		logging.Any("errCode", errCode),
+		logging.Any("errors", err))
 	HttpResponse(c, http.StatusInternalServerError, errCode, generateErrJson(err))
 	c.Abort()
 }
@@ -95,7 +99,9 @@ func ServerFailed(c *gin.Context, errCode int, err ...error) {
 // authorized failed response
 // 返回权限不足
 func Unauthorized(c *gin.Context, errCode int, err ...error) {
-	logging.Warnf("Unauthorized with code [%d].", errCode)
+	logging.L().Warn("Unauthorized",
+		logging.Any("errCode", errCode),
+		logging.Any("errors", err))
 	HttpResponse(c, http.StatusUnauthorized, errCode, generateErrJson(err))
 	c.Abort()
 }
@@ -104,7 +110,9 @@ func Unauthorized(c *gin.Context, errCode int, err ...error) {
 // authorized forbidden response
 // 返回被禁止访问
 func Forbidden(c *gin.Context, errCode int, err ...error) {
-	logging.Infof("Forbidden with code [%d].", errCode)
+	logging.L().Warn("Forbidden",
+		logging.Any("errCode", errCode),
+		logging.Any("errors", err))
 	HttpResponse(c, http.StatusForbidden, errCode, generateErrJson(err))
 	c.Abort()
 }

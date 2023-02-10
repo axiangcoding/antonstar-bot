@@ -7,9 +7,9 @@ import (
 )
 
 func main() {
-	settings.Setup()
-	logging.Setup()
-	data.Setup()
+	settings.InitConf()
+	logging.InitLogger()
+	data.InitData()
 	db := data.GetDB()
 	data.GenCode(db)
 }

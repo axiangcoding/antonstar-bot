@@ -34,7 +34,7 @@ func TestGetProfileFromThunderskill(t *testing.T) {
 }
 
 func TestMain(m *testing.M) {
-	logging.Setup()
+	logging.InitLogger()
 	code := m.Run()
 	os.Exit(code)
 }

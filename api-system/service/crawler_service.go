@@ -38,7 +38,7 @@ func WaitForCrawlerFinished(missionId string, fullMsg bool) error {
 		time.Sleep(time.Second * time.Duration(duration))
 		mission, err := FindMission(missionId)
 		if err != nil {
-			logging.Warnf("polling find mission failed. %s", err)
+			logging.L().Warn("polling find mission failed", logging.Error(err))
 			i += duration
 			continue
 		}

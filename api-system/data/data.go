@@ -15,28 +15,15 @@ import (
 	"time"
 )
 
-var db *gorm.DB
+var _db *gorm.DB
 
-func Setup() {
-	db = initDB()
-}
-
-func selectDb() gorm.Dialector {
-	driver := settings.Config.App.Data.Database.Driver
-	source := settings.Config.App.Data.Database.Source
-	var dial gorm.Dialector
-	switch driver {
-	case "postgres":
-		dial = postgres.Open(source)
-		break
-	default:
-		logging.Fatalf("no such driver: %s", driver)
-	}
-	return dial
+func InitData() {
+	_db = initDB()
 }
 
 func initDB() *gorm.DB {
-	dial := selectDb()
+	source := settings.C().App.Data.Db.Source
+	dial := postgres.Open(source)
 	db, err := gorm.Open(dial,
 		&gorm.Config{
 			NamingStrategy: &schema.NamingStrategy{SingularTable: true},
@@ -50,9 +37,11 @@ func initDB() *gorm.DB {
 				},
 			)})
 	if err != nil {
-		logging.Fatalf("Can't connect to db: %s", err)
+		logging.L().Fatal("can't connect to db",
+			logging.Error(err),
+			logging.Any("source", source))
 	}
-	logging.Info("Database mysql connected success")
+	logging.L().Info("database mysql connected success")
 	setProperties(db)
 	autoMigrate(db)
 	dal.SetDefault(db)
@@ -60,7 +49,7 @@ func initDB() *gorm.DB {
 }
 
 func GetDB() *gorm.DB {
-	return db
+	return _db
 }
 
 // 自动更新表结构
@@ -72,19 +61,20 @@ func autoMigrate(db *gorm.DB) {
 		&table.QQUserConfig{},
 		&table.GlobalConfig{},
 	); err != nil {
-		logging.Fatal(err)
+		logging.L().Fatal("auto migrate error", logging.Error(err))
 	} else {
-		logging.Info("Auto migrate database table success")
+		logging.L().Info("auto migrate db tables success")
 	}
 }
 
 func setProperties(db *gorm.DB) {
 	s, err := db.DB()
 	if err != nil {
-		logging.Fatal(err)
+		logging.L().Fatal("open db failed while set properties",
+			logging.Error(err))
 	}
-	s.SetMaxOpenConns(settings.Config.App.Data.Database.MaxOpenConn)
-	s.SetMaxIdleConns(settings.Config.App.Data.Database.MaxIdleConn)
+	s.SetMaxOpenConns(settings.C().App.Data.Db.MaxOpenConn)
+	s.SetMaxIdleConns(settings.C().App.Data.Db.MaxIdleConn)
 }
 
 func GenCode(db *gorm.DB) {

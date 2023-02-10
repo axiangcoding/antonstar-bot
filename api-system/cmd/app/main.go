@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/axiangcoding/antonstar-bot/cache"
-	"github.com/axiangcoding/antonstar-bot/controller/validation"
 	"github.com/axiangcoding/antonstar-bot/cron"
 	"github.com/axiangcoding/antonstar-bot/data"
 	"github.com/axiangcoding/antonstar-bot/logging"
@@ -20,12 +19,11 @@ import (
 )
 
 func init() {
-	settings.Setup()
-	logging.Setup()
-	data.Setup()
+	settings.InitConf()
+	logging.InitLogger()
+	data.InitData()
 	cache.Setup()
 	cron.Setup()
-	validation.Setup()
 }
 
 // @title        axiangcoding/anton-star
@@ -55,18 +53,18 @@ func init() {
 // @in                          header
 // @name                        X-Signature
 func main() {
-	runMode := settings.Config.Server.RunMode
+	runMode := settings.C().Server.RunMode
 	gin.SetMode(runMode)
 	r := router.InitRouter()
 	srv := &http.Server{
-		Addr:    fmt.Sprintf(":%s", settings.Config.Server.Port),
+		Addr:    fmt.Sprintf(":%s", settings.C().Server.Port),
 		Handler: r,
 	}
 	// Initialize the server in the goroutine so that it will not block the graceful stop processing below
 	// 在goroutine中初始化服务器，这样就不会阻塞下文的优雅停止处理
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			logging.Fatal("Server error. ", err)
+			logging.L().Fatal("Server error. ", logging.Error(err))
 		}
 	}()
 	// Wait for the interrupt signal to gracefully stop the server, set a delay of 5 seconds
@@ -77,14 +75,14 @@ func main() {
 	// kill -9 	syscall.SIGKILL
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
-	logging.Info("Shutting down server...")
+	logging.L().Info("Shutting down server...")
 	// ctx is used to notify the server that there is 5 seconds left to end the request currently being processed
 	// ctx是用来通知服务器还有5秒的时间来结束当前正在处理的request
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := srv.Shutdown(ctx); err != nil {
-		logging.Fatal("Server forced to shutdown. ", err)
+		logging.L().Fatal("Server forced to shutdown. ", logging.Error(err))
 	}
 
-	logging.Info("Server exiting")
+	logging.L().Info("Server exiting")
 }

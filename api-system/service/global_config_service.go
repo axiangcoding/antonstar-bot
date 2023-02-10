@@ -17,7 +17,7 @@ func FindGlobalConfig(key string) (*table.GlobalConfig, error) {
 func MustFindGlobalConfig(key string) *table.GlobalConfig {
 	config, err := FindGlobalConfig(key)
 	if err != nil {
-		logging.Warn(err)
+		logging.L().Warn("dal failed", logging.Error(err))
 	}
 	return config
 }
@@ -48,6 +48,6 @@ func MustUpsertGlobalConfig(key string, value string) {
 		config.Value = value
 	}
 	if err := dal.Q.GlobalConfig.Save(config); err != nil {
-		logging.Warn(err)
+		logging.L().Warn("dal failed", logging.Error(err))
 	}
 }

@@ -28,10 +28,10 @@ func CqHttpReceiveEvent(c *gin.Context) {
 	cp := c.Copy()
 	if err := ants.Submit(func() {
 		if err := service.HandleCqHttpEvent(cp, m); err != nil {
-			logging.Errorf("async handle cqhttp event failed. %s", err)
+			logging.L().Error("async handle cqhttp event failed. %s", logging.Error(err))
 		}
 	}); err != nil {
-		logging.Error(err)
+		logging.L().Error("ant submit error.", logging.Error(err))
 	}
 	app.Success(c, nil)
 }
@@ -42,7 +42,7 @@ func CqHttpReceiveEvent(c *gin.Context) {
 // @Success  200  {object}  app.ApiJson  ""
 // @Router   /v1/cqhttp/status [get]
 func CqHttpStatus(c *gin.Context) {
-	defaultSelfId := settings.Config.Service.CqHttp.SelfQQ
+	defaultSelfId := settings.C().App.Service.CqHttp.SelfQQ
 	status, err := service.GetCqHttpStatus(c, defaultSelfId)
 	if err != nil {
 		app.BizFailed(c, e.Error, err)

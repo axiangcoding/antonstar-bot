@@ -36,7 +36,9 @@ func MustGetCqCodeAtQQ(message string) int64 {
 	}
 	parseInt, err := strconv.ParseInt(sub[1], 10, 64)
 	if err != nil {
-		logging.Errorf("parse qq string: %s error. %s", sub[1], err)
+		logging.L().Warn("parse qq message failed",
+			logging.Any("message", sub[1]),
+			logging.Error(err))
 		return 0
 	}
 	return parseInt

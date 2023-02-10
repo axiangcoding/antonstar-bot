@@ -28,7 +28,7 @@ func GetProfileFromWTOfficial(nick string, callback func(status int, user *table
 	extensions.RandomUserAgent(c)
 
 	c.OnHTML("div[class=user__unavailable-title]", func(e *colly.HTMLElement) {
-		logging.Warnf("%s userinfo not found", nick)
+		logging.L().Warn("WT profile not found", logging.Any("nick", nick))
 		callback(StatusNotFound, nil)
 	})
 
@@ -38,18 +38,20 @@ func GetProfileFromWTOfficial(nick string, callback func(status int, user *table
 	})
 
 	c.OnRequest(func(r *colly.Request) {
-		logging.Infof("start visiting %s", r.URL.String())
+		logging.L().Info("colly on request", logging.Any("url", r.URL.String()))
 	})
 
 	c.OnError(func(r *colly.Response, err error) {
-		logging.Warnf("visiting %s failed. %s", r.Request.URL.String(), err)
+		logging.L().Warn("colly on error",
+			logging.Any("url", r.Request.URL.String()),
+			logging.Any("statusCode", r.StatusCode))
 		callback(StatusQueryFailed, nil)
 
 	})
 
 	err := c.Post(queryUrl, nil)
 	if err != nil {
-		logging.Warn("colly post failed. ", err)
+		logging.L().Warn("colly post failed", logging.Error(err))
 		callback(StatusQueryFailed, nil)
 		return err
 	}
@@ -58,7 +60,7 @@ func GetProfileFromWTOfficial(nick string, callback func(status int, user *table
 
 func GetProfileFromThunderskill(nick string, callback func(status int, skill *ThunderSkillResp)) error {
 	urlTemplate := "https://thunderskill.com/en/stat/%s/export/json"
-	url := fmt.Sprintf(urlTemplate, nick)
+	queryUrl := fmt.Sprintf(urlTemplate, nick)
 
 	c := colly.NewCollector(
 		colly.AllowedDomains("thunderskill.com"),
@@ -73,16 +75,18 @@ func GetProfileFromThunderskill(nick string, callback func(status int, skill *Th
 	})
 
 	c.OnRequest(func(r *colly.Request) {
-		logging.Infof("start visiting %s", r.URL.String())
+		logging.L().Info("colly on request", logging.Any("url", r.URL.String()))
 	})
 
 	c.OnError(func(r *colly.Response, err error) {
-		logging.Warnf("visiting %s failed. %s", r.Request.URL.String(), err)
+		logging.L().Warn("colly on error",
+			logging.Any("url", r.Request.URL.String()),
+			logging.Any("statusCode", r.StatusCode))
 	})
 
-	err := c.Visit(url)
+	err := c.Visit(queryUrl)
 	if err != nil {
-		logging.Warn("colly get failed. ", err)
+		logging.L().Warn("colly visit failed", logging.Error(err))
 		return err
 	}
 	return nil

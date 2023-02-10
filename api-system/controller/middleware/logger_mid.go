@@ -3,6 +3,7 @@ package middleware
 import (
 	"github.com/axiangcoding/antonstar-bot/logging"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"time"
 )
 
@@ -19,12 +20,18 @@ func Logger() gin.HandlerFunc {
 		reqMethod := c.Request.Method
 		statusCode := c.Writer.Status()
 		clientIP := c.ClientIP()
-		template := "%s %s %s --> status=%d, latency_time=%s, ip=%s"
+		fields := []zap.Field{
+			logging.Any("method", reqMethod),
+			logging.Any("path", path),
+			logging.Any("raw", raw),
+			logging.Any("statusCode", statusCode),
+			logging.Any("latencyTime", latencyTime),
+			logging.Any("clientIp", clientIP),
+		}
 		if latencyTime > time.Second*3 {
-			logging.Warnf(template+" [slow response]", reqMethod, path, raw, statusCode, latencyTime, clientIP)
+			logging.L().Warn("receive slow request", fields...)
 		} else {
-			logging.Infof(template,
-				reqMethod, path, raw, statusCode, latencyTime, clientIP)
+			logging.L().Info("receive request", fields...)
 		}
 
 	}

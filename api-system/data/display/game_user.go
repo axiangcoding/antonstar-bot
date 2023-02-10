@@ -1,11 +1,5 @@
 package display
 
-import (
-	"bytes"
-	"github.com/axiangcoding/antonstar-bot/logging"
-	"text/template"
-)
-
 type GameUser struct {
 	CreatedAt    string `json:"created_at"`
 	UpdatedAt    string `json:"updated_at"`
@@ -128,31 +122,9 @@ TS全真效率: {{.TsSBRate}}%
 `
 
 func (u GameUser) ToFriendlyShortString() string {
-	var buf bytes.Buffer
-
-	t, err := template.New("displayShort").Parse(templateShortStr)
-	if err != nil {
-		logging.Warn(err)
-		return "Error"
-	}
-	if err := t.Execute(&buf, u); err != nil {
-		logging.Error(err)
-		return "Error"
-	}
-	return buf.String()
+	return parseTemplate(templateShortStr, u)
 }
 
 func (u GameUser) ToFriendlyFullString() string {
-	var buf bytes.Buffer
-
-	t, err := template.New("displayFull").Parse(templateFullStr)
-	if err != nil {
-		logging.Warn(err)
-		return "Error"
-	}
-	if err := t.Execute(&buf, u); err != nil {
-		logging.Error(err)
-		return "Error"
-	}
-	return buf.String()
+	return parseTemplate(templateFullStr, u)
 }

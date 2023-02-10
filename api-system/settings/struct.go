@@ -1,55 +1,63 @@
 package settings
 
-type ConfigStruct struct {
-	App
-	Server
+import "github.com/gin-gonic/gin"
+
+const (
+	AppRunModeRelease = gin.ReleaseMode
+	AppRunModeDebug   = gin.DebugMode
+)
+
+const (
+	AppLogFileEncoderJson    = "json"
+	AppLogFileEncoderConsole = "console"
+)
+
+// GlobalConf 对应 /config/app.toml
+type GlobalConf struct {
+	App    appConf
+	Server serverConf
 }
 
-type App struct {
-	Version string
-	Name    string
+type serverConf struct {
+	RunMode  string `mapstructure:"run_mode"`
+	Port     string `mapstructure:"port"`
+	BasePath string `mapstructure:"base_path"`
+}
+
+type appConf struct {
+	Version string `mapstructure:"version"`
+	Name    string `mapstructure:"name"`
 	Log     struct {
 		Level string
 		File  struct {
-			Enable  bool
-			Path    string
-			Encoder string
+			Dir     string `mapstructure:"dir"`
+			Encoder string `mapstructure:"encoder"`
 		}
 	}
 	Auth struct {
-		AppToken       string `mapstructure:"app_token"`
-		Secret         string
-		ExpireDuration string `mapstructure:"expire_duration"`
+		Session struct {
+			EncryptSecret string `mapstructure:"encrypt_secret"`
+			MaxAge        string `mapstructure:"max_age"`
+		}
 	}
 	Swagger struct {
-		Enable bool
+		Enable bool `mapstructure:"enable"`
 	}
 	Data struct {
-		Database struct {
-			Driver      string
-			Source      string
-			MaxIdleConn int `mapstructure:"max_idle_conn"`
-			MaxOpenConn int `mapstructure:"max_open_conn"`
+		Db struct {
+			Source      string `mapstructure:"source"`
+			MaxIdleConn int    `mapstructure:"max_idle_conn"`
+			MaxOpenConn int    `mapstructure:"max_open_conn"`
 		}
 		Cache struct {
-			Driver string
-			Source string
+			Source string `mapstructure:"source"`
 		}
 	}
 	Service struct {
 		CqHttp struct {
 			Url    string `mapstructure:"url"`
 			SelfQQ int64  `mapstructure:"self_qq"`
-			Secret string
+			Secret string `mapstructure:"secret"`
 		}
 	}
-	Response struct {
-		HideErrorDetails bool `mapstructure:"hide_error_details"`
-	}
-}
-
-type Server struct {
-	RunMode  string `mapstructure:"run_mode"`
-	Port     string
-	BasePath string `mapstructure:"base_path"`
 }

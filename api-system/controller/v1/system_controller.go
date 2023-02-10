@@ -13,7 +13,7 @@ import (
 // @Router   /v1/system/info [get]
 func SystemInfo(c *gin.Context) {
 	m := map[string]string{
-		"version": settings.Config.Version,
+		"version": settings.C().App.Version,
 	}
 	app.Success(c, m)
 }
