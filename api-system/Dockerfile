@@ -8,7 +8,7 @@ FROM alpine:latest as prod
 LABEL maintainer=axiangcoding@gmail.com
 ARG VERSION
 WORKDIR /app
-ENV AX_APP_VERSION=${VERSION}
+ENV AS_APP_VERSION=${VERSION}
 COPY --from=build /build/application /app/application
 # 复制config文件夹到镜像中
 COPY --from=build /build/config /app/config
