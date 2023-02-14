@@ -20,7 +20,7 @@ type GlobalConf struct {
 
 type serverConf struct {
 	RunMode  string `mapstructure:"run_mode"`
-	Port     string `mapstructure:"port"`
+	Port     int    `mapstructure:"port"`
 	BasePath string `mapstructure:"base_path"`
 }
 
