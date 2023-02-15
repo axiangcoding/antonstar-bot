@@ -14,5 +14,4 @@ const themeOverrides = {
 </template>
 
 <style scoped>
-
 </style>
