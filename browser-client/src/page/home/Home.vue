@@ -5,7 +5,7 @@
         <div style="display: inherit">
           <n-image preview-disabled height="56" :src="logoNoText"></n-image>
 
-          <p class="welcome-text">欢迎使用安东星！请使用默认密码登录管理后台</p>
+          <p class="welcome-text">欢迎使用安东星！</p>
         </div>
 
 
