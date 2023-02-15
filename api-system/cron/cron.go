@@ -24,7 +24,7 @@ func addJob(c *cron.Cron) {
 		logging.L().Fatal("add cron job RefreshUserTodayCount failed", logging.Error(err))
 	}
 
-	logging.L().Info("All cron job add success")
+	logging.L().Info("all cron job add success")
 }
 
 func CheckRoomLiving() {

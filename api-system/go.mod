@@ -92,4 +92,5 @@ require (
 	gorm.io/datatypes v1.1.0 // indirect
 	gorm.io/driver/mysql v1.4.6 // indirect
 	gorm.io/hints v1.1.1 // indirect
+	moul.io/zapgorm2 v1.2.0 // indirect
 )
