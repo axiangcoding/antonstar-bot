@@ -1,3 +1,4 @@
 *.exe
 logs/
 .idea/
+web/
