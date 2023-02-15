@@ -22,33 +22,27 @@
           <n-gi span="0:4 600:4 800:2 1400:1">
             <bot-status/>
           </n-gi>
-          <n-gi span="0:4 600:4 800:2 1400:1" v-for="i in 6" :key="i">
-            <n-card title="卡片" hoverable>
-              卡片内容 ces
-            </n-card>
+          <n-gi span="0:4 600:4 800:2 1400:1">
+            <kook-bot-status/>
           </n-gi>
         </n-grid>
 
       </n-layout-content>
       <n-layout-footer>
-        Powered by
-        <n-image
-            preview-disabled
-            width="60"
-            :src="logo"
-        />
-
+        <app-footer/>
       </n-layout-footer>
     </n-layout>
   </div>
 </template>
 
 <script setup lang="ts">
-import logo from '@/assets/logo/logo_text_color.png'
+
 import logoNoText from '@/assets/logo/logo_no_text.png'
 import {SettingsFilled} from "@vicons/material";
 import {ref} from "vue";
-import BotStatus from "@/page/home/components/BotStatus.vue";
+import BotStatus from "@/page/home/components/QQBotStatus.vue";
+import AppFooter from "@/page/home/components/AppFooter.vue";
+import KookBotStatus from "@/page/home/components/KookBotStatus.vue";
 
 const testData = ref([{
   title: "机器人在线状态",

@@ -23,12 +23,12 @@ type MetaTypeHeartBeatEvent struct {
 	PostType      string `json:"post_type" mapstructure:"post_type"`
 	SelfId        int64  `json:"self_id" mapstructure:"self_id"`
 	Status        struct {
-		AppEnabled     bool        `json:"app_enabled" mapstructure:"app_enabled"`
-		AppGood        bool        `json:"app_good" mapstructure:"app_good"`
-		AppInitialized bool        `json:"app_initialized" mapstructure:"app_initialized"`
-		Good           bool        `json:"good" mapstructure:"good"`
-		Online         bool        `json:"online" mapstructure:"online"`
-		PluginsGood    interface{} `json:"plugins_good" mapstructure:"plugins_good"`
+		AppEnabled     bool  `json:"app_enabled" mapstructure:"app_enabled"`
+		AppGood        bool  `json:"app_good" mapstructure:"app_good"`
+		AppInitialized bool  `json:"app_initialized" mapstructure:"app_initialized"`
+		Good           bool  `json:"good" mapstructure:"good"`
+		Online         bool  `json:"online" mapstructure:"online"`
+		PluginsGood    *bool `json:"plugins_good" mapstructure:"plugins_good"`
 		Stat           struct {
 			DisconnectTimes int `json:"disconnect_times" mapstructure:"disconnect_times"`
 			LastMessageTime int `json:"last_message_time" mapstructure:"last_message_time"`

@@ -44,9 +44,16 @@ func CqHttpReceiveEvent(c *gin.Context) {
 func CqHttpStatus(c *gin.Context) {
 	defaultSelfId := settings.C().App.Service.CqHttp.SelfQQ
 	status, err := service.GetCqHttpStatus(c, defaultSelfId)
+	logging.L().Info("", logging.Any("status", status))
+	mp := map[string]any{
+		"app_enabled": status.Status.AppEnabled,
+		"app_good":    status.Status.AppGood,
+		"online":      status.Status.Online,
+		"plugin_good": status.Status.PluginsGood,
+	}
 	if err != nil {
 		app.BizFailed(c, e.Error, err)
 		return
 	}
-	app.Success(c, status)
+	app.Success(c, mp)
 }
