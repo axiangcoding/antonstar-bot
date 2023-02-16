@@ -18,6 +18,16 @@ info:
   title: axiangcoding/anton-star
   version: 1.0.0
 paths:
+  /v1/app/info:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      summary: App Info
+      tags:
+      - App API
   /v1/cqhttp/receive/event:
     post:
       parameters:

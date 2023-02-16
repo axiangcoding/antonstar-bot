@@ -36,8 +36,9 @@ func initDB() *gorm.DB {
 		logging.L().Fatal("can't connect to db",
 			logging.Error(err),
 			logging.Any("source", source))
+	} else {
+		logging.L().Info("database connected success")
 	}
-	logging.L().Info("database connected success")
 	setProperties(db)
 	autoMigrate(db)
 	dal.SetDefault(db)

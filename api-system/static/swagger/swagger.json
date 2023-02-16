@@ -17,6 +17,22 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/v1/app/info": {
+            "get": {
+                "tags": [
+                    "App API"
+                ],
+                "summary": "App Info",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/cqhttp/receive/event": {
             "post": {
                 "security": [

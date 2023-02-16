@@ -5,7 +5,7 @@ import (
 	"github.com/axiangcoding/antonstar-bot/controller/middleware"
 	"github.com/axiangcoding/antonstar-bot/controller/v1"
 	"github.com/axiangcoding/antonstar-bot/settings"
-	"github.com/axiangcoding/antonstar-bot/swagger"
+	"github.com/axiangcoding/antonstar-bot/static/swagger"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -41,6 +41,10 @@ func setRouterApiV1(r *gin.RouterGroup) {
 		system := groupV1.Group("/system")
 		{
 			system.GET("/info", v1.SystemInfo)
+		}
+		app := groupV1.Group("/app")
+		{
+			app.GET("/info", v1.AppInfo)
 		}
 		cqhttp := groupV1.Group("/cqhttp")
 		{
