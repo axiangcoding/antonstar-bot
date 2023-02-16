@@ -25,6 +25,7 @@ require (
 	gorm.io/gen v0.3.21
 	gorm.io/gorm v1.24.5
 	gorm.io/plugin/dbresolver v1.4.1
+	moul.io/zapgorm2 v1.2.0
 )
 
 require (
@@ -92,5 +93,4 @@ require (
 	gorm.io/datatypes v1.1.0 // indirect
 	gorm.io/driver/mysql v1.4.6 // indirect
 	gorm.io/hints v1.1.1 // indirect
-	moul.io/zapgorm2 v1.2.0 // indirect
 )
