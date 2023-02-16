@@ -25,7 +25,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/app.ApiJson'
-      summary: App Info
+      summary: 获取应用信息
       tags:
       - App API
   /v1/cqhttp/receive/event:
@@ -65,9 +65,25 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/app.ApiJson'
-      summary: System Info
+      summary: 获取系统信息
       tags:
       - System API
+  /v1/wt/profile:
+    get:
+      parameters:
+      - description: user nickname
+        in: query
+        name: nick
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      summary: 获取游戏内玩家数据
+      tags:
+      - GameUser API
 produces:
 - application/json
 securityDefinitions:
