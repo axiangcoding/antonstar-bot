@@ -7,11 +7,11 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-var rdb *redis.Client
+var _rdb *redis.Client
 
 func Setup() {
-	rdb = initRedis()
-	err := rdb.Ping(context.Background()).Err()
+	_rdb = initRedis()
+	err := _rdb.Ping(context.Background()).Err()
 	if err != nil {
 		logging.L().Fatal("redis connect failed", logging.Error(err))
 	}
@@ -29,5 +29,5 @@ func initRedis() *redis.Client {
 }
 
 func GetClient() *redis.Client {
-	return rdb
+	return _rdb
 }

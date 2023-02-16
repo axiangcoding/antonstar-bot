@@ -4,7 +4,7 @@ all: swag run
 
 swag:
 	@echo "latest swag tool required"
-	swag init -o ./swagger -g ./cmd/app/main.go
+	swag init -o ./static/swagger -g ./cmd/app/main.go
 	swag fmt -g ./cmd/app/main.go
 
 clean:

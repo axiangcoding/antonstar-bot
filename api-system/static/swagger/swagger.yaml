@@ -1,0 +1,86 @@
+consumes:
+- application/json
+definitions:
+  app.ApiJson:
+    properties:
+      code:
+        type: integer
+      data: {}
+      msg:
+        type: string
+    type: object
+info:
+  contact:
+    email: axiangcoding@gmail.com
+    name: axiangcoding
+  description: api system build by ax-web
+  license: {}
+  title: axiangcoding/anton-star
+  version: 1.0.0
+paths:
+  /v1/app/info:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      summary: App Info
+      tags:
+      - App API
+  /v1/cqhttp/receive/event:
+    post:
+      parameters:
+      - description: cqhttp event
+        in: body
+        name: event
+        required: true
+        schema:
+          type: object
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      security:
+      - CqhttpSelfID: []
+      - CqhttpSignature: []
+      summary: 接收cqhttp的事件
+      tags:
+      - CQHttp API
+  /v1/cqhttp/status:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      summary: 获取cqhttp的最新状态
+      tags:
+      - CQHttp API
+  /v1/system/info:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.ApiJson'
+      summary: System Info
+      tags:
+      - System API
+produces:
+- application/json
+securityDefinitions:
+  AppToken:
+    in: query
+    name: app_token
+    type: apiKey
+  CqhttpSelfID:
+    in: header
+    name: X-Self-ID
+    type: apiKey
+  CqhttpSignature:
+    in: header
+    name: X-Signature
+    type: apiKey
+swagger: "2.0"

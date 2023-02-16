@@ -57,7 +57,7 @@ func main() {
 	gin.SetMode(runMode)
 	r := router.InitRouter()
 	srv := &http.Server{
-		Addr:    fmt.Sprintf(":%s", settings.C().Server.Port),
+		Addr:    fmt.Sprintf(":%d", settings.C().Server.Port),
 		Handler: r,
 	}
 	// Initialize the server in the goroutine so that it will not block the graceful stop processing below
