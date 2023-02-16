@@ -72,7 +72,7 @@ onBeforeMount(() => {
 })
 
 function getStatus() {
-  api.get('api/v1/cqhttp/status').then((resp) => {
+  api.get('/api/v1/cqhttp/status').then((resp) => {
     if (resp.data.code === 0) {
       status.value = resp.data.data
     } else {
