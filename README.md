@@ -187,4 +187,4 @@ asbot镜像启动后需要约30MB内存，完整服务需要总共约100MB内存
 
 ## 开源协议
 
-本仓库遵循 [GPL-3.0 license](https://github.com/axiangcoding/antonstar-bot/blob/master/LICENSE) 协议
+本仓库遵循 [MIT license](https://github.com/axiangcoding/antonstar-bot/blob/master/LICENSE) 协议
