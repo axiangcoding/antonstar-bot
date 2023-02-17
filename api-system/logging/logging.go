@@ -50,7 +50,8 @@ func getEncoder(enc string) zapcore.Encoder {
 	case settings.AppLogFileEncoderJson:
 		encoder = zapcore.NewJSONEncoder(encConf)
 	case settings.AppLogFileEncoderConsole:
-		encConf.EncodeCaller = zapcore.ShortCallerEncoder
+		encConf.EncodeCaller = zapcore.FullCallerEncoder
+		encConf.ConsoleSeparator = " | "
 		encoder = zapcore.NewConsoleEncoder(encConf)
 	default:
 		log.Fatalln("no such log file encoder")

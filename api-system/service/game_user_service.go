@@ -41,7 +41,7 @@ func MustUpdateGameProfile(nick string, user *table.GameUser) {
 }
 
 func CanBeRefresh(nick string) bool {
-	client := cache.GetClient()
+	client := cache.Client()
 	key := cache.GenerateGameUserCacheKey(nick)
 	if _, err := client.Get(context.Background(), key).Result(); err != nil {
 		if errors.Is(err, redis.Nil) {
@@ -54,7 +54,7 @@ func CanBeRefresh(nick string) bool {
 }
 
 func MustPutRefreshFlag(nick string) {
-	client := cache.GetClient()
+	client := cache.Client()
 	key := cache.GenerateGameUserCacheKey(nick)
 	if err := client.Set(context.Background(), key, "", time.Hour*24).Err(); err != nil {
 		logging.L().Error("set cache error", logging.Error(err))

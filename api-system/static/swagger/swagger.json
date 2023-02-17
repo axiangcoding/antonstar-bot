@@ -22,7 +22,7 @@
                 "tags": [
                     "App API"
                 ],
-                "summary": "App Info",
+                "summary": "获取应用信息",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -89,7 +89,32 @@
                 "tags": [
                     "System API"
                 ],
-                "summary": "System Info",
+                "summary": "获取系统信息",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/wt/profile": {
+            "get": {
+                "tags": [
+                    "GameUser API"
+                ],
+                "summary": "获取游戏内玩家数据",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user nickname",
+                        "name": "nick",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",

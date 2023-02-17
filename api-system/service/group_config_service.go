@@ -46,7 +46,7 @@ func MustSaveGroupConfig(gc *table.QQGroupConfig) {
 }
 
 func ExistBiliRoomFlag(groupId int64, roomId int64) bool {
-	client := cache.GetClient()
+	client := cache.Client()
 	key := cache.GenerateBiliRoomLivingCacheKey(groupId, roomId)
 	if _, err := client.Get(context.Background(), key).Result(); err != nil {
 		if errors.Is(err, redis.Nil) {
@@ -59,7 +59,7 @@ func ExistBiliRoomFlag(groupId int64, roomId int64) bool {
 }
 
 func ExistGroupUsageLimitFlag(groupId int64) bool {
-	client := cache.GetClient()
+	client := cache.Client()
 	key := cache.GenerateGroupUsageLimitCacheKey(groupId)
 	if _, err := client.Get(context.Background(), key).Result(); err != nil {
 		if errors.Is(err, redis.Nil) {
@@ -72,7 +72,7 @@ func ExistGroupUsageLimitFlag(groupId int64) bool {
 }
 
 func MustPutBiliRoomFlag(groupId int64, roomId int64) {
-	client := cache.GetClient()
+	client := cache.Client()
 	key := cache.GenerateBiliRoomLivingCacheKey(groupId, roomId)
 	if err := client.Set(context.Background(), key, "", time.Minute*10).Err(); err != nil {
 		logging.L().Warn("set cache failed", logging.Error(err))
@@ -80,7 +80,7 @@ func MustPutBiliRoomFlag(groupId int64, roomId int64) {
 }
 
 func MustPutGroupUsageLimitFlag(groupId int64) {
-	client := cache.GetClient()
+	client := cache.Client()
 	key := cache.GenerateGroupUsageLimitCacheKey(groupId)
 	if err := client.Set(context.Background(), key, "", time.Hour*1).Err(); err != nil {
 		logging.L().Warn("set cache failed", logging.Error(err))

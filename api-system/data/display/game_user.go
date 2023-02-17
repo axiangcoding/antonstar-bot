@@ -48,7 +48,7 @@ type UserStat struct {
 }
 
 type UserRate struct {
-	Ka string `json:"ad,omitempty"`
+	Ka string `json:"ka,omitempty"`
 }
 
 const templateShortStr = `

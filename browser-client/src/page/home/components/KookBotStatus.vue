@@ -1,5 +1,5 @@
 <template>
-  <n-card title="Kook机器人实时状态">
+  <n-card class="home-card" hoverable title="Kook机器人实时状态">
     <n-space>
       <n-tag type="info">
         暂未接入

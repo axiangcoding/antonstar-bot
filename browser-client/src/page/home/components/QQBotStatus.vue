@@ -1,5 +1,5 @@
 <template>
-  <n-card hoverable title="QBot机器人实时状态">
+  <n-card class="home-card" hoverable title="QBot机器人实时状态">
     <n-space v-show="showTags">
       <n-tag :type="status.app_enabled?'success':'error'">
         {{ status.app_enabled ? "程序可用" : "程序不可用" }}
