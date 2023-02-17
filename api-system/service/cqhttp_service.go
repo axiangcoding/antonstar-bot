@@ -78,7 +78,7 @@ func HandleCqHttpEvent(c *gin.Context, data map[string]any) error {
 func GetCqHttpStatus(c *gin.Context, selfId int64) (cqhttp.MetaTypeHeartBeatEvent, error) {
 	var message cqhttp.MetaTypeHeartBeatEvent
 	key := cache.GenerateCQHTTPCacheKey(cqhttp.PostTypeMetaEvent, cqhttp.EventTypeHeartBeat, selfId)
-	result, err := cache.GetClient().Get(c, key).Result()
+	result, err := cache.Client().Get(c, key).Result()
 	if err != nil {
 		return message, err
 	}
@@ -90,7 +90,7 @@ func GetCqHttpStatus(c *gin.Context, selfId int64) (cqhttp.MetaTypeHeartBeatEven
 
 func handleCqHttpMetaEventHeartBeat(c *gin.Context, event *cqhttp.MetaTypeHeartBeatEvent) {
 	key := cache.GenerateCQHTTPCacheKey(event.PostType, event.MetaEventType, event.SelfId)
-	if err := cache.GetClient().Set(c, key, event, time.Minute).Err(); err != nil {
+	if err := cache.Client().Set(c, key, event, time.Minute).Err(); err != nil {
 		logging.L().Error("set cache error", logging.Error(err))
 	}
 }

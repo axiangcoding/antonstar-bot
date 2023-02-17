@@ -28,6 +28,6 @@ func initRedis() *redis.Client {
 	return redis.NewClient(opt)
 }
 
-func GetClient() *redis.Client {
+func Client() *redis.Client {
 	return _rdb
 }

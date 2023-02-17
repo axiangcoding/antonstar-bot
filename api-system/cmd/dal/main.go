@@ -10,6 +10,6 @@ func main() {
 	settings.InitConf()
 	logging.InitLogger()
 	data.InitData()
-	db := data.GetDB()
+	db := data.Db()
 	data.GenCode(db)
 }

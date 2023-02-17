@@ -45,7 +45,7 @@ func initDB() *gorm.DB {
 	return db
 }
 
-func GetDB() *gorm.DB {
+func Db() *gorm.DB {
 	return _db
 }
 

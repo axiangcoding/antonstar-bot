@@ -114,7 +114,7 @@ func ResetAllUserConfigTodayCount() error {
 }
 
 func ExistUserUsageLimitFlag(userId int64) bool {
-	client := cache.GetClient()
+	client := cache.Client()
 	key := cache.GenerateUserUsageLimitCacheKey(userId)
 	if _, err := client.Get(context.Background(), key).Result(); err != nil {
 		if errors.Is(err, redis.Nil) {
@@ -127,7 +127,7 @@ func ExistUserUsageLimitFlag(userId int64) bool {
 }
 
 func MustPutUserUsageLimitFlag(userId int64) {
-	client := cache.GetClient()
+	client := cache.Client()
 	key := cache.GenerateUserUsageLimitCacheKey(userId)
 	if err := client.Set(context.Background(), key, "", time.Hour*1).Err(); err != nil {
 		logging.L().Warn("dal failed", logging.Error(err))
