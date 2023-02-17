@@ -33,7 +33,7 @@ func InitRouter() *gin.Engine {
 }
 
 func setWebResources(r *gin.RouterGroup) {
-	r.GET("/", controller.BaseRedirect)
+	r.GET("/", controller.RootRedirect)
 	r.StaticFS("/web", http.Dir("web"))
 }
 

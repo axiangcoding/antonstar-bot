@@ -5,6 +5,6 @@ import (
 	"net/http"
 )
 
-func BaseRedirect(c *gin.Context) {
-	c.Redirect(http.StatusMovedPermanently, "/web")
+func RootRedirect(c *gin.Context) {
+	c.Redirect(http.StatusSeeOther, "/web")
 }
