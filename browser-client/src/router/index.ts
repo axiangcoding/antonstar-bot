@@ -5,6 +5,10 @@ const routes = [
     {
         path: '/',
         component: () => import('@/page/home/Home.vue')
+    },
+    {
+        path: '/query',
+        component: () => import('@/page/query/Query.vue')
     }
 ]
 

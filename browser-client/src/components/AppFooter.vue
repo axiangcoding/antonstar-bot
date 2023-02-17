@@ -1,5 +1,4 @@
 <template>
-
   <div id="footer">
     Powered by
     <n-image
@@ -7,10 +6,7 @@
         width="60"
         :src="logo"
     />
-
   </div>
-
-
 </template>
 
 <script setup lang="ts">
@@ -26,7 +22,7 @@ const version = ref('')
 
 function getSystemInfo() {
 
-  api.get('/api/v1/system/info').then((resp) => {
+  api.get('/api/v1/app/info').then((resp) => {
     version.value = resp.data.data.version
     console.log(resp)
   })
