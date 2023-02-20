@@ -17,6 +17,7 @@ import (
 
 var (
 	Q             = new(Query)
+	GameNew       *gameNew
 	GameUser      *gameUser
 	GlobalConfig  *globalConfig
 	Mission       *mission
@@ -26,6 +27,7 @@ var (
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
+	GameNew = &Q.GameNew
 	GameUser = &Q.GameUser
 	GlobalConfig = &Q.GlobalConfig
 	Mission = &Q.Mission
@@ -36,6 +38,7 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
 		db:            db,
+		GameNew:       newGameNew(db, opts...),
 		GameUser:      newGameUser(db, opts...),
 		GlobalConfig:  newGlobalConfig(db, opts...),
 		Mission:       newMission(db, opts...),
@@ -47,6 +50,7 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 type Query struct {
 	db *gorm.DB
 
+	GameNew       gameNew
 	GameUser      gameUser
 	GlobalConfig  globalConfig
 	Mission       mission
@@ -59,6 +63,7 @@ func (q *Query) Available() bool { return q.db != nil }
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
 		db:            db,
+		GameNew:       q.GameNew.clone(db),
 		GameUser:      q.GameUser.clone(db),
 		GlobalConfig:  q.GlobalConfig.clone(db),
 		Mission:       q.Mission.clone(db),
@@ -78,6 +83,7 @@ func (q *Query) WriteDB() *Query {
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
 		db:            db,
+		GameNew:       q.GameNew.replaceDB(db),
 		GameUser:      q.GameUser.replaceDB(db),
 		GlobalConfig:  q.GlobalConfig.replaceDB(db),
 		Mission:       q.Mission.replaceDB(db),
@@ -87,6 +93,7 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 }
 
 type queryCtx struct {
+	GameNew       IGameNewDo
 	GameUser      IGameUserDo
 	GlobalConfig  IGlobalConfigDo
 	Mission       IMissionDo
@@ -96,6 +103,7 @@ type queryCtx struct {
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
+		GameNew:       q.GameNew.WithContext(ctx),
 		GameUser:      q.GameUser.WithContext(ctx),
 		GlobalConfig:  q.GlobalConfig.WithContext(ctx),
 		Mission:       q.Mission.WithContext(ctx),

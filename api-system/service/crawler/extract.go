@@ -196,8 +196,25 @@ func parseCommonNumber(str string) int {
 	atoi, _ := strconv.Atoi(str)
 	return atoi
 }
+
 func parseSENumber(str string) int64 {
 	str = strings.ReplaceAll(str, ",", "")
 	atoi, _ := strconv.ParseInt(str, 10, 64)
 	return atoi
+}
+
+func ExtractGaijinNews(e *colly.HTMLElement) []table.GameNew {
+	var lst []table.GameNew
+	dom := e.DOM
+	dom.Children().Each(func(i int, item *goquery.Selection) {
+		gameNew := table.GameNew{}
+		gameNew.Link = "https://warthunder.com" + item.Find("a[class='widget__link']").AttrOr("href", "/zh/news")
+		posterUrl := "https:" + item.Find("div[class~='widget__poster']>img[class~='widget__poster-media']").AttrOr("data-src", "https://static.warthunder.com/")
+		gameNew.PosterUrl = posterUrl
+		gameNew.Title = strings.TrimSpace(item.Find("div[class='widget__content']>div[class='widget__title']").Text())
+		gameNew.Comment = strings.TrimSpace(item.Find("div[class='widget__content']>div[class='widget__comment']").Text())
+		gameNew.DateStr = strings.TrimSpace(item.Find("div[class='widget__content']>ul[class~='widget__meta']>li[class~='widget-meta__item--right']").Text())
+		lst = append([]table.GameNew{gameNew}, lst...)
+	})
+	return lst
 }

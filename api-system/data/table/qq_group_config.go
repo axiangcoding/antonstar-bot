@@ -16,6 +16,7 @@ type QQGroupConfig struct {
 	EnableActionLuck    *bool
 	EnableActionSetting *bool
 	EnableCheckBiliRoom *bool
+	EnableCheckWTNew    *bool
 	MessageTemplate     int
 	TodayQueryCount     int
 	OneDayQueryLimit    int

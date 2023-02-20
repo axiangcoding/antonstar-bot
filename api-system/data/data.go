@@ -57,6 +57,7 @@ func autoMigrate(db *gorm.DB) {
 		&table.QQGroupConfig{},
 		&table.QQUserConfig{},
 		&table.GlobalConfig{},
+		&table.GameNew{},
 	); err != nil {
 		logging.L().Fatal("auto migrate error", logging.Error(err))
 	} else {
@@ -90,7 +91,9 @@ func GenCode(db *gorm.DB) {
 		table.GameUser{},
 		table.QQGroupConfig{},
 		table.QQUserConfig{},
-		table.GlobalConfig{})
+		table.GlobalConfig{},
+		table.GameNew{},
+	)
 
 	// Execute the generator
 	g.Execute()

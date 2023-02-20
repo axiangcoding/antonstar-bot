@@ -1,10 +1,9 @@
 package crawler
 
 import (
+	"fmt"
 	"github.com/axiangcoding/antonstar-bot/data/table"
-	"github.com/axiangcoding/antonstar-bot/logging"
 	"github.com/stretchr/testify/assert"
-	"os"
 	"testing"
 )
 
@@ -33,8 +32,13 @@ func TestGetProfileFromThunderskill(t *testing.T) {
 	}
 }
 
-func TestMain(m *testing.M) {
-	logging.InitLogger()
-	code := m.Run()
-	os.Exit(code)
+func TestGetFirstPageNewsFromWTOfficial(t *testing.T) {
+	if err := GetFirstPageNewsFromWTOfficial(func(news []table.GameNew) {
+		fmt.Println(len(news))
+		for _, i := range news {
+			fmt.Println(i)
+		}
+	}); err != nil {
+		t.Failed()
+	}
 }

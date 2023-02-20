@@ -27,8 +27,13 @@ func MustFindGroupConfig(groupId int64) *table.QQGroupConfig {
 	return config
 }
 
-func GetEnableCheckBiliRoomGroupConfig(enableCheckBiliBiliRoom bool) ([]*table.QQGroupConfig, error) {
-	find, err := dal.QQGroupConfig.Where(dal.QQGroupConfig.EnableCheckBiliRoom.Is(enableCheckBiliBiliRoom)).Find()
+func GetEnableCheckBiliRoomGroupConfig(enabled bool) ([]*table.QQGroupConfig, error) {
+	find, err := dal.QQGroupConfig.Where(dal.QQGroupConfig.EnableCheckBiliRoom.Is(enabled)).Find()
+	return find, err
+}
+
+func GetEnableCheckWTNew(enabled bool) ([]*table.QQGroupConfig, error) {
+	find, err := dal.QQGroupConfig.Where(dal.QQGroupConfig.EnableCheckWTNew.Is(enabled)).Find()
 	return find, err
 }
 
