@@ -91,3 +91,37 @@ func GetProfileFromThunderskill(nick string, callback func(status int, skill *Th
 	}
 	return nil
 }
+
+func GetFirstPageNewsFromWTOfficial(callback func(news []table.GameNew)) error {
+	baseUrl := "https://warthunder.com/zh/news/"
+	c := colly.NewCollector(
+		colly.AllowedDomains("warthunder.com"),
+		colly.MaxDepth(1),
+		colly.IgnoreRobotsTxt(),
+	)
+	extensions.RandomUserAgent(c)
+
+	c.OnHTML("div[class=showcase__content-wrapper]", func(e *colly.HTMLElement) {
+		news := ExtractGaijinNews(e)
+		callback(news)
+	})
+
+	c.OnRequest(func(r *colly.Request) {
+		logging.L().Info("colly on request", logging.Any("url", r.URL.String()))
+	})
+
+	c.OnError(func(r *colly.Response, err error) {
+		logging.L().Warn("colly on error",
+			logging.Any("url", r.Request.URL.String()),
+			logging.Any("statusCode", r.StatusCode))
+		callback(nil)
+	})
+
+	err := c.Post(baseUrl, nil)
+	if err != nil {
+		logging.L().Warn("colly post failed", logging.Error(err))
+		callback(nil)
+		return err
+	}
+	return nil
+}

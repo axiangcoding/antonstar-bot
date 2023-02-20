@@ -40,6 +40,7 @@ func newQQGroupConfig(db *gorm.DB, opts ...gen.DOOption) qQGroupConfig {
 	_qQGroupConfig.EnableActionLuck = field.NewBool(tableName, "enable_action_luck")
 	_qQGroupConfig.EnableActionSetting = field.NewBool(tableName, "enable_action_setting")
 	_qQGroupConfig.EnableCheckBiliRoom = field.NewBool(tableName, "enable_check_bili_room")
+	_qQGroupConfig.EnableCheckWTNew = field.NewBool(tableName, "enable_check_wt_new")
 	_qQGroupConfig.MessageTemplate = field.NewInt(tableName, "message_template")
 	_qQGroupConfig.TodayQueryCount = field.NewInt(tableName, "today_query_count")
 	_qQGroupConfig.OneDayQueryLimit = field.NewInt(tableName, "one_day_query_limit")
@@ -70,6 +71,7 @@ type qQGroupConfig struct {
 	EnableActionLuck    field.Bool
 	EnableActionSetting field.Bool
 	EnableCheckBiliRoom field.Bool
+	EnableCheckWTNew    field.Bool
 	MessageTemplate     field.Int
 	TodayQueryCount     field.Int
 	OneDayQueryLimit    field.Int
@@ -106,6 +108,7 @@ func (q *qQGroupConfig) updateTableName(table string) *qQGroupConfig {
 	q.EnableActionLuck = field.NewBool(table, "enable_action_luck")
 	q.EnableActionSetting = field.NewBool(table, "enable_action_setting")
 	q.EnableCheckBiliRoom = field.NewBool(table, "enable_check_bili_room")
+	q.EnableCheckWTNew = field.NewBool(table, "enable_check_wt_new")
 	q.MessageTemplate = field.NewInt(table, "message_template")
 	q.TodayQueryCount = field.NewInt(table, "today_query_count")
 	q.OneDayQueryLimit = field.NewInt(table, "one_day_query_limit")
@@ -129,7 +132,7 @@ func (q *qQGroupConfig) GetFieldByName(fieldName string) (field.OrderExpr, bool)
 }
 
 func (q *qQGroupConfig) fillFieldMap() {
-	q.fieldMap = make(map[string]field.Expr, 20)
+	q.fieldMap = make(map[string]field.Expr, 21)
 	q.fieldMap["id"] = q.ID
 	q.fieldMap["created_at"] = q.CreatedAt
 	q.fieldMap["updated_at"] = q.UpdatedAt
@@ -143,6 +146,7 @@ func (q *qQGroupConfig) fillFieldMap() {
 	q.fieldMap["enable_action_luck"] = q.EnableActionLuck
 	q.fieldMap["enable_action_setting"] = q.EnableActionSetting
 	q.fieldMap["enable_check_bili_room"] = q.EnableCheckBiliRoom
+	q.fieldMap["enable_check_wt_new"] = q.EnableCheckWTNew
 	q.fieldMap["message_template"] = q.MessageTemplate
 	q.fieldMap["today_query_count"] = q.TodayQueryCount
 	q.fieldMap["one_day_query_limit"] = q.OneDayQueryLimit
