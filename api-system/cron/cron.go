@@ -25,7 +25,7 @@ func addJob(c *cron.Cron) {
 	if _, err := c.AddFunc("@daily", RefreshUserTodayCount); err != nil {
 		logging.L().Fatal("add cron job RefreshUserTodayCount failed", logging.Error(err))
 	}
-	if _, err := c.AddFunc("@every 5m", CheckWTNewsUpdate); err != nil {
+	if _, err := c.AddFunc("@every 2m", CheckWTNewsUpdate); err != nil {
 		logging.L().Fatal("add cron job CheckWTNewsUpdate failed", logging.Error(err))
 	}
 	logging.L().Info("all cron job add success")
