@@ -59,8 +59,8 @@ func getEncoder(enc string) zapcore.Encoder {
 	return encoder
 }
 
-func InitLogger() {
-	logLevel := getLogLevel(setting.C().App.Log.Level)
+func InitLogger(level string, mode string) {
+	logLevel := getLogLevel(level)
 
 	w := zapcore.AddSync(&lumberjack.Logger{
 		Filename: path.Join(setting.C().App.Log.File.Dir,
@@ -79,9 +79,7 @@ func InitLogger() {
 		logLevel,
 	)
 	cores = append(cores, prodCore)
-
-	runMode := setting.C().Server.RunMode
-	if runMode == setting.AppRunModeDebug {
+	if mode == setting.AppRunModeDebug {
 		debugCore := zapcore.NewCore(getEncoder("console"), os.Stdout, logLevel)
 		cores = append(cores, debugCore)
 	}

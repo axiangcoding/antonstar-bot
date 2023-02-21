@@ -8,8 +8,9 @@ import (
 
 func main() {
 	setting.InitConf()
-	logging.InitLogger()
-	data.InitData()
+	cfg := setting.C()
+	logging.InitLogger(cfg.App.Log.Level, cfg.Server.RunMode)
+	data.InitData(cfg.App.Data.Db.Source, cfg.App.Data.Db.MaxOpenConn, cfg.App.Data.Db.MaxIdleConn)
 	db := data.Db()
 	data.GenCode(db)
 }

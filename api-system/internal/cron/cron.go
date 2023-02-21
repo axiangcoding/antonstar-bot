@@ -3,7 +3,7 @@ package cron
 import (
 	"fmt"
 	"github.com/axiangcoding/antonstar-bot/internal/data/table"
-	service2 "github.com/axiangcoding/antonstar-bot/internal/service"
+	"github.com/axiangcoding/antonstar-bot/internal/service"
 	"github.com/axiangcoding/antonstar-bot/pkg/bilibili"
 	"github.com/axiangcoding/antonstar-bot/pkg/bot"
 	"github.com/axiangcoding/antonstar-bot/pkg/cqhttp"
@@ -12,7 +12,7 @@ import (
 	"github.com/robfig/cron/v3"
 )
 
-func Setup() {
+func InitCronJob() {
 	c := cron.New()
 	addJob(c)
 	c.Start()
@@ -32,7 +32,7 @@ func addJob(c *cron.Cron) {
 }
 
 func CheckRoomLiving() {
-	qcs, err := service2.GetEnableCheckBiliRoomGroupConfig(true)
+	qcs, err := service.GetEnableCheckBiliRoomGroupConfig(true)
 	if err != nil {
 		logging.L().Warn("get group config checkbilibiliroom failed", logging.Error(err))
 		return
@@ -46,27 +46,27 @@ func CheckRoomLiving() {
 			continue
 		}
 		if info.Data.LiveStatus == 1 {
-			exist := service2.ExistBiliRoomFlag(qc.GroupId, qc.BindBiliRoomId)
+			exist := service.ExistBiliRoomFlag(qc.GroupId, qc.BindBiliRoomId)
 			if !exist {
 				url := fmt.Sprintf("https://live.bilibili.com/%d", qc.BindBiliRoomId)
-				config, _ := service2.FindGroupConfig(qc.GroupId)
+				config, _ := service.FindGroupConfig(qc.GroupId)
 				sgmf.Message = fmt.Sprintf(bot.SelectStaticMessage(config.MessageTemplate).CommonResp.LiveBroadcast, info.Data.Title, url)
 				cqhttp.MustSendGroupMsg(sgmf)
 			}
-			service2.MustPutBiliRoomFlag(qc.GroupId, qc.BindBiliRoomId)
+			service.MustPutBiliRoomFlag(qc.GroupId, qc.BindBiliRoomId)
 		}
 	}
 
 }
 
 func RefreshUserTodayCount() {
-	if err := service2.ResetAllUserConfigTodayCount(); err != nil {
+	if err := service.ResetAllUserConfigTodayCount(); err != nil {
 		logging.L().Error("reset all qq user today_query_count failed. ", logging.Error(err))
 	} else {
 		logging.L().Info("reset all qq user today_query_count to 0")
 	}
 
-	if err := service2.ResetAllGroupConfigTodayCount(); err != nil {
+	if err := service.ResetAllGroupConfigTodayCount(); err != nil {
 		logging.L().Error("reset all qq group today_query_count failed. ", logging.Error(err))
 	} else {
 		logging.L().Info("reset all qq group today_query_count to 0")
@@ -76,11 +76,11 @@ func RefreshUserTodayCount() {
 func CheckWTNewsUpdate() {
 	if err := crawler.GetFirstPageNewsFromWTOfficial(func(news []table.GameNew) {
 		for _, item := range news {
-			found := service2.MustFindGameNewByLink(item.Link)
+			found := service.MustFindGameNewByLink(item.Link)
 			if found == nil {
-				service2.MustSaveGameNew(&item)
+				service.MustSaveGameNew(&item)
 				// 向配置了的群发送消息
-				qcs, err := service2.GetEnableCheckWTNew(true)
+				qcs, err := service.GetEnableCheckWTNew(true)
 				if err != nil {
 					logging.L().Warn("get group config enable_check_wt_new failed", logging.Error(err))
 					return

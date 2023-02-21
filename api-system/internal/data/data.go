@@ -4,7 +4,6 @@ import (
 	"github.com/axiangcoding/antonstar-bot/internal/data/dal"
 	"github.com/axiangcoding/antonstar-bot/internal/data/table"
 	"github.com/axiangcoding/antonstar-bot/pkg/logging"
-	"github.com/axiangcoding/antonstar-bot/setting"
 	"gorm.io/driver/postgres"
 	"gorm.io/gen"
 	"gorm.io/gorm"
@@ -16,12 +15,7 @@ import (
 
 var _db *gorm.DB
 
-func InitData() {
-	_db = initDB()
-}
-
-func initDB() *gorm.DB {
-	source := setting.C().App.Data.Db.Source
+func InitData(source string, maxOpenConn int, maxIdleConn int) {
 	dial := postgres.Open(source)
 	dbLogger := zapgorm2.New(logging.L())
 	dbLogger.SetAsDefault()
@@ -39,10 +33,10 @@ func initDB() *gorm.DB {
 	} else {
 		logging.L().Info("database connected success")
 	}
-	setProperties(db)
+	setProperties(db, maxOpenConn, maxIdleConn)
 	autoMigrate(db)
 	dal.SetDefault(db)
-	return db
+	_db = db
 }
 
 func Db() *gorm.DB {
@@ -65,14 +59,14 @@ func autoMigrate(db *gorm.DB) {
 	}
 }
 
-func setProperties(db *gorm.DB) {
+func setProperties(db *gorm.DB, maxOpenConn int, maxIdleConn int) {
 	s, err := db.DB()
 	if err != nil {
 		logging.L().Fatal("open db failed while set properties",
 			logging.Error(err))
 	}
-	s.SetMaxOpenConns(setting.C().App.Data.Db.MaxOpenConn)
-	s.SetMaxIdleConns(setting.C().App.Data.Db.MaxIdleConn)
+	s.SetMaxOpenConns(maxOpenConn)
+	s.SetMaxIdleConns(maxIdleConn)
 }
 
 func GenCode(db *gorm.DB) {

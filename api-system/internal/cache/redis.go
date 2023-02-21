@@ -3,29 +3,23 @@ package cache
 import (
 	"context"
 	"github.com/axiangcoding/antonstar-bot/pkg/logging"
-	"github.com/axiangcoding/antonstar-bot/setting"
 	"github.com/go-redis/redis/v8"
 )
 
 var _rdb *redis.Client
 
-func Setup() {
-	_rdb = initRedis()
-	err := _rdb.Ping(context.Background()).Err()
-	if err != nil {
-		logging.L().Fatal("redis connect failed", logging.Error(err))
-	}
-}
-
-func initRedis() *redis.Client {
-	source := setting.C().App.Data.Cache.Source
+func InitRedis(source string) {
 	opt, err := redis.ParseURL(source)
 	if err != nil {
 		logging.L().Fatal("parse redis url failed",
 			logging.Error(err),
 			logging.Any("source", source))
 	}
-	return redis.NewClient(opt)
+	_rdb = redis.NewClient(opt)
+	err = _rdb.Ping(context.Background()).Err()
+	if err != nil {
+		logging.L().Fatal("redis connect failed", logging.Error(err))
+	}
 }
 
 func Client() *redis.Client {
