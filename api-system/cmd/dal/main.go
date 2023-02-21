@@ -1,13 +1,13 @@
 package main
 
 import (
-	"github.com/axiangcoding/antonstar-bot/data"
-	"github.com/axiangcoding/antonstar-bot/logging"
-	"github.com/axiangcoding/antonstar-bot/settings"
+	"github.com/axiangcoding/antonstar-bot/internal/data"
+	"github.com/axiangcoding/antonstar-bot/pkg/logging"
+	"github.com/axiangcoding/antonstar-bot/setting"
 )
 
 func main() {
-	settings.InitConf()
+	setting.InitConf()
 	logging.InitLogger()
 	data.InitData()
 	db := data.Db()

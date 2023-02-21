@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/axiangcoding/antonstar-bot/service/cardfight"
+	"github.com/axiangcoding/antonstar-bot/pkg/cardfight"
 )
 
 // WIP 卡牌对战程序

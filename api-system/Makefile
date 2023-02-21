@@ -2,8 +2,8 @@
 
 gen-swag:
 	@echo "generate swagger files..."
-	swag init -o ./static/swagger -g ./cmd/app/main.go
-	swag fmt -g ./cmd/app/main.go
+	swag init -o ./api -g internal/controller/http/v1/router.go
+	swag fmt -g internal/controller/http/v1/router.go
 
 clean:
 	@echo "go clean"
