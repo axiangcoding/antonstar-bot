@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/axiangcoding/antonstar-bot/internal/cache"
-	table2 "github.com/axiangcoding/antonstar-bot/internal/data/table"
+	"github.com/axiangcoding/antonstar-bot/internal/data/table"
 	"github.com/axiangcoding/antonstar-bot/pkg/bot"
 	"github.com/axiangcoding/antonstar-bot/pkg/cqhttp"
 	"github.com/axiangcoding/antonstar-bot/pkg/logging"
@@ -111,7 +111,7 @@ func handleCqHttpMessageEventGroup(event *cqhttp.CommonEvent) {
 	gc, err := FindGroupConfig(groupId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			defaultGC := table2.DefaultGroupConfig(groupId)
+			defaultGC := table.DefaultGroupConfig(groupId)
 			gc = &defaultGC
 			MustSaveGroupConfig(gc)
 		} else {
@@ -121,7 +121,7 @@ func handleCqHttpMessageEventGroup(event *cqhttp.CommonEvent) {
 	uc, err := FindUserConfig(userId)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			defaultUC := table2.DefaultUserConfig(userId)
+			defaultUC := table.DefaultUserConfig(userId)
 			uc = &defaultUC
 			MustSaveUserConfig(uc)
 		} else {
