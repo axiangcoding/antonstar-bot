@@ -1,5 +1,6 @@
 FROM golang:1.20-alpine as build
-#ENV GOPROXY=https://proxy.golang.com.cn,direct
+#如果网络访问慢，可以启用以下配置项
+#ENV GOPROXY=https://goproxy.cn,direct
 WORKDIR /build
 COPY . /build/
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o application ./cmd/app

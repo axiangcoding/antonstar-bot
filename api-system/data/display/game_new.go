@@ -5,13 +5,13 @@ import (
 )
 
 type GameNew struct {
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	Link      string `gorm:"uniqueIndex;size:255"`
-	PosterUrl string
-	Title     string
-	Comment   string
-	DateStr   string
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	Link      string    `json:"link,omitempty"`
+	PosterUrl string    `json:"poster_url,omitempty"`
+	Title     string    `json:"title,omitempty"`
+	Comment   string    `json:"comment,omitempty"`
+	DateStr   string    `json:"date_str,omitempty"`
 }
 
 const templateGameNewStr = `

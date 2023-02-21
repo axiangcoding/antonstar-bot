@@ -1,17 +1,18 @@
-.PHONY: all swag clean upgrade check build-image run help run-dev-env
+.PHONY: gen-swag clean upgrade check build-image run-app help
 
-all: swag run
-
-swag:
-	@echo "latest swag tool required"
+gen-swag:
+	@echo "generate swagger files..."
 	swag init -o ./static/swagger -g ./cmd/app/main.go
 	swag fmt -g ./cmd/app/main.go
 
 clean:
+	@echo "go clean"
 	go clean
 
 upgrade:
+	@echo "go upgrade go.mod"
 	go get -u ./cmd/app
+	go get -u ./cmd/dal
 
 check:
 	go fmt ./cmd/app
@@ -19,16 +20,10 @@ check:
 
 build-image:
 	@echo "docker required"
-	docker build --build-arg=APP_VERSION=latest . -t axiangcoding/antonstar-bot:latest
+	docker build --build-arg=VERSION=latest . -t axiangcoding/antonstar-bot-server:latest
 
-run:
+run-app:
 	go run ./cmd/app
 
 help:
-	@echo "make - generate swagger docs, run application"
-	@echo "make swag - generate swagger docs"
-	@echo "make clean - go clean"
-	@echo "make prepare - format codes"
-	@echo "make build-image - build docker image"
-	@echo "make run - run application"
-	@echo "make run-dev-env - run development environment"
+	@echo "Please take a look at Makefile"
