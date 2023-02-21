@@ -66,7 +66,7 @@ func Success(c *gin.Context, data interface{}) {
 // business failed response
 // 返回业务逻辑失败
 func BizFailed(c *gin.Context, errCode int, err ...error) {
-	logging.L().Error("Biz failed",
+	logging.L().Warn("Biz failed",
 		logging.Any("errCode", errCode),
 		logging.Errors("errors", err))
 	HttpResponse(c, http.StatusOK, errCode, generateErrJson(err))
