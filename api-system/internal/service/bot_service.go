@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/axiangcoding/antonstar-bot/internal/data/display"
-	table2 "github.com/axiangcoding/antonstar-bot/internal/data/table"
+	"github.com/axiangcoding/antonstar-bot/internal/data/table"
 	"github.com/axiangcoding/antonstar-bot/pkg/bot"
 	"github.com/axiangcoding/antonstar-bot/pkg/cqhttp"
 	"github.com/axiangcoding/antonstar-bot/pkg/crawler"
@@ -70,21 +70,21 @@ func RefreshWTUserInfo(nickname string, sendForm cqhttp.SendGroupMsgForm) (*stri
 		SendForm: sendForm,
 		Nick:     nickname,
 	}
-	if err := SubmitMissionWithDetail(missionId, table2.MissionTypeUserInfo, form); err != nil {
+	if err := SubmitMissionWithDetail(missionId, table.MissionTypeUserInfo, form); err != nil {
 		return nil, err
 	}
 	if err := ants.Submit(func() {
 		if err := crawler.GetProfileFromWTOfficial(nickname,
-			func(status int, user *table2.GameUser) {
+			func(status int, user *table.GameUser) {
 				switch status {
 				case crawler.StatusQueryFailed:
-					MustFinishMissionWithResult(missionId, table2.MissionStatusFailed, CrawlerResult{
+					MustFinishMissionWithResult(missionId, table.MissionStatusFailed, CrawlerResult{
 						Found: false,
 						Nick:  nickname,
 					})
 				case crawler.StatusNotFound:
 					MustPutRefreshFlag(nickname)
-					MustFinishMissionWithResult(missionId, table2.MissionStatusSuccess, CrawlerResult{
+					MustFinishMissionWithResult(missionId, table.MissionStatusSuccess, CrawlerResult{
 						Found: false,
 						Nick:  nickname,
 					})
@@ -115,7 +115,7 @@ func RefreshWTUserInfo(nickname string, sendForm cqhttp.SendGroupMsgForm) (*stri
 						logging.L().Warn("failed on update thunder skill profile. ", logging.Error(err))
 					}
 					MustPutRefreshFlag(nickname)
-					MustFinishMissionWithResult(missionId, table2.MissionStatusSuccess, CrawlerResult{
+					MustFinishMissionWithResult(missionId, table.MissionStatusSuccess, CrawlerResult{
 						Found: true,
 						Nick:  nickname,
 						Data:  *user},
@@ -300,7 +300,7 @@ func DoActionUnbinding(retMsgForm *cqhttp.SendGroupMsgForm) {
 	retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.UnbindingSuccess
 }
 
-func DoActionManager(retMsgForm *cqhttp.SendGroupMsgForm, uc *table2.QQUserConfig, value string) {
+func DoActionManager(retMsgForm *cqhttp.SendGroupMsgForm, uc *table.QQUserConfig, value string) {
 	// 只有超级管理员可以进行全局设置
 	if uc.SuperAdmin == nil || !*uc.SuperAdmin {
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.ConfNotPermit
@@ -315,16 +315,16 @@ func DoActionManager(retMsgForm *cqhttp.SendGroupMsgForm, uc *table2.QQUserConfi
 	keyUnsetAdmin := "解除管理员"
 	switch value {
 	case keyOpenResponse:
-		MustUpsertGlobalConfig(table2.ConfigStopAllResponse, "false")
+		MustUpsertGlobalConfig(table.ConfigStopAllResponse, "false")
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.ConfStartGlobalResponse
 	case keyCloseResponse:
-		MustUpsertGlobalConfig(table2.ConfigStopAllResponse, "true")
+		MustUpsertGlobalConfig(table.ConfigStopAllResponse, "true")
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.ConfStopGlobalResponse
 	case keyOpenQuery:
-		MustUpsertGlobalConfig(table2.ConfigStopQuery, "false")
+		MustUpsertGlobalConfig(table.ConfigStopQuery, "false")
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.ConfStartGlobalQuery
 	case keyCloseQuery:
-		MustUpsertGlobalConfig(table2.ConfigStopQuery, "true")
+		MustUpsertGlobalConfig(table.ConfigStopQuery, "true")
 		retMsgForm.Message = bot.SelectStaticMessage(retMsgForm.MessageTemplate).CommonResp.ConfStopGlobalQuery
 	case keySetAdmin:
 	// 	TODO
@@ -342,6 +342,6 @@ func DoActionManager(retMsgForm *cqhttp.SendGroupMsgForm, uc *table2.QQUserConfi
 	}
 }
 
-func DoActionGroupManager(retMsgForm *cqhttp.SendGroupMsgForm, uc *table2.QQUserConfig, value string) {
+func DoActionGroupManager(retMsgForm *cqhttp.SendGroupMsgForm, uc *table.QQUserConfig, value string) {
 	// TODO 群管理
 }
