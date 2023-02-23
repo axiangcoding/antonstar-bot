@@ -81,6 +81,11 @@ func setRouterApiV1(r *gin.RouterGroup) {
 		wt := groupV1.Group("/wt")
 		{
 			wt.GET("/profile", GameUserProfile)
+			wt.POST("/profile/update", UpdateGameUserProfile)
+		}
+		mission := groupV1.Group("/mission")
+		{
+			mission.GET("/", GetMission)
 		}
 	}
 }
