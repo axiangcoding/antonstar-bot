@@ -13,17 +13,17 @@ type GameUser struct {
 	StatRb       UserStat
 	StatSb       UserStat
 
-	GroundRateAb UserRate
-	GroundRateRb UserRate
-	GroundRateSb UserRate
+	GroundRateAb GroundRate
+	GroundRateRb GroundRate
+	GroundRateSb GroundRate
 
-	AviationRateAb UserRate
-	AviationRateRb UserRate
-	AviationRateSb UserRate
+	AviationRateAb AviationRate
+	AviationRateRb AviationRate
+	AviationRateSb AviationRate
 
-	FleetRateAb UserRate
-	FleetRateRb UserRate
-	FleetRateSb UserRate
+	FleetRateAb FleetRate
+	FleetRateRb FleetRate
+	FleetRateSb FleetRate
 
 	TsABRate float64 `json:"ts_ab_rate"`
 	TsRBRate float64 `json:"ts_rb_rate"`
@@ -47,8 +47,62 @@ type UserStat struct {
 	Kd                   string `json:"kd,omitempty"`
 }
 
-type UserRate struct {
-	Ka string `json:"ka,omitempty"`
+type GroundRate struct {
+	Ka                     string `json:"ka,omitempty"`
+	GameCount              int    `json:"game_count,omitempty"`
+	GroundVehicleGameCount int    `json:"ground_vehicle_game_count,omitempty"`
+	TDGameCount            int    `json:"td_game_count,omitempty"`
+	HTGameCount            int    `json:"ht_game_count,omitempty"`
+	SPAAGameCount          int    `json:"spaa_game_count,omitempty"`
+	GameTime               string `json:"game_time,omitempty"`
+	GroundVehicleGameTime  string `json:"ground_vehicle_game_time,omitempty"`
+	TDGameTime             string `json:"td_game_time,omitempty"`
+	HTGameTime             string `json:"ht_game_time,omitempty"`
+	SPAAGameTime           string `json:"spaa_game_time,omitempty"`
+	TotalDestroyCount      int    `json:"total_destroy_count,omitempty"`
+	AviationDestroyCount   int    `json:"aviation_destroy_count,omitempty"`
+	GroundDestroyCount     int    `json:"ground_destroy_count,omitempty"`
+	FleetDestroyCount      int    `json:"fleet_destroy_count,omitempty"`
+}
+
+type AviationRate struct {
+	Ka                   string `json:"ka,omitempty"`
+	GameCount            int    `json:"game_count,omitempty"`
+	FighterGameCount     int    `json:"fighter_game_count,omitempty"`
+	BomberGameCount      int    `json:"bomber_game_count,omitempty"`
+	AttackerGameCount    int    `json:"attacker_game_count,omitempty"`
+	GameTime             string `json:"game_time,omitempty"`
+	FighterGameTime      string `json:"fighter_game_time,omitempty"`
+	BomberGameTime       string `json:"bomber_game_time,omitempty"`
+	AttackerGameTime     string `json:"attacker_game_time,omitempty"`
+	TotalDestroyCount    int    `json:"total_destroy_count,omitempty"`
+	AviationDestroyCount int    `json:"aviation_destroy_count,omitempty"`
+	GroundDestroyCount   int    `json:"ground_destroy_count,omitempty"`
+	FleetDestroyCount    int    `json:"fleet_destroy_count,omitempty"`
+}
+
+type FleetRate struct {
+	Ka                      string `json:"ka,omitempty"`
+	GameCount               int    `json:"game_count,omitempty"`
+	FleetGameCount          int    `json:"fleet_game_count,omitempty"`
+	TorpedoBoatGameCount    int    `json:"torpedo_boat_game_count,omitempty"`
+	GunboatGameCount        int    `json:"gunboat_game_count,omitempty"`
+	TorpedoGunboatGameCount int    `json:"torpedo_gunboat_game_count,omitempty"`
+	SubmarineHuntGameCount  int    `json:"submarine_hunt_game_count,omitempty"`
+	DestroyerGameCount      int    `json:"destroyer_game_count,omitempty"`
+	NavyBargeGameCount      int    `json:"navy_barge_game_count,omitempty"`
+	GameTime                string `json:"game_time,omitempty"`
+	FleetGameTime           string `json:"fleet_game_time,omitempty"`
+	TorpedoBoatGameTime     string `json:"torpedo_boat_game_time,omitempty"`
+	GunboatGameTime         string `json:"gunboat_game_time,omitempty"`
+	TorpedoGunboatGameTime  string `json:"torpedo_gunboat_game_time,omitempty"`
+	SubmarineHuntGameTime   string `json:"submarine_hunt_game_time,omitempty"`
+	DestroyerGameTime       string `json:"destroyer_game_time,omitempty"`
+	NavyBargeGameTime       string `json:"navy_barge_game_time,omitempty"`
+	TotalDestroyCount       int    `json:"total_destroy_count,omitempty"`
+	AviationDestroyCount    int    `json:"aviation_destroy_count,omitempty"`
+	GroundDestroyCount      int    `json:"ground_destroy_count,omitempty"`
+	FleetDestroyCount       int    `json:"fleet_destroy_count,omitempty"`
 }
 
 const templateShortStr = `
