@@ -100,6 +100,31 @@ var doc = `{
                 }
             }
         },
+        "/v1/mission": {
+            "get": {
+                "tags": [
+                    "Mission API"
+                ],
+                "summary": "获取执行任务状态",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "mission id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/system/info": {
             "get": {
                 "tags": [
@@ -122,6 +147,31 @@ var doc = `{
                     "GameUser API"
                 ],
                 "summary": "获取游戏内玩家数据",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user nickname",
+                        "name": "nick",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.ApiJson"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/wt/profile/update": {
+            "post": {
+                "tags": [
+                    "GameUser API"
+                ],
+                "summary": "更新游戏内玩家数据",
                 "parameters": [
                     {
                         "type": "string",

@@ -3,7 +3,7 @@ package crawler
 import (
 	"encoding/json"
 	"fmt"
-	table2 "github.com/axiangcoding/antonstar-bot/internal/data/table"
+	"github.com/axiangcoding/antonstar-bot/internal/data/table"
 	"github.com/axiangcoding/antonstar-bot/pkg/logging"
 	"github.com/gocolly/colly/v2"
 	"github.com/gocolly/colly/v2/extensions"
@@ -16,7 +16,7 @@ const (
 	StatusFound       = 3
 )
 
-func GetProfileFromWTOfficial(nick string, callback func(status int, user *table2.GameUser)) error {
+func GetProfileFromWTOfficial(nick string, callback func(status int, user *table.GameUser)) error {
 	urlTemplate := "https://warthunder.com/zh/community/userinfo/?nick=%s"
 	queryUrl := fmt.Sprintf(urlTemplate, url.QueryEscape(nick))
 
@@ -92,7 +92,7 @@ func GetProfileFromThunderskill(nick string, callback func(status int, skill *Th
 	return nil
 }
 
-func GetFirstPageNewsFromWTOfficial(callback func(news []table2.GameNew)) error {
+func GetFirstPageNewsFromWTOfficial(callback func(news []table.GameNew)) error {
 	baseUrl := "https://warthunder.com/zh/news/"
 	c := colly.NewCollector(
 		colly.AllowedDomains("warthunder.com"),
