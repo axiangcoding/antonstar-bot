@@ -59,18 +59,18 @@ func getEncoder(enc string) zapcore.Encoder {
 	return encoder
 }
 
-func InitLogger(level string, mode string) {
+func InitLogger(level string, fileDir string, fileEncoder string, mode string) {
 	logLevel := getLogLevel(level)
 
 	w := zapcore.AddSync(&lumberjack.Logger{
-		Filename: path.Join(setting.C().App.Log.File.Dir,
+		Filename: path.Join(fileDir,
 			"application.log"),
 		MaxSize:    100, // megabytes
 		MaxBackups: 100,
 		MaxAge:     60, // days
 		Compress:   true,
 	})
-	encoder := getEncoder(setting.C().App.Log.File.Encoder)
+	encoder := getEncoder(fileEncoder)
 
 	var cores []zapcore.Core
 	prodCore := zapcore.NewCore(

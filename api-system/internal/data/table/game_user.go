@@ -172,23 +172,69 @@ func convertToStat(stat UserStat) display.UserStat {
 	}
 }
 
-func convertToAviationRate(rate AviationRate) display.UserRate {
+func convertToAviationRate(rate AviationRate) display.AviationRate {
 	ka := float64(rate.TotalDestroyCount) / float64(rate.GameCount)
-	return display.UserRate{
-		Ka: fmt.Sprintf("%.2f", ka),
+	return display.AviationRate{
+		Ka:                   fmt.Sprintf("%.2f", ka),
+		GameCount:            rate.GameCount,
+		FighterGameCount:     rate.FighterGameCount,
+		BomberGameCount:      rate.BomberGameCount,
+		AttackerGameCount:    rate.AttackerGameCount,
+		GameTime:             rate.GameTime,
+		FighterGameTime:      rate.FighterGameTime,
+		BomberGameTime:       rate.BomberGameTime,
+		AttackerGameTime:     rate.AttackerGameTime,
+		TotalDestroyCount:    rate.TotalDestroyCount,
+		AviationDestroyCount: rate.AviationDestroyCount,
+		GroundDestroyCount:   rate.GroundDestroyCount,
+		FleetDestroyCount:    rate.FleetDestroyCount,
 	}
 }
 
-func convertToGroundRate(rate GroundRate) display.UserRate {
+func convertToGroundRate(rate GroundRate) display.GroundRate {
 	ka := float64(rate.TotalDestroyCount) / float64(rate.GameCount)
-	return display.UserRate{
-		Ka: fmt.Sprintf("%.2f", ka),
+	return display.GroundRate{
+		Ka:                     fmt.Sprintf("%.2f", ka),
+		GameCount:              rate.GameCount,
+		GroundVehicleGameCount: rate.GroundVehicleGameCount,
+		TDGameCount:            rate.TDGameCount,
+		HTGameCount:            rate.HTGameCount,
+		SPAAGameCount:          rate.SPAAGameCount,
+		GameTime:               rate.GameTime,
+		GroundVehicleGameTime:  rate.GroundVehicleGameTime,
+		TDGameTime:             rate.TDGameTime,
+		HTGameTime:             rate.HTGameTime,
+		SPAAGameTime:           rate.SPAAGameTime,
+		TotalDestroyCount:      rate.TotalDestroyCount,
+		AviationDestroyCount:   rate.AviationDestroyCount,
+		GroundDestroyCount:     rate.GroundDestroyCount,
+		FleetDestroyCount:      rate.FleetDestroyCount,
 	}
 }
 
-func convertToFleetRate(rate FleetRate) display.UserRate {
+func convertToFleetRate(rate FleetRate) display.FleetRate {
 	ka := float64(rate.TotalDestroyCount) / float64(rate.GameCount)
-	return display.UserRate{
-		Ka: fmt.Sprintf("%.2f", ka),
+	return display.FleetRate{
+		Ka:                      fmt.Sprintf("%.2f", ka),
+		GameCount:               rate.GameCount,
+		FleetGameCount:          rate.FleetGameCount,
+		TorpedoBoatGameCount:    rate.TorpedoBoatGameCount,
+		GunboatGameCount:        rate.GunboatGameCount,
+		TorpedoGunboatGameCount: rate.TorpedoGunboatGameCount,
+		SubmarineHuntGameCount:  rate.SubmarineHuntGameCount,
+		DestroyerGameCount:      rate.DestroyerGameCount,
+		NavyBargeGameCount:      rate.NavyBargeGameCount,
+		GameTime:                rate.GameTime,
+		FleetGameTime:           rate.FleetGameTime,
+		TorpedoBoatGameTime:     rate.TorpedoBoatGameTime,
+		GunboatGameTime:         rate.GunboatGameTime,
+		TorpedoGunboatGameTime:  rate.TorpedoGunboatGameTime,
+		SubmarineHuntGameTime:   rate.SubmarineHuntGameTime,
+		DestroyerGameTime:       rate.DestroyerGameTime,
+		NavyBargeGameTime:       rate.NavyBargeGameTime,
+		TotalDestroyCount:       rate.TotalDestroyCount,
+		AviationDestroyCount:    rate.AviationDestroyCount,
+		GroundDestroyCount:      rate.GroundDestroyCount,
+		FleetDestroyCount:       rate.FleetDestroyCount,
 	}
 }
