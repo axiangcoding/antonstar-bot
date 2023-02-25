@@ -33,7 +33,7 @@ func TestGetProfileFromThunderskill(t *testing.T) {
 }
 
 func TestGetFirstPageNewsFromWTOfficial(t *testing.T) {
-	if err := GetFirstPageNewsFromWTOfficial(func(news []table2.GameNew) {
+	if err := GetFirstPageNewsFromWTOfficial("en", func(news []table2.GameNew) {
 		fmt.Println(len(news))
 		for _, i := range news {
 			fmt.Println(i)

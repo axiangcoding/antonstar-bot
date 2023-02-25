@@ -3,7 +3,7 @@ package display
 import (
 	"bytes"
 	"github.com/axiangcoding/antonstar-bot/pkg/logging"
-	"html/template"
+	"text/template"
 )
 
 func parseTemplate(templateStr string, u any) string {
