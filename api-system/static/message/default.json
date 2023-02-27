@@ -1,12 +1,12 @@
 {
   "mode": "default",
   "common_resp": {
-    "common": "\n你好，我是安东星机器人\n如果需要帮助，请输入“.cqbot 帮助”",
-    "report": "暂不支持举办玩家，敬请期待",
+    "common": "\n你好，我是I型安东星机器人\n如果需要帮助，请输入“.cqbot 帮助”",
+    "report": "暂不支持举办玩家",
     "can_not_refresh": "目前暂时无法查询，请稍后重试",
     "too_short_to_refresh": "对不起，距上次刷新间隔太短，不允许刷新",
     "query_is_running": "正在发起查询，请耐心等待...",
-    "not_valid_nickname": "你输入了一个错误的昵称，请检查是否包括了特殊字符",
+    "not_valid_nickname": "你输入了一个错误的昵称，请检查是否有特殊字符",
     "get_help": "\n使用手册：https://www.yuque.com/axiangcoding/anton_star/sfw0d8\n机器人体验群：169657216\n开发者粉丝群：689874918",
     "draw_card": "暂不支持抽卡，敬请期待",
     "luck": "你今天的气运值是 %d，%s",
@@ -14,8 +14,8 @@
     "user_get_banned": "对不起，你的qq号因为违反机器人规则，所有功能已被禁用",
     "today_user_query_limit": "你今日的查询已达到上限 (%d/%d)，明天八点后重置",
     "today_group_query_limit": "你群今日的查询已达到上限 (%d/%d)，明天八点后重置",
-    "today_user_usage_limit": "你今日的召唤已达到上限 (%d/%d)，接下来一小时我不会理你了嗷",
-    "today_group_usage_limit": "你群今日的召唤已达到上限 (%d/%d)，接下来一小时我不会理你们了嗷",
+    "today_user_usage_limit": "你今日的召唤已达到上限 (%d/%d)，接下来一小时我不会响应",
+    "today_group_usage_limit": "你群今日的召唤已达到上限 (%d/%d)，接下来一小时我不会响应",
     "version": "当前机器人版本为 %s",
     "live_broadcast": "直播间“%s“开播啦，快去看看\n%s",
     "stop_global_query": "战绩查询功能暂不可用",
@@ -36,13 +36,13 @@
     "conf_start_global_query": "好的，我的master，我将继续提供战绩查询"
   },
   "luck_resp": {
-    "is_0": "好一个0！",
-    "between_1_30": "老非洲正黑旗的？",
-    "between_30_50": "拉跨了啊，没活了",
+    "is_0": "好家伙，你是0？",
+    "between_1_30": "非洲酋长见了都得叫家人",
+    "between_30_50": "欢迎来看非洲大河马呲牙",
     "between_50_70": "凑合凑合日子还得过",
     "between_70_80": "这不来一发狠狠奖励自己？",
     "between_80_95": "老欧洲正白旗，那叫一个地~道",
-    "between_95_100": "今天的爆率有点高",
+    "between_95_100": "到达最高分，理塘！",
     "is_100": "我超，满分"
   }
 }
