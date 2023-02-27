@@ -92,8 +92,8 @@ func GetProfileFromThunderskill(nick string, callback func(status int, skill *Th
 	return nil
 }
 
-func GetFirstPageNewsFromWTOfficial(callback func(news []table.GameNew)) error {
-	baseUrl := "https://warthunder.com/zh/news/"
+func GetFirstPageNewsFromWTOfficial(region string, callback func(news []table.GameNew)) error {
+	baseUrl := fmt.Sprintf("https://warthunder.com/%s/news/", region)
 	c := colly.NewCollector(
 		colly.AllowedDomains("warthunder.com"),
 		colly.MaxDepth(1),

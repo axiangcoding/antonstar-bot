@@ -25,13 +25,19 @@ func addJob(c *cron.Cron) {
 	if _, err := c.AddFunc("@daily", RefreshUserTodayCount); err != nil {
 		logging.L().Fatal("add cron job RefreshUserTodayCount failed", logging.Error(err))
 	}
-	if _, err := c.AddFunc("@every 2m", CheckWTNewsUpdate); err != nil {
+	if _, err := c.AddFunc("@every 2m", func() {
+		CheckWTNewsUpdate("en")
+		CheckWTNewsUpdate("zh")
+	}); err != nil {
 		logging.L().Fatal("add cron job CheckWTNewsUpdate failed", logging.Error(err))
 	}
 	logging.L().Info("all cron job add success")
 }
 
 func CheckRoomLiving() {
+	if service.IsStopAllResponse() {
+		return
+	}
 	qcs, err := service.GetEnableCheckBiliRoomGroupConfig(true)
 	if err != nil {
 		logging.L().Warn("get group config checkbilibiliroom failed", logging.Error(err))
@@ -73,12 +79,15 @@ func RefreshUserTodayCount() {
 	}
 }
 
-func CheckWTNewsUpdate() {
-	if err := crawler.GetFirstPageNewsFromWTOfficial(func(news []table.GameNew) {
+func CheckWTNewsUpdate(region string) {
+	if err := crawler.GetFirstPageNewsFromWTOfficial(region, func(news []table.GameNew) {
 		for _, item := range news {
 			found := service.MustFindGameNewByLink(item.Link)
 			if found == nil {
 				service.MustSaveGameNew(&item)
+				if service.IsStopAllResponse() {
+					return
+				}
 				// 向配置了的群发送消息
 				qcs, err := service.GetEnableCheckWTNew(true)
 				if err != nil {
