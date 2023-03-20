@@ -15,7 +15,7 @@ require (
 	github.com/panjf2000/ants/v2 v2.7.1
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/spf13/viper v1.15.0
-	github.com/stretchr/testify v1.8.1
+	github.com/stretchr/testify v1.8.2
 	github.com/swaggo/files v1.0.0
 	github.com/swaggo/gin-swagger v1.5.3
 	github.com/swaggo/swag v1.8.10
