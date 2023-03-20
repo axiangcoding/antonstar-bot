@@ -5,7 +5,7 @@ updates:
     schedule:
       interval: "weekly"
 
-  - package-ecosystem: "go"
+  - package-ecosystem: "gomod"
     directory: "/api-system"
     schedule:
       interval: "weekly"
