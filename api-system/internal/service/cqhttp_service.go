@@ -219,7 +219,7 @@ func handleAddGroup(event *cqhttp.CommonEvent) {
 		userId := event.UserId
 		groupConfig := MustFindGroupConfig(groupId)
 		userConfig := MustFindUserConfig(userId)
-		if (groupConfig == nil || !(*groupConfig.Banned)) && (userConfig == nil || !(*userConfig.Banned)) {
+		if (groupConfig == nil || !(*groupConfig.Banned)) && (userConfig == nil || !(*userConfig.Banned)) && (userConfig.SuperAdmin != nil && *userConfig.SuperAdmin) {
 			cqhttp.MustAcceptInviteToGroup(event.Flag, event.SubType, true, "")
 		} else {
 			logging.L().Warn("application for joining the group was rejected",
