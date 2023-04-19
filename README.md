@@ -1,4 +1,5 @@
 # AntonStar-Bot 安东星机器人
+**警告：这个项目已经完成了其生命周期，新的机器人AXBot将代替他的全部功能，见：https://github.com/axiangcoding/AXBot**
 
 [![GitHub](https://img.shields.io/github/license/axiangcoding/antonstar-bot)](https://github.com/axiangcoding/antonstar-bot/blob/master/LICENSE) [![Docker Image Version (tag latest semver)](https://img.shields.io/docker/v/axiangcoding/antonstar-bot/1)](https://hub.docker.com/r/axiangcoding/antonstar-bot) [![Build docker image](https://github.com/axiangcoding/antonstar-bot/actions/workflows/build_docker_image.yml/badge.svg)](https://github.com/axiangcoding/antonstar-bot/actions/workflows/build_docker_image.yml) [![CodeQL](https://github.com/axiangcoding/antonstar-bot/actions/workflows/codeql.yml/badge.svg)](https://github.com/axiangcoding/antonstar-bot/actions/workflows/codeql.yml) [![Qodana](https://github.com/axiangcoding/antonstar-bot/actions/workflows/qodana.yml/badge.svg)](https://github.com/axiangcoding/antonstar-bot/actions/workflows/qodana.yml) 
 
